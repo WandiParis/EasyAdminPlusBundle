@@ -32,7 +32,17 @@
     },
     "autoload": {
         "psr-4": {
-            "Wandi\\EasyAdminBundlePlus\\": ""
+            "Wandi\\EasyAdminPlusBundle\\": ""
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "https://github.com/WandiParis/EasyAdminBundle"
+        },
+        {
+            "type": "vcs",
+            "url":  "https://github.com/WandiParis/EasyAdminPlusBundle"
+        }
+    ]
 }
