@@ -21,11 +21,11 @@ security:
     
     providers:
         # ...    
-        wandi_easy_admin_plus:
+        easy_admin_plus:
             entity: { class: 'Wandi\EasyAdminPlusBundle\Entity\User' }
             
     firewalls:
-        wandi_easy_admin_plus:
+        easy_admin_plus:
             pattern: ^/admin
             anonymous: ~
             logout:

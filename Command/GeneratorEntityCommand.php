@@ -68,7 +68,7 @@ the generation process is stopped</info></comment>');
         }
 
         try {
-            $eaTool = $this->getContainer()->get('wandi_easy_admin_plus.generator.entity');
+            $eaTool = $this->getContainer()->get('easy_admin_plus.generator.entity');
             $eaTool->run($entitiesMetaData, $this);
         } catch (EAException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');

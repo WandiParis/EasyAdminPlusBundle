@@ -36,7 +36,7 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
         $dirProject = $container->getParameter('kernel.project_dir');
-        $eaToolParams = $container->getParameter('wandi_easy_admin_plus')['generator'];
+        $eaToolParams = $container->getParameter('easy_admin_plus')['generator'];
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('A easy admin config file, <info>already exist</info>, do you want to <info>override</info> it [<info>y</info>/n]?', true);
 
@@ -58,7 +58,7 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
             $cleanCommand->run(new ArrayInput([]), $output);
 
         try {
-            $eaTool = $container->get('wandi_easy_admin_plus.generator.generate');
+            $eaTool = $container->get('easy_admin_plus.generator.generate');
             $eaTool->run();
         } catch (EAException $e) {
             $output->writeln('<error>(EAException catché)' . $e->getMessage() . '</error>');

@@ -21,7 +21,7 @@ class EasyAdminPlusExtension extends Extension
     {
         $configuration = new Configuration($this->getAlias());
         $config = $this->processConfiguration($configuration, $configs);
-        $container->setParameter('wandi_easy_admin_plus', $config);
+        $container->setParameter('easy_admin_plus', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
@@ -32,6 +32,6 @@ class EasyAdminPlusExtension extends Extension
      */
     public function getAlias()
     {
-        return 'wandi_easy_admin_plus';
+        return 'easy_admin_plus';
     }
 }

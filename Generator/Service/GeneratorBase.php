@@ -19,7 +19,7 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Service;
      {
          $this->container = $container;
          $this->em = $container->get('doctrine.orm.entity_manager');
-         $this->parameters = $container->getParameter('wandi_easy_admin_plus')['generator'];
+         $this->parameters = $container->getParameter('easy_admin_plus')['generator'];
          $this->projectDir = $container->getParameter('kernel.project_dir');
      }
 
