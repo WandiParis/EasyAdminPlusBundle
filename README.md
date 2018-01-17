@@ -7,7 +7,7 @@ Wandi/EasyAdminPlusBundle is a Symfony4 wrapper for the amazing [javiereguiluz/E
 
 ### Install via composer
 ```
-$ composer require wandi/easy-admin-bundle
+$ composer require wandi/easyadminplus-bundle
 ```
 
 ### Configuration
