@@ -1,6 +1,6 @@
 # Wandi/EasyAdminPlusBundle
 
-Wandi/EasyAdminPlusBundle is a Symfony4 wrapper for the amazing [javiereguiluz/EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle). It includes some extra features like login, configuration generator:
+Wandi/EasyAdminPlusBundle is a Symfony4 wrapper for the amazing [javiereguiluz/EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle). It includes some extra features.
 
 
 ## How to use
