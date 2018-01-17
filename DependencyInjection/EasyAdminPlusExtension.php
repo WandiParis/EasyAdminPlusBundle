@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class WandiEasyAdminPlusExtension extends Extension
+class EasyAdminPlusExtension extends Extension
 {
     /**
      * {@inheritdoc}

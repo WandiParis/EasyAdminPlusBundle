@@ -4,6 +4,6 @@ namespace Wandi\EasyAdminPlusBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class WandiEasyAdminPlusBundle extends Bundle
+class EasyAdminPlusBundle extends Bundle
 {
 }

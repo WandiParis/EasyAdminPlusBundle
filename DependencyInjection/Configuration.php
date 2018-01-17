@@ -55,11 +55,11 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode( 'translation_domain' )
                             ->cannotBeEmpty()
-                            ->defaultValue( 'WandiEasyAdminPlusBundle' )
+                            ->defaultValue( 'EasyAdminPlusBundle' )
                         ->end()
                         ->scalarNode( 'bundles_filter' )
                             ->defaultValue( [
-                                'WandiEasyAdminPlusBundle',
+                                'EasyAdminPlusBundle',
                             ])
                         ->end()
                         ->append($this->getMethodsResolverNode())

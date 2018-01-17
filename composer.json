@@ -1,11 +1,12 @@
 {
     "name": "wandi/easyadminplus-bundle",
     "type": "symfony-bundle",
-    "description": "WandiEasyAdminPlusBundle",
+    "description": "Wandi/EasyAdminPlusBundle",
     "keywords": [
         "Symfony",
         "Bundle",
-        "WandiEasyAdminPlusBundle",
+        "Wandi",
+        "EasyAdminPlusBundle",
         "EasyAdminBundle",
         "Admin"
     ],
