@@ -21,19 +21,19 @@ security:
     
     providers:
         # ...    
-        wandi_easy_admin:
+        wandi_easy_admin_plus:
             entity: { class: 'Wandi\EasyAdminPlusBundle\Entity\User' }
             
     firewalls:
-        wandi_easy_admin:
+        wandi_easy_admin_plus:
             pattern: ^/admin
             anonymous: ~
             logout:
-                path: wandi_easy_admin_logout
+                path: wandi_easy_admin_plus_logout
                 target: easyadmin
             form_login:
-                login_path: wandi_easy_admin_login
-                check_path: wandi_easy_admin_login
+                login_path: wandi_easy_admin_plus_login
+                check_path: wandi_easy_admin_plus_login
                 default_target_path: easyadmin
                 remember_me: true
                 csrf_token_generator: security.csrf.token_manager

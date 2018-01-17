@@ -32,6 +32,6 @@ class WandiEasyAdminPlusExtension extends Extension
      */
     public function getAlias()
     {
-        return 'wandi_easy_admin';
+        return 'wandi_easy_admin_plus';
     }
 }

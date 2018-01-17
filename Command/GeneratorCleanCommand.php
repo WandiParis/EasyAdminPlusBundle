@@ -26,7 +26,7 @@ class GeneratorCleanCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
         $dirProject = $container->getParameter('kernel.project_dir');
-        $generatorParams = $container->getParameter('wandi_easy_admin')['generator'];
+        $generatorParams = $container->getParameter('wandi_easy_admin_plus')['generator'];
 
         if (!file_exists($dirProject . '/app/config/easyadmin/' . $generatorParams['pattern_file'] . '.yml'))
         {
@@ -36,7 +36,7 @@ class GeneratorCleanCommand extends ContainerAwareCommand
         }
 
         try {
-            $eaTool = $container->get('wandi_easy_admin.generator.clean');
+            $eaTool = $container->get('wandi_easy_admin_plus.generator.clean');
             $eaTool->run();
         } catch (EAException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
