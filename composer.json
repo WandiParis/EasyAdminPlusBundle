@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Wandi\\EasyAdminPlusBundle\\": ""
+            "Wandi\\EasyAdminPlusBundle\\": "src/"
         }
     }
 }
