@@ -1,0 +1,78 @@
+user:
+    login:
+        title: "Admin"
+        username: "Identifiant"
+        password: "Mot de passe"
+        remember_me: "Se souvenir de moi"
+        submit: "S'identifier"
+
+generator:
+    image:
+        mime: "les formats autorisés pour l'image sont %mimes%."
+        ratio:
+            equal: "Le ratio de l'image doit être égale à %equal%."
+            min: "Le ratio de l'image doit être supérieur à %min%."
+            max: "Le ratio de l'image doit être inférieur à %max%."
+            interval: "Le ratio de l'image doit être compris entre %min% et %max%."
+    range:
+        interval: "La valeur doit être comprise entre %min% et %max%."
+        equal: "La valeur doit être égale à %value%."
+        min: "La valeur doit être supérieure à %min%."
+        max: "La valeur doit être inférieure à %max%."
+    count:
+        interval: "Le nombre d'éléments doit être compris entre %min% et %max%."
+        equal: "Le nombre d'éléments doit être égale à %value%."
+        min: "le nombre d'élément doit être supérieur ou égale à %min%."
+        max: "Le nombre d'éléments doit être inférieur ou égale à %max%."
+    bic:
+        help: "la valeur doit être un  code universel d'identification des banques (BIC) valide."
+    iban:
+        help: "La valeur doit être un code IBAN (International Bank Account Number) valide."
+    isbn:
+        10: "La valeur doit être un code ISBN-10 (International Standard Book Number) valide."
+        13: "La valeur doit être un code ISBN-13 (International Standard Book Number) valide."
+        both: "La valeur doit être un code ISBN-10 ou ISBN-13 (International Standard Book Number) valide."
+    email:
+        help: "Sois pas con met un arobase et un domaine merci."
+    url:
+        help: "La valeur doit être une url valide, avec le bon protocol"
+        protocols: "Les protocoles autorisés pour l'url sont %protocols."
+    length:
+        min: "Le nombre de caractères doit être supérieur à %min%."
+        max: "Le nombre de caractère ne doit pas dépasser %max%."
+        interval: "Le nombre de caractères doit être compris entre %min% et %max%."
+        equal: "Le nombre de caractères doit être égale à %equal%."
+    luhn:
+        help: "Vous devez rentrer un numéro de carte de crédit valide."
+    ip:
+        v4: "Vous devez rentrer une adresse IPv4."
+        v6: "Vous devez rentrer une adresse IPv6."
+        all: "Vous devez rentrer une adresse ip (IPV4 ou IPV6)."
+    issn:
+        help: "Vous devez rentrer un code ISSN (International Standard Serial Number) valide."
+    unique:
+        help: "La valeur doit être unique."
+    equal_to:
+        help: "La valeur doit être égale à %value%."
+    not_equal_to:
+        help: "La valeur ne doit pas être égale à %value%."
+    identical_to:
+        help: "La valeur doit être identique à %value%."
+    not_identical_to:
+        help: "La valeur ne doit pas être identique à %value%."
+    less_than:
+        help: "La valeur doit être inférieure à %value%."
+    less_than_or_equal:
+        help: "La valeur doit être inéfieure ou égale à %value%."
+    greater_than:
+        help: "La valeur doit être supérieure à %value%."
+    greater_than_or_equal:
+        help: "La valeur doit être supérieure ou égale à %value%."
+    decimal:
+        title: "Le nombre doit avoir au maximum %value% chiffres(s) après la virgule."
+    method:
+        title:
+          list: "Liste %entity%"
+          show: "Fiche %entity%"
+          new: "Ajouter %entity%"
+          edit: "Editer %entity%"
