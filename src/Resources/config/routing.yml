@@ -1,7 +1,7 @@
 wandi_easy_admin_plus_login:
     path: /login
     defaults:
-        _controller: EasyAdminPlusBundle:Admin:login
+        _controller: WandiEasyAdminPlusBundle:Admin:login
 
 wandi_easy_admin_plus_logout:
     path: /logout
