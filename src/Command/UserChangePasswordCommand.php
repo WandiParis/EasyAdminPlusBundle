@@ -13,7 +13,7 @@ class UserChangePasswordCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('wandi:easy-admin:user:change-password')
+            ->setName('wandi:easy-admin-plus:user:change-password')
             ->setDescription('Change admin password')
             ->setDefinition(
                 [

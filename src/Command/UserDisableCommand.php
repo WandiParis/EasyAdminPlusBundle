@@ -13,7 +13,7 @@ class UserDisableCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('wandi:easy-admin:user:disable')
+            ->setName('wandi:easy-admin-plus:user:disable')
             ->setDescription('Disable an admin')
             ->setDefinition(
                 [

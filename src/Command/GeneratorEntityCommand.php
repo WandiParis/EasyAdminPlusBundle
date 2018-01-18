@@ -16,7 +16,7 @@ class GeneratorEntityCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this
-            ->setName('wandi:easy-admin:generator:entity')
+            ->setName('wandi:easy-admin-plus:generator:entity')
             ->setDescription('Create a specified entity file configuration for easy admin')
             ->setDefinition(
                 new InputDefinition(array(
@@ -38,7 +38,7 @@ class GeneratorEntityCommand extends ContainerAwareCommand
 
         if (!file_exists($dirProject . '/app/config/easyadmin/' . $eaToolParams['pattern_file'] . '.yml'))
         {
-            $output->writeln('You need to launch <info>wandi:easy-admin:generator:generate</info> command before launching this command.');
+            $output->writeln('You need to launch <info>wandi:easy-admin-plus:generator:generate</info> command before launching this command.');
             return ;
         }
 

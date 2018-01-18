@@ -12,7 +12,7 @@ class GeneratorCleanCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this
-            ->setName('wandi:easy-admin:generator:cleanup')
+            ->setName('wandi:easy-admin-plus:generator:cleanup')
             ->setDescription('Cleans easy admin configuration files for non-existing entities.')
         ;
     }

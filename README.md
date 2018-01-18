@@ -59,20 +59,20 @@ $ php bin/console doctrine:schema:update -f
 
 * Create an admin
  ```
- php bin/console wandi:easy-admin:user:create admin password
+ php bin/console wandi:easy-admin-plus:user:create admin password
  ```
 
 * Change admin password
  ```
- php bin/console wandi:easy-admin:user:change-password admin password2
+ php bin/console wandi:easy-admin-plus:user:change-password admin password2
  ```
 
 * Enable an admin
  ```
- php bin/console wandi:easy-admin:user:enable admin
+ php bin/console wandi:easy-admin-plus:user:enable admin
  ```
  
 * Disable an admin
  ```
- php bin/console wandi:easy-admin:user:disable admin
+ php bin/console wandi:easy-admin-plus:user:disable admin
  ```

@@ -14,7 +14,7 @@ class UserCreateCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('wandi:easy-admin:user:create')
+            ->setName('wandi:easy-admin-plus:user:create')
             ->setDescription('Create an admin')
             ->setDefinition(
                 [

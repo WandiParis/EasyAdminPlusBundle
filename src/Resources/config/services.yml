@@ -2,16 +2,16 @@ services:
     wandi.easy_admin_plus.command.user.create:
         class: Wandi\EasyAdminPlusBundle\Command\UserCreateCommand
         tags:
-            -  { name: console.command, command: wandi:easy-admin:user:create }
+            -  { name: console.command, command: wandi:easy-admin-plus:user:create }
     wandi.easy_admin_plus.command.user.change_password:
         class: Wandi\EasyAdminPlusBundle\Command\UserChangePasswordCommand
         tags:
-            -  { name: console.command, command: wandi:easy-admin:user:change-password }
+            -  { name: console.command, command: wandi:easy-admin-plus:user:change-password }
     wandi.easy_admin_plus.command.user.enable:
         class: Wandi\EasyAdminPlusBundle\Command\UserEnableCommand
         tags:
-            -  { name: console.command, command: wandi:easy-admin:user:enable }
+            -  { name: console.command, command: wandi:easy-admin-plus:user:enable }
     wandi.easy_admin_plus.command.user.disable:
         class: Wandi\EasyAdminPlusBundle\Command\UserDisableCommand
         tags:
-            -  { name: console.command, command: wandi:easy-admin:user:disable }
+            -  { name: console.command, command: wandi:easy-admin-plus:user:disable }

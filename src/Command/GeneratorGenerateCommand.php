@@ -16,7 +16,7 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this
-            ->setName('wandi:easy-admin:generator:generate')
+            ->setName('wandi:easy-admin-plus:generator:generate')
             ->setDescription('Create easy admin config files')
             ->setDefinition(
                 new InputDefinition(array(
@@ -40,7 +40,7 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('A easy admin config file, <info>already exist</info>, do you want to <info>override</info> it [<info>y</info>/n]?', true);
 
-        $cleanCommand = $this->getApplication()->find('wandi:easy-admin:generator:cleanup');
+        $cleanCommand = $this->getApplication()->find('wandi:easy-admin-plus:generator:cleanup');
 
         if (!$input->getOption('force')) {
             if (file_exists($dirProject . '/app/config/easyadmin/' . $eaToolParams['pattern_file'] . '.yml')) {
