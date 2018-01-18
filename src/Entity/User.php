@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Admin.
  *
- * @ORM\Table(name="easy_admin_plus_user")
+ * @ORM\Table(name="wandi_easy_admin_plus_user")
  * @ORM\Entity(repositoryClass="Wandi\EasyAdminPlusBundle\Repository\UserRepository")
  * @UniqueEntity(fields={"username"})
  */

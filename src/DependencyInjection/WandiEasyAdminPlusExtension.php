@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class EasyAdminPlusExtension extends Extension
+class WandiEasyAdminPlusExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -32,6 +32,6 @@ class EasyAdminPlusExtension extends Extension
      */
     public function getAlias()
     {
-        return 'easy_admin_plus';
+        return 'wandi_easy_admin_plus';
     }
 }
