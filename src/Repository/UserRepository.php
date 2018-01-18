@@ -1,6 +1,7 @@
 <?php
 
 namespace Wandi\EasyAdminPlusBundle\Repository;
+
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
 /**
@@ -9,9 +10,10 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 class UserRepository extends \Doctrine\ORM\EntityRepository implements UserLoaderInterface
 {
     /**
-     * Find user by username
+     * Find user by username.
      *
      * @param string $username
+     *
      * @return null|object
      */
     public function loadUserByUsername($username)

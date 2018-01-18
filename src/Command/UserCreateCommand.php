@@ -40,14 +40,14 @@ class UserCreateCommand extends ContainerAwareCommand
 
         $violations = $validator->validate($user);
 
-        if($violations->count() === 0){
+        if ($violations->count() === 0) {
             $em->persist($user);
             $em->flush();
 
             $output->writeln(sprintf('User <comment>%s</comment> created', $username));
-        } else{
-            foreach ($violations as $violation){
-                /** @var ConstraintViolation $violation */
+        } else {
+            foreach ($violations as $violation) {
+                /* @var ConstraintViolation $violation */
                 $output->writeln(sprintf('<error>%s: %s</error>', ucfirst($violation->getPropertyPath()), mb_strtolower($violation->getMessage())));
             }
         }

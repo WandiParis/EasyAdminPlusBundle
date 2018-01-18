@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Validator\ConstraintViolation;
 use Wandi\EasyAdminPlusBundle\Entity\User;
 
 class UserEnableCommand extends ContainerAwareCommand
@@ -31,12 +30,12 @@ class UserEnableCommand extends ContainerAwareCommand
         $username = $input->getArgument('username');
 
         /** @var User $user */
-        if($user = $em->getRepository(User::class)->findOneByUsername($username)){
+        if ($user = $em->getRepository(User::class)->findOneByUsername($username)) {
             $user->setEnabled(true);
             $em->flush();
 
             $output->writeln(sprintf('User <comment>%s</comment> enabled', $username));
-        } else{
+        } else {
             $output->writeln(sprintf('<error>User %s was not found</error>', $username));
         }
     }

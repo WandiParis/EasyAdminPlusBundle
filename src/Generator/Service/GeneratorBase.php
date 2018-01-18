@@ -2,17 +2,18 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
- use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
- abstract class GeneratorBase
+abstract class GeneratorBase
 {
-     protected $parameters;
-     protected $em;
-     protected $projectDir;
-     protected $container;
+    protected $parameters;
+    protected $em;
+    protected $projectDir;
+    protected $container;
 
      /**
       * GeneratorBase constructor.
+      *
       * @param ContainerInterface $container
       */
      public function __construct(ContainerInterface $container)

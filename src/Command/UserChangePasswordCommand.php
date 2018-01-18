@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Validator\ConstraintViolation;
 use Wandi\EasyAdminPlusBundle\Entity\User;
 
 class UserChangePasswordCommand extends ContainerAwareCommand
@@ -33,13 +32,13 @@ class UserChangePasswordCommand extends ContainerAwareCommand
         $password = $input->getArgument('password');
 
         /** @var User $user */
-        if($user = $em->getRepository(User::class)->findOneByUsername($username)){
+        if ($user = $em->getRepository(User::class)->findOneByUsername($username)) {
             $user->setPassword($container->get('security.password_encoder')->encodePassword($user, $password));
 
             $em->flush();
 
             $output->writeln(sprintf('User <comment>%s</comment> password changed', $username));
-        } else{
+        } else {
             $output->writeln(sprintf('<error>User %s was not found</error>', $username));
         }
     }

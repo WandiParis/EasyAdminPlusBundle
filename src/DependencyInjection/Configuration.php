@@ -39,26 +39,26 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('generator')
                     ->children()
-                        ->integerNode( 'dump_indentation' )
-                            ->defaultValue( 4 )
+                        ->integerNode('dump_indentation')
+                            ->defaultValue(4)
                         ->end()
-                        ->integerNode( 'dump_inline' )
-                            ->defaultValue( 6 )
+                        ->integerNode('dump_inline')
+                            ->defaultValue(6)
                         ->end()
-                        ->scalarNode( 'pattern_file' )
+                        ->scalarNode('pattern_file')
                             ->cannotBeEmpty()
-                            ->defaultValue( 'config_easyadmin' )
+                            ->defaultValue('config_easyadmin')
                         ->end()
-                        ->scalarNode( 'name_backend' )
+                        ->scalarNode('name_backend')
                             ->cannotBeEmpty()
-                            ->defaultValue( 4 )
+                            ->defaultValue(4)
                         ->end()
-                        ->scalarNode( 'translation_domain' )
+                        ->scalarNode('translation_domain')
                             ->cannotBeEmpty()
-                            ->defaultValue( 'EasyAdminPlusBundle' )
+                            ->defaultValue('EasyAdminPlusBundle')
                         ->end()
-                        ->scalarNode( 'bundles_filter' )
-                            ->defaultValue( [
+                        ->scalarNode('bundles_filter')
+                            ->defaultValue([
                                 'EasyAdminPlusBundle',
                             ])
                         ->end()
@@ -81,12 +81,12 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode( 'js' )
+                ->scalarNode('js')
                     ->defaultValue([
                         '/bundles/cksourceckfinder/ckfinder/ckfinder.js',
                     ])
                 ->end()
-                ->scalarNode( 'css' )
+                ->scalarNode('css')
                     ->defaultNull()
                 ->end()
             ->end()
@@ -103,20 +103,20 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode( 'methods' )
+                ->scalarNode('methods')
                     ->defaultValue([
                         'list',
                     ])
                 ->end()
-                ->scalarNode( 'properties' )
+                ->scalarNode('properties')
                     ->defaultValue([
                         [
                             'name' => 'position',
-                            'order' => 'ASC'
+                            'order' => 'ASC',
                         ],
                         [
                             'name' => 'id',
-                            'order' => 'DESC'
+                            'order' => 'DESC',
                         ],
                     ])
                 ->end()
@@ -134,13 +134,13 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode( 'methods' )
+                ->scalarNode('methods')
                     ->defaultValue([
                         'new',
                         'show',
                     ])
                  ->end()
-                ->scalarNode( 'label' )
+                ->scalarNode('label')
                     ->defaultNull()
                 ->end()
             ->end()
@@ -157,12 +157,12 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode( 'actions' )
-                    ->defaultValue( [
+                ->scalarNode('actions')
+                    ->defaultValue([
                         'new' => 'add',
                         'show' => 'search',
                         'edit' => 'edit',
-                        'delete' => 'trash'
+                        'delete' => 'trash',
                     ])
                 ->end()
             ->end()
@@ -179,17 +179,17 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
                 ->children()
-                    ->scalarNode( 'list' )
-                        ->defaultValue( ['new', 'show', 'edit', 'delete'] )
+                    ->scalarNode('list')
+                        ->defaultValue(['new', 'show', 'edit', 'delete'])
                     ->end()
-                    ->scalarNode( 'show' )
-                        ->defaultValue( ['edit', 'delete'] )
+                    ->scalarNode('show')
+                        ->defaultValue(['edit', 'delete'])
                     ->end()
-                    ->scalarNode( 'new' )
-                        ->defaultValue( [] )
+                    ->scalarNode('new')
+                        ->defaultValue([])
                     ->end()
-                    ->scalarNode( 'edit' )
-                        ->defaultValue( [] )
+                    ->scalarNode('edit')
+                        ->defaultValue([])
                     ->end()
                 ->end()
             ->end()
@@ -197,5 +197,4 @@ class Configuration implements ConfigurationInterface
 
         return $node;
     }
-
 }

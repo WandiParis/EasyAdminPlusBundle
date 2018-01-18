@@ -19,7 +19,7 @@ class AdminController extends BaseAdminController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render(
-            '@EasyAdminPlus/Admin/login.html.twig',
+            '@WandiEasyAdminPlus/Admin/login.html.twig',
             [
                 'error' => $error,
                 'lastUsername' => $lastUsername,
