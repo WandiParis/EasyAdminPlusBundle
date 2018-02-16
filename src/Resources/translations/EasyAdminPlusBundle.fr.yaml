@@ -8,7 +8,7 @@ user:
 
 generator:
     image:
-        mime: "les formats autorisés pour l'image sont %mimes%."
+        mime: "Les formats autorisés pour l'image sont %mimes%."
         ratio:
             equal: "Le ratio de l'image doit être égale à %equal%."
             min: "Le ratio de l'image doit être supérieur à %min%."
@@ -22,10 +22,10 @@ generator:
     count:
         interval: "Le nombre d'éléments doit être compris entre %min% et %max%."
         equal: "Le nombre d'éléments doit être égale à %value%."
-        min: "le nombre d'élément doit être supérieur ou égale à %min%."
+        min: "Le nombre d'élément doit être supérieur ou égale à %min%."
         max: "Le nombre d'éléments doit être inférieur ou égale à %max%."
     bic:
-        help: "la valeur doit être un  code universel d'identification des banques (BIC) valide."
+        help: "La valeur doit être un  code universel d'identification des banques (BIC) valide."
     iban:
         help: "La valeur doit être un code IBAN (International Bank Account Number) valide."
     isbn:
@@ -33,7 +33,7 @@ generator:
         13: "La valeur doit être un code ISBN-13 (International Standard Book Number) valide."
         both: "La valeur doit être un code ISBN-10 ou ISBN-13 (International Standard Book Number) valide."
     email:
-        help: "Sois pas con met un arobase et un domaine merci."
+        help: "L'adresse e-mail doit comporter un @ suivis d'un nom de domaine (ex: john@free.fr)."
     url:
         help: "La valeur doit être une url valide, avec le bon protocol"
         protocols: "Les protocoles autorisés pour l'url sont %protocols."
@@ -43,13 +43,13 @@ generator:
         interval: "Le nombre de caractères doit être compris entre %min% et %max%."
         equal: "Le nombre de caractères doit être égale à %equal%."
     luhn:
-        help: "Vous devez rentrer un numéro de carte de crédit valide."
+        help: "Vous devez entrer un numéro de carte de crédit valide."
     ip:
-        v4: "Vous devez rentrer une adresse IPv4."
-        v6: "Vous devez rentrer une adresse IPv6."
-        all: "Vous devez rentrer une adresse ip (IPV4 ou IPV6)."
+        v4: "Vous devez entrer une adresse IPv4."
+        v6: "Vous devez entrer une adresse IPv6."
+        all: "Vous devez entrer une adresse ip (IPV4 ou IPV6)."
     issn:
-        help: "Vous devez rentrer un code ISSN (International Standard Serial Number) valide."
+        help: "Vous devez entrer un code ISSN (International Standard Serial Number) valide."
     unique:
         help: "La valeur doit être unique."
     equal_to:
@@ -63,7 +63,7 @@ generator:
     less_than:
         help: "La valeur doit être inférieure à %value%."
     less_than_or_equal:
-        help: "La valeur doit être inéfieure ou égale à %value%."
+        help: "La valeur doit être inférieure ou égale à %value%."
     greater_than:
         help: "La valeur doit être supérieure à %value%."
     greater_than_or_equal:

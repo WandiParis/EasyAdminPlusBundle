@@ -8,71 +8,71 @@ user:
 
 generator:
     image:
-        mime: "les formats autorisés pour l'image sont %mimes%."
+        mime: "The allowed formats for the image are %mimes%."
         ratio:
-            equal: "Le ratio de l'image doit être égale à %equal%."
-            min: "Le ratio de l'image doit être supérieur à %min%."
-            max: "Le ratio de l'image doit être inférieur à %max%."
-            interval: "Le ratio de l'image doit être compris entre %min% et %max%."
+            equal: "The ratio of the image must be equal to %equal%."
+            min: "The ratio of the image must be greater than %min%."
+            max: "The ratio of the image must be less than %max%."
+            interval: "The ratio of the image must be between %min% and %max%."
     range:
-        interval: "La valeur doit être comprise entre %min% et %max%."
-        equal: "La valeur doit être égale à %value%."
-        min: "La valeur doit être supérieure à %min%."
-        max: "La valeur doit être inférieure à %max%."
+        interval: "The value must be between %min% and %max%."
+        equal: "The value must be equal to %value%."
+        min: "The value must be greater than %min%."
+        max: "The value must be less than %max%."
     count:
-        interval: "Le nombre d'éléments doit être compris entre %min% et %max%."
-        equal: "Le nombre d'éléments doit être égale à %value%."
-        min: "le nombre d'élément doit être supérieur ou égale à %min%."
-        max: "Le nombre d'éléments doit être inférieur ou égale à %max%."
+        interval: "The number of elements must be between %min% and %max%."
+        equal: "The number of elements must be equal to %value%."
+        min: "The number of items must be greater than or equal to %min%."
+        max: "The number of elements must be less than or equal to %max%."
     bic:
-        help: "la valeur doit être un  code universel d'identification des banques (BIC) valide."
+        help: "The value must be a valid Universal Bank Identification Code (BIC)."
     iban:
-        help: "La valeur doit être un code IBAN (International Bank Account Number) valide."
+        help: "The value must be a valid International Bank Account Number (IBAN)."
     isbn:
-        10: "La valeur doit être un code ISBN-10 (International Standard Book Number) valide."
-        13: "La valeur doit être un code ISBN-13 (International Standard Book Number) valide."
-        both: "La valeur doit être un code ISBN-10 ou ISBN-13 (International Standard Book Number) valide."
+        10: "The value must be a valid ISBN-10 (International Standard Book Number)."
+        13: "The value must be a valid ISBN-13 (International Standard Book Number)."
+        both: "The value must be a valid ISBN-10 or ISBN-13 (International Standard Book Number)."
     email:
-        help: "Sois pas con met un arobase et un domaine merci."
+        help: "The e-mail address must include an @ followed by a domain name (ex: john@free.fr)."
     url:
-        help: "La valeur doit être une url valide, avec le bon protocol"
-        protocols: "Les protocoles autorisés pour l'url sont %protocols."
+        help: "The value must be a valid url, with the correct protocol."
+        protocols: "The allowed protocols for the url are %protocols%."
     length:
-        min: "Le nombre de caractères doit être supérieur à %min%."
-        max: "Le nombre de caractère ne doit pas dépasser %max%."
-        interval: "Le nombre de caractères doit être compris entre %min% et %max%."
-        equal: "Le nombre de caractères doit être égale à %equal%."
+        min: "The number of characters must be greater than %min%."
+        max: "The number of characters must not exceed %max%."
+        interval: "The number of characters must be between %min% and %max%."
+        equal: "The number of characters must be equal to %equal%."
     luhn:
-        help: "Vous devez rentrer un numéro de carte de crédit valide."
+        help: "You must enter a valid credit card number."
     ip:
-        v4: "Vous devez rentrer une adresse IPv4."
-        v6: "Vous devez rentrer une adresse IPv6."
-        all: "Vous devez rentrer une adresse ip (IPV4 ou IPV6)."
+        v4: "You must enter an IPv4 address."
+        v6: "You must enter an IPv6 address."
+        all: "You must enter an IP address (IPV4 or IPV6)."
     issn:
-        help: "Vous devez rentrer un code ISSN (International Standard Serial Number) valide."
+        help: "You must enter a valid International Standard Serial Number (ISSN)."
     unique:
-        help: "La valeur doit être unique."
+        help: "The value must be unique."
     equal_to:
-        help: "La valeur doit être égale à %value%."
+        help: "The value must be equal to %value%."
     not_equal_to:
-        help: "La valeur ne doit pas être égale à %value%."
+        help: "The value must not be equal to %value%."
     identical_to:
-        help: "La valeur doit être identique à %value%."
+        help: "The value must be identical to %value%."
     not_identical_to:
-        help: "La valeur ne doit pas être identique à %value%."
+        help: "The value must not be identical to %value%."
     less_than:
-        help: "La valeur doit être inférieure à %value%."
+        help: "The value must be less than %value%."
     less_than_or_equal:
-        help: "La valeur doit être inéfieure ou égale à %value%."
+        help: "The value must be less than or equal to %value%."
     greater_than:
-        help: "La valeur doit être supérieure à %value%."
+        help: "The value must be greater than %value%."
     greater_than_or_equal:
-        help: "La valeur doit être supérieure ou égale à %value%."
+        help: "The value must be greater than or equal to %value%."
     decimal:
-        title: "Le nombre doit avoir au maximum %value% chiffres(s) après la virgule."
+        title: "The number must have at most %value% digits after the decimal point."
     method:
         title:
-          list: "Liste %entity%"
+          list: "List %entity%"
           show: "Fiche %entity%"
-          new: "Ajouter %entity%"
-          edit: "Editer %entity%"
+          new: "Add %entity%"
+          edit: "Edit %entity%"
