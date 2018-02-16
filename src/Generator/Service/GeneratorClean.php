@@ -71,11 +71,6 @@ class GeneratorClean
         $entitiesList = $this->getEntitiesNameFromMetaDataList($this->em->getMetadataFactory()->getAllMetadata(), $this->bundles);
         $entitiesEasyAdmin = $this->getNameListEntities($fileContent['imports']);
 
-//        dump($fileContent['imports']);
-//        dump($entitiesList);
-//        dump($entitiesEasyAdmin);
-//        die();
-
         foreach (array_diff($entitiesEasyAdmin, $entitiesList) as $entity)
         {
             $entitiesToDelete['name'][] = $entity;
@@ -149,7 +144,6 @@ class GeneratorClean
      */
     private function purgeEasyAdminMenu(array $entities): void
     {
-
         $fileContent = Yaml::parse(file_get_contents(sprintf( '%s/config/packages/wandi_easy_admin_plus/%s_menu.yaml', $this->projectDir, $this->parameters['pattern_file'])));
 
         if (!isset($fileContent['easy_admin']['design']['menu']))
@@ -174,7 +168,6 @@ class GeneratorClean
      */
     private function purgeEntityFiles(array $entities): void
     {
-//        dump($entities);die;
         foreach ($entities['name'] as $entityName)
         {
             $this->consoleOutput->writeln(sprintf('Purging entity <info>%s</info>',$entityName));

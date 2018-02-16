@@ -41,13 +41,8 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
 
         foreach ($relatedEntities as $entityMetaData)
         {
-            $entityName = (new \ReflectionClass($entityMetaData->getName()))->getShortName();
             $entity = new Entity($entityMetaData);
             $entity->setName(Entity::buildName(Entity::buildNameData($entityMetaData, $bundles)));
-
-            dump($entity->getName());
-//            $entity->setName(Entity::buildName($nameData));
-//            $entity->setName($entityName);
             $entity->setClass($entityMetaData->getName());
             $entity->buildMethods($this->parameters);
             $eaTool->addEntity($entity);

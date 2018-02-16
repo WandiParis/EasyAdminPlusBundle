@@ -155,8 +155,6 @@ class Entity
      */
     public function buildMethods(array $eaToolParams): void
     {
-
-//        dump($eaToolParams);die;
         foreach ($eaToolParams['methods'] as $name => $method)
         {
             $method = new Method();

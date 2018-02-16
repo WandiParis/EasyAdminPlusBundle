@@ -79,7 +79,6 @@ class PropertyClassHelperFunctions
     {
         /** @var  Translator $translator */
         $translator = EATool::getTranslation();
-//        dump($translator);die();
         $helpMessage = [];
 
         //gestions des mimes
