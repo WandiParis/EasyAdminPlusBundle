@@ -8,7 +8,7 @@ EasyAdminPlusBundle is a Symfony4 wrapper for the amazing [javiereguiluz/EasyAdm
 
 ### Install via composer
 ```
-$ composer require wandi/easyadminplus-bundle
+$ composer require wandi/easyadmin-plus-bundle
 ```
 
 ### Configuration
