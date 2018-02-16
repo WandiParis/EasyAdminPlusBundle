@@ -41,8 +41,13 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
 
         foreach ($relatedEntities as $entityMetaData)
         {
+            $entityName = (new \ReflectionClass($entityMetaData->getName()))->getShortName();
             $entity = new Entity($entityMetaData);
             $entity->setName(Entity::buildName(Entity::buildNameData($entityMetaData, $bundles)));
+
+            dump($entity->getName());
+//            $entity->setName(Entity::buildName($nameData));
+//            $entity->setName($entityName);
             $entity->setClass($entityMetaData->getName());
             $entity->buildMethods($this->parameters);
             $eaTool->addEntity($entity);
@@ -59,7 +64,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
      */
     private function updateMenuFile(ArrayCollection $entities): void
     {
-        $fileMenuContent = Yaml::parse(file_get_contents(sprintf( '%s/app/config/easyadmin/%s_menu.yml', $this->projectDir, $this->parameters['pattern_file'])));
+        $fileMenuContent = Yaml::parse(file_get_contents(sprintf( '%s/config/packages/wandi_easy_admin_plus/%s_menu.yaml', $this->projectDir, $this->parameters['pattern_file'])));
 
         if (!isset($fileMenuContent['easy_admin']['design']['menu']))
         {
@@ -76,7 +81,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
         }
 
         $ymlContent = EATool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
-        file_put_contents($this->projectDir . '/app/config/easyadmin/' . $this->parameters['pattern_file'] . '_menu.yml', $ymlContent);
+        file_put_contents($this->projectDir . '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml', $ymlContent);
     }
 
     /**
@@ -85,7 +90,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
      */
     private function updateImportsFile(ArrayCollection $entities): void
     {
-        $fileMenuContent = Yaml::parse(file_get_contents(sprintf( '%s/app/config/easyadmin/%s.yml', $this->projectDir, $this->parameters['pattern_file'])));
+        $fileMenuContent = Yaml::parse(file_get_contents(sprintf( '%s/config/packages/easy_admin.yaml', $this->projectDir)));
 
         if (!isset($fileMenuContent['imports']))
         {
@@ -94,7 +99,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
 
         foreach ($entities as $entity)
         {
-            $patternEntity = $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yml';
+            $patternEntity = 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yaml';
 
             //Si le l'entité n'existe pas dans les fichiers
             if (false === array_search($patternEntity, array_column($fileMenuContent['imports'], 'resource')))
@@ -106,8 +111,8 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
         }
 
         $ymlContent = EATool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
-        if (!file_put_contents(sprintf( '%s/app/config/easyadmin/%s.yml', $this->projectDir, $this->parameters['pattern_file']), $ymlContent))
-            throw new EAException(sprintf('Can not update imported files in %s/app/config/easyadmin/%s.yml', $this->projectDir, $this->parameters['pattern_file']));
+        if (!file_put_contents(sprintf( '%s/config/packages/easy_admin.yaml', $this->projectDir), $ymlContent))
+            throw new EAException(sprintf('Can not update imported files in %s/config/packages/easy_admin.yaml', $this->projectDir));
     }
 
     private function getRelatedEntitiesMetaData(array $entitiesMetaData, Command $command, array $bundles): array

@@ -41,7 +41,7 @@ class GeneratorClean
      */
     public function run(): void
     {
-        $fileContent = Yaml::parse(file_get_contents($this->projectDir . '/app/config/easyadmin/' . $this->parameters['pattern_file'] . '.yml'));
+        $fileContent = Yaml::parse(file_get_contents($this->projectDir . '/config/packages/easy_admin.yaml'));
         if (!isset($fileContent['imports']))
             throw new EAException('There are no imported files.');
 
@@ -53,7 +53,7 @@ class GeneratorClean
             return ;
         }
 
-        $this->consoleOutput->writeln('<info>Start </info>of cleaning easyadmin configuration files.<br>');
+        $this->consoleOutput->writeln('<info>Start </info>of cleaning easyadmin configuration files.');
         $this->purgeImportedFiles($entitiesToDelete);
         $this->purgeEasyAdminMenu($entitiesToDelete);
         $this->purgeEntityFiles($entitiesToDelete);
@@ -71,10 +71,15 @@ class GeneratorClean
         $entitiesList = $this->getEntitiesNameFromMetaDataList($this->em->getMetadataFactory()->getAllMetadata(), $this->bundles);
         $entitiesEasyAdmin = $this->getNameListEntities($fileContent['imports']);
 
+//        dump($fileContent['imports']);
+//        dump($entitiesList);
+//        dump($entitiesEasyAdmin);
+//        die();
+
         foreach (array_diff($entitiesEasyAdmin, $entitiesList) as $entity)
         {
             $entitiesToDelete['name'][] = $entity;
-            $entitiesToDelete['pattern'][] = $this->parameters['pattern_file'] . '_' . $entity . '.yml';
+            $entitiesToDelete['pattern'][] = 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_' . $entity . '.yaml';
         }
         return $entitiesToDelete;
     }
@@ -91,11 +96,11 @@ class GeneratorClean
 
         foreach ($files as $fileName)
         {
-            if ($fileName['resource'] === $this->parameters['pattern_file'] . '_menu.yml')
+            if ($fileName['resource'] === 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml')
                 continue ;
-            $lengthPattern = strlen($this->parameters['pattern_file']);
-            $postPatternFile = strripos($fileName['resource'], $this->parameters['pattern_file'] . '_');
-            $entitiesName[] = substr($fileName['resource'], $postPatternFile + $lengthPattern + 1,  - 4 - $postPatternFile );
+            $lengthPattern = strlen('wandi_easy_admin_plus/' . $this->parameters['pattern_file']);
+            $postPatternFile = strripos($fileName['resource'], 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_');
+            $entitiesName[] = substr($fileName['resource'], $postPatternFile + $lengthPattern + 1,  - 5 - $postPatternFile );
         }
         return $entitiesName;
     }
@@ -120,7 +125,7 @@ class GeneratorClean
      */
     private function purgeImportedFiles(array $entities): void
     {
-        $fileBaseContent = Yaml::parse(file_get_contents(sprintf('%s/app/config/easyadmin/%s.yml', $this->projectDir, $this->parameters['pattern_file'])));
+        $fileBaseContent = Yaml::parse(file_get_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir)));
 
         if (!isset($fileBaseContent['imports']))
         {
@@ -135,7 +140,7 @@ class GeneratorClean
 
         $fileBaseContent['imports'] = array_values($fileBaseContent['imports']);
         $ymlContent = EATool::buildDumpPhpToYml($fileBaseContent, $this->parameters);
-        file_put_contents(sprintf('%s/app/config/easyadmin/%s.yml', $this->projectDir ,$this->parameters['pattern_file']), $ymlContent);
+        file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir ,$this->parameters['pattern_file']), $ymlContent);
     }
 
     /**
@@ -145,7 +150,7 @@ class GeneratorClean
     private function purgeEasyAdminMenu(array $entities): void
     {
 
-        $fileContent = Yaml::parse(file_get_contents(sprintf( '%s/app/config/easyadmin/%s_menu.yml', $this->projectDir, $this->parameters['pattern_file'])));
+        $fileContent = Yaml::parse(file_get_contents(sprintf( '%s/config/packages/wandi_easy_admin_plus/%s_menu.yaml', $this->projectDir, $this->parameters['pattern_file'])));
 
         if (!isset($fileContent['easy_admin']['design']['menu']))
         {
@@ -160,7 +165,7 @@ class GeneratorClean
 
         $fileContent['easy_admin']['design']['menu'] = array_values($fileContent['easy_admin']['design']['menu']);
         $ymlContent = EATool::buildDumpPhpToYml($fileContent, $this->parameters);
-        file_put_contents($this->projectDir . '/app/config/easyadmin/' . $this->parameters['pattern_file'] . '_menu.yml', $ymlContent);
+        file_put_contents($this->projectDir . '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml', $ymlContent);
     }
 
     /**
@@ -169,10 +174,11 @@ class GeneratorClean
      */
     private function purgeEntityFiles(array $entities): void
     {
+//        dump($entities);die;
         foreach ($entities['name'] as $entityName)
         {
             $this->consoleOutput->writeln(sprintf('Purging entity <info>%s</info>',$entityName));
-            $path = sprintf('/app/config/easyadmin/%s_%s.yml', $this->parameters['pattern_file'], $entityName);
+            $path = sprintf('/config/packages/wandi_easy_admin_plus/%s_%s.yaml', $this->parameters['pattern_file'], $entityName);
             if (unlink($this->projectDir . $path))
                 $this->consoleOutput->writeln(sprintf('   >File <comment>%s</comment> has been <info>deleted</info>.', $path));
             else

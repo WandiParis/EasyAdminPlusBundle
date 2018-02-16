@@ -20,7 +20,7 @@ abstract class GeneratorBase
      {
          $this->container = $container;
          $this->em = $container->get('doctrine.orm.entity_manager');
-         $this->parameters = $container->getParameter('easy_admin_plus')['generator'];
+         $this->parameters = $container->getParameter('easy_admin_plus');
          $this->projectDir = $container->getParameter('kernel.project_dir');
      }
 

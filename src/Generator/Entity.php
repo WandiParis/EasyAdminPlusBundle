@@ -59,9 +59,17 @@ class Entity
     {
         $entityShortName =(new \ReflectionClass($metaData->getName()))->getShortName();
 
-        if (0 === preg_match('#((.*?)(?:Bundle))\\\Entity\\\(?:' . $entityShortName . ')$#', $metaData->getName(), $match))
+        if ($metaData->namespace == "App\Entity")
         {
-            throw new EAException('Unable to parse the bundle name');
+            return[
+                'bundle' => 'App',
+                'entity' => $entityShortName,
+            ];
+        }
+
+        if (0 === preg_match('#((.*?)(?:Bundle))#', $metaData->getName(), $match))
+        {
+            throw new EAException('Unable to parse the bundle name for the ' . $entityShortName . ' entity');
         }
 
         unset($match[0]);
@@ -80,7 +88,7 @@ class Entity
                 ];
         }
 
-        throw new EAException('<comment>the entity bundle could not be found</comment>');
+        throw new EAException('<comment>the entity bundle could not be found for the ' . $entityShortName . '</comment>');
     }
 
     public static function buildName(array $nameData): string
@@ -147,6 +155,8 @@ class Entity
      */
     public function buildMethods(array $eaToolParams): void
     {
+
+//        dump($eaToolParams);die;
         foreach ($eaToolParams['methods'] as $name => $method)
         {
             $method = new Method();

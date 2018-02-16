@@ -2,6 +2,7 @@
 
 namespace Wandi\EasyAdminPlusBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -19,19 +20,12 @@ class WandiEasyAdminPlusExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration($this->getAlias());
-        $config = $this->processConfiguration($configuration, $configs);
+        $processor     = new Processor();
+        $config = $processor->processConfiguration(new Configuration(), $configs);
+
         $container->setParameter('easy_admin_plus', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias()
-    {
-        return 'wandi_easy_admin_plus';
     }
 }

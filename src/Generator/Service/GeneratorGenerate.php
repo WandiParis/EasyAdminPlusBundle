@@ -13,6 +13,9 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
     private $vichMappings;
     private $consoleOutput;
 
+    /**
+     * @required
+     */
     public function buildServiceConfig()
     {
         $this->vichMappings = $this->container->getParameter('vich_uploader.mappings');

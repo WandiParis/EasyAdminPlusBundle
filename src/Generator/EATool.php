@@ -61,9 +61,9 @@ class EATool
 
     /**
      * @param ArrayCollection $entities
-     * @return $this
+     * @return EATool
      */
-    public function setEntities(ArrayCollection $entities): AETool
+    public function setEntities(ArrayCollection $entities): EATool
     {
         $this->entities = $entities;
         return $this;
@@ -127,7 +127,7 @@ class EATool
         {
             self::$translation = new Translator('fr_FR');
             self::$translation->addLoader('yaml', new YamlFileLoader());
-            self::$translation->addResource('yaml', $projectDir."/vendor/Wandi/easy-admin-bundle/Resources/translations/".$fileName.".fr.yml", 'fr_FR');
+            self::$translation->addResource('yaml', $projectDir."/vendor/wandi/easyadmin-plus-bundle/src/Resources/translations/".$fileName.".fr.yaml", 'fr_FR');
         }
     }
 
@@ -154,7 +154,7 @@ class EATool
     public function generateMenuFile(string $projectDir, ConsoleOutput $consoleOutput): void
     {
         $ymlContent = self::buildDumpPhpToYml($this->getMenuStructure(), $this->parameters);
-        $path =  '/app/config/easyadmin/' . $this->parameters['pattern_file'] . '_menu.yml';
+        $path =  '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml';
         if (false !== file_put_contents($projectDir . $path, $ymlContent))
             $consoleOutput->writeln('The file <comment>' . $path . ' </comment>has been <info>generated</info>.');
         else
@@ -171,7 +171,7 @@ class EATool
         foreach($this->getEntities()->getIterator()  as $entity)
         {
             $ymlContent = self::buildDumpPhpToYml($entity->getStructure($this->parameters), $this->parameters);
-            $path = '/app/config/easyadmin/' . $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yml';
+            $path = '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yaml';
             $consoleOutput->writeln('Generating entity "<info>' . $entity->getName() . '</info>"');
             $this->createBackupFile($entity->getName(), $projectDir . $path, $consoleOutput);
 
@@ -191,11 +191,11 @@ class EATool
 
         foreach($this->getEntities()->getIterator()  as $entity)
         {
-            $importFiles[] = ['resource' => $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yml'];
+            $importFiles[] = ['resource' => 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yaml'];
         }
 
         //ajoute fichier menu
-        $importFiles[] = ['resource' => $this->parameters['pattern_file'] . '_menu.yml'];
+        $importFiles[] = ['resource' => 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml'];
 
         $structure = [
             'imports' => $importFiles,
@@ -227,9 +227,7 @@ class EATool
     public function generateBaseFile(string $projectDir, ConsoleOutput $consoleOutput): void
     {
         $ymlContent = self::buildDumpPhpToYml($this->getBaseFileStructure(), $this->parameters);
-        $path = '/app/config/easyadmin/' . $this->parameters['pattern_file'] . '.yml';
-
-        // on fait une backup, créer une méthode
+        $path = '/config/packages/easy_admin.yaml';
 
         if (file_put_contents($projectDir . $path, $ymlContent ))
             $consoleOutput->writeln('The <info>main</info> configuration file <comment>' . $path . '</comment> has been <info>generated</info>.');

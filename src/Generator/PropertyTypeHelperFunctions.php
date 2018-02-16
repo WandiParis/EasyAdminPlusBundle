@@ -44,6 +44,8 @@ class PropertyTypeHelperFunctions
             throw new EaException(sprintf('Can not find the parameter relative to the specified value (%s)', $mapping['uri_prefix']));
         }
 
+
+//        dump('vich');die;
         $field->setBasePath("%" . $param . "%");
     }
 

@@ -15,3 +15,46 @@ services:
         class: Wandi\EasyAdminPlusBundle\Command\UserDisableCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:disable }
+
+    wandi.easy_admin_plus.generator.base:
+        abstract: true
+        calls:
+            - method: buildServiceConfig
+
+    wandi.easy_admin_plus.generator.generate:
+        class: Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorGenerate
+        arguments:
+            - '@service_container'
+        public: true
+        parent: wandi.easy_admin_plus.generator.base
+
+    wandi.easy_admin_plus.generator.clean:
+        class: Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorClean
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '%easy_admin_plus%'
+            - '%kernel.project_dir%'
+            - '%kernel.bundles%'
+        public: true
+
+    wandi.easy_admin_plus.generator.entity:
+        class: Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorEntity
+        arguments:
+            - '@service_container'
+        public: true
+        parent: wandi.easy_admin_plus.generator.base
+
+    wandi.easy_admin_plus.command.generator.generate:
+        class: Wandi\EasyAdminPlusBundle\Command\GeneratorGenerateCommand
+        tags:
+            -  { name: console.command, command: wandi:easy-admin-plus:generator:generate }
+
+    wandi.easy_admin_plus.command.generator.clean:
+        class: Wandi\EasyAdminPlusBundle\Command\GeneratorCleanCommand
+        tags:
+            -  { name: console.command, command: wandi:easy-admin-plus:generator:cleanup }
+
+    wandi.easy_admin_plus.command.generator.entity:
+        class: Wandi\EasyAdminPlusBundle\Command\GeneratorEntityCommand
+        tags:
+            -  { name: console.command, command: wandi:easy-admin-plus:generator:entity }
