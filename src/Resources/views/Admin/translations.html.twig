@@ -1,0 +1,147 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/easyadminplus/css/easyadminplus-translations.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <section class="content-header">
+        {% block content_header %}
+            <h1 class="title">{% block content_title %}Translations{% endblock %}</h1>
+        {% endblock content_header %}
+    </section>
+
+    <section class="flash">
+        {% block flash_messages %}
+            {{ include(_entity_config is defined ? _entity_config.templates.flash_messages : '@EasyAdmin/default/flash_messages.html.twig') }}
+        {% endblock flash_messages %}
+
+    </section>
+
+    <section id="main" class="content">
+        {% block main %}
+
+            <div class="row">
+                <div class="field-group col-xs-12">
+
+                    <div class="box box-default">
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title">
+                                <i class="fa fa-link"></i>
+                                Domain
+                            </h3>
+                        </div>
+                        <div class="box-body">
+                            <form class="form-vertical edit-form" method="GET" action="">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-11 form-group">
+                                        <select class="form-control custom-select" name="domain" id="domain" data-widget="select2">
+                                            {% for curDomain in domains %}
+                                                <option value="{{ curDomain }}"{{ (curDomain == domain ? ' selected="selected"') }}>{{ curDomain }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-1">
+                                        <button class="btn btn-primary action-switch" type="submit">Change</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form-vertical edit-form" method="POST" action="">
+                <input type="hidden" name="domain" value="{{ domain }}" />
+                <div class="row">
+                    <div class="field-group col-xs-12">
+
+                        <div class="box box-default">
+
+                            {% set colBootstrap = locales|length + 1 %}
+                            {% set dictionary = dictionaries[domain] %}
+
+                            {% for file, languages in dictionary %}
+
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">
+                                        <i class="fa fa-file-text"></i>
+                                        .{{ file|split('.')|last|upper }}
+                                    </h3>
+                                </div>
+
+                                <div class="box-body">
+
+                                    <div class="row">
+                                        <div class="col form-locales">&nbsp;</div>
+                                        {% for locale in locales %}
+                                            <div class="col form-locales">
+                                                <div class="form-group field-text text-center">
+                                                    <div class="box-header with-border">
+                                                        <img class="country" src="{{ asset('img/country/' ~ locale ~ '.png') }}" alt="{{ locale }}" title="{{ locale }}" />
+                                                        <label class="control-label">{{ locale }}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="w-100 form-locales"></div>
+
+                                        {% for key, value in dictionary[file][locale] %}
+                                            <div class="col col-xs-12">
+                                                <div class="field-text">
+                                                    <div class="box-header with-border">
+                                                        <i class="fa fa-font"></i>
+                                                        <label class="control-label">{{ key|replace({'.': ' > '}) }}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% for locale in locales %}
+                                                <div class="col col-xs-12">
+                                                    <div class="field-label">
+                                                        <img class="country" src="{{ asset('img/country/' ~ locale ~ '.png') }}" alt="{{ locale }}" title="{{ locale }}" />
+                                                        <label class="control-label">{{ locale }}</label>
+                                                    </div>
+                                                    <div class="field-textarea">
+                                                        <textarea class="form-control" name="dictionaries[{{ domain }}][{{ file }}][{{ locale }}][{{ key }}]">{{ dictionary[file][locale][key] }}</textarea>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            <div class="w-100"></div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 form-actions stuck">
+                        <div class="form-group">
+                            <div id="form-actions-row">
+                                <button type="submit" name="submit" value="save" class="btn btn-primary action-save">
+                                    <i class="fa fa-save"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </div><div class="col-xs-12 form-actions sticky-wrapper"></div>
+                </div>
+
+            </form>
+
+        {% endblock %}
+    </section>
+
+    {% block body_javascript %}
+        {{ parent() }}
+
+        {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
+    {% endblock %}
+
+{% endblock %}

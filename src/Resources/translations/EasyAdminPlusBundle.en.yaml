@@ -6,6 +6,10 @@ user:
         remember_me: "Remember me"
         submit: "Login"
 
+translator:
+    flash:
+        success: "%nbFiles% file has been saved|]1,+Inf]%nbFiles% files were saved successfully."
+
 generator:
     image:
         mime: "The allowed formats for the image are %mimes%."

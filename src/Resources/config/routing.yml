@@ -5,3 +5,8 @@ wandi_easy_admin_plus_login:
 
 wandi_easy_admin_plus_logout:
     path: /logout
+
+wandi_easy_admin_plus_translations:
+    path: /translations
+    defaults:
+        _controller: WandiEasyAdminPlusBundle:Admin:translations

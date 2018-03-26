@@ -6,6 +6,10 @@ user:
         remember_me: "Se souvenir de moi"
         submit: "S'identifier"
 
+translator:
+    flash:
+        success: "%nbFiles% fichier a été sauvegardé|]1,+Inf]%nbFiles% fichiers de traduction ont été sauvegardés."
+
 generator:
     image:
         mime: "Les formats autorisés pour l'image sont %mimes%."
