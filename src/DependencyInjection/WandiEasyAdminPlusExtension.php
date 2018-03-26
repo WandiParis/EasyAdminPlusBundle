@@ -24,7 +24,7 @@ class WandiEasyAdminPlusExtension extends Extension
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
         $config['translator']['paths'] = [
-            $container->get('kernel')->getProjectDir().'/translations'
+            //$container->get('kernel')->getProjectDir().'/translations'
         ];
 
         $container->setParameter('easy_admin_plus', $config);
