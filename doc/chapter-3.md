@@ -57,7 +57,7 @@ Just browse `/admin/translations` or click on your item in the `EasyAdmin` menu.
 
 <img src="images/translations-desktop-save.png" align="center" alt="Translations Save" />
 
-This action is also responsive:
+The action is also responsive:
 
 <img src="images/translations-mobile.png" align="center" alt="Translations Mobile" />
 
