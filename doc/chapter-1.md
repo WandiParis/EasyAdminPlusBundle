@@ -1,6 +1,6 @@
 ## Authentication
 
-`EasyAdminPlus` is packaged with an `Authentication` layer if you want to restrict access to the admin area.
+`EasyAdminPlus` is packaged with an `Authentication` layer which allows you to restrict access to the admin area.
 
 ### Configuration
 Update ```config/packages/security.yaml``` configuration: 
