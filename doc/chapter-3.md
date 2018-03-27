@@ -43,7 +43,7 @@ easy_admin:
 
 ### Translations Screen
 
-Just browse `/admin/translations`
+Just browse `/admin/translations` or click on your item in the `EasyAdmin` menu.
 
 * On the first part, you can switch the current domain to manage.
 
