@@ -141,4 +141,4 @@ class LoadAdmin extends AbstractFixture implements OrderedFixtureInterface, Cont
 
 ```
 
-Back to [ReadMe](../README.md) | Next Chapter > [Generator](doc/chapter-2.md)
+Back to [ReadMe](../README.md) | Next Chapter > [Generator](chapter-2.md)

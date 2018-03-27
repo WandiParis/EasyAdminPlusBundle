@@ -74,4 +74,4 @@ The `Translator` list all the files in the directories paths provided, it extrac
 If a file is missing in another locale, it'll be created after submission.
 If some keys are missing in the same file in another locale, it'll be created with empty value after submission.
 
-Previous Chapter > [Generator](doc/chapter-2.md) | Next Chapter > [Export Action](doc/chapter-4.md)
+Previous Chapter > [Generator](chapter-2.md) | Next Chapter > [Export Action](chapter-4.md)
