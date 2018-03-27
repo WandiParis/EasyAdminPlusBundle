@@ -71,7 +71,9 @@ All the files are backuped according to the Symfony convention (eg: `messages.en
 
 The `Translator` list all the files in the directories paths provided, it extracts all the files and all the keys from the dictionaries.
 
-If a file is missing in another locale, it'll be created after submission.
-If some keys are missing in the same file in another locale, it'll be created with empty value after submission.
+- If a file is missing in another locale, it'll be created after submission.
+- If some keys are missing in the same file in another locale, it'll be created with empty value after submission.
+
+When submitting the form, files on the current domain are erased and translations cache dir is cleared.
 
 Previous Chapter > [Generator](chapter-2.md) | Next Chapter > [Export Action](chapter-4.md)
