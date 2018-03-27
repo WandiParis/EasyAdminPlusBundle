@@ -29,3 +29,5 @@
 
 * VichUploaderBundle
 * StofDoctrineExtensionsBundle
+
+Previous Chapter [Authentication](doc/chapter-1.md) | Next Chapter > [Translation Action](doc/chapter-3.md)
