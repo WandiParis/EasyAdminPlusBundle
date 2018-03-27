@@ -7,6 +7,9 @@ login:
 
 translator:
     title: "Traductions"
+    domain: "Domaine"
+    switch: "Changer"
+    save: "Sauvegarder"
     flash:
         success: "%nbFiles% fichier a été sauvegardé|]1,+Inf]%nbFiles% fichiers de traduction ont été sauvegardés."
 
