@@ -14,7 +14,7 @@ wandi_easy_admin_plus:
         locales:
             - fr
             - en
-        # defines the directories you want to extract translations files
+        # defines the directories in which you want to extract translations files
         paths:
             - /translations
             - ...
