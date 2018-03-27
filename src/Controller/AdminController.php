@@ -36,7 +36,7 @@ class AdminController extends BaseAdminController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function translations(Request $request)
+    public function translationsAction(Request $request)
     {
         $translator = $this->get('wandi.easy_admin_plus.translator');
         $domain = $request->request->get('domain') ?? $request->query->get('domain');
@@ -61,7 +61,7 @@ class AdminController extends BaseAdminController
         // get locales
         $locales = $translator->getLocales();
         if (empty($locales)){
-            throw new \Exception("No locales to manage.");
+            throw new \Exception("No locale to manage.");
         }
 
         // get files
@@ -70,15 +70,15 @@ class AdminController extends BaseAdminController
             throw new \Exception("No translation files found.");
         }
 
+        // get all translations in files
+        $translations = $translator->getTranslations($files);
+
         // extract different domains & choose the domain to manage
-        $domains = array_keys($files);
+        $domains = array_keys($translations);
         $domain = ($domain == null && !empty($domains)) ? $domains[0] : $domain;
         if (!$domain){
             throw new \Exception("No domain found.");
         }
-
-        // get all translations in files
-        $translations = $translator->getTranslations($files);
 
         // prepare translations (add missing files in other locale and clone missing translation keys)
         $dictionaries = [];
@@ -92,6 +92,8 @@ class AdminController extends BaseAdminController
                 'domain' => $domain,
                 'dictionaries' => $dictionaries,
                 'locales' => $locales,
+                'locale' => $locale,
+                'config' => $this->getParameter('easyadmin.config'),
             ]
         );
     }

@@ -1,8 +1,7 @@
-{% extends '@EasyAdmin/default/layout.html.twig' %}
+{% extends '@WandiEasyAdminPlus/layout.html.twig' %}
 
-{% block head_stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/easyadminplus/css/easyadminplus-translations.css') }}">
+{% block page_title %}
+    {{ config.site_name }} - {{ 'translator.title'|trans({}, 'EasyAdminPlusBundle') }}
 {% endblock %}
 
 {% block content %}
@@ -17,7 +16,6 @@
         {% block flash_messages %}
             {{ include(_entity_config is defined ? _entity_config.templates.flash_messages : '@EasyAdmin/default/flash_messages.html.twig') }}
         {% endblock flash_messages %}
-
     </section>
 
     <section id="main" class="content">

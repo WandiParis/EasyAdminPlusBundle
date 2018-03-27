@@ -38,7 +38,7 @@ class Translator
     private function parseConfig(array $config)
     {
         $this->locales = $config['translator']['locales'];
-        $this->directories = $config['translator']['directories'];
+        $this->directories = $config['translator']['paths'];
         $this->excludedDomains = $config['translator']['excluded_domains'];
     }
 
@@ -97,7 +97,9 @@ class Translator
                         // use the correct loader for file extension and extract all the translation keys from catalog
                         $loader = new $loaderPath();
                         $catalog = $loader->load($file, $locale, $domain);
-                        $translations[$domain][$locale][$file->getPath() . '/' . $file->getRelativePathname()] = $catalog->all()[$domain];
+                        if (!empty($catalog->all())) {
+                            $translations[$domain][$locale][$file->getPath() . '/' . $file->getRelativePathname()] = $catalog->all()[$domain];
+                        }
                     }
                     else {
                         throw new \Exception(sprintf("No loader found for %s extension", $file->getExtension()));

@@ -1,12 +1,12 @@
-user:
-    login:
-        title: "Admin"
-        username: "Username"
-        password: "Password"
-        remember_me: "Remember me"
-        submit: "Login"
+login:
+    title: "Admin"
+    username: "Username"
+    password: "Password"
+    remember_me: "Remember me"
+    submit: "Login"
 
 translator:
+    title: "Translations"
     flash:
         success: "%nbFiles% file has been saved|]1,+Inf]%nbFiles% files were saved successfully."
 
