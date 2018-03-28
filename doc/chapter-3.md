@@ -55,7 +55,7 @@ Just browse `/admin/translations` or click on your item in the `EasyAdmin` menu.
     <img src="images/translations-desktop-domains.png" align="center" alt="Translations Domains" />
 </p>
 
-* On the second part, you've a list of all matching files and all the keys (exploded) with translations in the locales you defined.
+* On the second part, you've a list of all matching files (if you're using several files formats for the same domain) and all the keys (exploded) with translations in the locales you defined.
 
 <p align="center">
     <img src="images/translations-desktop-translations-files.png" align="center" alt="Translations files, keys & values" />
