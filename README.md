@@ -10,7 +10,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 
 It includes some extra features such as:
 * User management to restrict access to the admin area.
-* Provide a generator to guess the default EasyAdmin configuration based on Doctrine Types', Annotations' & Asserts' reflection + support popular 3rd party bundles.
+* Provide a generator to guess the default [EasyAdmin](https://symfony.com/doc/current/bundles/EasyAdminBundle/book/configuration-reference.html) configuration based on Doctrine Types', Annotations' & Asserts' reflection + support popular 3rd party bundles.
 * Add an action to manage translations files.
 * Add an action to export entities content in CSV, XLS, JSON.
 
@@ -21,11 +21,13 @@ It includes some extra features such as:
 * EasyAdminBundle ^1.17
 
 ### Install
+
 ```
 $ composer require wandi/easyadmin-plus-bundle
 ```
 
 ### Getting started
+
 1. [Authentication](doc/chapter-1.md)
 2. [Generator](doc/chapter-2.md)
 3. [Translation Action](doc/chapter-3.md)

@@ -3,9 +3,10 @@
 `EasyAdminPlus` is packaged with an `Authentication` layer which allows you to restrict access to the admin area.
 
 ### Configuration
-Update ```config/packages/security.yaml``` configuration: 
+Update your `security` settings: 
 
 ```yaml
+# config/packages/security.yaml
 security:
     encoders:
         # ...
@@ -41,7 +42,8 @@ security:
 
 ### Update schema
 
-The bundle uses its own **User** entity. So we need to update your database schema.
+The bundle uses its own **User** entity. So you need to update the database schema.
+
 ```
 $ php bin/console doctrine:schema:update -f
 ```
