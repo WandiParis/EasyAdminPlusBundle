@@ -26,6 +26,8 @@ wandi_easy_admin_plus:
             - ...
 ```
 
+All the settings are optional.
+
 If you don't provide these settings, the `Translator` will extract files located in the default `Symfony 4` translations directory (`/translations`) and only work with your default locale (`locale` parameter or `kernel.default_locale` if not set)
 
 ### Loading
