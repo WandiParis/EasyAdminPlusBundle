@@ -84,8 +84,6 @@ You've a list of:
     <img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
 </p>
 
--------
-
 *The grid uses a `display: flex` layout, so every translation value will be floated.*
 
 -------
