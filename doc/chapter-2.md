@@ -1,6 +1,6 @@
 # Generator
 
-`EasyAdminPlus` is packaged with a generator which create the default `EasyAdmin` configuration file based on your `Entities` reflection.
+`EasyAdminPlus` is packaged with a generator which create the default [EasyAdmin](https://symfony.com/doc/current/bundles/EasyAdminBundle/book/configuration-reference.html) configuration file based on your `Entities` reflection.
 
 ### Intro
 
