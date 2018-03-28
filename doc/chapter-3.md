@@ -2,7 +2,9 @@
 
 `EasyAdminPlus` is packaged with an action to manage all your translations files directly in the admin area.
 
-<img src="images/translations-desktop.png" align="center" alt="Translations Desktop" />
+<p align="center">
+    <img src="images/translations-desktop.png" align="center" alt="Translations Desktop" />
+</p>
 
 ### Configuration
 
@@ -47,19 +49,27 @@ Just browse `/admin/translations` or click on your item in the `EasyAdmin` menu.
 
 * On the first part, you can switch the current domain to manage.
 
-<img src="images/translations-desktop-domains.png" align="center" alt="Translations Domains" />
+<p align="center">
+    <img src="images/translations-desktop-domains.png" align="center" alt="Translations Domains" />
+</p>
 
 * On the second part, you've a list of all matching files and all the keys (exploded) with translations in the locales you defined.
 
-<img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
+<p align="center">
+    <img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
+</p>
 
 * On the last part, you can submit and save your changes by clicking on the sticky bottom bar.
 
-<img src="images/translations-desktop-save.png" align="center" alt="Translations Save" />
+<p align="center">
+    <img src="images/translations-desktop-save.png" align="center" alt="Translations Save" />
+</p>
 
 The action is also responsive:
 
-<img src="images/translations-mobile.png" align="center" alt="Translations Mobile" />
+<p align="center">
+    <img src="images/translations-mobile.png" align="center" alt="Translations Mobile" />
+</p>
 
 ### Formats
 
