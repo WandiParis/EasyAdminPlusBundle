@@ -16,6 +16,13 @@ services:
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:disable }
 
+    wandi.easy_admin_plus.translator:
+        class: Wandi\EasyAdminPlusBundle\Translator\Translator
+        public: true
+        arguments:
+            - '%easy_admin_plus%'
+            - '%kernel.cache_dir%'
+
     wandi.easy_admin_plus.generator.base:
         abstract: true
         calls:

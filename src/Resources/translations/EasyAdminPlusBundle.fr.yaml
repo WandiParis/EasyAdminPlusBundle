@@ -1,10 +1,17 @@
-user:
-    login:
-        title: "Admin"
-        username: "Identifiant"
-        password: "Mot de passe"
-        remember_me: "Se souvenir de moi"
-        submit: "S'identifier"
+login:
+    title: "Admin"
+    username: "Identifiant"
+    password: "Mot de passe"
+    remember_me: "Se souvenir de moi"
+    submit: "S'identifier"
+
+translator:
+    title: "Traductions"
+    domain: "Domaine"
+    switch: "Changer"
+    save: "Sauvegarder"
+    flash:
+        success: "%nbFiles% fichier a été sauvegardé|]1,+Inf]%nbFiles% fichiers de traduction ont été sauvegardés."
 
 generator:
     image:

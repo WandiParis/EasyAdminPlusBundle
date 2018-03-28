@@ -1,0 +1,88 @@
+/** TRANSLATIONS **/
+form .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+form .row .col {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%;
+}
+form .row .w-100{
+    width: 100% !important;
+    height: 15px;
+}
+.flash {
+    padding: 0 15px;
+    margin-bottom: -10px;
+}
+.control-label {
+    word-break: break-all;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding-left: 2px;
+}
+.field-text {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%)
+}
+.field-textarea {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%)
+}
+.field-textarea textarea {
+    resize: vertical;
+}
+.action-switch {
+    width: 100%;
+}
+img.country {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+@media(max-width:768px) {
+    .action-switch {
+        margin-bottom: 10px;
+    }
+    .form-locales {
+        display: none;
+    }
+    form .row .col.col-xs-12 {
+        -ms-flex-preferred-size: auto;
+        flex-basis: auto;
+    }
+    form .row .w-100 {
+        margin: 20px 15px;
+        height: 1px;
+        background-color: #F0F0F0;
+    }
+    .field-textarea {
+        top: 0;
+        transform: initial;
+    }
+    .field-label {
+        text-align: left;
+        margin: 10px 0;
+    }
+    .control-label {
+        display: inline;
+    }
+}
+@media(min-width:768px) {
+    .field-label {
+        display: none;
+    }
+}
+/** /TRANSLATIONS **/

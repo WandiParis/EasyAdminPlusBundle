@@ -20,6 +20,14 @@
         {
             "name": "Laurent Fouquet",
             "email": "laurent.fouquet@wandi.fr"
+        },
+        {
+            "name": "Laurent Bientz",
+            "email": "laurent.bientz@wandi.fr"
+        },
+        {
+            "name": "Jean-Baptiste Chateaux",
+            "email": "jean-baptiste.chateaux@wandi.fr"
         }
     ],
     "minimum-stability": "stable",

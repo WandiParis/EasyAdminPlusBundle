@@ -23,9 +23,27 @@ class WandiEasyAdminPlusExtension extends Extension
         $processor     = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
+        $config = $this->processConfigTranslator($config, $container);
+
         $container->setParameter('easy_admin_plus', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+    }
+
+    private function processConfigTranslator(array $config, ContainerBuilder $container): array
+    {
+        if (empty($config['translator']['paths'])) {
+            $config['translator']['paths'] = [
+                $container->getParameter('kernel.project_dir') . '/translations',
+            ];
+        }
+        if (empty($config['translator']['locales'])) {
+            $config['translator']['locales'] = [
+                $container->getParameter('locale') ?? $container->getParameter('kernel.default_locale'),
+            ];
+        }
+
+        return $config;
     }
 }
