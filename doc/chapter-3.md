@@ -62,7 +62,7 @@ You can switch the current domain to manage.
 #### 2. Middle part
 
 You've a list of:
-* all matching files (if you're using several files formats for the same domain)
+* all matching files (if you're using several files formats for the same domain), note that we only display file extension.
 * all the keys (`action.save` is exploded into `action > save` for user readability) 
 * all the translations values in all the locales you defined.
 
