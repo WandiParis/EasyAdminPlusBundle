@@ -80,7 +80,7 @@ $ php bin/console doctrine:schema:update -f
  
  ### Fixtures
  
- :exclamation: If you're using `DataFixtures` in your project, to avoid admin's lost, we recommand you to add a `LoadAdmin` Fixtures that uses the previous command.
+ :exclamation: If you're using `DataFixtures` in your project, to avoid admin's lost, we recommend you to add a `LoadAdmin` Fixtures that uses the previous command.
 
 ```php
 <?php
@@ -145,4 +145,6 @@ class LoadAdmin extends AbstractFixture implements OrderedFixtureInterface, Cont
 
 ```
 
-Back to [ReadMe](../README.md) | Next Chapter > [Generator](chapter-2.md)
+----------
+
+Next Chapter: [Chapter 2 - Generator](chapter-2.md)
