@@ -76,6 +76,8 @@ Eg: classic case with only one file
     <img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
 </p>
 
+-------
+
 #### 3. Last part
 
 You can submit and save your changes by clicking on the button located in the sticky bottom bar.
