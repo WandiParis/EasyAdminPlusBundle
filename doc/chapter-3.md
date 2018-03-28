@@ -66,12 +66,14 @@ You've a list of:
 * all the keys (`action.save` is exploded into `action > save` for user readability) 
 * all the translations values in all the locales you defined.
 
-Eg: several files
+*Eg: several files*
 <p align="center">
     <img src="images/translations-desktop-translations-files.png" align="center" alt="Translations files, keys & values" />
 </p>
 
-Eg: classic case with only one file
+-------
+
+*Eg: classic case with only one file*
 <p align="center">
     <img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
 </p>
