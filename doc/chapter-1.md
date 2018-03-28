@@ -74,7 +74,9 @@ $ php bin/console doctrine:schema:update -f
  
  The login `form` get the `site_name` property from `EasyAdmin` configuration.
  
- <img src="images/login.png" align="middle" alt="Login Form" /> 
+ <p align="center">
+    <img src="images/login.png" align="middle" alt="Login Form" />
+  </p>
  
  ### Fixtures
  
