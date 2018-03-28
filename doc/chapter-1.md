@@ -1,4 +1,4 @@
-## Authentication
+# Authentication
 
 `EasyAdminPlus` is packaged with an `Authentication` layer which allows you to restrict access to the admin area.
 

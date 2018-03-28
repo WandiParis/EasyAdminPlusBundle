@@ -1,4 +1,4 @@
-## Export Action
+# Export Action
 
 `EasyAdminPlus` is packaged with an action to export all your entities in several formats (CSV, Excel, Json, ...)
 

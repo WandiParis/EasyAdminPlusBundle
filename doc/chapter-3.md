@@ -1,4 +1,4 @@
-## Translator
+# Translator
 
 `EasyAdminPlus` is packaged with an action to manage all your translations files directly in the admin area.
 

@@ -1,4 +1,4 @@
-## Generator
+# Generator
 
 `EasyAdminPlus` is packaged with a generator which create the default `EasyAdmin` configuration file based on your `Entities` reflection.
 
