@@ -44,29 +44,29 @@ security:
 
 The bundle uses its own **User** entity. So you need to update the database schema.
 
-```
+```shell
 $ php bin/console doctrine:schema:update -f
 ```
 
 ### Commands
 
 * Create an admin
- ```
+ ```shell
  php bin/console wandi:easy-admin-plus:user:create admin password
  ```
 
 * Change admin password
- ```
+ ```shell
  php bin/console wandi:easy-admin-plus:user:change-password admin password2
  ```
 
 * Enable an admin
- ```
+ ```shell
  php bin/console wandi:easy-admin-plus:user:enable admin
  ```
  
 * Disable an admin
- ```
+ ```shell
  php bin/console wandi:easy-admin-plus:user:disable admin
  ```
  

@@ -23,7 +23,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 
 ### Install
 
-```bash
+```shell
 $ composer require wandi/easyadmin-plus-bundle
 ```
 
