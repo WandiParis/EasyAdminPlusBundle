@@ -128,7 +128,7 @@ The `Translator` list all the translations files in the directories paths provid
 
 When submitting the form, files on the current domain are backuped and erased with your changes. 
 
-Message is addedd  in `session flashbag` and translations cache dir (`kernel.cache_dir`) is cleared for production use before forwarding on GET.
+Message is added  in `session flashbag` and translations cache dir (`kernel.cache_dir`) is cleared for production use before forwarding on GET.
 
 
 ----------
