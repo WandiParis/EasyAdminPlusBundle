@@ -80,6 +80,8 @@ You've a list of:
 
 -------
 
+** The grid uses a `display: flex` layout, so every translation value will be floated. ** 
+
 #### 3. Last part
 
 You can submit and save your changes by clicking on the button located in the sticky bottom bar.
