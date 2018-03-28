@@ -100,7 +100,7 @@ You can submit and save your changes by clicking on the button located in the st
 
 ### Translations Screen - Mobile
 
-The etire action is also responsive:
+The entire action is also responsive:
 
 <p align="center">
     <img src="images/translations-mobile.png" align="center" alt="Translations Mobile" />
@@ -110,9 +110,11 @@ The etire action is also responsive:
 
 ### Formats
 
-The translator manage all the translations formats supported by Symfony (yaml, xlf, json, ts, php, po, mo, ini, csv) and preserve the original format when committing the changes.
+The `Translator` manage all the [translations formats](https://symfony.com/doc/current/components/translation.html#component-translator-message-catalogs) supported by Symfony (yaml, xlf, json, ts, php, po, mo, ini, csv).
+ 
+It preserves the original file format when committing the changes.
 
-All the files are backuped according to the Symfony convention (eg: `messages.en.xlf~`) before erasing task complete.
+All the files are backuped according to the Symfony convention (eg: `messages.en.xlf~`) before the erasing task is complete.
 
 -------
 
