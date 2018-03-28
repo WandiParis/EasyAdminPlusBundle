@@ -4,7 +4,7 @@
 
 ### Intro
 
-:exclamation: The purpose of this generator is not to write all the settings for you but to get rid of the tedious writing time of the configurations of your many entities.
+:exclamation: The purpose of this generator is not to write all the configuration for you but to get rid of the tedious writing time of the settings if you've many entities.
 
 **Up to you to enrich these settings by yourself after the complete generation.**
 
