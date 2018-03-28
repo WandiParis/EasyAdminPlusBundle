@@ -108,7 +108,7 @@ The entire action is also responsive:
 
 -------
 
-### Formats
+### Supported formats
 
 The `Translator` manage all the [translations formats supported by Symfony](https://symfony.com/doc/current/components/translation.html#component-translator-message-catalogs) (yaml, xlf, json, ts, php, po, mo, ini, csv).
  
@@ -118,14 +118,17 @@ All the files are backuped according to the Symfony convention (eg: `messages.en
 
 -------
 
-### How it works
+### Behind the scenes
 
-The `Translator` list all the files in the directories paths provided, it extracts all the files and all the keys from the dictionaries.
+The `Translator` list all the files in the directories paths provided, excludes unwanted domains if needed and extracts all the files and all the keys from the dictionaries.
 
-- If a file is missing in another locale, it'll be created after submission.
-- If some keys are missing in the same file in another locale, it'll be created with empty value after submission.
+- If a file is missing in another locale, it'll be created after submission with empty values.
+- If some keys are missing in the same file in another locale, they will be added with empty values after submission.
 
-When submitting the form, files on the current domain are erased and translations cache dir is cleared.
+When submitting the form, files on the current domain are backuped and erased. 
+
+Message is addedd  in `session flashbag` and translations cache dir (`kernel.cache_dir`) is cleared for production use before forwarding on GET.
+
 
 ----------
 
