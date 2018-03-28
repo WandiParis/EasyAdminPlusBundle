@@ -120,7 +120,7 @@ All the files are backuped according to the Symfony convention (eg: `messages.en
 
 ### Behind the scenes
 
-The `Translator` list all the files in the directories paths provided, excludes unwanted domains if needed and extracts all the files and all the keys from the dictionaries.
+The `Translator` list all the translations files in the directories paths provided, excludes unwanted domains if needed and extracts all the files and all the keys from the dictionaries.
 
 - If a file is missing in another locale, it'll be created after submission with empty values.
 - If some keys are missing in the same file in another locale, they will be added with empty values after submission.
