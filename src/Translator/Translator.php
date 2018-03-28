@@ -309,7 +309,7 @@ class Translator
      */
     public function clearTranslationsCache()
     {
-        array_map('unlink', glob($this->cacheDir));
+        array_map('unlink', glob($this->cacheDir . '/translations/*'));
     }
 
     /**

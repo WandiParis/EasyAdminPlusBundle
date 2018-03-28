@@ -49,7 +49,7 @@ class AdminController extends BaseAdminController
             $nbWrittenFiles = $translator->writeDictionaries($request->request->get('dictionaries') ?? [], $locale);
 
             // put flash
-            $this->addFlash('success', $this->get('translator')->transChoice('translator.flash.success', $nbWrittenFiles, ['nbFiles' => $nbWrittenFiles], 'EasyAdminPlusBundle'));
+            $this->addFlash('success', $this->get('translator')->transChoice('translator.flash.success', $nbWrittenFiles, ['%nbFiles%' => $nbWrittenFiles], 'EasyAdminPlusBundle'));
 
             // clear cache
             $translator->clearTranslationsCache();

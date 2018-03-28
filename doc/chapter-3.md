@@ -44,9 +44,9 @@ easy_admin:
     site_name: Your website
     design:
         # ...
-    menu:
-        # ...
-        - { route: 'wandi_easy_admin_plus_translations', label: 'Translations', icon: 'globe' }
+        menu:
+            # ...
+            - { route: 'wandi_easy_admin_plus_translations', label: 'Translations', icon: 'globe' }
 ```
 
 -------
