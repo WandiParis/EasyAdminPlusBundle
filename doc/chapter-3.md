@@ -56,6 +56,7 @@ You can switch the current domain to manage.
 <p align="center">
     <img src="images/translations-desktop-domains.png" align="center" alt="Translations Domains" />
 </p>
+
 -------
 
 #### 2. Middle part
