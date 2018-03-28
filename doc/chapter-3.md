@@ -28,7 +28,7 @@ wandi_easy_admin_plus:
 
 All the settings are optional.
 
-If you don't provide these settings, the `Translator` will extract files located in the default `Symfony 4` translations directory (`/translations`) and only work with your default locale (`locale` parameter or `kernel.default_locale` if not set)
+If you don't provide them, the `Translator` will extract files located in the default `Symfony 4` translations directory (`/translations`) and only work with your default locale (`locale` parameter or `kernel.default_locale` if not set)
 
 ### Loading
 
@@ -56,6 +56,10 @@ Just browse `/admin/translations` or click on your item in the `EasyAdmin` menu.
 </p>
 
 * On the second part, you've a list of all matching files and all the keys (exploded) with translations in the locales you defined.
+
+<p align="center">
+    <img src="images/translations-desktop-translations-files.png" align="center" alt="Translations files, keys & values" />
+</p>
 
 <p align="center">
     <img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
