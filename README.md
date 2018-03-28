@@ -4,6 +4,8 @@
 
 **EXPERIMENTAL-BETA VERSION** > not recommended for production use
 
+-------
+
 ### About
 
 EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle) which includes some extra features. 
