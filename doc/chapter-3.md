@@ -6,6 +6,8 @@
     <img src="images/translations-desktop.png" align="center" alt="Translations Desktop" />
 </p>
 
+-------
+
 ### Configuration
 
 ```yaml
@@ -30,6 +32,8 @@ All the settings are optional.
 
 If you don't provide them, the `Translator` will extract files located in the default `Symfony 4` translations directory (`/translations`) and only work with your default locale (`locale` parameter or `kernel.default_locale` if not set)
 
+-------
+
 ### Loading
 
 Add the `wandi_easy_admin_plus_translations` route in the `menu` attribute of the `EasyAdmin` configuration file.
@@ -44,6 +48,8 @@ easy_admin:
         # ...
         - { route: 'wandi_easy_admin_plus_translations', label: 'Translations', icon: 'globe' }
 ```
+
+-------
 
 ### Translations Screen
 
@@ -82,6 +88,8 @@ You've a list of:
 
 *The grid uses a `display: flex` layout, so every translation value will be floated.*
 
+-------
+
 #### 3. Last part
 
 You can submit and save your changes by clicking on the button located in the sticky bottom bar.
@@ -89,6 +97,8 @@ You can submit and save your changes by clicking on the button located in the st
 <p align="center">
     <img src="images/translations-desktop-save.png" align="center" alt="Translations Save" />
 </p>
+
+-------
 
 ### Translations Screen - Mobile
 
@@ -98,11 +108,15 @@ The etire action is also responsive:
     <img src="images/translations-mobile.png" align="center" alt="Translations Mobile" />
 </p>
 
+-------
+
 ### Formats
 
 The translator manage all the translations formats supported by Symfony (yaml, xlf, json, ts, php, po, mo, ini, csv) and preserve the original format when committing the changes.
 
 All the files are backuped according to the Symfony convention (eg: `messages.en.xlf~`) before erasing task complete.
+
+-------
 
 ### How it works
 
