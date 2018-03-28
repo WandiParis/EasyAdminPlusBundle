@@ -126,7 +126,7 @@ The `Translator` list all the translations files in the directories paths provid
 - If a file is missing in another locale, it'll be created after submission with empty values.
 - If some keys are missing in the same file in another locale, they will be added with empty values after submission.
 
-When submitting the form, files on the current domain are backuped and erased. 
+When submitting the form, files on the current domain are backuped and erased with your changes. 
 
 Message is addedd  in `session flashbag` and translations cache dir (`kernel.cache_dir`) is cleared for production use before forwarding on GET.
 
