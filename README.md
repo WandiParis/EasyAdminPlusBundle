@@ -10,7 +10,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 
 ### Features
 
-- [x] User management to restrict access to the admin area.
+- [x] Admin management to restrict access to the secure area.
 - [x] Provide a generator to guess the default [EasyAdmin](https://symfony.com/doc/current/bundles/EasyAdminBundle/book/configuration-reference.html) configuration based on Doctrine Types', Annotations' & Asserts' reflection + support popular 3rd party bundles.
 - [x] Add an action to manage translations files.
 - [x] ACL to restrict access based on `entity/action role permissions` (porting of [EasyAdminExtensionBundle](https://github.com/alterphp/EasyAdminExtensionBundle))
