@@ -76,4 +76,6 @@ The `Translator` list all the files in the directories paths provided, it extrac
 
 When submitting the form, files on the current domain are erased and translations cache dir is cleared.
 
-Previous Chapter > [Generator](chapter-2.md) | Next Chapter > [Export Action](chapter-4.md)
+----------
+
+Next chapter: [Chapter 4 - Export Action](chapter-4.md)

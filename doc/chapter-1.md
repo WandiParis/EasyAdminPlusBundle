@@ -147,4 +147,4 @@ class LoadAdmin extends AbstractFixture implements OrderedFixtureInterface, Cont
 
 ----------
 
-Next Chapter: [Chapter 2 - Generator](chapter-2.md)
+Next chapter: [Chapter 2 - Generator](chapter-2.md)

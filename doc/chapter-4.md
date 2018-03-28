@@ -6,4 +6,6 @@
 
 :exclamation: Write the doc [@jbchateaux](https://github.com/jbchateaux)
 
-Previous Chapter > [Translation Action](chapter-3.md) | Back to [ReadMe](../README.md) 
+----------
+
+Next chapter: [Back to main readme](../README.md)

@@ -30,4 +30,6 @@
 * VichUploaderBundle
 * StofDoctrineExtensionsBundle
 
-Previous Chapter [Authentication](chapter-1.md) | Next Chapter > [Translation Action](chapter-3.md)
+----------
+
+Next chapter: [Chapter 3 - Translation Action](chapter-3.md)
