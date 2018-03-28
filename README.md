@@ -1,12 +1,12 @@
+# EasyAdminPlusBundle
+
 :exclamation: **DISCLAIMER** :exclamation: 
 
-EXPERIMENTAL-BETA VERSION > not recommended for production use
-
-# EasyAdminPlusBundle
+**EXPERIMENTAL-BETA VERSION** > not recommended for production use
 
 ### About
 
-EasyAdminPlusBundle is a Symfony4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle). 
+EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle). 
 
 It includes some extra features such as:
 * User management to restrict access to the admin area.
