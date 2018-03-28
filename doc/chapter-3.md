@@ -49,15 +49,16 @@ easy_admin:
 
 Just browse `/admin/translations` or click on your item in the `EasyAdmin` menu.
 
-##### First part
+#### 1. First part
 
 You can switch the current domain to manage.
 
 <p align="center">
     <img src="images/translations-desktop-domains.png" align="center" alt="Translations Domains" />
 </p>
+-------
 
-##### Middle part
+#### 2. Middle part
 
 You've a list of:
 * all matching files (if you're using several files formats for the same domain)
@@ -74,7 +75,7 @@ Eg: classic case with only one file
     <img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
 </p>
 
-##### Last part
+#### 3. Last part
 
 You can submit and save your changes by clicking on the button located in the sticky bottom bar.
 
