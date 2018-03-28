@@ -80,7 +80,7 @@ You've a list of:
 
 -------
 
-**The grid uses a `display: flex` layout, so every translation value will be floated.** 
+*The grid uses a `display: flex` layout, so every translation value will be floated.*
 
 #### 3. Last part
 
