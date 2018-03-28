@@ -49,29 +49,42 @@ easy_admin:
 
 Just browse `/admin/translations` or click on your item in the `EasyAdmin` menu.
 
-* On the first part, you can switch the current domain to manage.
+##### First part
+
+You can switch the current domain to manage.
 
 <p align="center">
     <img src="images/translations-desktop-domains.png" align="center" alt="Translations Domains" />
 </p>
 
-* On the second part, you've a list of all matching files (if you're using several files formats for the same domain) and all the keys (exploded) with translations values in all the locales you defined.
+##### Middle part
 
+You've a list of:
+* all matching files (if you're using several files formats for the same domain)
+* all the keys (`action.save` is exploded into `action > save` for user readability) 
+* all the translations values in all the locales you defined.
+
+Eg: several files
 <p align="center">
     <img src="images/translations-desktop-translations-files.png" align="center" alt="Translations files, keys & values" />
 </p>
 
+Eg: classic case with only one file
 <p align="center">
     <img src="images/translations-desktop-translations.png" align="center" alt="Translations files, keys & values" />
 </p>
 
-* On the last part, you can submit and save your changes by clicking on the sticky bottom bar.
+##### Last part
+
+You can submit and save your changes by clicking on the button located in the sticky bottom bar.
 
 <p align="center">
     <img src="images/translations-desktop-save.png" align="center" alt="Translations Save" />
 </p>
 
-The action is also responsive:
+### Translations Screen - Mobile
+
+The etire action is also responsive:
 
 <p align="center">
     <img src="images/translations-mobile.png" align="center" alt="Translations Mobile" />
