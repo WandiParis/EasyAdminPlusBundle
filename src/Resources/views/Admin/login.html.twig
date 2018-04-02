@@ -1,7 +1,7 @@
 {% extends '@WandiEasyAdminPlus/layout.html.twig' %}
 
 {% block page_title %}
-    {{ config.site_name }} - {{ 'login.title'|trans({}, 'EasyAdminPlusBundle') }}
+    {{ config.site_name|striptags }}{% if config.site_name|striptags is not empty %} - {% endif %}{{ 'login.title'|trans({}, 'EasyAdminPlusBundle') }}
 {% endblock %}
 
 {% block body %}
@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
-                    <h1 class="page-title">{{ config.site_name }}</h1>
+                    <h1 class="page-title">{{ config.site_name|raw }}</h1>
                     <div class="well">
                         {% if error %}
                             <div class="alert alert-danger" role="alert">
@@ -47,3 +47,4 @@
     </div>
     </body>
 {% endblock %}
+
