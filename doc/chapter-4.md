@@ -110,6 +110,18 @@ If you are writing a custom action, you can use the twig filter to check a privi
 {% endif %}
 ```
 
+### Known issues
+
+For the default access to admin area, Javier takes the first `Entity` in the settings and forward on it with default action `List`.
+
+The problem is that he's not checking if the `List` action of this entity is really enabled.
+
+I've submitted a [PR](https://github.com/EasyCorp/EasyAdminBundle/pull/2151) to force the redirect on the correct `Entity`, `Action` and `Id` (if `Edit` action) but still not merged.
+
+With the addition of the role feature, if the first defined `Entity` requires a higher role than yours, we've no other choice than choosing the first `Entity` which matchs with your role **on the `List` Action**.
+ 
+So sadly, if your first defined `Entity` matchs with your role but on a different action than `List`, it'll be skipped.
+
 ----------
 
 Next chapter: [Chapter 5 - Export Action](chapter-5.md)
