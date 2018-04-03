@@ -107,7 +107,7 @@ If you are writing a custom action, you can use the twig filter to check a privi
 {# templates/Admin/test.html.twig #}
 {% if is_easyadmin_granted('Product', 'new') %}
     <a href="...">Add a product</a>
-  {% endif %}
+{% endif %}
 ```
 
 ----------
