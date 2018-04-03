@@ -50,17 +50,19 @@ Let's admit you use this kind of role hierarchy:
 ```yaml
 # config/packages/security.yaml
 security:
-	###
-	role_hierarchy:
+    ### ...
+    role_hierarchy:
         ROLE_USER:        	ROLE_USER
         ROLE_ADMIN:       	ROLE_USER # admin (minimum level to access back-office)
-		ROLE_ADMIN_READER: 	ROLE_ADMIN # custom admin role
+        ROLE_ADMIN_READER: 	ROLE_ADMIN # custom admin role
         ROLE_ADMIN_SUPER: 	[ROLE_USER, ROLE_ADMIN, ROLE_ADMIN_READER] # super-admin
 ```
 
 User with role `ROLE_ADMIN_READER` can only access to `List`, `Search` and `Show` actions of the Product `Entity` whereas `ROLE_ADMIN_SUPER` can access all the actions with no restriction.
 
-> *Note: If you use actions based roles, you can do some factoring by naming all your roles with the action name as suffix.*
+### Using actions based roles 
+
+You can do some factoring by naming all your roles with the action name as suffix.
 
 Both following configurations will apply exactly the same restrictions.
 
