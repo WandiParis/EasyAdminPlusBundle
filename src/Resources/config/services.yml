@@ -23,15 +23,21 @@ services:
             - '%easy_admin_plus%'
             - '%kernel.cache_dir%'
 
-    wandi.easy_admin_plus.acl.admin_authorization_checker:
+    wandi.easy_admin_plus.acl.security.admin_authorization_checker:
         class: Wandi\EasyAdminPlusBundle\Acl\Security\AdminAuthorizationChecker
         public: true
         arguments:
             - '@security.authorization_checker'
+    wandi.easy_admin_plus.acl.event_listener.easy_admin_subscriber:
+        class: Wandi\EasyAdminPlusBundle\Acl\EventListener\EasyAdminSubscriber
+        arguments:
+            - '@wandi.easy_admin_plus.acl.security.admin_authorization_checker'
+        tags:
+            - { name: kernel.event_subscriber }
     wandi.easy_admin_plus.acl.helper.menu_helper:
         class: Wandi\EasyAdminPlusBundle\Acl\Helper\MenuHelper
         arguments:
-            - '@wandi.easy_admin_plus.acl.admin_authorization_checker'
+            - '@wandi.easy_admin_plus.acl.security.admin_authorization_checker'
     wandi.easy_admin_plus.acl.twig.menu_extension:
         class: Wandi\EasyAdminPlusBundle\Acl\Twig\MenuExtension
         arguments:
@@ -41,7 +47,7 @@ services:
     wandi.easy_admin_plus.acl.twig.admin_authorization_extension:
         class: Wandi\EasyAdminPlusBundle\Acl\Twig\AdminAuthorizationExtension
         arguments:
-            - '@wandi.easy_admin_plus.acl.admin_authorization_checker'
+            - '@wandi.easy_admin_plus.acl.security.admin_authorization_checker'
         tags:
             - { name: twig.extension }
 

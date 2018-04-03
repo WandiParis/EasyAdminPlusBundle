@@ -16,10 +16,10 @@ easy_admin:
     entities:
         Product:
             class: App\Entity\Product
-            role: ROLE_ADMIN_SUPER
+            role: ROLE_EASY_ADMIN_SUPER
 ```
 
-All the enabled actions on the Product `Entity` will be only accessible to users with role `ROLE_ADMIN_SUPER`.
+All the enabled actions on the Product `Entity` will be only accessible to users with role `ROLE_EASY_ADMIN_SUPER`.
 
 ### Per entity action role permissions
 
@@ -52,13 +52,13 @@ Let's admit you use this kind of role hierarchy:
 security:
     ### ...
     role_hierarchy:
-        ROLE_USER:        	ROLE_USER
-        ROLE_ADMIN:       	ROLE_USER # admin (minimum level to access back-office)
-        ROLE_ADMIN_READER: 	ROLE_ADMIN # custom admin role
-        ROLE_ADMIN_SUPER: 	[ROLE_USER, ROLE_ADMIN, ROLE_ADMIN_READER] # super-admin
+        ROLE_USER:        	    ROLE_USER
+        ROLE_EASY_ADMIN:        ROLE_USER # admin (minimum level to access back-office)
+        ROLE_EASY_ADMIN_READER: ROLE_EASY_ADMIN # custom admin role
+        ROLE_EASY_ADMIN_SUPER: 	[ROLE_USER, ROLE_EASY_ADMIN, ROLE_EASY_ADMIN_READER] # super-admin
 ```
 
-User with role `ROLE_ADMIN_READER` can only access to `List`, `Search` and `Show` actions of the Product `Entity` whereas `ROLE_ADMIN_SUPER` can access all the actions with no restriction.
+User with role `ROLE_EASY_ADMIN_READER` can only access to `List`, `Search` and `Show` actions of the Product `Entity` whereas `ROLE_EASY_ADMIN_SUPER` can access all the actions with no restriction.
 
 ### Using actions based roles 
 
