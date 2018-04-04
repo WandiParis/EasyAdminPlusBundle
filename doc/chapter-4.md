@@ -32,17 +32,17 @@ easy_admin:
         Product:
             class: App\Entity\Product
             list:
-                role: ROLE_ADMIN_READER
+                role: ROLE_EASY_ADMIN_READER
             search:
-                role: ROLE_ADMIN_READER
+                role: ROLE_EASY_ADMIN_READER
             new:
-                role: ROLE_ADMIN_SUPER
+                role: ROLE_EASY_ADMIN_SUPER
             edit:
-                role: ROLE_ADMIN_SUPER
+                role: ROLE_EASY_ADMIN_SUPER
             show:
-                role: ROLE_ADMIN_READER
+                role: ROLE_EASY_ADMIN_READER
             delete:
-                role: ROLE_ADMIN_SUPER
+                role: ROLE_EASY_ADMIN_SUPER
 ```
 
 Let's admit you use this kind of role hierarchy:

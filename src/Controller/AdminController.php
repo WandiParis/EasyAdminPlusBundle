@@ -4,6 +4,7 @@ namespace Wandi\EasyAdminPlusBundle\Controller;
 
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class AdminController extends BaseAdminController
 {
@@ -29,6 +30,70 @@ class AdminController extends BaseAdminController
         }
 
         return parent::redirectToBackendHomepage();
+    }
+
+    /**
+     * see PR #2150 (https://github.com/EasyCorp/EasyAdminBundle/pull/2150)
+     *
+     * @inheritdoc
+     */
+    protected function redirectToReferrer()
+    {
+        $refererUrl = $this->request->query->get('referer', '');
+        $refererAction = $this->request->query->get('action');
+
+        // 1. redirect to list if possible
+        if ($this->isActionAllowed('list', true)) {
+            if (!empty($refererUrl)) {
+                return $this->redirect(urldecode($refererUrl));
+            }
+
+            return $this->redirectToRoute('easyadmin', [
+                'action' => 'list',
+                'entity' => $this->entity['name'],
+                'menuIndex' => $this->request->query->get('menuIndex'),
+                'submenuIndex' => $this->request->query->get('submenuIndex'),
+            ]);
+        }
+
+        // 2. from new|edit action, redirect to edit if possible
+        if (\in_array($refererAction, ['new', 'edit']) && $this->isActionAllowed('edit', true)) {
+            return $this->redirectToRoute('easyadmin', [
+                'action' => 'edit',
+                'entity' => $this->entity['name'],
+                'menuIndex' => $this->request->query->get('menuIndex'),
+                'submenuIndex' => $this->request->query->get('submenuIndex'),
+                'id' => ('new' === $refererAction)
+                    ? PropertyAccess::createPropertyAccessor()->getValue($this->request->attributes->get('easyadmin')['item'], $this->entity['primary_key_field_name'])
+                    : $this->request->query->get('id'),
+            ]);
+        }
+
+        // 3. from new action, redirect to new if possible
+        if ('new' === $refererAction && $this->isActionAllowed('new', true)) {
+            return $this->redirectToRoute('easyadmin', [
+                'action' => 'new',
+                'entity' => $this->entity['name'],
+                'menuIndex' => $this->request->query->get('menuIndex'),
+                'submenuIndex' => $this->request->query->get('submenuIndex'),
+            ]);
+        }
+
+        return $this->redirectToBackendHomepage();
+    }
+
+    /**
+     * @inheritdoc
+     * @param bool $checkRole force to check role
+     */
+    protected function isActionAllowed($actionName, $checkRole = false)
+    {
+        if ($checkRole){
+            return false === in_array($actionName, $this->entity['disabled_actions'], true) &&
+                $this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName);
+        }
+
+        return parent::isActionAllowed($actionName);
     }
 
     /**
