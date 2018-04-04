@@ -20,6 +20,7 @@ class UserCreateCommand extends ContainerAwareCommand
                 [
                     new InputArgument('username', InputArgument::REQUIRED, 'The username'),
                     new InputArgument('password', InputArgument::REQUIRED, 'The password'),
+                    new InputArgument('roles', InputArgument::IS_ARRAY, 'The roles'),
                 ]
             );
     }
@@ -32,24 +33,30 @@ class UserCreateCommand extends ContainerAwareCommand
 
         $username = $input->getArgument('username');
         $password = $input->getArgument('password');
+        $roles = $input->getArgument('roles');
 
         $user = new User();
 
         $user->setUsername($username)
             ->setPassword($container->get('security.password_encoder')->encodePassword($user, $password));
 
+        foreach ($roles as $role) {
+            $user->addRole($role);
+        }
+
         $violations = $validator->validate($user);
 
-        if ($violations->count() === 0) {
-            $em->persist($user);
-            $em->flush();
-
-            $output->writeln(sprintf('User <comment>%s</comment> created', $username));
-        } else {
+        if ($violations->count()) {
             foreach ($violations as $violation) {
                 /* @var ConstraintViolation $violation */
                 $output->writeln(sprintf('<error>%s: %s</error>', ucfirst($violation->getPropertyPath()), mb_strtolower($violation->getMessage())));
             }
+            return;
         }
+
+        $em->persist($user);
+        $em->flush();
+
+        $output->writeln(sprintf('User <comment>%s</comment> created', $username));
     }
 }

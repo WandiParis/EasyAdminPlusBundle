@@ -15,6 +15,18 @@ services:
         class: Wandi\EasyAdminPlusBundle\Command\UserDisableCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:disable }
+    wandi.easy_admin_plus.command.user.add_roles:
+        class: Wandi\EasyAdminPlusBundle\Command\UserAddRoles
+        tags:
+            -  { name: console.command, command: wandi:easy-admin-plus:user:add-roles }
+    wandi.easy_admin_plus.command.user.remove_roles:
+        class: Wandi\EasyAdminPlusBundle\Command\UserRemoveRoles
+        tags:
+            -  { name: console.command, command: wandi:easy-admin-plus:user:remove-roles }
+    wandi.easy_admin_plus.command.user.change_roles:
+        class: Wandi\EasyAdminPlusBundle\Command\UserChangeRoles
+        tags:
+            -  { name: console.command, command: wandi:easy-admin-plus:user:change-roles }
 
     wandi.easy_admin_plus.translator:
         class: Wandi\EasyAdminPlusBundle\Translator\Translator
