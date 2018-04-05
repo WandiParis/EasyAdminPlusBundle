@@ -133,6 +133,9 @@ class LoadAdmin extends AbstractFixture implements OrderedFixtureInterface, Cont
             'command' => 'wandi:easy-admin-plus:create-user',
             'username' => 'YOUR_LOGIN',
             'password' => 'YOUR_PASSWORD',
+            'roles' => [
+                'ROLE_EASY_ADMIN_SUPER',
+            ],
         ));
         $output = new NullOutput();
 
