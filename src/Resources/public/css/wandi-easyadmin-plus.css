@@ -1,3 +1,4 @@
+/** AUTH **/
 .login-container {
     display: flex;
     height: 100vh;
@@ -6,9 +7,15 @@
     justify-content: center;
 }
 
-.page-title {
+.login-container .page-title {
     text-align: center;
+    overflow:hidden;
 }
+
+.login-container .page-title *{
+    max-width: 100%;
+}
+/** /AUTH **/
 
 /** TRANSLATIONS **/
 form .row {
