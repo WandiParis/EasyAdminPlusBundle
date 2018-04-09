@@ -9,8 +9,11 @@ use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyClassHelper;
+use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
+use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 
-class EATool
+class GeneratorTool
 {
     private $parameters = [];
     private $entities;
@@ -61,9 +64,9 @@ class EATool
 
     /**
      * @param ArrayCollection $entities
-     * @return EATool
+     * @return GeneratorTool
      */
-    public function setEntities(ArrayCollection $entities): EATool
+    public function setEntities(ArrayCollection $entities): GeneratorTool
     {
         $this->entities = $entities;
         return $this;
@@ -73,7 +76,7 @@ class EATool
      * @param Entity $entity
      * @return $this
      */
-    public function addEntity(Entity $entity): EATool
+    public function addEntity(Entity $entity): GeneratorTool
     {
         $this->entities[] = $entity;
         return $this;
@@ -91,7 +94,7 @@ class EATool
      * @param array $parameters
      * @return $this
      */
-    public function setParameters(array $parameters): EATool
+    public function setParameters(array $parameters): GeneratorTool
     {
         $this->parameters = $parameters;
         return $this;
@@ -134,16 +137,16 @@ class EATool
     public function initHelpers(): void
     {
         $classHelpers = array_map(function($helper){
-            return array_replace(ConfigurationTypes::getMaskHelper(), $helper);
-        }, ConfigurationTypes::getClassHelpers());
+            return array_replace(PropertyClassHelper::getMaskHelper(), $helper);
+        }, PropertyClassHelper::getClassHelpers());
 
-        ConfigurationTypes::setClassHelpers($classHelpers);
+        PropertyClassHelper::setClassHelpers($classHelpers);
 
         $typeHelpers = array_map(function($helper){
-            return array_replace(ConfigurationTypes::getMaskHelper(), $helper);
-        }, ConfigurationTypes::getTypeHelpers());
+            return array_replace(PropertyTypeHelper::getMaskHelper(), $helper);
+        }, PropertyTypeHelper::getTypeHelpers());
 
-        ConfigurationTypes::setTypeHelpers($typeHelpers);
+        PropertyTypeHelper::setTypeHelpers($typeHelpers);
     }
 
     /**

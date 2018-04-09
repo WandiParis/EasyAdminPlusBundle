@@ -1,8 +1,10 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator;
+namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Translation\Translator;
+use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 
 class Method
 {
@@ -51,7 +53,7 @@ class Method
     public function buildTitle(string $entityName): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
 
         $splitName = explode('_', $entityName);
 

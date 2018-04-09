@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Command;
+namespace Wandi\EasyAdminPlusBundle\Generator\Command;
 
 use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -30,7 +30,7 @@ class GeneratorEntityCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $dirProject = $this->getContainer()->getParameter('kernel.project_dir');
-        $eaToolParams = $this->getContainer()->getParameter('easy_admin_plus');
+        $eaToolParams = $this->getContainer()->getParameter('easy_admin_plus')['generator'];
         $entiyManager = $this->getContainer()->get('doctrine.orm.entity_manager');
         $helper = $this->getHelper('question');
         $entitiesRawName = $input->getArgument('entity');

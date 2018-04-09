@@ -37,4 +37,5 @@ class EasyAdminType
     const   TIME = 'time';
     const   POSITION = 'position';
     const   ASSOCIATION = 'association';
+    const   IP = 'ip';
 }

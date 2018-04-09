@@ -4,9 +4,8 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Wandi\EasyAdminPlusBundle\Generator\Entity;
-use Wandi\EasyAdminPlusBundle\Generator\EATool;
-use Wandi\EasyAdminPlusBundle\Generator\GeneratorConfigInterface;
+use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
+use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 
 class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterface
 {
@@ -18,7 +17,8 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
      */
     public function buildServiceConfig()
     {
-        $this->vichMappings = $this->container->getParameter('vich_uploader.mappings');
+        $this->vichMappings = $this->container->hasParameter('vich_uploader.mappings') ?
+            $this->container->getParameter('vich_uploader.mappings') : null;
         $this->consoleOutput = new ConsoleOutput();
     }
 
@@ -30,7 +30,7 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
     {
         $listMetaData = $this->em->getMetadataFactory()->getAllMetadata();
 
-        $eaTool = new EATool($this->parameters);
+        $eaTool = new GeneratorTool($this->parameters);
         $eaTool->setParameterBag($this->container->getParameterBag()->all());
         $eaTool->initTranslation($this->parameters['translation_domain'], $this->projectDir);
         $bundles = $this->container->getParameter('kernel.bundles');

@@ -1,7 +1,9 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator;
+namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 
+use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyClassHelper;
+use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
 
 class Field
 {
@@ -210,15 +212,15 @@ class Field
      */
     private function buildFieldTypeHelpers(array $propertyConfig, Method $method): void
     {
-        $helpers = ConfigurationTypes::getTypeHelpers();
+        $helpers = PropertyTypeHelper::getTypeHelpers();
 
         foreach ($helpers as $type => $helper)
         {
-            $helper = array_replace(ConfigurationTypes::getMaskHelper(), $helper);
+            $helper = array_replace(PropertyTypeHelper::getMaskHelper(), $helper);
 
-            if ($type == $propertyConfig['typeConfig']['easyAdminGeneratorType'] && !in_array($method->getName(), $helper['methods']))
+            if ($type == $propertyConfig['typeConfig']['easyAdminType'] && !in_array($method->getName(), $helper['methods']))
             {
-                PropertyTypeHelperFunctions::{$helper['function']}($propertyConfig, $this, $method);
+                PropertyTypeHelper::{$helper['function']}($propertyConfig, $this, $method);
             }
         }
     }
@@ -230,7 +232,7 @@ class Field
      */
     private function buildFieldClassHelpers(array $propertyConfig, Entity $entity, method $method): void
     {
-        $helpers = ConfigurationTypes::getClassHelpers();
+        $helpers = PropertyClassHelper::getClassHelpers();
 
         foreach ($propertyConfig['annotationClasses'] as $annotation)
         {
@@ -239,7 +241,7 @@ class Field
             if (($classHelper = $helpers[get_class($annotation)] ?? null) && (!in_array($method->getName(), ['list', 'show'])
                     || in_array($method->getName(), $classHelper['methods'])) )
             {
-                PropertyClassHelperFunctions::{$classHelper['function']}($annotation, $this, $entity, $method);
+                PropertyClassHelper::{$classHelper['function']}($annotation, $this, $entity, $method);
             }
         }
     }

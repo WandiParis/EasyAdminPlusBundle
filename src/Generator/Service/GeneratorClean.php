@@ -2,35 +2,24 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
-use Wandi\EasyAdminPlusBundle\Generator\EATool;
-use Wandi\EasyAdminPlusBundle\Generator\Entity;
+use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Yaml\Yaml;
 
-class GeneratorClean
+class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
 {
-    private $parameters;
-    private $em;
-    private $projectDir;
     private $consoleOutput;
     private $bundles;
 
     /**
-     * GeneratorClean constructor.
-     * @param EntityManager $entityManager
-     * @param $parameters
-     * @param $projectDir
-     * @param $bundles
+     * @required
      */
-    public function __construct(EntityManager $entityManager, $parameters, $projectDir, $bundles)
+    public function buildServiceConfig()
     {
-        $this->em = $entityManager;
-        $this->parameters = $parameters;
-        $this->projectDir = $projectDir;
         $this->consoleOutput = new ConsoleOutput();
-        $this->bundles = $bundles;
+        $this->bundles = $this->container->getParameter('kernel.bundles');
     }
 
     /**
@@ -39,6 +28,7 @@ class GeneratorClean
      *
      * @throws EAException
      */
+
     public function run(): void
     {
         $fileContent = Yaml::parse(file_get_contents($this->projectDir . '/config/packages/easy_admin.yaml'));
@@ -134,7 +124,7 @@ class GeneratorClean
         }
 
         $fileBaseContent['imports'] = array_values($fileBaseContent['imports']);
-        $ymlContent = EATool::buildDumpPhpToYml($fileBaseContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileBaseContent, $this->parameters);
         file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir ,$this->parameters['pattern_file']), $ymlContent);
     }
 
@@ -158,7 +148,7 @@ class GeneratorClean
         }
 
         $fileContent['easy_admin']['design']['menu'] = array_values($fileContent['easy_admin']['design']['menu']);
-        $ymlContent = EATool::buildDumpPhpToYml($fileContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileContent, $this->parameters);
         file_put_contents($this->projectDir . '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml', $ymlContent);
     }
 

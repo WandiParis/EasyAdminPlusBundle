@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Command;
+namespace Wandi\EasyAdminPlusBundle\Generator\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

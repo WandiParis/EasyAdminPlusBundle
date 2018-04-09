@@ -1,11 +1,12 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator;
-
+namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
+use Wandi\EasyAdminPlusBundle\Generator\Property\PropertyConfig;
 
 class Entity
 {
@@ -19,7 +20,7 @@ class Entity
     /**
      * Entity constructor.
      * @param ClassMetadata $metaData
-     * @throws Exception\EAException
+     * @throws EAException
      */
     public function __construct(ClassMetadata $metaData)
     {
@@ -238,8 +239,7 @@ class Entity
     }
 
     /**
-     * Configure les propriétés de l'entité
-     * @throws Exception\EAException
+     * @throws EAException
      */
     private function initProperties(): void
     {
@@ -251,7 +251,7 @@ class Entity
         }
 
         //Attribution des types par rapport aux types des autres propriétés (VICH,...)
-        $this->properties = ConfigurationTypes::setVichPropertiesConfig($this->properties);
+        $this->properties = PropertyTypeHelper::setVichPropertiesConfig($this->properties);
     }
 
     /**

@@ -4,15 +4,13 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Command\Command;
-use Wandi\EasyAdminPlusBundle\Generator\EATool;
-use Wandi\EasyAdminPlusBundle\Generator\Entity;
+use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Yaml\Yaml;
-use Wandi\EasyAdminPlusBundle\Generator\GeneratorConfigInterface;
 
 class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
 {
@@ -35,7 +33,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
         $relatedEntities = $this->getRelatedEntitiesMetaData($entitiesMetaData, $command, $bundles);
         $relatedEntities = array_merge($relatedEntities, $entitiesMetaData);
 
-        $eaTool = new EATool($this->parameters);
+        $eaTool = new GeneratorTool($this->parameters);
         $eaTool->setParameterBag($this->container->getParameterBag()->all());
         $eaTool->initTranslation($this->parameters['translation_domain'], $this->projectDir);
 
@@ -71,11 +69,11 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
             //Si le l'entité n'existe pas dans le menu
             if (false === array_search($entity->getName(), array_column($fileMenuContent['easy_admin']['design']['menu'], 'entity')))
             {
-                $fileMenuContent['easy_admin']['design']['menu'][] = EATool::buildEntryMenu($entity->getName());
+                $fileMenuContent['easy_admin']['design']['menu'][] = GeneratorTool::buildEntryMenu($entity->getName());
             }
         }
 
-        $ymlContent = EATool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
         file_put_contents($this->projectDir . '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml', $ymlContent);
     }
 
@@ -105,7 +103,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
             }
         }
 
-        $ymlContent = EATool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
         if (!file_put_contents(sprintf( '%s/config/packages/easy_admin.yaml', $this->projectDir), $ymlContent))
             throw new EAException(sprintf('Can not update imported files in %s/config/packages/easy_admin.yaml', $this->projectDir));
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator;
+namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
 interface GeneratorConfigInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator;
+namespace Wandi\EasyAdminPlusBundle\Generator\Helper;
 
 use Gedmo\Mapping\Annotation\SortablePosition;
 use Symfony\Component\Validator\Constraints\Choice;
@@ -37,9 +37,13 @@ use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Time;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Date;
+use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Model\Field;
+use Wandi\EasyAdminPlusBundle\Generator\Model\Method;
 
-class PropertyClassHelperFunctions
+class PropertyClassHelper extends AbstractPropertyHelper
 {
     const BIC_REGEX = '[a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})';
     const ISBN10_REGEX = '^ISBN:(\d{9}(?:\d|X))$';
@@ -50,6 +54,121 @@ class PropertyClassHelperFunctions
     const IPV6_REGEX = '^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*';
     const IPALL_REGEX = '(' . self::IPV4_REGEX . ')|(' . self::IPV6_REGEX . ')';
     const NUMBER_REGEX = '^[0-9]*$';
+
+    /**
+     * Liste des fonctions à éxécuter pour chaque type présent
+     */
+    private static $classHelpers = [
+        SortablePosition::class => [
+            'function' => 'handlePosition',
+        ],
+        Choice::class => [
+            'function' => 'handleChoice',
+        ],
+        Image::class => [
+            'function' => 'handleImage',
+        ],
+        UploadableField::class => [
+            'function' => 'handleUploadableField',
+        ],
+        Range::class => [
+            'function' => 'handleRange',
+        ],
+        Count::class => [
+            'function' => 'handleCount',
+        ],
+        Bic::class => [
+            'function' => 'handleBic',
+        ],
+        Iban::class => [
+            'function' => 'handleIban',
+        ],
+        Isbn::class => [
+            'function' => 'handleIsbn',
+        ],
+        Email::class => [
+            'function' => 'handleEmail',
+        ],
+        url::class => [
+            'function' => 'handleUrl',
+        ],
+        Regex::class => [
+            'function' => 'handleRegex',
+        ],
+        Length::class => [
+            'function' => 'handleLength',
+        ],
+        Luhn::class => [
+            'function' => 'handleLuhn',
+        ],
+        Currency::class => [
+            'function' => 'handleCurrency',
+        ],
+        Country::class => [
+            'function' => 'handleCountry',
+        ],
+        Ip::class => [
+            'function' => 'handleIp',
+        ],
+        Language::class => [
+            'function' => 'handleLanguage',
+        ],
+        Locale::class => [
+            'function' => 'handleLocale',
+        ],
+        CardScheme::class => [
+            'function' => 'handleCardScheme',
+        ],
+        Issn::class => [
+            'function' => 'handleIssn',
+        ],
+        EqualTo::class => [
+            'function' => 'handleEqualTo',
+        ],
+        NotEqualTo::class => [
+            'function' => 'handleNotEqualTo',
+        ],
+        IdenticalTo::class => [
+            'function' => 'handleIdenticalTo',
+        ],
+        NotIdenticalTo::class => [
+            'function' => 'handleNotIdenticalTo',
+        ],
+        LessThan::class => [
+            'function' => 'handleLessThan',
+        ],
+        LessThanOrEqual::class => [
+            'function' => 'handleLessThanOrEqual',
+        ],
+        GreaterThan::class => [
+            'function' => 'handleGreaterThan',
+        ],
+        GreaterThanOrEqual::class => [
+            'function' => 'handleGreaterThanOrEqual',
+        ],
+        Time::class => [
+            'function' => 'handleTime',
+        ],
+        DateTime::class => [
+            'function' => 'handleDateTime',
+        ],
+        Date::class => [
+            'function' => 'handleDate',
+        ],
+    ];
+
+    /**
+     * @return mixed
+     */
+    public static function getClassHelpers(): array
+    {
+        return self::$classHelpers;
+    }
+
+    public static function setClassHelpers(array $helpers)
+    {
+        self::$classHelpers = $helpers;
+    }
 
     /**
      * Array_replace sur le min (au cas ou le range ou autre est passé par la)
@@ -78,7 +197,7 @@ class PropertyClassHelperFunctions
     public static function handleImage(Image $image, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = [];
 
         //gestions des mimes
@@ -90,10 +209,10 @@ class PropertyClassHelperFunctions
         {
             $helpMessage[] = ($image->minRatio == $image->maxRatio) ? $translator->trans('generator.image.ratio.equal', ['%equal%' => $image->minRatio])
                 : $translator->trans('generator.image.ratio.interval', [
-                    '%min%' => $image->minRatio,
-                    '%max%' => $image->maxRatio,
-                ]
-             );
+                        '%min%' => $image->minRatio,
+                        '%max%' => $image->maxRatio,
+                    ]
+                );
         }
 
         //Gestion des 21 cas -_-
@@ -297,7 +416,7 @@ class PropertyClassHelperFunctions
         {
             $object = $entity->getMetaData()->getName();
             if (!is_callable($choices = array(new $object(), $choice->callback))
-                 && !is_callable($choice->callback)
+                && !is_callable($choice->callback)
             ) {
                 throw new EAException('The Choice constraint expects a valid callback');
             }
@@ -306,9 +425,8 @@ class PropertyClassHelperFunctions
             $choices = $choice->choices;
         }
 
-        //Si tableau non associatif , key = value
         if (!self::isAssoc($choices))
-           $choices = array_combine($choices, $choices);
+            $choices = array_combine($choices, $choices);
 
         $typeOptions = $field->getTypeOptions();
         $typeOptions['choices'] = $choices;
@@ -335,7 +453,7 @@ class PropertyClassHelperFunctions
         if(!isset($propertyLinked[0]))
             throw new EAException("The UploadableField does not have a valid file name property");
 
-        $column = ConfigurationTypes::getClassFromArray($propertyLinked[0]['annotationClasses'], Column::class);
+        $column = PropertyHelper::getClassFromArray($propertyLinked[0]['annotationClasses'], Column::class);
         if (!$column->nullable)
         {
             $typeOptions = $field->getTypeOptions();
@@ -364,7 +482,7 @@ class PropertyClassHelperFunctions
     public static function handleRange(Range $range, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
 
         if($range->min && $range->max)
         {
@@ -394,7 +512,7 @@ class PropertyClassHelperFunctions
     public static function handleCount(Count $count, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
 
         if($count->min && $count->max)
         {
@@ -424,7 +542,7 @@ class PropertyClassHelperFunctions
     public static function handleBic(Bic $bic, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.bic.help');
         $field->setHelp($helpMessage);
 
@@ -442,7 +560,7 @@ class PropertyClassHelperFunctions
     public static function handleIban(Iban $iban, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.iban.help');
         $field->setHelp($helpMessage);
     }
@@ -457,7 +575,7 @@ class PropertyClassHelperFunctions
     public static function handleIsbn(Isbn $isbn, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
 
         $regex = ($isbn->type != null) ? ($isbn->type == 'isbn10') ? self::ISBN10_REGEX : self::ISBN13_REGEX : self::ISBN_REGEX;
         $idTranslation = ($isbn->type != null) ? ($isbn->type == 'isbn10') ? '10' : '13' : 'both';
@@ -480,7 +598,7 @@ class PropertyClassHelperFunctions
     public static function handleEmail(Email $email, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.email.help');
         $field->setHelp($helpMessage);
     }
@@ -496,7 +614,7 @@ class PropertyClassHelperFunctions
     public static function handleUrl(Url $url, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
 
         if (empty($url->protocols))
             throw new EAException('No authorized protocols (property -> '.$field->getName().')');
@@ -534,7 +652,7 @@ class PropertyClassHelperFunctions
     public static function handleLength(Length $length, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
 
         if($length->min && $length->max)
         {
@@ -564,7 +682,7 @@ class PropertyClassHelperFunctions
     public static function handleLuhn(Luhn $luhn, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.luhn.help');
         $field->setHelp($helpMessage);
 
@@ -611,7 +729,7 @@ class PropertyClassHelperFunctions
     public static function handleIp(Ip $ip, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = '';
         $pattern = '';
 
@@ -690,7 +808,7 @@ class PropertyClassHelperFunctions
     public static function handleIssn(Issn $issn, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.issn.help');
         $field->setHelp($helpMessage);
     }
@@ -705,7 +823,7 @@ class PropertyClassHelperFunctions
     public static function handleEqualTo(EqualTo $equalTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.equal_to.help', ['%value%' => $equalTo->value]);
         $field->setHelp($helpMessage);
     }
@@ -720,7 +838,7 @@ class PropertyClassHelperFunctions
     public static function handleNotEqualTo(NotEqualTo $notEqualTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.not_equal_to.help', ['%value%' => $notEqualTo->value]);
         $field->setHelp($helpMessage);
     }
@@ -735,7 +853,7 @@ class PropertyClassHelperFunctions
     public static function handleIdenticalTo(IdenticalTo $identicalTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.identical_to.help', ['%value%' => $identicalTo->value]);
         $field->setHelp($helpMessage);
     }
@@ -750,7 +868,7 @@ class PropertyClassHelperFunctions
     public static function handleNotIdenticalTo(NotIdenticalTo $notIdenticalTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.not_identical_to.help', ['%value%' => $notIdenticalTo->value]);
         $field->setHelp($helpMessage);
     }
@@ -765,7 +883,7 @@ class PropertyClassHelperFunctions
     public static function handleLessThan(LessThan $lessThan, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.less_than.help', ['%value%' => $lessThan->value]);
         $field->setHelp($helpMessage);
     }
@@ -780,7 +898,7 @@ class PropertyClassHelperFunctions
     public static function handleLessThanOrEqual(LessThanOrEqual $lessThanOrEqual, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.less_than_or_equal.help', ['%value%' => $lessThanOrEqual->value]);
         $field->setHelp($helpMessage);
     }
@@ -795,7 +913,7 @@ class PropertyClassHelperFunctions
     public static function handleGreaterThan(GreaterThan $greaterThan, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.greater_than.help', ['%value%' => $greaterThan->value]);
         $field->setHelp($helpMessage);
     }
@@ -810,7 +928,7 @@ class PropertyClassHelperFunctions
     public static function handleGreaterThanOrEqual(GreaterThanOrEqual $greaterThanOrEqual, Field $field, Entity $entity, Method $method): void
     {
         /** @var  Translator $translator */
-        $translator = EATool::getTranslation();
+        $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.greater_than_or_equal.help', ['%value%' => $greaterThanOrEqual->value]);
         $field->setHelp($helpMessage);
     }
