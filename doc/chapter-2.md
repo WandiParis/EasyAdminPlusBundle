@@ -93,13 +93,13 @@ wandi_easy_admin_plus:
   At first launch, the command will create the easy_admin folder, in it will be generated:
   <ul>
       <li> the design.yaml file which contains the basic configuration of your backend </li>
-      <li> the menu.yaml file which contains the menu of your backend </li>
+      <li> the menu.yaml file which contains the menu configuration of your backend </li>
       <li> the entities folder with the configuration files of each entity </li>
   </ul>
   <p align="center">
        <img src="images/generator-tree-file.png" align="center" alt="Generator tree file" />
   </p>
-  Regarding the configuration file tree, we took the example of the official EasyAdmin demo (cf https://github.com/javiereguiluz/easy-admin-demo/tree/master/config/packages/easy_admin)
+  Regarding the configuration file tree, we took the example of the official EasyAdmin demo (cf https://github.com/javiereguiluz/easy-admin-demo/tree/master/config/packages/easy_admin).
   If you retry the command, a backup of the configuration files of each previously created entity will be made.
   <p align="center">
         <img src="images/generator-generate-backup.png" align="center" alt="Generator generate backup" />
