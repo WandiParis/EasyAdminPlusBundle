@@ -52,7 +52,7 @@ Let's admit you use this kind of role hierarchy:
 security:
     ### ...
     role_hierarchy:
-        ROLE_USER:        	    ROLE_USER
+        ROLE_USER:              ROLE_USER
         ROLE_EASY_ADMIN:        ROLE_USER # admin (minimum level to access back-office)
         ROLE_EASY_ADMIN_READER: ROLE_EASY_ADMIN # custom admin role
         ROLE_EASY_ADMIN_SUPER: 	[ROLE_USER, ROLE_EASY_ADMIN, ROLE_EASY_ADMIN_READER] # super-admin

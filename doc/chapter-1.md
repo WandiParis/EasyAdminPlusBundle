@@ -102,63 +102,42 @@ php bin/console wandi:easy-admin-plus:user:set-roles admin ROLE_EASY_ADMIN_1 ROL
  :exclamation: If you're using `DataFixtures` in your project, to avoid admin's lost, we recommend you to add a `LoadAdmin` Fixtures that uses the previous command.
 
 ```php
-<?php
+namespace App\DataFixtures;
 
-namespace App\DataFixtures\ORM;
-
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\DependencyInjection\Container;
 
-class LoadAdmin extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class EasyAdminFixtures extends Fixture
 {
-    /**
-     * @var ContainerInterface
-     */
+    /** @var Container $container */
     private $container;
 
-    public function load(ObjectManager $em)
-    {
-        $time = time();
-
-        $application = new Application($this->container->get('kernel'));
-        $application->setAutoExit(false);
-
-        $input = new ArrayInput(array(
-            'command' => 'wandi:easy-admin-plus:create-user',
-            'username' => 'YOUR_LOGIN',
-            'password' => 'YOUR_PASSWORD',
-        ));
-        $output = new NullOutput();
-
-        $application->run($input, $output);
-
-        echo '  '.(time() - $time)." seconds\n";
-    }
-
-    /**
-     * Sets the container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     */
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * Get the order of this fixture.
-     *
-     * @return int
-     */
-    public function getOrder()
+    public function load(ObjectManager $manager)
     {
-        return 0;
+        $application = new Application($this->container->get('kernel'));
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'wandi:easy-admin-plus:user:create',
+            'username' => 'admin',
+            'password' => '5K48pDgZveZT',
+            'roles' => [
+                'ROLE_EASY_ADMIN_GOD',
+            ],
+        ]);
+        $output = new NullOutput();
+
+        $application->run($input, $output);
     }
 }
 
