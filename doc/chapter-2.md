@@ -97,7 +97,7 @@ wandi_easy_admin_plus:
       <li> the entities folder with the configuration files of each entity </li>
   </ul>
   <p align="center">
-       <img src="images/generator-tree_file.png" align="center" alt="Generator tree file" />
+       <img src="images/generator-tree-file.png" align="center" alt="Generator tree file" />
   </p>
   Regarding the configuration file tree, we took the example of the official EasyAdmin demo (cf https://github.com/javiereguiluz/easy-admin-demo/tree/master/config/packages/easy_admin)
   If you retry the command, a backup of the configuration files of each previously created entity will be made.
