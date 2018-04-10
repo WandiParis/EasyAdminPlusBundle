@@ -41,17 +41,17 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
         $cleanCommand = $this->getApplication()->find('wandi:easy-admin-plus:generator:cleanup');
 
         if (!$input->getOption('force')) {
-            if (is_dir($dirProject . '/config/packages/wandi_easy_admin_plus/')) {
+            if (is_dir($dirProject . '/config/packages/easy_admin/')) {
                 if (!$helper->ask($input, $output, $question))
                     return;
             }
         }
 
-        if (!is_dir($dirProject . '/config/packages/wandi_easy_admin_plus/')) {
-            if (mkdir($dirProject . '/config/packages/wandi_easy_admin_plus/'))
-                $output->writeln('<info>wandi_easy_admin_plus folder created successfully.</info>');
+        if (!is_dir($dirProject . '/config/packages/easy_admin/')) {
+            if (mkdir($dirProject . '/config/packages/easy_admin/'))
+                $output->writeln('<info>easy_admin folder created successfully.</info>');
             else
-                $output->writeln('<error>Unable to create wandi_easy_admin_plus folder, the build process is stopped</error>');
+                $output->writeln('<error>Unable to create easy_admin folder, the build process is stopped</error>');
         }
         else
             $cleanCommand->run(new ArrayInput([]), $output);

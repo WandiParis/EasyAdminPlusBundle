@@ -36,7 +36,7 @@ class GeneratorEntityCommand extends ContainerAwareCommand
         $entitiesRawName = $input->getArgument('entity');
         $entitiesMetaData = [];
 
-        if (!is_dir($dirProject . '/config/packages/wandi_easy_admin_plus/'))
+        if (!is_dir($dirProject . '/config/packages/easy_admin/'))
         {
             $output->writeln('You need to launch <info>wandi:easy-admin-plus:generator:generate</info> command before launching this command.');
             return ;
@@ -64,7 +64,7 @@ the generation process is stopped</info></comment>');
         {
             foreach ($entitiesMetaData as $entity)
             {
-                if (file_exists($dirProject . '/config/packages/wandi_easy_admin_plus/' .$eaToolParams['pattern_file']. $entity . '.yml'))
+                if (file_exists($dirProject . '/config/packages/easy_admin/' .$eaToolParams['pattern_file']. $entity . '.yml'))
                 {
                     $question = new ConfirmationQuestion(sprintf('A easy admin config file for %s, already exist, do you want to override it [<info>y</info>/n]?', $entity), true);
                     if (!$helper->ask($input, $output, $question))

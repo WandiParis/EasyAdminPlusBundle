@@ -104,8 +104,7 @@ class GeneratorTool
     {
         $entitiesMenuStructure = [];
 
-        foreach($this->getEntities()->getIterator()  as $entity)
-        {
+        foreach($this->getEntities()->getIterator()  as $entity) {
             $entitiesMenuStructure[] = self::buildEntryMenu($entity->getName());
         }
 
@@ -126,8 +125,7 @@ class GeneratorTool
      */
     public function initTranslation(string $fileName, string $projectDir): void
     {
-        if (self::$translation === null)
-        {
+        if (self::$translation === null) {
             self::$translation = new Translator('fr_FR');
             self::$translation->addLoader('yaml', new YamlFileLoader());
             self::$translation->addResource('yaml', $projectDir."/vendor/wandi/easyadmin-plus-bundle/src/Resources/translations/".$fileName.".fr.yaml", 'fr_FR');
@@ -157,9 +155,9 @@ class GeneratorTool
     public function generateMenuFile(string $projectDir, ConsoleOutput $consoleOutput): void
     {
         $ymlContent = self::buildDumpPhpToYml($this->getMenuStructure(), $this->parameters);
-        $path =  '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml';
+        $path =  '/config/packages/easy_admin/menu.yaml';
         if (false !== file_put_contents($projectDir . $path, $ymlContent))
-            $consoleOutput->writeln('The file <comment>' . $path . ' </comment>has been <info>generated</info>.');
+            $consoleOutput->writeln('The menu file <comment>' . $path . ' </comment>has been <info>generated</info>.');
         else
             throw new EAException('Unable to generate the menu file, the generation process is <info>stopped</info>');
     }
@@ -171,10 +169,16 @@ class GeneratorTool
      */
     public function generateEntityFiles(string $projectDir, ConsoleOutput $consoleOutput): void
     {
-        foreach($this->getEntities()->getIterator()  as $entity)
-        {
+        if (!is_dir($projectDir . '/config/packages/easy_admin/entities/')) {
+            if (mkdir($projectDir . '/config/packages/easy_admin/entities/'))
+                $consoleOutput->writeln('<info>entities folder created successfully.</info>');
+            else
+                throw new EAException('the entity folder could not be created');
+        }
+
+        foreach($this->getEntities()->getIterator()  as $entity) {
             $ymlContent = self::buildDumpPhpToYml($entity->getStructure($this->parameters), $this->parameters);
-            $path = '/config/packages/wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yaml';
+            $path = '/config/packages/easy_admin/entities/' . $entity->getName() . '.yaml';
             $consoleOutput->writeln('Generating entity "<info>' . $entity->getName() . '</info>"');
             $this->createBackupFile($entity->getName(), $projectDir . $path, $consoleOutput);
 
@@ -192,16 +196,24 @@ class GeneratorTool
     {
         $importFiles = [];
 
-        foreach($this->getEntities()->getIterator()  as $entity)
-        {
-            $importFiles[] = ['resource' => 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yaml'];
+        foreach($this->getEntities()->getIterator()  as $entity) {
+            $importFiles[] = ['resource' => 'easy_admin/entities/' . $entity->getName() . '.yaml'];
         }
 
-        //ajoute fichier menu
-        $importFiles[] = ['resource' => 'wandi_easy_admin_plus/' . $this->parameters['pattern_file'] . '_menu.yaml'];
+        $importFiles[] = ['resource' => 'easy_admin/menu.yaml'];
+        $importFiles[] = ['resource' => 'easy_admin/design.yaml'];
 
-        $structure = [
+        return [
             'imports' => $importFiles,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getDesignFileStructure(): array
+    {
+        $structure = [
             'easy_admin' => [
                 'translation_domain' => $this->parameters['translation_domain'],
                 'formats' => [
@@ -222,6 +234,17 @@ class GeneratorTool
         return $structure;
     }
 
+    public function generateDesignFile(string $projectDir, ConsoleOutput $consoleOutput): void
+    {
+        $ymlContent = self::buildDumpPhpToYml($this->getDesignFileStructure(), $this->parameters);
+        $path = '/config/packages/easy_admin/design.yaml';
+
+        if (file_put_contents($projectDir . $path, $ymlContent ))
+            $consoleOutput->writeln('The <info>design</info>  file <comment>' . $path . '</comment> has been <info>generated</info>.');
+        else
+            throw new EAException('Unable to generate the design file , the generation process is <info>stopped</info>');
+    }
+
     /**
      * @param $projectDir
      * @param ConsoleOutput $consoleOutput
@@ -231,6 +254,8 @@ class GeneratorTool
     {
         $ymlContent = self::buildDumpPhpToYml($this->getBaseFileStructure(), $this->parameters);
         $path = '/config/packages/easy_admin.yaml';
+
+        $this->createBackupFile('easy_admin.yaml', $projectDir . $path, $consoleOutput);
 
         if (file_put_contents($projectDir . $path, $ymlContent ))
             $consoleOutput->writeln('The <info>main</info> configuration file <comment>' . $path . '</comment> has been <info>generated</info>.');
@@ -261,8 +286,7 @@ class GeneratorTool
 
     public function createBackupFile($fileName, $filePath, ConsoleOutput $consoleOutput)
     {
-        if (file_exists($filePath))
-        {
+        if (file_exists($filePath)) {
             if (true === copy($filePath, $filePath . '~'))
                 $consoleOutput->writeln('  > Backing up <comment>' . $fileName . '.php</comment> to <comment>' . $fileName . '.php~</comment>');
             else

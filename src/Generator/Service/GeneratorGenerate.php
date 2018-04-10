@@ -30,9 +30,9 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
     {
         $listMetaData = $this->em->getMetadataFactory()->getAllMetadata();
 
-        $eaTool = new GeneratorTool($this->parameters);
-        $eaTool->setParameterBag($this->container->getParameterBag()->all());
-        $eaTool->initTranslation($this->parameters['translation_domain'], $this->projectDir);
+        $generatorTool = new GeneratorTool($this->parameters);
+        $generatorTool->setParameterBag($this->container->getParameterBag()->all());
+        $generatorTool->initTranslation($this->parameters['translation_domain'], $this->projectDir);
         $bundles = $this->container->getParameter('kernel.bundles');
 
         if (empty($listMetaData))
@@ -51,13 +51,15 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
             $entity = new Entity($metaData);
             $entity->setName(Entity::buildName($nameData));
             $entity->setClass($metaData->getName());
-            $entity->buildMethods($eaTool->getParameters());
+            $entity->buildMethods($generatorTool->getParameters());
 
-            $eaTool->addEntity($entity);
+            $generatorTool->addEntity($entity);
         }
 
-        $eaTool->generateMenuFile($this->projectDir, $this->consoleOutput);
-        $eaTool->generateEntityFiles($this->projectDir, $this->consoleOutput);
-        $eaTool->generateBaseFile($this->projectDir, $this->consoleOutput);
+        $generatorTool->generateMenuFile($this->projectDir, $this->consoleOutput);
+        $generatorTool->generateEntityFiles($this->projectDir, $this->consoleOutput);
+        $generatorTool->generateDesignFile($this->projectDir, $this->consoleOutput);
+        $generatorTool->generateBaseFile($this->projectDir, $this->consoleOutput);
+
     }
 }
