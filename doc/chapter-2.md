@@ -87,7 +87,7 @@ wandi_easy_admin_plus:
   php bin/console wandi:easy-admin-plus:generator:generate
   ```
   <p align="center">
-      <img src="images/generator-generate" align="center" alt="Generator generate" />
+      <img src="images/generator-generate.png" align="center" alt="Generator generate" />
   </p>
   
   At first launch, the command will create the easy_admin folder, in it will be generated:
@@ -97,12 +97,12 @@ wandi_easy_admin_plus:
       <li> the entities folder with the configuration files of each entity </li>
   </ul>
   <p align="center">
-       <img src="images/generator-tree_file" align="center" alt="Generator tree file" />
+       <img src="images/generator-tree_file.png" align="center" alt="Generator tree file" />
   </p>
   Regarding the configuration file tree, we took the example of the official EasyAdmin demo (cf https://github.com/javiereguiluz/easy-admin-demo/tree/master/config/packages/easy_admin)
   If you retry the command, a backup of the configuration files of each previously created entity will be made.
   <p align="center">
-        <img src="images/generator-generate-backup" align="center" alt="Generator generate backup" />
+        <img src="images/generator-generate-backup.png" align="center" alt="Generator generate backup" />
     </p>
   
  * Generate the configuration file for one or more specific entities
@@ -111,7 +111,7 @@ wandi_easy_admin_plus:
   ```
   If the entities passed as parameters are linked to other entities, we will propose to regenerate their configuration file
   <p align="center">
-      <img src="images/generator-entity" align="center" alt="Generator entity" />
+      <img src="images/generator-entity.png" align="center" alt="Generator entity" />
   </p>
   
 
