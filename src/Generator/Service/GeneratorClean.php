@@ -131,7 +131,7 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
 
         $fileBaseContent['imports'] = array_values($fileBaseContent['imports']);
         $ymlContent = GeneratorTool::buildDumpPhpToYml($fileBaseContent, $this->parameters);
-        file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir ,$this->parameters['pattern_file']), $ymlContent);
+        file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir), $ymlContent);
     }
 
     /**

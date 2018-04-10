@@ -27,6 +27,8 @@ class WandiEasyAdminPlusExtension extends Extension
 
         $container->setParameter('easy_admin_plus', $config);
 
+        dump($config);die;
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

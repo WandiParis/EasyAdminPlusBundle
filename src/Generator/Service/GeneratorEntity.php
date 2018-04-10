@@ -57,7 +57,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
      */
     private function updateMenuFile(ArrayCollection $entities): void
     {
-        $fileMenuContent = Yaml::parse(file_get_contents(sprintf( '%s/config/packages/easy_admin/%s_menu.yaml', $this->projectDir, $this->parameters['pattern_file'])));
+        $fileMenuContent = Yaml::parse(file_get_contents(sprintf( '%s/config/packages/easy_admin/menu.yaml', $this->projectDir)));
 
         if (!isset($fileMenuContent['easy_admin']['design']['menu']))
         {
@@ -74,7 +74,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
         }
 
         $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
-        file_put_contents($this->projectDir . '/config/packages/easy_admin/' . $this->parameters['pattern_file'] . '_menu.yaml', $ymlContent);
+        file_put_contents($this->projectDir . '/config/packages/easy_admin/menu.yaml', $ymlContent);
     }
 
     /**
@@ -92,7 +92,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
 
         foreach ($entities as $entity)
         {
-            $patternEntity = 'easy_admin/' . $this->parameters['pattern_file'] . '_' . $entity->getName() . '.yaml';
+            $patternEntity = 'easy_admin/entities/' . $entity->getName() . '.yaml';
 
             //Si le l'entité n'existe pas dans les fichiers
             if (false === array_search($patternEntity, array_column($fileMenuContent['imports'], 'resource')))
@@ -132,11 +132,10 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
             {
                 if (in_array($associationMapping['targetEntity'], $entitiesName))
                 {
-                    //Si déjà présent dans les entités liées, on next
                     if (in_array($associationMapping['targetEntity'], $relatedEntities['name']))
                         continue ;
 
-                    $question = new ConfirmationQuestion(sprintf('L\'entité <info>%s</info> est lié, voulez-vous (re)générer son fichier de configuration [<info>y</info>/n]?', $metaData->name), true);
+                    $question = new ConfirmationQuestion(sprintf('The %s entity is linked, do you want to (re)generate its configuration file [<info>y</info>/n]?', $metaData->name), true);
                     if ($helper->ask($consoleInput, $consoleOutput, $question))
                     {
                         $relatedEntities['name'][] = $metaData->getName();

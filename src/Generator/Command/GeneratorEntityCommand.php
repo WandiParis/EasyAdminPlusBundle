@@ -64,7 +64,7 @@ the generation process is stopped</info></comment>');
         {
             foreach ($entitiesMetaData as $entity)
             {
-                if (file_exists($dirProject . '/config/packages/easy_admin/' .$eaToolParams['pattern_file']. $entity . '.yml'))
+                if (file_exists($dirProject . '/config/packages/easy_admin/entities/' . $entity . '.yaml'))
                 {
                     $question = new ConfirmationQuestion(sprintf('A easy admin config file for %s, already exist, do you want to override it [<info>y</info>/n]?', $entity), true);
                     if (!$helper->ask($input, $output, $question))
