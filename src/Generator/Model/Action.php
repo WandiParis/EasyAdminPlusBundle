@@ -2,7 +2,6 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 
-
 class Action
 {
     private $name;
@@ -24,11 +23,13 @@ class Action
 
     /**
      * @param mixed $name
+     *
      * @return $this
      */
     public function setName(string $name): Action
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -42,11 +43,13 @@ class Action
 
     /**
      * @param mixed $icon
+     *
      * @return $this
      */
     public function setIcon(string $icon): Action
     {
         $this->icon = $icon;
+
         return $this;
     }
 
@@ -60,19 +63,22 @@ class Action
 
     /**
      * @param mixed $label
+     *
      * @return $this
      */
     public function setLabel(string $label): Action
     {
         $this->label = $label;
+
         return $this;
     }
 
     /**
      * @param array $parameters
+     *
      * @return string
      */
-    public function getIconFromAction(array $parameters) : string
+    public function getIconFromAction(array $parameters): string
     {
         return $parameters[$this->name] ?? '';
     }
@@ -80,13 +86,12 @@ class Action
     /**
      * @return array
      */
-    public function getStructure() : array
+    public function getStructure(): array
     {
         return [
             'name' => $this->name,
             'label' => $this->label,
-            'icon' => $this->icon
+            'icon' => $this->icon,
         ];
     }
-
 }

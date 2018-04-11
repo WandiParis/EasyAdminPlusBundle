@@ -18,7 +18,7 @@ class GeneratorCleanCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
@@ -26,18 +26,18 @@ class GeneratorCleanCommand extends ContainerAwareCommand
         $container = $this->getContainer();
         $dirProject = $container->getParameter('kernel.project_dir');
 
-        if (!is_dir($dirProject . '/config/packages/easy_admin'))
-        {
+        if (!is_dir($dirProject.'/config/packages/easy_admin')) {
             $output->writeln('<info>Unable</info> to clean easy admin configuration, no configuration file found.');
             $output->writeln('The cleaning process is stopped.');
-            return ;
+
+            return;
         }
 
         try {
             $eaTool = $container->get('wandi.easy_admin_plus.generator.clean');
             $eaTool->run();
         } catch (EAException $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $output->writeln('<error>'.$e->getMessage().'</error>');
         }
     }
 }

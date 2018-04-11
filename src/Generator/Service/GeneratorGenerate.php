@@ -23,7 +23,8 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
     }
 
     /**
-     * Génère les fichiers d'entités, le fichier du menu et le fichier de base
+     * Generates entity files, the menu file, and the base file.
+     *
      * @throws \Wandi\EasyAdminPlusBundle\Generator\Exception\EAException
      */
     public function run(): void
@@ -36,17 +37,17 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
         $generatorTool->initTranslation($this->parameters['translation_domain'], $this->projectDir, $locale);
         $bundles = $this->container->getParameter('kernel.bundles');
 
-        if (empty($listMetaData))
-        {
+        if (empty($listMetaData)) {
             $this->consoleOutput->writeln('<comment>There are no entities to configure, the generation process is stopped.</comment>');
-            return ;
+
+            return;
         }
 
-        foreach ($listMetaData as $metaData)
-        {
+        foreach ($listMetaData as $metaData) {
             $nameData = Entity::buildNameData($metaData, $bundles);
-            if (in_array($nameData['bundle']."Bundle", $this->parameters['bundles_filter']))
-                continue ;
+            if (in_array($nameData['bundle'].'Bundle', $this->parameters['bundles_filter'])) {
+                continue;
+            }
 
             /** @var ClassMetadata $metaData */
             $entity = new Entity($metaData);
@@ -61,6 +62,5 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
         $generatorTool->generateEntityFiles($this->projectDir, $this->consoleOutput);
         $generatorTool->generateDesignFile($this->projectDir, $this->consoleOutput);
         $generatorTool->generateBaseFile($this->projectDir, $this->consoleOutput);
-
     }
 }

@@ -9,20 +9,20 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class AdminController extends BaseAdminController
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function redirectToBackendHomepage()
     {
         $homepageConfig = $this->config['homepage'];
 
-        # when Javier will merge #2151 (https://github.com/EasyCorp/EasyAdminBundle/pull/2151)
-        # it'll be ok and redirect on the correct action instead of raw "list"
+        // when Javier will merge #2151 (https://github.com/EasyCorp/EasyAdminBundle/pull/2151)
+        // it'll be ok and redirect on the correct action instead of raw "list"
 
         // if the first entity have a higher role, take the first one which matchs
-        if (!$this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->config['entities'][$homepageConfig['params']['entity']], 'list')){
-            foreach($this->config['entities'] as $entityName => $entityInfo){
+        if (!$this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->config['entities'][$homepageConfig['params']['entity']], 'list')) {
+            foreach ($this->config['entities'] as $entityName => $entityInfo) {
                 if ($this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($entityInfo, 'list') &&
-                    !in_array('list', $entityInfo['disabled_actions'])){
+                    !in_array('list', $entityInfo['disabled_actions'])) {
                     $this->config['homepage']['params']['entity'] = $entityName;
                     break;
                 }
@@ -33,9 +33,9 @@ class AdminController extends BaseAdminController
     }
 
     /**
-     * see PR #2150 (https://github.com/EasyCorp/EasyAdminBundle/pull/2150)
+     * see PR #2150 (https://github.com/EasyCorp/EasyAdminBundle/pull/2150).
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function redirectToReferrer()
     {
@@ -83,12 +83,13 @@ class AdminController extends BaseAdminController
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @param bool $checkRole force to check role
      */
     protected function isActionAllowed($actionName, $checkRole = false)
     {
-        if ($checkRole){
+        if ($checkRole) {
             return false === in_array($actionName, $this->entity['disabled_actions'], true) &&
                 $this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName);
         }
@@ -119,10 +120,12 @@ class AdminController extends BaseAdminController
     }
 
     /**
-     * Manage translations
+     * Manage translations.
      *
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @throws \Exception
      */
     public function translationsAction(Request $request)
@@ -132,8 +135,7 @@ class AdminController extends BaseAdminController
         $locale = $this->container->getParameter('locale') ?? $this->container->getParameter('kernel.default_locale');
 
         // submit
-        if ($request->request->get('submit') == "save"){
-
+        if ('save' == $request->request->get('submit')) {
             // save files
             $nbWrittenFiles = $translator->writeDictionaries($request->request->get('dictionaries') ?? [], $locale);
 
@@ -144,19 +146,19 @@ class AdminController extends BaseAdminController
             $translator->clearTranslationsCache();
 
             // forward on GET
-            $this->redirectToRoute("wandi_easy_admin_plus_translations", ['domain' => $domain]);
+            $this->redirectToRoute('wandi_easy_admin_plus_translations', ['domain' => $domain]);
         }
 
         // get locales
         $locales = $translator->getLocales();
-        if (empty($locales)){
-            throw new \Exception("No locale to manage.");
+        if (empty($locales)) {
+            throw new \Exception('No locale to manage.');
         }
 
         // get files
         $files = $translator->getFiles();
-        if (empty($files)){
-            throw new \Exception("No translation files found.");
+        if (empty($files)) {
+            throw new \Exception('No translation files found.');
         }
 
         // get all translations in files
@@ -164,9 +166,9 @@ class AdminController extends BaseAdminController
 
         // extract different domains & choose the domain to manage
         $domains = array_keys($translations);
-        $domain = ($domain == null && !empty($domains)) ? $domains[0] : $domain;
-        if (!$domain){
-            throw new \Exception("No domain found.");
+        $domain = (null == $domain && !empty($domains)) ? $domains[0] : $domain;
+        if (!$domain) {
+            throw new \Exception('No domain found.');
         }
 
         // prepare translations (add missing files in other locale and clone missing translation keys)

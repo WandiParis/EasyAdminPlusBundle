@@ -51,6 +51,7 @@ class UserCreateCommand extends ContainerAwareCommand
                 /* @var ConstraintViolation $violation */
                 $output->writeln(sprintf('<error>%s: %s</error>', ucfirst($violation->getPropertyPath()), mb_strtolower($violation->getMessage())));
             }
+
             return;
         }
 

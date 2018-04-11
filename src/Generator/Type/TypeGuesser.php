@@ -20,7 +20,7 @@ use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyHelper;
 class TypeGuesser
 {
     /**
-     * Default configuration of an EasyAdminGeneratorType
+     * Default configuration of an EasyAdminGeneratorType.
      */
     public static $defaultConfigType = [
         'mandatoryClasses' => [],
@@ -34,13 +34,13 @@ class TypeGuesser
     ];
 
     /**
-     * List of EasyAdminType configurations
+     * List of EasyAdminType configurations.
      */
     public static $generatorTypesConfiguration = [
         EasyAdminType::VICH_IMAGE => [
             'mandatoryClasses' => [
                 Image::class,
-                UploadableField::class
+                UploadableField::class,
             ],
             'priority' => 1,
             'easyAdminType' => EasyAdminType::VICH_IMAGE,
@@ -60,7 +60,7 @@ class TypeGuesser
             'easyAdminType' => EasyAdminType::INTEGER,
             'doctrineColumnType' => DoctrineType::INTEGER,
         ],
-        EasyAdminType::TEXT => [
+        EasyAdminType::RAW => [
             'doctrineColumnType' => DoctrineType::TEXT,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::RAW,
@@ -70,7 +70,7 @@ class TypeGuesser
             ],
             'methodsTypeForced' => [
                 'new',
-                'edit'
+                'edit',
             ],
         ],
         EasyAdminType::IMAGE => [
@@ -80,7 +80,7 @@ class TypeGuesser
             'typeForced' => true,
             'methodsNoAllowed' => [
                 'new',
-                'edit'
+                'edit',
             ],
         ],
         EasyAdminType::BOOLEAN => [
@@ -90,12 +90,12 @@ class TypeGuesser
             'typeForced' => true,
             'methodsTypeForced' => [
                 'new',
-                'edit'
+                'edit',
             ],
         ],
         EasyAdminType::POSITION => [
             'mandatoryClasses' => [
-                SortablePosition::class
+                SortablePosition::class,
             ],
             'priority' => 2,
             'easyAdminType' => EasyAdminType::POSITION,
@@ -106,14 +106,14 @@ class TypeGuesser
         EasyAdminType::VICH_FILE => [
             'mandatoryClasses' => [
                 UploadableField::class,
-                File::class
+                File::class,
             ],
             'priority' => 1,
             'easyAdminType' => EasyAdminType::VICH_FILE,
             'typeForced' => true,
             'methodsNoAllowed' => [
                 'list',
-                'show'
+                'show',
             ],
         ],
         EasyAdminType::FILE => [
@@ -126,68 +126,67 @@ class TypeGuesser
                 'edit',
             ],
         ],
-        EasyAdminType::COLLECTION =>  [
+        EasyAdminType::COLLECTION => [
             'priority' => 6,
             'easyAdminType' => EasyAdminType::COLLECTION,
             'typeForced' => true,
         ],
-        EasyAdminType::AUTOCOMPLETE =>  [
+        EasyAdminType::AUTOCOMPLETE => [
             'noMandatoryClasses' => [
                 ManyToOne::class,
                 OneToOne::class,
                 ManyToMany::class,
                 OneToMany::class,
-
             ],
             'priority' => 1,
             'easyAdminType' => EasyAdminType::AUTOCOMPLETE,
             'typeForced' => true,
             'methodsTypeForced' => [
                 'list',
-                'show'
+                'show',
             ],
         ],
         EasyAdminType::EMAIL => [
             'mandatoryClasses' => [
-                Email::class
+                Email::class,
             ],
             'priority' => 2,
             'easyAdminType' => EasyAdminType::EMAIL,
             'typeForced' => true,
             'methodsTypeForced' => [
                 'edit',
-                'new'
+                'new',
             ],
         ],
         EasyAdminType::URL => [
             'mandatoryClasses' => [
-                Url::class
+                Url::class,
             ],
             'priority' => 2,
             'easyAdminType' => EasyAdminType::URL,
             'typeForced' => true,
             'methodsTypeForced' => [
                 'edit',
-                'new'
+                'new',
             ],
         ],
         EasyAdminType::IP => [
             'mandatoryClasses' => [
-                Ip::class
+                Ip::class,
             ],
             'priority' => 2,
             'easyAdminType' => EasyAdminType::STRING,
         ],
-        EasyAdminType::CHOICE =>  [
+        EasyAdminType::CHOICE => [
             'mandatoryClasses' => [
-                Choice::class
+                Choice::class,
             ],
             'priority' => 2,
             'easyAdminType' => EasyAdminType::CHOICE,
             'typeForced' => true,
             'methodsTypeForced' => [
                 'list',
-                'show'
+                'show',
             ],
         ],
         EasyAdminType::FLOAT => [
@@ -195,7 +194,7 @@ class TypeGuesser
             'priority' => 3,
             'easyAdminType' => EasyAdminType::FLOAT,
         ],
-        EasyAdminType::BIGINT =>  [
+        EasyAdminType::BIGINT => [
             'doctrineColumnType' => DoctrineType::BIGINT,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::BIGINT,
@@ -205,22 +204,22 @@ class TypeGuesser
             'priority' => 3,
             'easyAdminType' => EasyAdminType::ARRAY,
         ],
-        EasyAdminType::SIMPLE_ARRAY =>  [
+        EasyAdminType::SIMPLE_ARRAY => [
             'doctrineColumnType' => DoctrineType::SIMPLE_ARRAY,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::SIMPLE_ARRAY,
         ],
-        EasyAdminType::JSON_ARRAY =>  [
+        EasyAdminType::JSON_ARRAY => [
             'doctrineColumnType' => DoctrineType::JSON_ARRAY,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::JSON_ARRAY,
         ],
-        EasyAdminType::TIME =>  [
+        EasyAdminType::TIME => [
             'doctrineColumnType' => DoctrineType::TIME,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::TIME,
         ],
-        EasyAdminType::DATE =>  [
+        EasyAdminType::DATE => [
             'doctrineColumnType' => DoctrineType::DATE,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::DATE,
@@ -230,17 +229,17 @@ class TypeGuesser
             'priority' => 3,
             'easyAdminType' => EasyAdminType::DATETIME,
         ],
-        EasyAdminType::DATETIMETZ =>  [
+        EasyAdminType::DATETIMETZ => [
             'doctrineColumnType' => DoctrineType::DATETIMETZ,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::DATETIMETZ,
         ],
-        EasyAdminType::OBJECT =>  [
+        EasyAdminType::OBJECT => [
             'doctrineColumnType' => DoctrineType::OBJECT,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::OBJECT,
         ],
-        EasyAdminType::SMALLINT =>  [
+        EasyAdminType::SMALLINT => [
             'doctrineColumnType' => DoctrineType::SMALLINT,
             'priority' => 3,
             'easyAdminType' => EasyAdminType::SMALLINT,
@@ -253,20 +252,21 @@ class TypeGuesser
     ];
 
     /**
-     * Sorts the types in order of priority
+     * Sorts the types in order of priority.
      */
     public static function getTypesOrderedByPriorities(): void
     {
-        uasort(self::$generatorTypesConfiguration, function(array $a, array $b)
-        {
+        uasort(self::$generatorTypesConfiguration, function (array $a, array $b) {
             return $a['priority'] <=> $b['priority'];
         });
     }
 
     /**
-     * Return the guessed type of the property of the class
+     * Return the guessed type of the property of the class.
+     *
      * @param string $property
      * @param string $class
+     *
      * @return string
      */
     public static function getGuessType(string $property, string $class): string
@@ -285,33 +285,29 @@ class TypeGuesser
                 }
             }
 
-            if (!$check)
+            if (!$check) {
                 continue;
+            }
 
             $check = false;
             foreach ($configuration['noMandatoryClasses'] as $class) {
                 if (PropertyHelper::hasClass($propertyAnnotations, $class)) {
                     $check = true;
-                    break ;
+                    break;
                 }
             }
 
-            if (!$check && count($configuration['noMandatoryClasses']) > 0)
+            if (!$check && count($configuration['noMandatoryClasses']) > 0) {
                 continue;
+            }
 
-            if ($configuration['doctrineColumnType'] !== null && !(PropertyHelper::hasDoctrineColumnType($propertyAnnotations, $configuration['doctrineColumnType'])))
+            if (null !== $configuration['doctrineColumnType'] && !(PropertyHelper::hasDoctrineColumnType($propertyAnnotations, $configuration['doctrineColumnType']))) {
                 continue;
+            }
 
             return $configuration['easyAdminType'];
         }
 
         return EasyAdminType::STRING;
     }
-
-
-
-
-
-
-
 }

@@ -15,11 +15,12 @@ class PropertyConfig
     private static $defaultPropertyConfig = [
         'name' => '',
         'annotationClasses' => [],
-        'typeConfig' => null
+        'typeConfig' => null,
     ];
 
     /**
      * @param \ReflectionProperty $reflectProperty
+     *
      * @return array
      */
     public static function setPropertyConfig(\ReflectionProperty $reflectProperty): array
@@ -35,8 +36,9 @@ class PropertyConfig
         $propertyConfig['typeConfig'] = array_replace(TypeGuesser::$defaultConfigType, TypeGuesser::$generatorTypesConfiguration[$typeGuessed]);
         $propertyConfig['annotationClasses'] = $propertyAnnotations;
 
-        if (PropertyHelper::hasClass($propertyConfig['annotationClasses'], Id::class))
+        if (PropertyHelper::hasClass($propertyConfig['annotationClasses'], Id::class)) {
             $propertyConfig['typeConfig']['methodsNoAllowed'] = array_merge($propertyConfig['typeConfig']['methodsNoAllowed'], ['new', 'edit']);
+        }
 
         return $propertyConfig;
     }

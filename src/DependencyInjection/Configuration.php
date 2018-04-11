@@ -197,7 +197,7 @@ class Configuration implements ConfigurationInterface
 
     private static function getMethodsClosure($methods)
     {
-        return function() use ($methods) {
+        return function () use ($methods) {
             return $methods;
         };
     }
@@ -205,7 +205,7 @@ class Configuration implements ConfigurationInterface
     private static function validateMethodsClosure($supportedMethods)
     {
         return function ($methods) use ($supportedMethods) {
-            return (!empty(array_diff($methods, ['new', 'edit', 'show', 'delete'])));
+            return !empty(array_diff($methods, ['new', 'edit', 'show', 'delete']));
         };
     }
 
@@ -258,7 +258,7 @@ class Configuration implements ConfigurationInterface
             ],
             [
                 'name' => 'id',
-                'order' => 'DESC'
+                'order' => 'DESC',
             ],
         ];
         $treeBuilder = new TreeBuilder();
@@ -284,10 +284,11 @@ class Configuration implements ConfigurationInterface
                         ->ifTrue(function ($properties) {
                             foreach ($properties as $property) {
                                 if (false === is_array($property)
-                                    || count($property) != 2
+                                    || 2 != count($property)
                                     || !array_key_exists('name', $property)
-                                    || !array_key_exists('order', $property))
+                                    || !array_key_exists('order', $property)) {
                                     return true;
+                                }
                             }
                         })
                         ->thenInvalid('Each property must be an array that contains the \'name\' and \'order\' indexes')

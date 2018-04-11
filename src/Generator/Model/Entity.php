@@ -19,7 +19,9 @@ class Entity
 
     /**
      * Entity constructor.
+     *
      * @param ClassMetadata $metaData
+     *
      * @throws EAException
      */
     public function __construct(ClassMetadata $metaData)
@@ -42,59 +44,61 @@ class Entity
 
     /**
      * @param mixed $name
+     *
      * @return object Entity
      */
     public function setName(string $name): Entity
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
      * @param ClassMetadata $metaData
-     * @param array $bundles
+     * @param array         $bundles
+     *
      * @return array
+     *
      * @throws EAException
      */
     public static function buildNameData(ClassMetadata $metaData, array $bundles): array
     {
-        $entityShortName =(new \ReflectionClass($metaData->getName()))->getShortName();
+        $entityShortName = (new \ReflectionClass($metaData->getName()))->getShortName();
 
-        if ($metaData->namespace == "App\Entity")
-        {
+        if ("App\Entity" == $metaData->namespace) {
             return[
                 'bundle' => 'App',
                 'entity' => $entityShortName,
             ];
         }
 
-        if (0 === preg_match('#((.*?)(?:Bundle))#', $metaData->getName(), $match))
-        {
-            throw new EAException('Unable to parse the bundle name for the ' . $entityShortName . ' entity');
+        if (0 === preg_match('#((.*?)(?:Bundle))#', $metaData->getName(), $match)) {
+            throw new EAException('Unable to parse the bundle name for the '.$entityShortName.' entity');
         }
 
         unset($match[0]);
         $match = array_values($match);
 
-        $match = array_map(function($a) {
+        $match = array_map(function ($a) {
             return str_replace('\\', '', $a);
         }, $match);
 
-        foreach ($bundles as $name => $bundle)
-        {
-            if ($match[0] === $name)
+        foreach ($bundles as $name => $bundle) {
+            if ($match[0] === $name) {
                 return [
                     'bundle' => str_replace('\\', '', $match[1]),
-                    'entity' => $entityShortName
+                    'entity' => $entityShortName,
                 ];
+            }
         }
 
-        throw new EAException('<comment>the entity bundle could not be found for the ' . $entityShortName . '</comment>');
+        throw new EAException('<comment>the entity bundle could not be found for the '.$entityShortName.'</comment>');
     }
 
     public static function buildName(array $nameData): string
     {
-        return strtolower($nameData['bundle'] . '_' . $nameData['entity']);
+        return strtolower($nameData['bundle'].'_'.$nameData['entity']);
     }
 
     /**
@@ -107,11 +111,13 @@ class Entity
 
     /**
      * @param mixed $class
+     *
      * @return $this
      */
     public function setClass($class): Entity
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -125,11 +131,13 @@ class Entity
 
     /**
      * @param mixed $disabledAction
+     *
      * @return $this
      */
     public function setDisabledAction($disabledAction): Entity
     {
         $this->disabledAction = $disabledAction;
+
         return $this;
     }
 
@@ -143,11 +151,13 @@ class Entity
 
     /**
      * @param ArrayCollection $methods
+     *
      * @return $this
      */
     public function setMethods(ArrayCollection $methods): Entity
     {
         $this->methods = $methods;
+
         return $this;
     }
 
@@ -156,14 +166,12 @@ class Entity
      */
     public function buildMethods(array $eaToolParams): void
     {
-        foreach ($eaToolParams['methods'] as $name => $method)
-        {
+        foreach ($eaToolParams['methods'] as $name => $method) {
             $method = new Method();
             $method->setName($name);
             $method->buildTitle($this->name);
 
-            foreach ($eaToolParams['methods'][$name] as $actionName)
-            {
+            foreach ($eaToolParams['methods'][$name] as $actionName) {
                 $action = new Action();
                 $action->setName($actionName);
                 $action->setIcon($action->getIconFromAction($eaToolParams['icons']['actions']));
@@ -171,11 +179,10 @@ class Entity
                 $method->addAction($action);
             }
 
-            foreach ($this->properties as $property)
-            {
-                //Si le type de la propriété n'est pas accepté pour la method, on next
-                if (in_array($name, $property['typeConfig']['methodsNoAllowed']))
-                    continue ;
+            foreach ($this->properties as $property) {
+                if (in_array($name, $property['typeConfig']['methodsNoAllowed'])) {
+                    continue;
+                }
 
                 $field = new Field();
                 $field->buildFieldConfig($property, $method);
@@ -197,14 +204,16 @@ class Entity
 
     /**
      * @param $eaToolParams
+     *
      * @return array
      */
     public function getStructure(array $eaToolParams): array
     {
         $methodsStructure = [];
 
-        foreach ($this->methods as $method)
+        foreach ($this->methods as $method) {
             $methodsStructure = array_merge($methodsStructure, $method->getStructure($eaToolParams));
+        }
 
         $structure = [
             'easy_admin' => [
@@ -213,8 +222,8 @@ class Entity
                         'class' => $this->class,
                         'disabled_actions' => $this->disabledAction,
                     ], $methodsStructure),
-                ]
-            ]
+                ],
+            ],
         ];
 
         return $structure;
@@ -230,11 +239,13 @@ class Entity
 
     /**
      * @param array $properties
+     *
      * @return $this
      */
     public function setProperties(array $properties): Entity
     {
         $this->properties = $properties;
+
         return $this;
     }
 
@@ -245,12 +256,10 @@ class Entity
     {
         $reflectionProperties = (new \ReflectionClass($this->metaData->getName()))->getProperties();
 
-        foreach ($reflectionProperties as $reflectionProperty)
-        {
+        foreach ($reflectionProperties as $reflectionProperty) {
             $this->properties[] = PropertyConfig::setPropertyConfig($reflectionProperty);
         }
 
-        //Attribution des types par rapport aux types des autres propriétés (VICH,...)
         $this->properties = PropertyTypeHelper::setVichPropertiesConfig($this->properties);
     }
 
@@ -264,11 +273,13 @@ class Entity
 
     /**
      * @param array $metaData
+     *
      * @return $this
      */
     public function setMetaData(array $metaData): Entity
     {
         $this->metaData = $metaData;
+
         return $this;
     }
 }

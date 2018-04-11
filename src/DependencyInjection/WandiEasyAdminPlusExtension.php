@@ -20,14 +20,12 @@ class WandiEasyAdminPlusExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $processor     = new Processor();
+        $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
         $config = $this->processConfigTranslator($config, $container);
 
         $container->setParameter('easy_admin_plus', $config);
-
-        dump($config);die;
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
@@ -37,7 +35,7 @@ class WandiEasyAdminPlusExtension extends Extension
     {
         if (empty($config['translator']['paths'])) {
             $config['translator']['paths'] = [
-                $container->getParameter('kernel.project_dir') . '/translations',
+                $container->getParameter('kernel.project_dir').'/translations',
             ];
         }
         if (empty($config['translator']['locales'])) {

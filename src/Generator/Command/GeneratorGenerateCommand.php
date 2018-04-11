@@ -20,16 +20,18 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
             ->setDescription('Create easy admin config files')
             ->setDefinition(
                 new InputDefinition(array(
-                    new InputOption('force', 'f')
+                    new InputOption('force', 'f'),
                 ))
             )
         ;
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return int|null|void
+     *
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
@@ -41,26 +43,28 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
         $cleanCommand = $this->getApplication()->find('wandi:easy-admin-plus:generator:cleanup');
 
         if (!$input->getOption('force')) {
-            if (is_dir($dirProject . '/config/packages/easy_admin/')) {
-                if (!$helper->ask($input, $output, $question))
+            if (is_dir($dirProject.'/config/packages/easy_admin/')) {
+                if (!$helper->ask($input, $output, $question)) {
                     return;
+                }
             }
         }
 
-        if (!is_dir($dirProject . '/config/packages/easy_admin/')) {
-            if (mkdir($dirProject . '/config/packages/easy_admin/'))
+        if (!is_dir($dirProject.'/config/packages/easy_admin/')) {
+            if (mkdir($dirProject.'/config/packages/easy_admin/')) {
                 $output->writeln('<info>easy_admin folder created successfully.</info>');
-            else
+            } else {
                 $output->writeln('<error>Unable to create easy_admin folder, the build process is stopped</error>');
-        }
-        else
+            }
+        } else {
             $cleanCommand->run(new ArrayInput([]), $output);
+        }
 
         try {
             $eaTool = $container->get('wandi.easy_admin_plus.generator.generate');
             $eaTool->run();
         } catch (EAException $e) {
-            $output->writeln('<error>(EAException catché)' . $e->getMessage() . '</error>');
+            $output->writeln('<error>(EAException catché)'.$e->getMessage().'</error>');
         }
     }
 }

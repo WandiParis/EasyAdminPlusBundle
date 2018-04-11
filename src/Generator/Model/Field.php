@@ -38,11 +38,13 @@ class Field
 
     /**
      * @param mixed $name
+     *
      * @return $this
      */
     public function setName($name): Field
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -56,11 +58,13 @@ class Field
 
     /**
      * @param mixed $type
+     *
      * @return $this
      */
     public function setType(string $type): Field
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -74,15 +78,17 @@ class Field
 
     /**
      * @param mixed $label
+     *
      * @return $this
      */
     public function setLabel($label): Field
     {
         $this->label = $label;
+
         return $this;
     }
 
-    public function getStructure() : ?array
+    public function getStructure(): ?array
     {
         $structure = [
             'property' => $this->name,
@@ -98,21 +104,20 @@ class Field
     }
 
     /**
-     * Supprime Tous les sous tableaux qui sont vides
-     * Link: https://stackoverflow.com/a/46781625/7285018
+     * Removes all empty sub array
+     * Link: https://stackoverflow.com/a/46781625/7285018.
      */
     public static function removeEmptyValuesAndSubArrays(array $array): array
     {
-        foreach($array as $k => &$v)
-        {
-            if (is_array($v))
-            {
+        foreach ($array as $k => &$v) {
+            if (is_array($v)) {
                 $v = self::removeEmptyValuesAndSubArrays($v);
-                if (!sizeof($v) )
+                if (!sizeof($v)) {
                     unset($array[$k]);
-
-            } elseif (!strlen($v ) && $v !== false)
+                }
+            } elseif (!strlen($v) && false !== $v) {
                 unset($array[$k]);
+            }
         }
 
         return $array;
@@ -128,11 +133,13 @@ class Field
 
     /**
      * @param array $typeOptions
+     *
      * @return $this
      */
     public function setTypeOptions(array $typeOptions): Field
     {
         $this->typeOptions = $typeOptions;
+
         return $this;
     }
 
@@ -146,11 +153,13 @@ class Field
 
     /**
      * @param mixed $help
+     *
      * @return $this
      */
     public function setHelp(string $help): Field
     {
         $this->help = $help;
+
         return $this;
     }
 
@@ -164,11 +173,13 @@ class Field
 
     /**
      * @param mixed $basePath
+     *
      * @return $this
      */
     public function setBasePath(string $basePath): Field
     {
         $this->basePath = $basePath;
+
         return $this;
     }
 
@@ -182,16 +193,18 @@ class Field
 
     /**
      * @param mixed $forcedType
+     *
      * @return $this
      */
     public function setForcedType(string $forcedType): Field
     {
         $this->forcedType = $forcedType;
+
         return $this;
     }
 
     /**
-     * @param array $propertyConfig
+     * @param array  $propertyConfig
      * @param Method $method
      */
     public function buildFieldConfig(array $propertyConfig, Method $method): void
@@ -200,33 +213,31 @@ class Field
         $this->type = $propertyConfig['typeConfig']['easyAdminType'];
         $this->label = $propertyConfig['name'];
 
-        //Si le type est forcé et que la methode n'est pas bannie
         if ($propertyConfig['typeConfig']['typeForced'] && (empty($propertyConfig['typeConfig']['methodsTypeForced'])
-            || !in_array($method->getName(), $propertyConfig['typeConfig']['methodsTypeForced'])))
+            || !in_array($method->getName(), $propertyConfig['typeConfig']['methodsTypeForced']))) {
             $this->forcedType = $this->type;
+        }
     }
 
     /**
-     * @param array $propertyConfig
+     * @param array  $propertyConfig
      * @param Method $method
      */
     private function buildFieldTypeHelpers(array $propertyConfig, Method $method): void
     {
         $helpers = PropertyTypeHelper::getTypeHelpers();
 
-        foreach ($helpers as $type => $helper)
-        {
+        foreach ($helpers as $type => $helper) {
             $helper = array_replace(PropertyTypeHelper::getMaskHelper(), $helper);
 
-            if ($type == $propertyConfig['typeConfig']['easyAdminType'] && !in_array($method->getName(), $helper['methods']))
-            {
+            if ($propertyConfig['typeConfig']['easyAdminType'] == $type && !in_array($method->getName(), $helper['methods'])) {
                 PropertyTypeHelper::{$helper['function']}($propertyConfig, $this, $method);
             }
         }
     }
 
     /**
-     * @param array $propertyConfig
+     * @param array  $propertyConfig
      * @param Entity $entity
      * @param method $method
      */
@@ -234,29 +245,22 @@ class Field
     {
         $helpers = PropertyClassHelper::getClassHelpers();
 
-        foreach ($propertyConfig['annotationClasses'] as $annotation)
-        {
-            //Si l'entré existe et si la methode est autorisé pour la class spécifié
-            //On bannit les méthodes list et show de base
+        foreach ($propertyConfig['annotationClasses'] as $annotation) {
             if (($classHelper = $helpers[get_class($annotation)] ?? null) && (!in_array($method->getName(), ['list', 'show'])
-                    || in_array($method->getName(), $classHelper['methods'])) )
-            {
+                    || in_array($method->getName(), $classHelper['methods']))) {
                 PropertyClassHelper::{$classHelper['function']}($annotation, $this, $entity, $method);
             }
         }
     }
 
     /**
-     * @param array $propertyConfig
+     * @param array  $propertyConfig
      * @param Entity $entity
      * @param Method $method
      */
     public function buildFieldHelpers(array $propertyConfig, Entity $entity, Method $method): void
     {
-        //Helpers par rapport aux classes possédés
         $this->buildFieldClassHelpers($propertyConfig, $entity, $method);
-
-        //helpers par rapport au type attribué
         $this->buildFieldTypeHelpers($propertyConfig, $method);
     }
 
@@ -270,11 +274,13 @@ class Field
 
     /**
      * @param mixed $format
+     *
      * @return $this
      */
     public function setFormat($format): Field
     {
         $this->format = $format;
+
         return $this;
     }
 }

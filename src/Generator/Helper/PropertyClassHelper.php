@@ -52,11 +52,11 @@ class PropertyClassHelper extends AbstractPropertyHelper
     const DIGIT_REGEX = '^[0-9]+$';
     const IPV4_REGEX = '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$';
     const IPV6_REGEX = '^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*';
-    const IPALL_REGEX = '(' . self::IPV4_REGEX . ')|(' . self::IPV6_REGEX . ')';
+    const IPALL_REGEX = '('.self::IPV4_REGEX.')|('.self::IPV6_REGEX.')';
     const NUMBER_REGEX = '^[0-9]*$';
 
     /**
-     * Liste des fonctions à éxécuter pour chaque type présent
+     * List of functions to execute for each type present.
      */
     private static $classHelpers = [
         SortablePosition::class => [
@@ -171,42 +171,36 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Array_replace sur le min (au cas ou le range ou autre est passé par la)
      * @param SortablePosition $class
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field            $field
+     * @param Entity           $entity
+     * @param Method           $method
      */
     public static function handlePosition(SortablePosition $class, Field $field, Entity $entity, Method $method): void
     {
         $typeOptions = $field->getTypeOptions();
-        if (!isset($typeOptions['attr']['min']))
-        {
+        if (!isset($typeOptions['attr']['min'])) {
             $typeOptions['attr']['min'] = 0;
             $field->setTypeOptions($typeOptions);
         }
     }
 
     /**
-     * Gérer les 21 cas
-     * @param Image $image
-     * @param Field $field
+     * @param Image  $image
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleImage(Image $image, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = [];
 
-        //gestions des mimes
         $mimes = self::getMimesToString((array) $image->mimeTypes);
         $helpMessage[] = $translator->trans('generator.image.mime', ['%mimes%' => $mimes]);
 
-        //Gestion du ratio:
-        if ($image->minRatio && $image->maxRatio)
-        {
+        if ($image->minRatio && $image->maxRatio) {
             $helpMessage[] = ($image->minRatio == $image->maxRatio) ? $translator->trans('generator.image.ratio.equal', ['%equal%' => $image->minRatio])
                 : $translator->trans('generator.image.ratio.interval', [
                         '%min%' => $image->minRatio,
@@ -215,145 +209,115 @@ class PropertyClassHelper extends AbstractPropertyHelper
                 );
         }
 
-        //Gestion des 21 cas -_-
         $helpMessage[] = self::buildImageHelpMessageDimension($image);
 
-
-        if($image->minRatio && !$image->maxRatio)
+        if ($image->minRatio && !$image->maxRatio) {
             $helpMessage[] = $translator->trans('generator.image.ratio.min', ['%min%' => $image->minRatio]);
-        if(!$image->minRatio && $image->maxRatio)
+        }
+        if (!$image->minRatio && $image->maxRatio) {
             $helpMessage[] = $translator->trans('generator.image.ratio.max', ['%max%' => $image->maxRatio]);
-
-        //Gestion des dimensions (21 possibilités)
+        }
 
         $field->setHelp(self::buildHelpMessage($helpMessage));
     }
 
     /**
-     * Génère le message d'aide concernant les dimensions d'une image (21 cas)
+     * Generates the help message about the dimensions of an image.
      */
     private static function buildImageHelpMessageDimension(Image $image): string
     {
         $helpMessage = '';
 
-        if ($image->minHeight)
-        {
-            if ($image->maxHeight)
-            {
-                if ($image->minWidth)
-                {
-                    if ($image->maxWidth)
-                    {
-                        if ($image->minHeight == $image->maxHeight)
-                        {
-                            if ($image->minWidth == $image->maxWidth)
-                                $helpMessage = "image doit faire X*Y";
-                            else
-                                $helpMessage = "Image doit faire X de hauteur et entre X et Y de largeur";
+        if ($image->minHeight) {
+            if ($image->maxHeight) {
+                if ($image->minWidth) {
+                    if ($image->maxWidth) {
+                        if ($image->minHeight == $image->maxHeight) {
+                            if ($image->minWidth == $image->maxWidth) {
+                                $helpMessage = 'image doit faire X*Y';
+                            } else {
+                                $helpMessage = 'Image doit faire X de hauteur et entre X et Y de largeur';
+                            }
+                        } else {
+                            if ($image->minWidth == $image->maxWidth) {
+                                $helpMessage = 'Image doit faire entre X et Y de hauteur et Y de largeur';
+                            } else {
+                                $helpMessage = 'Image doit faire entre X et Y de hauteur et X et Y de largeur';
+                            }
                         }
-                        else
-                        {
-                            if ($image->minWidth == $image->maxWidth)
-                                $helpMessage = "Image doit faire entre X et Y de hauteur et Y de largeur";
-                            else
-                                $helpMessage = "Image doit faire entre X et Y de hauteur et X et Y de largeur";
-                        }
-                    }
-                    else //minH, maxH, minW
-                    {
-                        if ($image->minHeight == $image->maxHeight)
+                    } else { //minH, maxH, minW
+                        if ($image->minHeight == $image->maxHeight) {
                             $helpMessage = "l'image doit faire X de hauteur et doit dépasser X en largeur";
-                        else
+                        } else {
                             $helpMessage = "L'image doit faire entre X et Y en hauteur et doit dépasser X en largeur";
+                        }
+                    }
+                } else { //minH, maxH, maxW ?
+                    if ($image->maxWidth) { //minH, maxH, maxW
+                        if ($image->minHeight == $image->maxHeight) {
+                            $helpMessage = 'Image doit faire X en hauteur et ne doit pas dépaaser X en largeur';
+                        } else {
+                            $helpMessage = 'Image doit faire entre X et Y en hauteur et ne doit pas dépasser X en largeur';
+                        }
+                    } else {
+                        if ($image->minHeight == $image->maxHeight) {
+                            $helpMessage = 'Image doit faire X en hauteur.';
+                        } else {
+                            $helpMessage = 'Image doit faire entre X et Y en hauteur.';
+                        }
                     }
                 }
-                else //minH, maxH, maxW ?
-                {
-                    if ($image->maxWidth) //minH, maxH, maxW
-                    {
-                        if ($image->minHeight == $image->maxHeight)
-                            $helpMessage = "Image doit faire X en hauteur et ne doit pas dépaaser X en largeur";
-                        else
-                            $helpMessage = "Image doit faire entre X et Y en hauteur et ne doit pas dépasser X en largeur";
+            } else { //minH, minW ? , maxW ?
+                if ($image->minWidth) {
+                    if ($image->maxWidth) {
+                        if ($image->minWidth == $image->maxWidth) {
+                            $helpMessage = 'Image doit dépasser X en largeur et faire X en hauteur';
+                        } else {
+                            $helpMessage = 'Image doit dépasser X en largeur et doit faire entre X et Y en hauteur';
+                        }
+                    } else { // minH, minW
+                        $helpMessage = 'Image doit dépasser X en hauteur et X en largeur';
                     }
-                    else
-                    {
-                        if ($image->minHeight == $image->maxHeight)
-                            $helpMessage = "Image doit faire X en hauteur.";
-                        else
-                            $helpMessage = "Image doit faire entre X et Y en hauteur.";
+                } else { // minH, maxW ?
+                    if ($image->maxWidth) {
+                        $helpMessage = 'Image doit dépasser X en hauteur et ne doit pas dépasser X en largeur';
+                    } else {
+                        $helpMessage = 'Image doit dépasser X en hauteur';
                     }
-                }
-            }
-            else //minH, minW ? , maxW ?
-            {
-                if ($image->minWidth)
-                {
-                    if ($image->maxWidth)
-                    {
-                        if ($image->minWidth == $image->maxWidth)
-                            $helpMessage = "Image doit dépasser X en largeur et faire X en hauteur";
-                        else
-                            $helpMessage = "Image doit dépasser X en largeur et doit faire entre X et Y en hauteur";
-                    }
-                    else // minH, minW
-                    {
-                        $helpMessage = "Image doit dépasser X en hauteur et X en largeur";
-                    }
-                }
-                else // minH, maxW ?
-                {
-                    if ($image->maxWidth)
-                        $helpMessage = "Image doit dépasser X en hauteur et ne doit pas dépasser X en largeur";
-                    else
-                        $helpMessage = "Image doit dépasser X en hauteur";
                 }
             }
-        }
-        else //maxH ?, minW ? , maxW ?
-        {
-            if ($image->maxHeight)
-            {
-                if ($image->minWidth)
-                {
-                    if ($image->maxWidth)
-                    {
-                        if ($image->minWidth == $image->maxWidth)
-                            $helpMessage = "Image doit faire X en largeur et ne doit pas dépaaser X en hauteur";
+        } else { //maxH ?, minW ? , maxW ?
+            if ($image->maxHeight) {
+                if ($image->minWidth) {
+                    if ($image->maxWidth) {
+                        if ($image->minWidth == $image->maxWidth) {
+                            $helpMessage = 'Image doit faire X en largeur et ne doit pas dépaaser X en hauteur';
+                        }
+                    } else { //maxH, minW
+                        $helpMessage = 'Image doit ne doit pas dépaaser X en hauteur et doit faire au minimum X en largeur';
                     }
-                    else //maxH, minW
-                    {
-                        $helpMessage = "Image doit ne doit pas dépaaser X en hauteur et doit faire au minimum X en largeur";
-                    }
-                }
-                else //maxH , maxW ?
-                {
-                    if ($image->maxWidth)
-                        $helpMessage = "Image ne doit pas dépasser X en hauteur et ne doit pas dépasser X en largeur";
-                    else
-                        $helpMessage = "Image ne doit pas dépasser X en hauteur";
-                }
-            }
-            else // minW ? maxW ?
-            {
-                if ($image->minWidth)
-                {
-                    if ($image->maxWidth)
-                    {
-                        if ($image->minWidth == $image->maxWidth)
-                            $helpMessage = "Image doit faire X en largeur";
-                        else
-                            $helpMessage = "Image doit faire entre X et Y en largeur";
-                    }
-                    else // minW
-                    {
-                        $helpMessage = "Image doit faire au minimum X de largeur";
+                } else { //maxH , maxW ?
+                    if ($image->maxWidth) {
+                        $helpMessage = 'Image ne doit pas dépasser X en hauteur et ne doit pas dépasser X en largeur';
+                    } else {
+                        $helpMessage = 'Image ne doit pas dépasser X en hauteur';
                     }
                 }
-                else //maxW ?
-                {
-                    if ($image->maxWidth)
-                        $helpMessage = "Image ne doit pas dépasser X en largeur";
+            } else { // minW ? maxW ?
+                if ($image->minWidth) {
+                    if ($image->maxWidth) {
+                        if ($image->minWidth == $image->maxWidth) {
+                            $helpMessage = 'Image doit faire X en largeur';
+                        } else {
+                            $helpMessage = 'Image doit faire entre X et Y en largeur';
+                        }
+                    } else { // minW
+                        $helpMessage = 'Image doit faire au minimum X de largeur';
+                    }
+                } else { //maxW ?
+                    if ($image->maxWidth) {
+                        $helpMessage = 'Image ne doit pas dépasser X en largeur';
+                    }
                 }
             }
         }
@@ -362,58 +326,60 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Retourne la liste des mimes dans une chaine de caractères
+     * Returns the list of mimes in a string.
+     *
      * @param array $mimes
+     *
      * @return string
      */
     private static function getMimesToString(array $mimes): string
     {
         $mimesString = '';
-        foreach ($mimes as $mime)
-        {
+        foreach ($mimes as $mime) {
             $mimeExploded = explode('/', $mime);
-            if (empty($mimeExploded) || count($mimeExploded) != 2)
+            if (empty($mimeExploded) || 2 != count($mimeExploded)) {
                 continue;
-            $mimesString .= ($mimesString != '') ? ", ".$mimeExploded[1] : $mimeExploded[1];
+            }
+            $mimesString .= ('' != $mimesString) ? ', '.$mimeExploded[1] : $mimeExploded[1];
         }
 
         return $mimesString;
     }
 
     /**
-     * Crée une liste de message d'aides.
      * @param array $messages
+     *
      * @return string
      */
     private static function buildHelpMessage(array $messages): string
     {
         $helpMessage = '';
-        foreach ($messages as $message)
-            $helpMessage .= $message . "</br>";
+        foreach ($messages as $message) {
+            $helpMessage .= $message.'</br>';
+        }
 
         return $helpMessage;
     }
 
     /**
-     * TODO: Rajouter la gestion des choix stocker dans une autre class que celle de l'entité
-     * Set les choix
      * @param Choice $choice
-     * @param Field $field
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
+     *
      * @throws EAException
      */
     public static function handleChoice(Choice $choice, Field $field, Entity $entity, Method $method): void
     {
-        if (!is_array($choice->choices) && !$choice->callback)
+        if (!is_array($choice->choices) && !$choice->callback) {
             return;
+        }
 
         if (!is_array($choice->choices) && !$choice->callback) {
             throw new EAException('Either "choices" or "callback" must be specified on constraint Choice');
         }
 
-        if ($choice->callback)
-        {
+        if ($choice->callback) {
             $object = $entity->getMetaData()->getName();
             if (!is_callable($choices = array(new $object(), $choice->callback))
                 && !is_callable($choice->callback)
@@ -425,8 +391,9 @@ class PropertyClassHelper extends AbstractPropertyHelper
             $choices = $choice->choices;
         }
 
-        if (!self::isAssoc($choices))
+        if (!self::isAssoc($choices)) {
             $choices = array_combine($choices, $choices);
+        }
 
         $typeOptions = $field->getTypeOptions();
         $typeOptions['choices'] = $choices;
@@ -434,28 +401,28 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Si le champs  lié, possède l'option nullable à false,
-     * on set l'option allow_delete à felse pour le currant Field
+     * If the linked field has the nullable option set to false,
+     * set the allow_delete option to felse for the field currant.
      *
      * @param UploadableField $uploadableField
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field           $field
+     * @param Entity          $entity
+     * @param Method          $method
+     *
      * @throws EAException
      */
     public static function handleUploadableField(UploadableField $uploadableField, Field $field, Entity $entity, Method $method): void
     {
         $propertyLinkedName = $uploadableField->getFileNameProperty();
-        $propertyLinked = array_values(array_filter($entity->getProperties(), function($property) use ($propertyLinkedName){
-            return ($property['name'] == $propertyLinkedName);
+        $propertyLinked = array_values(array_filter($entity->getProperties(), function ($property) use ($propertyLinkedName) {
+            return $property['name'] == $propertyLinkedName;
         }));
 
-        if(!isset($propertyLinked[0]))
-            throw new EAException("The UploadableField does not have a valid file name property");
-
+        if (!isset($propertyLinked[0])) {
+            throw new EAException('The UploadableField does not have a valid file name property');
+        }
         $column = PropertyHelper::getClassFromArray($propertyLinked[0]['annotationClasses'], Column::class);
-        if (!$column->nullable)
-        {
+        if (!$column->nullable) {
             $typeOptions = $field->getTypeOptions();
             $typeOptions['allow_delete'] = false;
             $field->setTypeOptions($typeOptions);
@@ -463,85 +430,88 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     *  Vérifie si c'est un tableau associatif
+     * Check if it is an associative array.
+     *
      * @param array $array
+     *
      * @return bool
      */
     public static function isAssoc(array $array): bool
     {
-        return ($array !== array_values($array));
+        return $array !== array_values($array);
     }
 
     /**
-     * Message d'aide
-     * @param Range $range
-     * @param Field $field
+     * @param Range  $range
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleRange(Range $range, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
-        if($range->min && $range->max)
-        {
-            if ($range->min == $range->max)
+        if ($range->min && $range->max) {
+            if ($range->min == $range->max) {
                 $helpMessage = $translator->trans('generator.range.equal', ['%value%' => $range->min]);
-            else
+            } else {
                 $helpMessage = $translator->trans('generator.range.interval', [
                     '%min%' => $range->min,
                     '%max%' => $range->max,
                 ]);
+            }
         }
-        if($range->min && !$range->max)
+        if ($range->min && !$range->max) {
             $helpMessage = $translator->trans('generator.range.min', ['%min%' => $range->min]);
-        if(!$range->min && $range->max)
+        }
+        if (!$range->min && $range->max) {
             $helpMessage = $translator->trans('generator.range.max', ['%max%' => $range->max]);
+        }
 
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
-     * @param Count $count
-     * @param Field $field
+     * @param Count  $count
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleCount(Count $count, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
-        if($count->min && $count->max)
-        {
-            if ($count->min == $count->max)
+        if ($count->min && $count->max) {
+            if ($count->min == $count->max) {
                 $helpMessage = $translator->trans('generator.count.equal', ['%value%' => $count->min]);
-            else
+            } else {
                 $helpMessage = $translator->trans('generator.count.interval', [
                     '%min%' => $count->min,
                     '%max%' => $count->max,
                 ]);
+            }
         }
-        if($count->min && !$count->max)
+        if ($count->min && !$count->max) {
             $helpMessage = $translator->trans('generator.count.min', ['%min%' => $count->min]);
-        if(!$count->min && $count->max)
+        }
+        if (!$count->min && $count->max) {
             $helpMessage = $translator->trans('generator.count.max', ['%max%' => $count->max]);
+        }
 
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Attribut pattern et message d'aide
-     * @param Bic $bic
-     * @param Field $field
+     * @param Bic    $bic
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleBic(Bic $bic, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.bic.help');
         $field->setHelp($helpMessage);
@@ -552,33 +522,32 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * @param Iban $iban
-     * @param Field $field
+     * @param Iban   $iban
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleIban(Iban $iban, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.iban.help');
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Attribut pattern (gère ISBN10, ISBN13 et les 2)
-     * @param Isbn $isbn
-     * @param Field $field
+     * @param Isbn   $isbn
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleIsbn(Isbn $isbn, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
-        $regex = ($isbn->type != null) ? ($isbn->type == 'isbn10') ? self::ISBN10_REGEX : self::ISBN13_REGEX : self::ISBN_REGEX;
-        $idTranslation = ($isbn->type != null) ? ($isbn->type == 'isbn10') ? '10' : '13' : 'both';
+        $regex = (null != $isbn->type) ? ('isbn10' == $isbn->type) ? self::ISBN10_REGEX : self::ISBN13_REGEX : self::ISBN_REGEX;
+        $idTranslation = (null != $isbn->type) ? ('isbn10' == $isbn->type) ? '10' : '13' : 'both';
 
         $typeOptions = $field->getTypeOptions();
         $typeOptions['attr']['pattern'] = $regex;
@@ -589,53 +558,50 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Message d'aide (pas de pattern, conflit avec le navigateur web)
-     * @param Email $email
-     * @param Field $field
+     * @param Email  $email
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleEmail(Email $email, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.email.help');
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide (liste des protocoles autorisés)
-     * @param Url $url
-     * @param Field $field
+     * @param Url    $url
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
+     *
      * @throws EAException
      */
     public static function handleUrl(Url $url, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
-        if (empty($url->protocols))
+        if (empty($url->protocols)) {
             throw new EAException('No authorized protocols (property -> '.$field->getName().')');
-
-        $protocols = implode(", ", $url->protocols);
+        }
+        $protocols = implode(', ', $url->protocols);
         $helpMessage[] = $translator->trans('generator.url.protocols', ['%protocols' => $protocols]);
         $helpMessage[] = $translator->trans('generator.url.help');
         $field->setHelp(self::buildHelpMessage($helpMessage));
     }
 
     /**
-     * Attribut pattern
-     * @param Regex $regex
-     * @param Field $field
+     * @param Regex  $regex
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleRegex(Regex $regex, Field $field, Entity $entity, Method $method): void
     {
-        if ($regex->match)
-        {
+        if ($regex->match) {
             $typeOptions = $field->getTypeOptions();
             $typeOptions['attr']['pattern'] = $regex->pattern;
             $field->setTypeOptions($typeOptions);
@@ -643,45 +609,45 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Message d'aide
      * @param Length $length
-     * @param Field $field
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleLength(Length $length, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
-        if($length->min && $length->max)
-        {
-            if ($length->min == $length->max)
+        if ($length->min && $length->max) {
+            if ($length->min == $length->max) {
                 $helpMessage = $translator->trans('generator.length.equal', ['%equal%' => $length->min]);
-            else
+            } else {
                 $helpMessage = $translator->trans('generator.length.interval', [
                     '%min%' => $length->min,
                     '%max%' => $length->max,
                 ]);
+            }
         }
-        if($length->min && !$length->max)
+        if ($length->min && !$length->max) {
             $helpMessage = $translator->trans('generator.length.min', ['%min%' => $length->min]);
-        if(!$length->min && $length->max)
+        }
+        if (!$length->min && $length->max) {
             $helpMessage = $translator->trans('generator.length.max', ['%max%' => $length->max]);
+        }
 
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide et attribut pattern
-     * @param Luhn $luhn
-     * @param Field $field
+     * @param Luhn   $luhn
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleLuhn(Luhn $luhn, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.luhn.help');
         $field->setHelp($helpMessage);
@@ -692,11 +658,12 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Selection ISO 4217
+     * ISO 4217.
+     *
      * @param Currency $currency
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field    $field
+     * @param Entity   $entity
+     * @param Method   $method
      */
     public static function handleCurrency(Currency $currency, Field $field, Entity $entity, Method $method): void
     {
@@ -706,11 +673,12 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Selection ISO 3166-1
+     * ISO 3166-1.
+     *
      * @param Country $country
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field   $field
+     * @param Entity  $entity
+     * @param Method  $method
      */
     public static function handleCountry(Country $country, Field $field, Entity $entity, Method $method): void
     {
@@ -720,32 +688,25 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Attribut pattern pour IPV4, IPV6 et les 2
-     * @param Ip $ip
-     * @param Field $field
+     * @param Ip     $ip
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleIp(Ip $ip, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = '';
         $pattern = '';
 
-        if($ip->version == "4")
-        {
+        if ('4' == $ip->version) {
             $helpMessage = $translator->trans('generator.ip.v4');
             $pattern = self::IPV4_REGEX;
-        }
-        else if ($ip->version == "6")
-        {
+        } elseif ('6' == $ip->version) {
             $helpMessage = $translator->trans('generator.ip.v6');
             $pattern = self::IPV6_REGEX;
-
-        }
-        else if ($ip->version == "all")
-        {
+        } elseif ('all' == $ip->version) {
             $helpMessage = $translator->trans('generator.ip.all');
             $pattern = self::IPALL_REGEX;
         }
@@ -757,11 +718,12 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Selection RFC 3066
+     * RFC 3066.
+     *
      * @param Language $language
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field    $field
+     * @param Entity   $entity
+     * @param Method   $method
      */
     public static function handleLanguage(Language $language, Field $field, Entity $entity, Method $method): void
     {
@@ -771,9 +733,10 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Selection ISO 639-1
+     * ISO 639-1.
+     *
      * @param Locale $locale
-     * @param Field $field
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
@@ -785,11 +748,10 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Attribut pattern
      * @param CardScheme $cardScheme
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field      $field
+     * @param Entity     $entity
+     * @param Method     $method
      */
     public static function handleCardScheme(CardScheme $cardScheme, Field $field, Entity $entity, Method $method): void
     {
@@ -799,135 +761,126 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * Message d'aide
-     * @param Issn $issn
-     * @param Field $field
+     * @param Issn   $issn
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
     public static function handleIssn(Issn $issn, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.issn.help');
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param EqualTo $equalTo
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field   $field
+     * @param Entity  $entity
+     * @param Method  $method
      */
     public static function handleEqualTo(EqualTo $equalTo, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.equal_to.help', ['%value%' => $equalTo->value]);
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param NotEqualTo $notEqualTo
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field      $field
+     * @param Entity     $entity
+     * @param Method     $method
      */
     public static function handleNotEqualTo(NotEqualTo $notEqualTo, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.not_equal_to.help', ['%value%' => $notEqualTo->value]);
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param IdenticalTo $identicalTo
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field       $field
+     * @param Entity      $entity
+     * @param Method      $method
      */
     public static function handleIdenticalTo(IdenticalTo $identicalTo, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.identical_to.help', ['%value%' => $identicalTo->value]);
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param NotIdenticalTo $notIdenticalTo
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field          $field
+     * @param Entity         $entity
+     * @param Method         $method
      */
     public static function handleNotIdenticalTo(NotIdenticalTo $notIdenticalTo, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.not_identical_to.help', ['%value%' => $notIdenticalTo->value]);
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param LessThan $lessThan
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field    $field
+     * @param Entity   $entity
+     * @param Method   $method
      */
     public static function handleLessThan(LessThan $lessThan, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.less_than.help', ['%value%' => $lessThan->value]);
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param LessThanOrEqual $lessThanOrEqual
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field           $field
+     * @param Entity          $entity
+     * @param Method          $method
      */
     public static function handleLessThanOrEqual(LessThanOrEqual $lessThanOrEqual, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.less_than_or_equal.help', ['%value%' => $lessThanOrEqual->value]);
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param GreaterThan $greaterThan
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field       $field
+     * @param Entity      $entity
+     * @param Method      $method
      */
     public static function handleGreaterThan(GreaterThan $greaterThan, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.greater_than.help', ['%value%' => $greaterThan->value]);
         $field->setHelp($helpMessage);
     }
 
     /**
-     * Message d'aide
      * @param GreaterThanOrEqual $greaterThanOrEqual
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field              $field
+     * @param Entity             $entity
+     * @param Method             $method
      */
     public static function handleGreaterThanOrEqual(GreaterThanOrEqual $greaterThanOrEqual, Field $field, Entity $entity, Method $method): void
     {
-        /** @var  Translator $translator */
+        /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
         $helpMessage = $translator->trans('generator.greater_than_or_equal.help', ['%value%' => $greaterThanOrEqual->value]);
         $field->setHelp($helpMessage);
@@ -935,9 +888,9 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * @param DateTime $dateTime
-     * @param Field $field
-     * @param Entity $entity
-     * @param Method $method
+     * @param Field    $field
+     * @param Entity   $entity
+     * @param Method   $method
      */
     public static function handleDateTime(DateTime $dateTime, Field $field, Entity $entity, Method $method): void
     {
@@ -945,8 +898,8 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * @param Date $date
-     * @param Field $field
+     * @param Date   $date
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */
@@ -956,8 +909,8 @@ class PropertyClassHelper extends AbstractPropertyHelper
     }
 
     /**
-     * @param Time $time
-     * @param Field $field
+     * @param Time   $time
+     * @param Field  $field
      * @param Entity $entity
      * @param Method $method
      */

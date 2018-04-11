@@ -10,6 +10,7 @@ abstract class GeneratorBase
     protected $em;
     protected $projectDir;
     protected $container;
+
     /**
      * GeneratorBase constructor.
      *
@@ -22,6 +23,7 @@ abstract class GeneratorBase
         $this->parameters = $container->getParameter('easy_admin_plus')['generator'];
         $this->projectDir = $container->getParameter('kernel.project_dir');
     }
+
     /**
      * @param ContainerInterface $container
      */

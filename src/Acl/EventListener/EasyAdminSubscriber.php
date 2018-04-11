@@ -35,10 +35,12 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Throws an AccessDeniedException if user haven't enough privileges
+     * Throws an AccessDeniedException if user haven't enough privileges.
      *
      * @param GenericEvent $event event
+     *
      * @return bool
+     *
      * @throws AccessDeniedException
      */
     public function checkUserRights(GenericEvent $event): bool

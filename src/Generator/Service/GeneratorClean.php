@@ -23,26 +23,22 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
     }
 
     /**
-     * Suppression des entités dans menu, dans la liste des ficheirs importés et du fichier en lui même
-     * TODO: Mettre les methodes de purges dans une autre classe
-     *
      * @throws EAException
      */
-
     public function run(): void
     {
-        $fileContent = Yaml::parse(file_get_contents($this->projectDir . '/config/packages/easy_admin.yaml'));
+        $fileContent = Yaml::parse(file_get_contents($this->projectDir.'/config/packages/easy_admin.yaml'));
 
         //RETIRER cette horreur
-        if (!isset($fileContent['imports']))
+        if (!isset($fileContent['imports'])) {
             throw new EAException('There are no imported files.');
-
+        }
         $entitiesToDelete = $this->getEntitiesToDelete($fileContent);
 
-        if (empty($entitiesToDelete))
-        {
+        if (empty($entitiesToDelete)) {
             $this->consoleOutput->writeln('There are no files to clean, cleaning process <info>completed</info>.');
-            return ;
+
+            return;
         }
 
         $this->consoleOutput->writeln('<info>Start </info>of cleaning easyadmin configuration files.');
@@ -53,8 +49,10 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
     }
 
     /**
-     * Retourne la liste des entités à supprimer
+     * Returns the list of entities to delete.
+     *
      * @param $fileContent
+     *
      * @return array
      */
     private function getEntitiesToDelete($fileContent): array
@@ -65,15 +63,15 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
 
         foreach (array_diff($entitiesEasyAdmin, $entitiesList) as $entity) {
             $entitiesToDelete['name'][] = $entity;
-            $entitiesToDelete['pattern'][] = 'easy_admin/entities/' . $entity . '.yaml';
+            $entitiesToDelete['pattern'][] = 'easy_admin/entities/'.$entity.'.yaml';
         }
 
         return $entitiesToDelete;
     }
 
-
     /**
      * @param array $files
+     *
      * @return array
      */
     private function getEasyAdminEntityNames(array $files): array
@@ -90,43 +88,46 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
             }
 
             $lengthPattern = strlen('easy_admin/entities/');
-            $entitiesName[] = substr($file['resource'], $lengthPattern ,  strlen($file['resource'])  - $lengthPattern - 5);
+            $entitiesName[] = substr($file['resource'], $lengthPattern, strlen($file['resource']) - $lengthPattern - 5);
         }
 
         return $entitiesName;
     }
 
     /**
-     * Retourne un tableau contenant les noms des entités
+     * Returns an array containing the names of the entities.
+     *
      * @param array $metaDataList
      * @param array $bundles
+     *
      * @return array
      */
     private function getEntitiesNameFromMetaDataList(array $metaDataList, array $bundles): array
     {
-        $entitiesName = array_map(function($metaData) use ($bundles){
+        $entitiesName = array_map(function ($metaData) use ($bundles) {
             return Entity::buildName(Entity::buildNameData($metaData, $bundles));
         }, $metaDataList);
+
         return $entitiesName;
     }
 
     /**
      * @param $entities
+     *
      * @throws EAException
      */
     private function purgeImportedFiles(array $entities): void
     {
         $fileBaseContent = Yaml::parse(file_get_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir)));
 
-        if (!isset($fileBaseContent['imports']))
-        {
+        if (!isset($fileBaseContent['imports'])) {
             throw new EAException('No imported files2');
         }
 
-        foreach ($fileBaseContent['imports'] as $key => $import)
-        {
-            if (in_array($import['resource'], $entities['pattern']))
+        foreach ($fileBaseContent['imports'] as $key => $import) {
+            if (in_array($import['resource'], $entities['pattern'])) {
                 unset($fileBaseContent['imports'][$key]);
+            }
         }
 
         $fileBaseContent['imports'] = array_values($fileBaseContent['imports']);
@@ -136,11 +137,12 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
 
     /**
      * @param $entities
+     *
      * @throws EAException
      */
     private function purgeEasyAdminMenu(array $entities): void
     {
-        $fileContent = Yaml::parse(file_get_contents(sprintf( '%s/config/packages/easy_admin/menu.yaml', $this->projectDir)));
+        $fileContent = Yaml::parse(file_get_contents(sprintf('%s/config/packages/easy_admin/menu.yaml', $this->projectDir)));
 
         if (!isset($fileContent['easy_admin']['design']['menu'])) {
             throw new EAException('no easy admin menu detected');
@@ -154,23 +156,24 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
 
         $fileContent['easy_admin']['design']['menu'] = array_values($fileContent['easy_admin']['design']['menu']);
         $ymlContent = GeneratorTool::buildDumpPhpToYml($fileContent, $this->parameters);
-        file_put_contents($this->projectDir . '/config/packages/easy_admin/menu.yaml', $ymlContent);
+        file_put_contents($this->projectDir.'/config/packages/easy_admin/menu.yaml', $ymlContent);
     }
 
     /**
-     * @param $entities
+     * @param array $entities
+     *
      * @throws EAException
      */
     private function purgeEntityFiles(array $entities): void
     {
-        foreach ($entities['name'] as $entityName)
-        {
-            $this->consoleOutput->writeln(sprintf('Purging entity <info>%s</info>',$entityName));
+        foreach ($entities['name'] as $entityName) {
+            $this->consoleOutput->writeln(sprintf('Purging entity <info>%s</info>', $entityName));
             $path = sprintf('/config/packages/easy_admin/entities/%s.yaml', $entityName);
-            if (unlink($this->projectDir . $path))
+            if (unlink($this->projectDir.$path)) {
                 $this->consoleOutput->writeln(sprintf('   >File <comment>%s</comment> has been <info>deleted</info>.', $path));
-            else
+            } else {
                 throw new EAException(sprintf('Unable to delete configuration file for %s entity', $entityName));
+            }
         }
     }
 }
