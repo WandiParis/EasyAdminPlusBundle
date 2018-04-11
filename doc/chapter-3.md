@@ -130,6 +130,95 @@ When submitting the form, files on the current domain are backuped and erased wi
 
 Message is added  in `session flashbag` and translations' cache dir (`kernel.cache_dir`) is cleared for production use before forwarding on GET.
 
+### Events
+
+The `Translator` component dispatchs two events.
+
+##### PRE_TRANSLATE
+
+The event is dispatched when an admin accesses the form on a specific domain.
+
+```php
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+
+$this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::PRE_TRANSLATE,
+    new GenericEvent($domain, [
+        'domain' => $domain,
+        'user' => [
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles(),
+        ],
+    ])
+);
+```
+
+##### POST_TRANSLATE
+
+The event is dispatched when an admin submits the form on a specific domain.
+
+```php
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+
+$this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::POST_TRANSLATE,
+    new GenericEvent($domain, [
+        'domain' => $domain,
+        'files' => $fileNames,
+        'user' => [
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles(),
+        ],
+    ])
+);
+```
+
+##### Subscribe events
+
+```php
+use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+
+class EasyAdminPlusSubscriber implements EventSubscriberInterface
+{
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        // return the subscribed events, their methods and priorities
+        return array(
+            EasyAdminPlusTranslatorEvents::PRE_TRANSLATE => 'logAccess',
+            EasyAdminPlusTranslatorEvents::POST_TRANSLATE => 'clearVarnishCache',
+        );
+    }
+    
+    /**
+     * Log admin access
+     *
+     * @param GenericEvent $event event
+     */
+    public function logAccess(GenericEvent $event): bool
+    {
+        $domain = $event->getArguments()['domain'];
+        $user = $event->getArguments()['user'];
+        
+        # your logic
+    }
+    
+    /**
+     * Clear Varnish Cache
+     *
+     * @param GenericEvent $event event
+     */
+    public function clearVarnishCache(GenericEvent $event): bool
+    {
+        $domain = $event->getArguments()['domain'];
+        $files = $event->getArguments()['files'];
+        $user = $event->getArguments()['user'];
+        
+        # your logic
+    }
+```
 
 ----------
 

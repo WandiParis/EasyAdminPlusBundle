@@ -1,7 +1,7 @@
 {% extends '@WandiEasyAdminPlus/layout.html.twig' %}
 
 {% block page_title %}
-    {{ 'translator.title'|trans({}, 'EasyAdminPlusBundle') }}
+    {{ config.site_name }} - {{ 'translator.title'|trans({}, 'EasyAdminPlusBundle') }}
 {% endblock %}
 
 {% block content %}
