@@ -119,7 +119,7 @@ In this example, we:
 * choose a custom fields order
 * restrict export to a few fields
 * put french labels on all fields
-* set custom `EasyAdmin `types (raw for HTML content, image for VichFile, but all types are possible)
+* set custom `EasyAdmin `types (raw for HTML content, image for VichFile, but types supported by `EasyAdmin` are possible)
 * override the `slug` property with a custom template (to prepend the base url on the product slug)
 
 ```twig
@@ -133,7 +133,7 @@ In this example, we:
 
 ### ACL
 
-According to [ACL](chapter-4.md), you can restrict `Export` action to a specific `role`.
+Thanks to [ACL](chapter-4.md) feature, you can restrict `Export` action to a specific `role`.
 
 Simply add the minimum role required to get the feature enabled:
 
