@@ -30,8 +30,8 @@ class GeneratorEntityCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $dirProject = $this->getContainer()->getParameter('kernel.project_dir');
-        $eaToolParams = $this->getContainer()->getParameter('easy_admin_plus')['generator'];
         $entiyManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $locale = $this->getContainer()->getParameter('locale') ?? $this->getContainer()->getParameter('kernel.default_locale');
         $helper = $this->getHelper('question');
         $entitiesRawName = $input->getArgument('entity');
         $entitiesMetaData = [];
@@ -75,7 +75,7 @@ the generation process is stopped</info></comment>');
 
         try {
             $eaTool = $this->getContainer()->get('wandi.easy_admin_plus.generator.entity');
-            $eaTool->run($entitiesMetaData, $this);
+            $eaTool->run($entitiesMetaData, $this, $locale);
         } catch (EAException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }

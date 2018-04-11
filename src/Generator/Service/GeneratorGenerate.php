@@ -29,10 +29,11 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
     public function run(): void
     {
         $listMetaData = $this->em->getMetadataFactory()->getAllMetadata();
+        $locale = $this->container->getParameter('locale') ?? $this->container->getParameter('kernel.default_locale');
 
         $generatorTool = new GeneratorTool($this->parameters);
         $generatorTool->setParameterBag($this->container->getParameterBag()->all());
-        $generatorTool->initTranslation($this->parameters['translation_domain'], $this->projectDir);
+        $generatorTool->initTranslation($this->parameters['translation_domain'], $this->projectDir, $locale);
         $bundles = $this->container->getParameter('kernel.bundles');
 
         if (empty($listMetaData))

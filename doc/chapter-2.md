@@ -2,7 +2,7 @@
 
 `EasyAdminPlus` is packaged with a generator which create the default [EasyAdmin](https://symfony.com/doc/current/bundles/EasyAdminBundle/book/configuration-reference.html) configuration file based on your `Entities` reflection.
 
-### Intro
+## Intro
 
 :exclamation: The purpose of this generator is not to write all the configuration for you but to get rid of the tedious writing time of the settings if you've many entities.
 
@@ -14,7 +14,7 @@
  * Annotations
  * Asserts
  
- ### Configuration
+ ## Configuration
  
  ```yaml
 # config/packages/wandi_easyadmin_plus.yaml
@@ -79,9 +79,17 @@ wandi_easy_admin_plus:
  
  All the settings are optional.
  
- ### Commands
+ ### Entities used for the example
  
- * Generate configuration files
+ * Comment
+ 
+ * Post
+ 
+ * Tags
+ 
+ ## Commands
+ 
+ ### Generate configuration files
  
   ```shell
   php bin/console wandi:easy-admin-plus:generator:generate
@@ -104,21 +112,84 @@ wandi_easy_admin_plus:
   <p align="center">
         <img src="images/generator-generate-backup.png" align="center" alt="Generator generate backup" />
     </p>
+    
+  * Generated Post entity configuration file
+   ```yaml
+  # config/packages/easy_admin/entities/app_post.yaml
+  easy_admin:
+      entities:
+          app_post:
+              class: App\Entity\Post
+              disabled_actions: []
+              list:
+                  title: 'List post'
+                  actions:
+                      - { name: new, label: new, icon: add }
+                      - { name: show, label: show, icon: search }
+                      - { name: edit, label: edit, icon: edit }
+                      - { name: delete, label: delete, icon: trash }
+                  fields:
+                      - { property: id, label: id }
+                      - { property: title, label: title }
+                      - { property: slug, label: slug }
+                      - { property: summary, label: summary }
+                      - { property: publishedAt, label: publishedAt }
+                      - { property: author, label: author }
+                      - { property: tags, label: tags }
+                  sort:
+                      - id
+                      - DESC
+              show:
+                  title: 'Fiche post'
+                  actions:
+                      - { name: edit, label: edit, icon: edit }
+                      - { name: delete, label: delete, icon: trash }
+                  fields:
+                      - { property: id, label: id }
+                      - { property: title, label: title }
+                      - { property: slug, label: slug }
+                      - { property: summary, label: summary }
+                      - { property: content, label: content, type: raw }
+                      - { property: publishedAt, label: publishedAt }
+                      - { property: author, label: author }
+                      - { property: comments, label: comments }
+                      - { property: tags, label: tags }
+              edit:
+                  title: 'Edit post'
+                  actions: []
+                  fields:
+                      - { property: title, label: title }
+                      - { property: slug, label: slug }
+                      - { property: summary, label: summary }
+                      - { property: content, label: content, help: 'The number of characters must be greater than 10.' }
+                      - { property: publishedAt, label: publishedAt }
+                      - { property: author, label: author, type: easyadmin_autocomplete }
+                      - { property: comments, label: comments, type: easyadmin_autocomplete, type_options: { by_reference: false } }
+                      - { property: tags, label: tags, type: easyadmin_autocomplete, help: 'The number of elements must be less than or equal to 4.' }
+              new:
+                  title: 'Add post'
+                  actions: []
+                  fields:
+                      - { property: title, label: title }
+                      - { property: slug, label: slug }
+                      - { property: summary, label: summary }
+                      - { property: content, label: content, help: 'The number of characters must be greater than 10.' }
+                      - { property: publishedAt, label: publishedAt }
+                      - { property: author, label: author, type: easyadmin_autocomplete }
+                      - { property: comments, label: comments, type: easyadmin_autocomplete, type_options: { by_reference: false } }
+                      - { property: tags, label: tags, type: easyadmin_autocomplete, help: 'The number of elements must be less than or equal to 4.' }
+   ```
   
- * Generate the configuration file for one or more specific entities
+ ### Generate the configuration file for one or more specific entities
   ```shell
   php bin/console wandi:easy-admin-plus:generation:entity entity_1 entity_2 ...
   ```
-  If the entities passed as parameters are linked to other entities, we will propose to regenerate their configuration file
+  If the entities passed as parameters are linked to other entities, we will propose to regenerate their configuration file.
   <p align="center">
       <img src="images/generator-entity.png" align="center" alt="Generator entity" />
   </p>
   
-
-### Todo
-
-:exclamation: Write the doc [@kasou](https://github.com/kasou)
-
+  
 ### Type Guessing
 * Doctrine match
   * 

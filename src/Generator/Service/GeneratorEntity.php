@@ -27,15 +27,16 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
      * @param Command $command
      * @throws EAException
      */
-    public function run(array $entitiesMetaData, Command $command): void
+    public function run(array $entitiesMetaData, Command $command, string $userLocale): void
     {
         $bundles = $this->container->getParameter('kernel.bundles');
+        $locale = $this->container->getParameter('locale') ?? $this->container->getParameter('kernel.default_locale');
         $relatedEntities = $this->getRelatedEntitiesMetaData($entitiesMetaData, $command, $bundles);
         $relatedEntities = array_merge($relatedEntities, $entitiesMetaData);
 
-        $eaTool = new GeneratorTool($this->parameters);
-        $eaTool->setParameterBag($this->container->getParameterBag()->all());
-        $eaTool->initTranslation($this->parameters['translation_domain'], $this->projectDir);
+        $generatorTool = new GeneratorTool($this->parameters);
+        $generatorTool->setParameterBag($this->container->getParameterBag()->all());
+        $generatorTool->initTranslation($this->parameters['translation_domain'], $this->projectDir, $locale);
 
         foreach ($relatedEntities as $entityMetaData)
         {
@@ -43,12 +44,12 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
             $entity->setName(Entity::buildName(Entity::buildNameData($entityMetaData, $bundles)));
             $entity->setClass($entityMetaData->getName());
             $entity->buildMethods($this->parameters);
-            $eaTool->addEntity($entity);
+            $generatorTool->addEntity($entity);
         }
 
-        $eaTool->generateEntityFiles($this->projectDir, $this->consoleOutput);
-        $this->updateMenuFile($eaTool->getEntities());
-        $this->updateImportsFile($eaTool->getEntities());
+        $generatorTool->generateEntityFiles($this->projectDir, $this->consoleOutput);
+        $this->updateMenuFile($generatorTool->getEntities());
+        $this->updateImportsFile($generatorTool->getEntities());
     }
 
     /**
@@ -135,7 +136,7 @@ class GeneratorEntity  extends GeneratorBase implements GeneratorConfigInterface
                     if (in_array($associationMapping['targetEntity'], $relatedEntities['name']))
                         continue ;
 
-                    $question = new ConfirmationQuestion(sprintf('The %s entity is linked, do you want to (re)generate its configuration file [<info>y</info>/n]?', $metaData->name), true);
+                    $question = new ConfirmationQuestion(sprintf('The <info>%s</info> entity is linked, do you want to (re)generate its configuration file [<info>y</info>/n]?', $metaData->name), true);
                     if ($helper->ask($consoleInput, $consoleOutput, $question))
                     {
                         $relatedEntities['name'][] = $metaData->getName();

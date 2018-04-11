@@ -123,12 +123,12 @@ class GeneratorTool
      * @param $fileName
      * @param $projectDir
      */
-    public function initTranslation(string $fileName, string $projectDir): void
+    public function initTranslation(string $fileName, string $projectDir, string $userLocale): void
     {
         if (self::$translation === null) {
-            self::$translation = new Translator('fr_FR');
+            self::$translation = new Translator($userLocale);
             self::$translation->addLoader('yaml', new YamlFileLoader());
-            self::$translation->addResource('yaml', $projectDir."/vendor/wandi/easyadmin-plus-bundle/src/Resources/translations/".$fileName.".fr.yaml", 'fr_FR');
+            self::$translation->addResource('yaml', $projectDir."/vendor/wandi/easyadmin-plus-bundle/src/Resources/translations/".$fileName.".' . $userLocale . '.yaml", $userLocale);
         }
     }
 
