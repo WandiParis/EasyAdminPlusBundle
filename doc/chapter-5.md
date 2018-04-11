@@ -113,6 +113,8 @@ easy_admin:
                     - { property: 'createdAt', label: 'Date de création', type: 'datetime' }
 ```
 
+We perform the same configuration passes than `EasyAdmin`, so you can write the `properties` the [way you want](https://symfony.com/doc/master/bundles/EasyAdminBundle/book/list-search-show-configuration.html#customize-the-properties-displayed).
+
 In this example, we:
 * choose a custom fields order
 * restrict export to a few fields
