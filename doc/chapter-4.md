@@ -6,6 +6,8 @@
 
 You can define roles to restrict access at `Entity` level or at `Action` level.
 
+-------
+
 ### Per entity role permissions
 
 Defining a global role for the whole `Entity` access.
@@ -20,6 +22,8 @@ easy_admin:
 ```
 
 All the enabled actions on the Product `Entity` will be only accessible to users with role `ROLE_EASY_ADMIN_SUPER`.
+
+-------
 
 ### Per entity action role permissions
 
@@ -60,6 +64,8 @@ security:
 
 User with role `ROLE_EASY_ADMIN_READER` can only access to `List`, `Search` and `Show` actions of the Product `Entity` whereas `ROLE_EASY_ADMIN_SUPER` can access all the actions with no restriction.
 
+-------
+
 ### Using actions based roles 
 
 You can do some factoring by naming all your roles with the action name as suffix.
@@ -95,6 +101,8 @@ easy_admin:
 
 Entity `role_prefix` defines all actions required roles by appending the action name to the prefix
 
+-------
+
 ### Front-End
 
 The items in the menu are reduced to only display Entities you're allowed to access.
@@ -109,6 +117,8 @@ If you are writing a custom action, you can use the twig filter to check a privi
     <a href="...">Add a product</a>
 {% endif %}
 ```
+
+-------
 
 ### Known issues
 
