@@ -8,6 +8,7 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Wandi\EasyAdminPlusBundle\Acl\Security\AdminAuthorizationChecker;
+use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
@@ -31,6 +32,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             EasyAdminEvents::PRE_EDIT => 'checkUserRights',
             EasyAdminEvents::PRE_SHOW => 'checkUserRights',
             EasyAdminEvents::PRE_DELETE => 'checkUserRights',
+            EasyAdminPlusExporterEvents::PRE_EXPORT => 'checkUserRights',
         );
     }
 

@@ -63,6 +63,16 @@ services:
         tags:
             - { name: twig.extension }
 
+    wandi.easy_admin_plus.exporter.configuration.normalizer_config_pass:
+        class: Wandi\EasyAdminPlusBundle\Exporter\Configuration\NormalizerConfigPass
+        public: true
+    wandi.easy_admin_plus.exporter.configuration.property_config_pass:
+        class: Wandi\EasyAdminPlusBundle\Exporter\Configuration\PropertyConfigPass
+        public: true
+    wandi.easy_admin_plus.exporter.configuration.template_config_pass:
+        class: Wandi\EasyAdminPlusBundle\Exporter\Configuration\TemplateConfigPass
+        public: true
+
     wandi.easy_admin_plus.generator.base:
         abstract: true
         autowire: true
