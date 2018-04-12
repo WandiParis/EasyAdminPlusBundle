@@ -38,9 +38,13 @@ A new button is visible on top of `List` action, beside `New` action.
     <img src="images/export-button.png" align="center" alt="Export Button" />
 </p>
 
+-------
+
 ### Exported recordsets
 
 We recover the current `Paginator` (and the `query` from the `Search` if used) to build the recordsets to export.
+
+-------
 
 ### Field formatting
 
@@ -61,6 +65,8 @@ To see the complete list, check all the files named `field_{*}.html.twig` in `Ea
 * field_url.html.twig (strip `html`)
 * label_null.html.twig (strip `label`, simple empty string)
 
+-------
+
 ### Default behavior
 
 If you set any settings in `export` node, the action will export all `Entity` fields based on the default field formatting (see above).
@@ -72,6 +78,8 @@ It'll use exactly the same formatting as `List` action if you not set any fields
 <p align="center">
     <img src="images/export-default.png" align="center" alt="Export - Default" />
 </p>
+
+-------
 
 ### Proper formatting
 
@@ -131,6 +139,8 @@ In this example, we:
     <img src="images/export-custom.png" align="center" alt="Export - Custom" />
 </p>
 
+-------
+
 ### ACL
 
 Thanks to [ACL](chapter-4.md) feature, you can restrict `Export` action to a specific `role`.
@@ -183,6 +193,8 @@ easy_admin:
   {% endif %}
 {% endblock %}
 ```
+
+-------
 
 ### Events
 

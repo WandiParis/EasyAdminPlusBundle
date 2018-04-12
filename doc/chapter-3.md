@@ -130,6 +130,8 @@ When submitting the form, files on the current domain are backuped and erased wi
 
 Message is added  in `session flashbag` and translations' cache dir (`kernel.cache_dir`) is cleared for production use before forwarding on GET.
 
+-------
+
 ### Events
 
 The `Translator` component dispatchs two events.
