@@ -1,30 +1,34 @@
 services:
     wandi.easy_admin_plus.command.user.create:
-        class: Wandi\EasyAdminPlusBundle\Command\UserCreateCommand
+          class: Wandi\EasyAdminPlusBundle\Auth\Command\UserCreateCommand
+          tags:
+              -  { name: console.command, command: wandi:easy-admin-plus:user:create }
+    wandi.easy_admin_plus.command.user.remove:
+        class: Wandi\EasyAdminPlusBundle\Auth\Command\UserRemoveCommand
         tags:
-            -  { name: console.command, command: wandi:easy-admin-plus:user:create }
+            -  { name: console.command, command: wandi:easy-admin-plus:user:remove }
     wandi.easy_admin_plus.command.user.change_password:
-        class: Wandi\EasyAdminPlusBundle\Command\UserChangePasswordCommand
+        class: Wandi\EasyAdminPlusBundle\Auth\Command\UserChangePasswordCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:change-password }
     wandi.easy_admin_plus.command.user.enable:
-        class: Wandi\EasyAdminPlusBundle\Command\UserEnableCommand
+        class: Wandi\EasyAdminPlusBundle\Auth\Command\UserEnableCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:enable }
     wandi.easy_admin_plus.command.user.disable:
-        class: Wandi\EasyAdminPlusBundle\Command\UserDisableCommand
+        class: Wandi\EasyAdminPlusBundle\Auth\Command\UserDisableCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:disable }
     wandi.easy_admin_plus.command.user.add_roles:
-        class: Wandi\EasyAdminPlusBundle\Command\UserAddRoles
+        class: Wandi\EasyAdminPlusBundle\Auth\Command\UserAddRolesCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:add-roles }
     wandi.easy_admin_plus.command.user.remove_roles:
-        class: Wandi\EasyAdminPlusBundle\Command\UserRemoveRoles
+        class: Wandi\EasyAdminPlusBundle\Auth\Command\UserRemoveRolesCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:remove-roles }
     wandi.easy_admin_plus.command.user.set_roles:
-        class: Wandi\EasyAdminPlusBundle\Command\UserSetRoles
+        class: Wandi\EasyAdminPlusBundle\Auth\Command\UserSetRolesCommand
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:user:set-roles }
 
