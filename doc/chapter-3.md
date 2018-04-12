@@ -146,8 +146,8 @@ $this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::PRE_TRAN
     new GenericEvent($domain, [
         'domain' => $domain,
         'user' => [
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles(),
+            'username' => $user ? $user->getUsername() : null,
+            'roles' => $user ? $user->getRoles() : [],
         ],
     ])
 );
@@ -166,8 +166,8 @@ $this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::POST_TRA
         'domain' => $domain,
         'files' => $fileNames,
         'user' => [
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles(),
+            'username' => $user ? $user->getUsername() : null,
+            'roles' => $user ? $user->getRoles() : [],
         ],
     ])
 );

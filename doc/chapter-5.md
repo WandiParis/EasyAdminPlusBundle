@@ -199,8 +199,8 @@ use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 
 $this->dispatch(EasyAdminPlusExporterEvents::PRE_EXPORT, [
     'user' => [
-        'username' => $user->getUsername(),
-        'roles' => $user->getRoles(),
+        'username' => $user ? $user->getUsername() : null,
+        'roles' => $user ? $user->getRoles() : [],
     ],
 ]);
 ```
@@ -214,8 +214,8 @@ use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 
 $this->dispatch(EasyAdminPlusExporterEvents::PRE_EXPORT, [
     'user' => [
-        'username' => $user->getUsername(),
-        'roles' => $user->getRoles(),
+        'username' => $user ? $user->getUsername() : null,
+        'roles' => $user ? $user->getRoles() : [],
     ],
 ]);
 ```
