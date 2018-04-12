@@ -8,8 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Search\Paginator;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
@@ -107,7 +106,7 @@ class AdminController extends BaseAdminController
     /**
      * export action.
      *
-     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function exportAction()
     {
@@ -163,18 +162,18 @@ class AdminController extends BaseAdminController
      *
      * @param Paginator $paginator recordsets to export
      * @param array $fields fields to display
-     * @return StreamedResponse the response
+     * @return Response
      */
     public function getExportFile($paginator, $fields)
     {
-        $out = fopen('php://temp', 'w+');
+        $handle = fopen('php://memory', 'r+');
 
         // first legend line
         $keys = array_keys($fields);
         for($i=0, $count=count($keys) ; $i<$count ; $i++){
             $keys[$i] = $fields[$keys[$i]]['label'] ?? $keys[$i];
         }
-        fputcsv($out, $keys, ';');
+        fputcsv($handle, $keys, ';', '"');
 
         $twig = $this->get('twig');
         $ea_twig = $twig->getExtension(EasyAdminTwigExtension::class);
@@ -183,24 +182,19 @@ class AdminController extends BaseAdminController
             $row = [];
             foreach ($fields as $field) {
                 $value = $ea_twig->renderEntityField($twig, 'list', $this->entity['name'], $entity, $field);
-                $row[] = $value;
+                $row[] = trim($value);
             }
-            fputcsv($out, $row, ';');
+            fputcsv($handle, $row, ';', '"');
         }
 
-        fseek($out, 0);
-        $response = new StreamedResponse(function () use($out) {
-            fpassthru($out);
-            exit;
-        });
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            sprintf('export-%s-%s.csv', $this->entity['name'], date('Y-m-d H:i:s'))
-        );
+        rewind($handle);
+        $content = stream_get_contents($handle);
+        fclose($handle);
 
-        $response->headers->set('Content-Disposition', $disposition);
-
-        return $response;
+        return new Response("\xEF\xBB\xBF".$content, 200, array(
+            'Content-Type' => 'application/force-download',
+            'Content-Disposition' => 'attachment; filename="' . sprintf('export-%s-%s.csv', strtolower($this->entity['name']), date('Ymd_His')) . '"'
+        ));
     }
 
     /**
