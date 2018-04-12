@@ -14,15 +14,16 @@ class MenuHelper
         $this->adminAuthorizationChecker = $adminAuthorizationChecker;
     }
 
-    public function pruneMenuItems(array $menuConfig, array $entitiesConfig)
+    public function pruneMenuItems(array $menuConfig, array $entitiesConfig): array
     {
         $menuConfig = $this->pruneAccessDeniedEntries($menuConfig, $entitiesConfig);
         $menuConfig = $this->pruneEmptyFolderEntries($menuConfig);
+        $menuConfig = $this->reindexMenuItems(array_values($menuConfig));
 
         return $menuConfig;
     }
 
-    protected function pruneAccessDeniedEntries(array $menuConfig, array $entitiesConfig)
+    protected function pruneAccessDeniedEntries(array $menuConfig, array $entitiesConfig): array
     {
         foreach ($menuConfig as $key => $entry) {
             if (
@@ -45,7 +46,7 @@ class MenuHelper
         return $menuConfig;
     }
 
-    protected function pruneEmptyFolderEntries(array $menuConfig)
+    protected function pruneEmptyFolderEntries(array $menuConfig): array
     {
         foreach ($menuConfig as $key => $entry) {
             if (isset($entry['children'])) {
@@ -55,6 +56,32 @@ class MenuHelper
                 if ('empty' === $entry['type'] && empty($entry['children'])) {
                     unset($menuConfig[$key]);
                     continue;
+                }
+            }
+        }
+
+        return $menuConfig;
+    }
+
+    /**
+     * Sadly, as Javier manages the item currently selected in the menu
+     * by dealing in back-end the parameters `menuIndex` and `submenuIndex`
+     * we've to reindex recursively all the array after pruned it :/
+     *
+     * @param array $menuConfig
+     * @return array
+     */
+    protected function reindexMenuItems(array $menuConfig): array
+    {
+        for($i=0, $countItems=count($menuConfig) ; $i<$countItems ; $i++){
+            $menuConfig[$i]['menu_index'] = $i;
+            $menuConfig[$i]['submenu_index'] = '-1';
+
+            if (array_key_exists('children', $menuConfig[$i]) && is_array($menuConfig[$i]['children'])) {
+                $menuConfig[$i]['children'] = array_values($menuConfig[$i]['children']);
+                for ($j = 0, $countSubItems = count($menuConfig[$i]['children']); $j < $countSubItems; $j++) {
+                    $menuConfig[$i]['children'][$j]['menu_index'] = $i;
+                    $menuConfig[$i]['children'][$j]['submenu_index'] = $j;
                 }
             }
         }
