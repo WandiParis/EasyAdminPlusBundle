@@ -59,6 +59,11 @@ $ php bin/console doctrine:schema:update -f
  php bin/console wandi:easy-admin-plus:user:create admin password ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
  ```
  
+ * Remove an admin
+  ```shell
+  php bin/console wandi:easy-admin-plus:user:remove admin
+  ```
+  
  * Add roles to an admin
   ```shell
   php bin/console wandi:easy-admin-plus:user:add-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
