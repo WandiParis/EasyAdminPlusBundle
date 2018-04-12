@@ -99,7 +99,7 @@ Entity `role_prefix` defines all actions required roles by appending the action 
 
 The items in the menu are reduced to only display Entities you're allowed to access.
 
-In the same way, action buttons (`New`, `Edit`, `Show`, `Delete`) and the search form are only displayed with you own the correct privileges.
+In the same way, action buttons (`New`, `Edit`, `Show`, `Delete`) and the search form are only displayed if you own the correct privileges.
 
 If you are writing a custom action, you can use the twig filter to check a privilege for a given entity.
 

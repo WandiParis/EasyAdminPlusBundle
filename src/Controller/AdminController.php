@@ -116,8 +116,8 @@ class AdminController extends BaseAdminController
 
         $this->dispatch(EasyAdminPlusExporterEvents::PRE_EXPORT, [
             'user' => [
-                'username' => $user->getUsername(),
-                'roles' => $user->getRoles(),
+                'username' => $user ? $user->getUsername() : null,
+                'roles' => $user ? $user->getRoles() : [],
             ],
         ]);
 
@@ -150,8 +150,8 @@ class AdminController extends BaseAdminController
 
         $this->dispatch(EasyAdminPlusExporterEvents::POST_EXPORT, [
             'user' => [
-                'username' => $user->getUsername(),
-                'roles' => $user->getRoles(),
+                'username' => $user ? $user->getUsername() : null,
+                'roles' => $user ? $user->getRoles() : [],
             ],
         ]);
 
@@ -267,8 +267,8 @@ class AdminController extends BaseAdminController
                     'domain' => $domain,
                     'files' => $fileNames,
                     'user' => [
-                        'username' => $user->getUsername(),
-                        'roles' => $user->getRoles(),
+                        'username' => $user ? $user->getUsername() : null,
+                        'roles' => $user ? $user->getRoles() : [],
                     ],
                 ])
             );
@@ -311,8 +311,8 @@ class AdminController extends BaseAdminController
             new GenericEvent($domain, [
                 'domain' => $domain,
                 'user' => [
-                    'username' => $user->getUsername(),
-                    'roles' => $user->getRoles(),
+                    'username' => $user ? $user->getUsername() : null,
+                    'roles' => $user ? $user->getRoles() : [],
                 ],
             ])
         );

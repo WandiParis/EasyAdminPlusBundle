@@ -48,7 +48,7 @@ We use the twig Extension to render each field based on `EasyAdmin` type guessin
 
 So, all your [format settings](https://symfony.com/doc/master/bundles/EasyAdminBundle/book/list-search-show-configuration.html#formatting-dates-and-numbers) like date, numbers, [...] will be applied to your CSV export.
 
-It means that Doctrine allow us to render correctly all the native types like `string` (`varchar`, `text`), `numbers` (`*int`, `float`), `date` (`date`, `datetime`, `timestamp`, [...]) and `associations` (thanks to `__toString`).
+It means that Doctrine allows us to render correctly all the native types like `string` (`varchar`, `text`), `numbers` (`*int`, `float`), `date` (`date`, `datetime`, `timestamp`, [...]) and `associations` (thanks to `__toString`).
 
 To see the complete list, check all the files named `field_{*}.html.twig` in `EasyAdmin` [default views](https://github.com/EasyCorp/EasyAdminBundle/tree/master/src/Resources/views/default):
 > vendor/easycorp/easyadmin-bundle/Resources/views/default
@@ -57,7 +57,7 @@ To see the complete list, check all the files named `field_{*}.html.twig` in `Ea
 * field_association.html.twig (strip `html` and put `comas` between related entities if iterable)
 * field_file.html.twig (strip `html` and put `absolute url` to file)
 * field_image.html.twig (strip `html` and put `absolute url` to image)
-* field_tel.html.twig (strip `tel:` prefix)
+* field_tel.html.twig (strip `html` and `tel:` prefix)
 * field_url.html.twig (strip `html`)
 * label_null.html.twig (strip `label`, simple empty string)
 
@@ -119,7 +119,7 @@ In this example, we:
 * choose a custom fields order
 * restrict export to a few fields
 * put french labels on all fields
-* set custom `EasyAdmin `types (raw for HTML content, image for VichFile, but types supported by `EasyAdmin` are possible)
+* set custom `EasyAdmin `types (raw for HTML content, image for VichFile, but all types supported by `EasyAdmin` are possible)
 * override the `slug` property with a custom template (to prepend the base url on the product slug)
 
 ```twig
@@ -167,7 +167,7 @@ easy_admin:
 {# ... #} 
 
 {% block new_action %}
-    {# Do not display EXPORT button if not defined and not granted #}
+    {# Do not display EXPORT button if not defined or not granted #}
     {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
       {% set referer = app.request.server.get('http-referer')|default('/') %}
       <div class="button-action">
