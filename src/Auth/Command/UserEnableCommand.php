@@ -1,12 +1,14 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Command;
+namespace Wandi\EasyAdminPlusBundle\Auth\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Wandi\EasyAdminPlusBundle\Entity\User;
+use Wandi\EasyAdminPlusBundle\Auth\Event\EasyAdminPlusAuthEvents;
 
 class UserEnableCommand extends ContainerAwareCommand
 {
@@ -26,17 +28,22 @@ class UserEnableCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
         $em = $container->get('doctrine')->getManager();
+        $dispatcher = $container->get('event_dispatcher');
 
         $username = $input->getArgument('username');
 
         /** @var User $user */
-        if ($user = $em->getRepository(User::class)->findOneByUsername($username)) {
-            $user->setEnabled(true);
-            $em->flush();
-
-            $output->writeln(sprintf('User <comment>%s</comment> enabled', $username));
-        } else {
+        if (null === ($user = $em->getRepository(User::class)->findOneByUsername($username))) {
             $output->writeln(sprintf('<error>User %s was not found</error>', $username));
         }
+
+        $dispatcher->dispatch(EasyAdminPlusAuthEvents::USER_PRE_ENABLE, new GenericEvent($user));
+
+        $user->setEnabled(true);
+        $em->flush();
+
+        $dispatcher->dispatch(EasyAdminPlusAuthEvents::USER_POST_ENABLE, new GenericEvent($user));
+
+        $output->writeln(sprintf('User <comment>%s</comment> enabled', $username));
     }
 }

@@ -1,13 +1,15 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Command;
+namespace Wandi\EasyAdminPlusBundle\Auth\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Validator\ConstraintViolation;
 use Wandi\EasyAdminPlusBundle\Entity\User;
+use Wandi\EasyAdminPlusBundle\Auth\Event\EasyAdminPlusAuthEvents;
 
 class UserCreateCommand extends ContainerAwareCommand
 {
@@ -30,13 +32,15 @@ class UserCreateCommand extends ContainerAwareCommand
         $container = $this->getContainer();
         $em = $container->get('doctrine')->getManager();
         $validator = $container->get('validator');
+        $dispatcher = $container->get('event_dispatcher');
 
         $username = $input->getArgument('username');
         $password = $input->getArgument('password');
         $roles = $input->getArgument('roles');
 
-        $user = new User();
+        $dispatcher->dispatch(EasyAdminPlusAuthEvents::USER_PRE_CREATE);
 
+        $user = new User();
         $user->setUsername($username)
             ->setPassword($container->get('security.password_encoder')->encodePassword($user, $password));
 
@@ -51,12 +55,13 @@ class UserCreateCommand extends ContainerAwareCommand
                 /* @var ConstraintViolation $violation */
                 $output->writeln(sprintf('<error>%s: %s</error>', ucfirst($violation->getPropertyPath()), mb_strtolower($violation->getMessage())));
             }
-
             return;
         }
 
         $em->persist($user);
         $em->flush();
+
+        $dispatcher->dispatch(EasyAdminPlusAuthEvents::USER_POST_CREATE, new GenericEvent($user));
 
         $output->writeln(sprintf('User <comment>%s</comment> created', $username));
     }
