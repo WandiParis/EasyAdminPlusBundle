@@ -11,8 +11,8 @@
 ### Configuration
 
 ```yaml
-# config/packages/wandi_easyadmin_plus.yaml
-wandi_easy_admin_plus:
+# config/packages/lle_easyadmin_plus.yaml
+lle_easy_admin_plus:
     translator:
         # defines the locales you want to manage
         locales:
@@ -36,7 +36,7 @@ If you don't provide them, the `Translator` will extract files located in the de
 
 ### Loading
 
-Add the `wandi_easy_admin_plus_translations` route in the `menu` attribute of the `EasyAdmin` configuration file.
+Add the `lle_easy_admin_plus_translations` route in the `menu` attribute of the `EasyAdmin` configuration file.
 
 ```yaml
 # config/packages/easy_admin.yaml
@@ -46,7 +46,7 @@ easy_admin:
         # ...
         menu:
             # ...
-            - { route: 'wandi_easy_admin_plus_translations', label: 'Translations', icon: 'globe' }
+            - { route: 'lle_easy_admin_plus_translations', label: 'Translations', icon: 'globe' }
 ```
 
 -------
@@ -142,7 +142,7 @@ The event is dispatched when an admin accesses the form on a specific domain.
 
 ```php
 use Symfony\Component\EventDispatcher\GenericEvent;
-use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
 
 $this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::PRE_TRANSLATE,
     new GenericEvent($domain, [
@@ -161,7 +161,7 @@ The event is dispatched when an admin submits the form on a specific domain.
 
 ```php
 use Symfony\Component\EventDispatcher\GenericEvent;
-use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
 
 $this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::POST_TRANSLATE,
     new GenericEvent($domain, [
@@ -178,7 +178,7 @@ $this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::POST_TRA
 ##### Subscribe events
 
 ```php
-use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
 
 class EasyAdminPlusSubscriber implements EventSubscriberInterface
 {

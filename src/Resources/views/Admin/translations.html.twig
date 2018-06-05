@@ -1,4 +1,4 @@
-{% extends '@WandiEasyAdminPlus/layout.html.twig' %}
+{% extends '@LleEasyAdminPlus/layout.html.twig' %}
 
 {% block page_title %}
     {{ 'translator.title'|trans({}, 'EasyAdminPlusBundle') }}
@@ -79,7 +79,7 @@
                                             <div class="col form-locales">
                                                 <div class="form-group field-text text-center">
                                                     <div class="box-header with-border">
-                                                        <img class="country" src="{{ asset('bundles/wandieasyadminplus/img/country/' ~ locale ~ '.png') }}" alt="{{ locale }}" title="{{ locale }}" />
+                                                        <img class="country" src="{{ asset('bundles/lleeasyadminplus/img/country/' ~ locale ~ '.png') }}" alt="{{ locale }}" title="{{ locale }}" />
                                                         <label class="control-label">{{ locale }}</label>
                                                     </div>
                                                 </div>
@@ -99,7 +99,7 @@
                                             {% for locale in locales %}
                                                 <div class="col col-xs-12">
                                                     <div class="field-label">
-                                                        <img class="country" src="{{ asset('bundles/wandieasyadminplus/img/country/' ~ locale ~ '.png') }}" alt="{{ locale }}" title="{{ locale }}" />
+                                                        <img class="country" src="{{ asset('bundles/lleeasyadminplus/img/country/' ~ locale ~ '.png') }}" alt="{{ locale }}" title="{{ locale }}" />
                                                         <label class="control-label">{{ locale }}</label>
                                                     </div>
                                                     <div class="field-textarea">

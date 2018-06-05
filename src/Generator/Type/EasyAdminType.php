@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Type;
+namespace Lle\EasyAdminPlusBundle\Generator\Type;
 
 class EasyAdminType
 {

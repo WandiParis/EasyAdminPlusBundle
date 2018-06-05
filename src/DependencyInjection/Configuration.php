@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\DependencyInjection;
+namespace Lle\EasyAdminPlusBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('wandi_easy_admin_plus');
+        $rootNode = $treeBuilder->root('lle_easy_admin_plus');
 
         $this->addGeneratorSection($rootNode);
         $this->addTranslatorSection($rootNode);
@@ -96,7 +96,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue('EasyAdminPlusBundle')
                         ->end()
                         ->variableNode('bundles_filter')
-                            ->defaultValue(['WandiEasyAdminPlusBundle'])
+                            ->defaultValue(['LleEasyAdminPlusBundle'])
                             ->treatNullLike([])
                             ->validate()
                                 ->ifTrue(function ($v) {

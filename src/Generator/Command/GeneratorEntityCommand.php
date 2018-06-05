@@ -1,8 +1,8 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Command;
+namespace Lle\EasyAdminPlusBundle\Generator\Command;
 
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Lle\EasyAdminPlusBundle\Generator\Exception\EAException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +16,7 @@ class GeneratorEntityCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this
-            ->setName('wandi:easy-admin-plus:generator:entity')
+            ->setName('lle:easy-admin-plus:generator:entity')
             ->setDescription('Create a specified entity file configuration for easy admin')
             ->setDefinition(
                 new InputDefinition(array(
@@ -36,7 +36,7 @@ class GeneratorEntityCommand extends ContainerAwareCommand
         $entitiesMetaData = [];
 
         if (!is_dir($dirProject.'/config/packages/easy_admin/')) {
-            $output->writeln('You need to launch <info>wandi:easy-admin-plus:generator:generate</info> command before launching this command.');
+            $output->writeln('You need to launch <info>lle:easy-admin-plus:generator:generate</info> command before launching this command.');
 
             return;
         }
@@ -68,7 +68,7 @@ the generation process is stopped</info></comment>');
         }
 
         try {
-            $eaTool = $this->getContainer()->get('wandi.easy_admin_plus.generator.entity');
+            $eaTool = $this->getContainer()->get('lle.easy_admin_plus.generator.entity');
             $eaTool->run($entitiesMetaData, $this);
         } catch (EAException $e) {
             $output->writeln('<error>'.$e->getMessage().'</error>');

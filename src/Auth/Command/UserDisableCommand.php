@@ -1,21 +1,21 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Auth\Command;
+namespace Lle\EasyAdminPlusBundle\Auth\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
-use Wandi\EasyAdminPlusBundle\Entity\User;
-use Wandi\EasyAdminPlusBundle\Auth\Event\EasyAdminPlusAuthEvents;
+use Lle\EasyAdminPlusBundle\Entity\User;
+use Lle\EasyAdminPlusBundle\Auth\Event\EasyAdminPlusAuthEvents;
 
 class UserDisableCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('wandi:easy-admin-plus:user:disable')
+            ->setName('lle:easy-admin-plus:user:disable')
             ->setDescription('Disable an admin')
             ->setDefinition(
                 [

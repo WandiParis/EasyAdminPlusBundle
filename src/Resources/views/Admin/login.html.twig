@@ -1,4 +1,4 @@
-{% extends '@WandiEasyAdminPlus/layout.html.twig' %}
+{% extends '@LleEasyAdminPlus/layout.html.twig' %}
 
 {% block page_title %}
     {{ 'login.title'|trans({}, 'EasyAdminPlusBundle') }}
@@ -19,7 +19,7 @@
                             </div>
                         {% endif %}
 
-                        <form action="{{ path("wandi_easy_admin_plus_login") }}" method="post">
+                        <form action="{{ path("lle_easy_admin_plus_login") }}" method="post">
                             <div class="form-group">
                                 <label for="username">{{ 'login.username'|trans({}, 'EasyAdminPlusBundle') }}</label>
                                 <input type="text" id="username" class="form-control" name="_username" value="{{ lastUsername }}" required="required"/>

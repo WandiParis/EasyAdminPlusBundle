@@ -1,17 +1,17 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Helper;
+namespace Lle\EasyAdminPlusBundle\Generator\Helper;
 
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Translation\Translator;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 use Doctrine\ORM\Mapping\Column;
-use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Field;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Method;
-use Wandi\EasyAdminPlusBundle\Generator\Type\EasyAdminType;
-use Wandi\EasyAdminPlusBundle\Generator\Type\TypeGuesser;
+use Lle\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Lle\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Lle\EasyAdminPlusBundle\Generator\Model\Field;
+use Lle\EasyAdminPlusBundle\Generator\Model\Method;
+use Lle\EasyAdminPlusBundle\Generator\Type\EasyAdminType;
+use Lle\EasyAdminPlusBundle\Generator\Type\TypeGuesser;
 
 class PropertyTypeHelper extends AbstractPropertyHelper
 {

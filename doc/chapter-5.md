@@ -57,7 +57,7 @@ It means that Doctrine allows us to render correctly all the native types like `
 To see the complete list, check all the files named `field_{*}.html.twig` in `EasyAdmin` [default views](https://github.com/EasyCorp/EasyAdminBundle/tree/master/src/Resources/views/default):
 > vendor/easycorp/easyadmin-bundle/Resources/views/default
 
-`WandiEasyAdminPlus` simply overrides the following fields to strip some extra infos and html tags for proper text plain formatting:
+`LleEasyAdminPlus` simply overrides the following fields to strip some extra infos and html tags for proper text plain formatting:
 * field_association.html.twig (strip `html` and put `comas` between related entities if iterable)
 * field_file.html.twig (strip `html` and put `absolute url` to file)
 * field_image.html.twig (strip `html` and put `absolute url` to image)
@@ -172,7 +172,7 @@ easy_admin:
 ```
 
 ```twig
-{# vendor/wandi/easyadmin-plus-bundle/resources/views/default/list.html.twig #}
+{# vendor/lle/easyadmin-plus-bundle/resources/views/default/list.html.twig #}
 
 {# ... #} 
 
@@ -207,7 +207,7 @@ Both events use the `EasyAdmin` dispatcher which automatically merge custom info
 The event is dispatched before the export.
 
 ```php
-use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
+use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 
 $this->dispatch(EasyAdminPlusExporterEvents::PRE_EXPORT, [
     'user' => [
@@ -222,7 +222,7 @@ $this->dispatch(EasyAdminPlusExporterEvents::PRE_EXPORT, [
 The event is dispatched after the export.
 
 ```php
-use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
+use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 
 $this->dispatch(EasyAdminPlusExporterEvents::PRE_EXPORT, [
     'user' => [
@@ -235,7 +235,7 @@ $this->dispatch(EasyAdminPlusExporterEvents::PRE_EXPORT, [
 ##### Subscribe events
 
 ```php
-use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
+use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 
 class EasyAdminPlusSubscriber implements EventSubscriberInterface
 {

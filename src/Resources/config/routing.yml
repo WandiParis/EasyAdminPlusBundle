@@ -1,12 +1,12 @@
-wandi_easy_admin_plus_login:
+lle_easy_admin_plus_login:
     path: /login
     defaults:
-        _controller: WandiEasyAdminPlusBundle:Admin:login
+        _controller: LleEasyAdminPlusBundle:Admin:login
 
-wandi_easy_admin_plus_logout:
+lle_easy_admin_plus_logout:
     path: /logout
 
-wandi_easy_admin_plus_translations:
+lle_easy_admin_plus_translations:
     path: /translations
     defaults:
-        _controller: WandiEasyAdminPlusBundle:Admin:translations
+        _controller: LleEasyAdminPlusBundle:Admin:translations

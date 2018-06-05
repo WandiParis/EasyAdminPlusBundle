@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Helper;
+namespace Lle\EasyAdminPlusBundle\Generator\Helper;
 
 use Doctrine\ORM\Mapping\Column;
 

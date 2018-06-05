@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Acl\Helper;
+namespace Lle\EasyAdminPlusBundle\Acl\Helper;
 
 /**
  * @author Pierre-Charles Bertineau <pc.bertineau@alterphp.com>

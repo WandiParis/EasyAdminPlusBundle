@@ -1,10 +1,10 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Model;
+namespace Lle\EasyAdminPlusBundle\Generator\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
-use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Lle\EasyAdminPlusBundle\Generator\GeneratorTool;
 
 class Method
 {

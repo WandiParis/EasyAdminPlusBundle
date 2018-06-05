@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Controller;
+namespace Lle\EasyAdminPlusBundle\Controller;
 
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
@@ -10,8 +10,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Wandi\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
-use Wandi\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
+use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
 
 class AdminController extends BaseAdminController
 {
@@ -26,9 +26,9 @@ class AdminController extends BaseAdminController
         // it'll be ok and redirect on the correct action instead of raw "list"
 
         // if the first entity have a higher role, take the first one which matchs
-        if (!$this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->config['entities'][$homepageConfig['params']['entity']], 'list')) {
+        if (!$this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->config['entities'][$homepageConfig['params']['entity']], 'list')) {
             foreach ($this->config['entities'] as $entityName => $entityInfo) {
-                if ($this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($entityInfo, 'list') &&
+                if ($this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($entityInfo, 'list') &&
                     !in_array('list', $entityInfo['disabled_actions'])) {
                     $this->config['homepage']['params']['entity'] = $entityName;
                     break;
@@ -98,7 +98,7 @@ class AdminController extends BaseAdminController
     {
         if ($checkRole) {
             return false === in_array($actionName, $this->entity['disabled_actions'], true) &&
-                $this->get('wandi.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName);
+                $this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName);
         }
 
         return parent::isActionAllowed($actionName);
@@ -130,9 +130,9 @@ class AdminController extends BaseAdminController
         }
 
         // property/normalize/template config pass on all export fields
-        $this->config = $this->get('wandi.easy_admin_plus.exporter.configuration.normalizer_config_pass')->process($this->config);
-        $this->config = $this->get('wandi.easy_admin_plus.exporter.configuration.property_config_pass')->process($this->config);
-        $this->config = $this->get('wandi.easy_admin_plus.exporter.configuration.template_config_pass')->process($this->config);
+        $this->config = $this->get('lle.easy_admin_plus.exporter.configuration.normalizer_config_pass')->process($this->config);
+        $this->config = $this->get('lle.easy_admin_plus.exporter.configuration.property_config_pass')->process($this->config);
+        $this->config = $this->get('lle.easy_admin_plus.exporter.configuration.template_config_pass')->process($this->config);
 
         // get paginator from search
         $this->dispatch(EasyAdminEvents::PRE_LIST);
@@ -211,7 +211,7 @@ class AdminController extends BaseAdminController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render(
-            '@WandiEasyAdminPlus/Admin/login.html.twig',
+            '@LleEasyAdminPlus/Admin/login.html.twig',
             [
                 'error' => $error,
                 'lastUsername' => $lastUsername,
@@ -231,7 +231,7 @@ class AdminController extends BaseAdminController
      */
     public function translationsAction(Request $request)
     {
-        $translator = $this->get('wandi.easy_admin_plus.translator');
+        $translator = $this->get('lle.easy_admin_plus.translator');
         $domain = $request->request->get('domain') ?? $request->query->get('domain');
         $locale = $this->container->getParameter('locale') ?? $this->container->getParameter('kernel.default_locale');
         $user = $this->getUser();
@@ -270,7 +270,7 @@ class AdminController extends BaseAdminController
             );
 
             // forward on GET
-            $this->redirectToRoute('wandi_easy_admin_plus_translations', ['domain' => $domain]);
+            $this->redirectToRoute('lle_easy_admin_plus_translations', ['domain' => $domain]);
         }
 
         // get locales
@@ -313,7 +313,7 @@ class AdminController extends BaseAdminController
             ])
         );
 
-        return $this->render('@WandiEasyAdminPlus/Admin/translations.html.twig', [
+        return $this->render('@LleEasyAdminPlus/Admin/translations.html.twig', [
                 'domains' => $domains,
                 'domain' => $domain,
                 'dictionaries' => $dictionaries,

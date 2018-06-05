@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Auth\Command;
+namespace Lle\EasyAdminPlusBundle\Auth\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -8,15 +8,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Validator\ConstraintViolation;
-use Wandi\EasyAdminPlusBundle\Entity\User;
-use Wandi\EasyAdminPlusBundle\Auth\Event\EasyAdminPlusAuthEvents;
+use Lle\EasyAdminPlusBundle\Entity\User;
+use Lle\EasyAdminPlusBundle\Auth\Event\EasyAdminPlusAuthEvents;
 
 class UserCreateCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('wandi:easy-admin-plus:user:create')
+            ->setName('lle:easy-admin-plus:user:create')
             ->setDescription('Create an admin')
             ->setDefinition(
                 [

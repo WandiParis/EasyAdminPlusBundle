@@ -1,13 +1,13 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle;
+namespace Lle\EasyAdminPlusBundle;
 
-use Wandi\EasyAdminPlusBundle\Acl\Compiler\TwigPathPass;
+use Lle\EasyAdminPlusBundle\Acl\Compiler\TwigPathPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class WandiEasyAdminPlusBundle extends Bundle
+class LleEasyAdminPlusBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

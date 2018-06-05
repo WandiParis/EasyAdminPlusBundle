@@ -1,10 +1,10 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Service;
+namespace Lle\EasyAdminPlusBundle\Generator\Service;
 
-use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Lle\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Lle\EasyAdminPlusBundle\Generator\Model\Entity;
+use Lle\EasyAdminPlusBundle\Generator\Exception\EAException;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Yaml\Yaml;
 

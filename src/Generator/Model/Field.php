@@ -1,9 +1,9 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Model;
+namespace Lle\EasyAdminPlusBundle\Generator\Model;
 
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyClassHelper;
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
+use Lle\EasyAdminPlusBundle\Generator\Helper\PropertyClassHelper;
+use Lle\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
 
 class Field
 {

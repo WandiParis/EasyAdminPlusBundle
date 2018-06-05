@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Helper;
+namespace Lle\EasyAdminPlusBundle\Generator\Helper;
 
 use Gedmo\Mapping\Annotation\SortablePosition;
 use Symfony\Component\Validator\Constraints\Choice;
@@ -37,11 +37,11 @@ use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Time;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Date;
-use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Field;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Method;
+use Lle\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Lle\EasyAdminPlusBundle\Generator\Model\Entity;
+use Lle\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Lle\EasyAdminPlusBundle\Generator\Model\Field;
+use Lle\EasyAdminPlusBundle\Generator\Model\Method;
 
 class PropertyClassHelper extends AbstractPropertyHelper
 {

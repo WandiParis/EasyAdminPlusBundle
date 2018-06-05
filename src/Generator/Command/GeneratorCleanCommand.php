@@ -1,18 +1,18 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Command;
+namespace Lle\EasyAdminPlusBundle\Generator\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Lle\EasyAdminPlusBundle\Generator\Exception\EAException;
 
 class GeneratorCleanCommand extends ContainerAwareCommand
 {
     protected function configure(): void
     {
         $this
-            ->setName('wandi:easy-admin-plus:generator:cleanup')
+            ->setName('lle:easy-admin-plus:generator:cleanup')
             ->setDescription('Cleans easy admin configuration files for non-existing entities.')
         ;
     }
@@ -34,7 +34,7 @@ class GeneratorCleanCommand extends ContainerAwareCommand
         }
 
         try {
-            $eaTool = $container->get('wandi.easy_admin_plus.generator.clean');
+            $eaTool = $container->get('lle.easy_admin_plus.generator.clean');
             $eaTool->run();
         } catch (EAException $e) {
             $output->writeln('<error>'.$e->getMessage().'</error>');

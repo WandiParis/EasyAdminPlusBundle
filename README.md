@@ -25,17 +25,17 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 ### Install
 
 ```shell
-$ composer require wandi/easyadmin-plus-bundle
+$ composer require lle/easyadmin-plus-bundle
 ```
 
 ### Replace EasyAdmin controller
 
-Load routes from our `AdminController` or yours but make sure it extends `WandiEasyAdminPlusBundle` Controller
+Load routes from our `AdminController` or yours but make sure it extends `LleEasyAdminPlusBundle` Controller
 
 ```yaml
 # config/routes/easy_admin.yaml
 easy_admin_bundle:
-    resource: '@WandiEasyAdminPlusBundle/Controller/AdminController.php'
+    resource: '@LleEasyAdminPlusBundle/Controller/AdminController.php'
     prefix: /admin
     type: annotation
 ```

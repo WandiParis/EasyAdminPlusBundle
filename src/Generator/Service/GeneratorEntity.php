@@ -1,12 +1,12 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Service;
+namespace Lle\EasyAdminPlusBundle\Generator\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Command\Command;
-use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Lle\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Lle\EasyAdminPlusBundle\Generator\Model\Entity;
+use Lle\EasyAdminPlusBundle\Generator\Exception\EAException;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Question\ConfirmationQuestion;

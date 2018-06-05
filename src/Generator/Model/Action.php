@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Model;
+namespace Lle\EasyAdminPlusBundle\Generator\Model;
 
 class Action
 {

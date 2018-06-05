@@ -1,12 +1,12 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Translator\Event;
+namespace Lle\EasyAdminPlusBundle\Translator\Event;
 
 final class EasyAdminPlusTranslatorEvents
 {
     // Events related to custom action
     /** @Event("Symfony\Component\EventDispatcher\GenericEvent") */
-    const PRE_TRANSLATE = 'wandi.easy_admin_plus.pre_translate';
+    const PRE_TRANSLATE = 'lle.easy_admin_plus.pre_translate';
     /** @Event("Symfony\Component\EventDispatcher\GenericEvent") */
-    const POST_TRANSLATE = 'wandi.easy_admin_plus.post_translate';
+    const POST_TRANSLATE = 'lle.easy_admin_plus.post_translate';
 }

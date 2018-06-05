@@ -1,10 +1,10 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Acl\Twig;
+namespace Lle\EasyAdminPlusBundle\Acl\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Wandi\EasyAdminPlusBundle\Acl\Helper\MenuHelper;
+use Lle\EasyAdminPlusBundle\Acl\Helper\MenuHelper;
 
 /**
  * @author Pierre-Charles Bertineau <pc.bertineau@alterphp.com>

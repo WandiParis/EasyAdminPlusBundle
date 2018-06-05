@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator\Type;
+namespace Lle\EasyAdminPlusBundle\Generator\Type;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Ip;
 use Symfony\Component\Validator\Constraints\Url;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyHelper;
+use Lle\EasyAdminPlusBundle\Generator\Helper\PropertyHelper;
 
 class TypeGuesser
 {

@@ -10,23 +10,23 @@ Update your `security` settings:
 security:
     encoders:
         # ...
-        Wandi\EasyAdminPlusBundle\Entity\User: bcrypt
+        Lle\EasyAdminPlusBundle\Entity\User: bcrypt
     
     providers:
         # ...    
-        wandi_easy_admin_plus:
-            entity: { class: 'Wandi\EasyAdminPlusBundle\Entity\User' }
+        lle_easy_admin_plus:
+            entity: { class: 'Lle\EasyAdminPlusBundle\Entity\User' }
             
     firewalls:
-        wandi_easy_admin_plus:
+        lle_easy_admin_plus:
             pattern: ^/admin
             anonymous: ~
             logout:
-                path: wandi_easy_admin_plus_logout
+                path: lle_easy_admin_plus_logout
                 target: easyadmin
             form_login:
-                login_path: wandi_easy_admin_plus_login
-                check_path: wandi_easy_admin_plus_login
+                login_path: lle_easy_admin_plus_login
+                check_path: lle_easy_admin_plus_login
                 default_target_path: easyadmin
                 remember_me: true
                 csrf_token_generator: security.csrf.token_manager
@@ -52,46 +52,46 @@ $ php bin/console doctrine:schema:update -f
 
 * Create an admin
  ```shell
- php bin/console wandi:easy-admin-plus:user:create admin password
+ php bin/console lle:easy-admin-plus:user:create admin password
  ```
 
  ```shell
- php bin/console wandi:easy-admin-plus:user:create admin password ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
+ php bin/console lle:easy-admin-plus:user:create admin password ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
  ```
  
  * Remove an admin
   ```shell
-  php bin/console wandi:easy-admin-plus:user:remove admin
+  php bin/console lle:easy-admin-plus:user:remove admin
   ```
   
  * Add roles to an admin
   ```shell
-  php bin/console wandi:easy-admin-plus:user:add-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
+  php bin/console lle:easy-admin-plus:user:add-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
   ```
   
 * Remove roles from an admin
 ```shell
-php bin/console wandi:easy-admin-plus:user:remove-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
+php bin/console lle:easy-admin-plus:user:remove-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
 ```
 
 * Set roles of an admin
 ```shell
-php bin/console wandi:easy-admin-plus:user:set-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
+php bin/console lle:easy-admin-plus:user:set-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
 ```
  
 * Change admin password
  ```shell
- php bin/console wandi:easy-admin-plus:user:change-password admin password2
+ php bin/console lle:easy-admin-plus:user:change-password admin password2
  ```
 
 * Enable an admin
  ```shell
- php bin/console wandi:easy-admin-plus:user:enable admin
+ php bin/console lle:easy-admin-plus:user:enable admin
  ```
  
 * Disable an admin
  ```shell
- php bin/console wandi:easy-admin-plus:user:disable admin
+ php bin/console lle:easy-admin-plus:user:disable admin
  ```
  
  ### Login Screen
@@ -133,7 +133,7 @@ class EasyAdminFixtures extends Fixture
         $application->setAutoExit(false);
 
         $input = new ArrayInput([
-            'command' => 'wandi:easy-admin-plus:user:create',
+            'command' => 'lle:easy-admin-plus:user:create',
             'username' => 'admin',
             'password' => '5K48pDgZveZT',
             'roles' => [

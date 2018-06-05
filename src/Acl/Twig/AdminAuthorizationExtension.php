@@ -1,6 +1,6 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Acl\Twig;
+namespace Lle\EasyAdminPlusBundle\Acl\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;

@@ -1,17 +1,17 @@
 <?php
 
-namespace Wandi\EasyAdminPlusBundle\Generator;
+namespace Lle\EasyAdminPlusBundle\Generator;
 
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Lle\EasyAdminPlusBundle\Generator\Exception\EAException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyClassHelper;
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
-use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
+use Lle\EasyAdminPlusBundle\Generator\Helper\PropertyClassHelper;
+use Lle\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
+use Lle\EasyAdminPlusBundle\Generator\Model\Entity;
 
 class GeneratorTool
 {
@@ -134,7 +134,7 @@ class GeneratorTool
         if (null === self::$translation) {
             self::$translation = new Translator($userLocale);
             self::$translation->addLoader('yaml', new YamlFileLoader());
-            self::$translation->addResource('yaml', $projectDir.'/vendor/wandi/easyadmin-plus-bundle/src/Resources/translations/'.$fileName.'.'.$userLocale.'.yaml', $userLocale);
+            self::$translation->addResource('yaml', $projectDir.'/vendor/lle/easyadmin-plus-bundle/src/Resources/translations/'.$fileName.'.'.$userLocale.'.yaml', $userLocale);
         }
     }
 

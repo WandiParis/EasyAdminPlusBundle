@@ -1,18 +1,22 @@
 {
-    "name": "wandi/easyadmin-plus-bundle",
+    "name": "2lenet/easyadmin-plus-bundle",
     "type": "symfony-bundle",
-    "description": "Wandi/EasyAdminPlusBundle",
+    "description": "2lenet/EasyAdminPlusBundle",
     "keywords": [
         "Symfony",
         "Bundle",
-        "Wandi",
+        "Lle",
         "EasyAdminPlusBundle",
         "EasyAdminBundle",
         "Admin"
     ],
-    "homepage": "https://github.com/WandiParis/EasyAdminPlusBundle",
+    "homepage": "https://github.com/2lenet/EasyAdminPlusBundle",
     "license": "MIT",
     "authors": [
+        {
+          "name": "Sébastien HEITZMANN",
+          "email": "2le@2le.net"
+        },
         {
             "name": "Jacques N. de Lamballerie",
             "email": "jndl@wandi.fr"
@@ -41,7 +45,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Wandi\\EasyAdminPlusBundle\\": "src/"
+            "Lle\\EasyAdminPlusBundle\\": "src/"
         }
     }
 }
