@@ -2,8 +2,11 @@
 
 `EasyAdminPlus` is packaged with an `Authentication` layer which allows you to restrict access to the admin area.
 
+
+Don't use this configuration if you use the oauth bundle
+
 ### Configuration
-Update your `security` settings: 
+Update your `security` settings:
 
 ```yaml
 # config/packages/security.yaml
@@ -11,12 +14,12 @@ security:
     encoders:
         # ...
         Lle\EasyAdminPlusBundle\Entity\User: bcrypt
-    
+
     providers:
         # ...    
         lle_easy_admin_plus:
             entity: { class: 'Lle\EasyAdminPlusBundle\Entity\User' }
-            
+
     firewalls:
         lle_easy_admin_plus:
             pattern: ^/admin
@@ -58,17 +61,17 @@ $ php bin/console doctrine:schema:update -f
  ```shell
  php bin/console lle:easy-admin-plus:user:create admin password ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
  ```
- 
+
  * Remove an admin
   ```shell
   php bin/console lle:easy-admin-plus:user:remove admin
   ```
-  
+
  * Add roles to an admin
   ```shell
   php bin/console lle:easy-admin-plus:user:add-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
   ```
-  
+
 * Remove roles from an admin
 ```shell
 php bin/console lle:easy-admin-plus:user:remove-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
@@ -78,7 +81,7 @@ php bin/console lle:easy-admin-plus:user:remove-roles admin ROLE_EASY_ADMIN_1 RO
 ```shell
 php bin/console lle:easy-admin-plus:user:set-roles admin ROLE_EASY_ADMIN_1 ROLE_EASY_ADMIN_2
 ```
- 
+
 * Change admin password
  ```shell
  php bin/console lle:easy-admin-plus:user:change-password admin password2
@@ -88,22 +91,22 @@ php bin/console lle:easy-admin-plus:user:set-roles admin ROLE_EASY_ADMIN_1 ROLE_
  ```shell
  php bin/console lle:easy-admin-plus:user:enable admin
  ```
- 
+
 * Disable an admin
  ```shell
  php bin/console lle:easy-admin-plus:user:disable admin
  ```
- 
+
  ### Login Screen
- 
+
  The login `form` get the `site_name` property from `EasyAdmin` configuration.
- 
+
  <p align="center">
     <img src="images/login.png" align="middle" alt="Login Form" />
   </p>
- 
+
  ### Fixtures
- 
+
  :exclamation: If you're using `DataFixtures` in your project, to avoid admin's lost, we recommend you to add a `LoadAdmin` Fixtures that uses the previous command.
 
 ```php
