@@ -1,37 +1,4 @@
 services:
-    lle.easy_admin_plus.command.user.create:
-          class: Lle\EasyAdminPlusBundle\Auth\Command\UserCreateCommand
-          tags:
-              -  { name: console.command, command: lle:easy-admin-plus:user:create }
-    lle.easy_admin_plus.command.user.remove:
-        class: Lle\EasyAdminPlusBundle\Auth\Command\UserRemoveCommand
-        tags:
-            -  { name: console.command, command: lle:easy-admin-plus:user:remove }
-    lle.easy_admin_plus.command.user.change_password:
-        class: Lle\EasyAdminPlusBundle\Auth\Command\UserChangePasswordCommand
-        tags:
-            -  { name: console.command, command: lle:easy-admin-plus:user:change-password }
-    lle.easy_admin_plus.command.user.enable:
-        class: Lle\EasyAdminPlusBundle\Auth\Command\UserEnableCommand
-        tags:
-            -  { name: console.command, command: lle:easy-admin-plus:user:enable }
-    lle.easy_admin_plus.command.user.disable:
-        class: Lle\EasyAdminPlusBundle\Auth\Command\UserDisableCommand
-        tags:
-            -  { name: console.command, command: lle:easy-admin-plus:user:disable }
-    lle.easy_admin_plus.command.user.add_roles:
-        class: Lle\EasyAdminPlusBundle\Auth\Command\UserAddRolesCommand
-        tags:
-            -  { name: console.command, command: lle:easy-admin-plus:user:add-roles }
-    lle.easy_admin_plus.command.user.remove_roles:
-        class: Lle\EasyAdminPlusBundle\Auth\Command\UserRemoveRolesCommand
-        tags:
-            -  { name: console.command, command: lle:easy-admin-plus:user:remove-roles }
-    lle.easy_admin_plus.command.user.set_roles:
-        class: Lle\EasyAdminPlusBundle\Auth\Command\UserSetRolesCommand
-        tags:
-            -  { name: console.command, command: lle:easy-admin-plus:user:set-roles }
-
     lle.easy_admin_plus.translator:
         class: Lle\EasyAdminPlusBundle\Translator\Translator
         public: true

@@ -1,10 +1,3 @@
-lle_easy_admin_plus_login:
-    path: /login
-    defaults:
-        _controller: LleEasyAdminPlusBundle:Admin:login
-
-lle_easy_admin_plus_logout:
-    path: /logout
 
 lle_easy_admin_plus_translations:
     path: /translations
