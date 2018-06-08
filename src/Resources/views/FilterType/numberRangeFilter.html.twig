@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col-lg-6">
+    <input type="text" placeholder="de" {% if data.value[0] is defined %} value="{{data.value[0]}}" {% endif %} class="form-control col-md-6" name="{{nameprefix}}value{{namesuffix}}[]">
+  </div>
+  <div class="col-lg-6">
+    <input type="text" placeholder="à" {% if data.value[1] is defined %} value="{{data.value[1]}}" {% endif %} class="form-control col-md-6"  name="{{nameprefix}}value{{namesuffix}}[]">
+  </div>
+</div>

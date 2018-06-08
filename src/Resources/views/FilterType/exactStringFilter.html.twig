@@ -1,0 +1,34 @@
+   <div class="input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle {{nameprefix}}button{{namesuffix}}" data-toggle="dropdown" aria-expanded="false">
+
+          <i title="Egal" class="fa equals">=</i>
+          <i title="Est vide" class="fa fa-square-o isnull"></i>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','equals');">
+            <i class="fa"></i>=</a>
+          </li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','isnull');">
+            <i class="fa fa-square-o "></i>Est vide</a>
+          </li>
+        </ul>
+
+      </div><!-- /btn-group -->
+
+<input type="hidden" class="form-control" id="{{nameprefix}}comparator{{namesuffix}}" name="{{nameprefix}}comparator{{namesuffix}}" {% if data.comparator is defined %}value="{{data.comparator}}"{% endif %}>
+
+
+<input type="text"  class="form-control"  aria-label="..." name="{{nameprefix}}value{{namesuffix}}"
+      {% if data.value is defined %}
+        value="{{data.value}}"
+      {% endif %}
+        />
+    </div><!-- /input-group -->
+
+
+<script>
+$(document).ready(function() {
+  lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','{% if data.comparator is defined %}{{data.comparator}}{% elseif filtertype.defaultComparator is defined %}{{filtertype.defaultComparator}}{% else %}equals{% endif %}');
+});
+</script>

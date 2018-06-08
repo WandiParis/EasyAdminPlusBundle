@@ -1,0 +1,48 @@
+<div class="input-group">
+    <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle {{nameprefix}}button{{namesuffix}}" data-toggle="dropdown" aria-expanded="false">
+            <i title="Est égal à" class="fa fa-text-width eq"></i>
+            <i title="N'est pas égal à" class="fa fa-exclamation neq"></i>
+            <i title="Plus petit que" class="fa fa-chevron-left lte"></i>
+            <i title="Plus grand que" class="fa fa-chevron-right gte"></i>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','eq');">
+                    <i class="fa fa-text-width"></i>Est égal à</a>
+            </li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','neq');">
+                    <i class="fa fa-exclamation"></i>N'est pas égal à</a>
+            </li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','lte');">
+                    <i class="fa fa-chevron-left"></i>Plus petit que</a>
+            </li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','gte');">
+                    <i class="fa fa-chevron-right"></i>Plus grand que</a>
+            </li>
+        </ul>
+        <!--<ul class="dropdown-menu" role="menu">
+        <select class="form-control" name="{{nameprefix}}comparator{{namesuffix}}" id="{{nameprefix}}comparator{{namesuffix}}">
+            <option value="eq" {% if data.comparator is defined and data.comparator == "eq" %} selected="selected" {% endif %} >equals</option>
+            <option value="neq" {% if data.comparator is defined and data.comparator == "neq" %} selected="selected" {% endif %} >not equals</option>
+            <option value="lt" {% if data.comparator is defined and data.comparator == "lt" %} selected="selected" {% endif %} >lower than</option>
+            <option value="lte" {% if data.comparator is defined and data.comparator == "lte" %} selected="selected" {% endif %} >lower than or equal</option>
+            <option value="gt" {% if data.comparator is defined and data.comparator == "gt" %} selected="selected" {% endif %} >greater than</option>
+            <option value="gte" {% if data.comparator is defined and data.comparator == "gte" %} selected="selected" {% endif %} >greater than or equal</option>
+            <option value="isnull" {% if data.comparator is defined and data.comparator == "isnull" %} selected="selected" {% endif %} >empty</option>
+            <option value="isnotnull" {% if data.comparator is defined and data.comparator == "isnotnull" %} selected="selected" {% endif %} >not empty</option>
+        </select>
+    </ul>-->
+    </div>
+    <input type="hidden" class="form-control" id="{{nameprefix}}comparator{{namesuffix}}" name="{{nameprefix}}comparator{{namesuffix}}" {% if data.comparator is defined %}value="{{data.comparator}}"{% endif %}>
+
+    <input class="form-control"  type="text" name="{{nameprefix}}value{{namesuffix}}" id="{{nameprefix}}value{{namesuffix}}"
+            {% if data.value is defined %}
+                value="{{data.value}}"
+            {% endif %}
+    />
+</div>
+<script>
+    $(document).ready(function() {
+        lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','{% if data.comparator is defined %}{{data.comparator}}{% elseif filtertype.defaultComparator is defined %}{{filtertype.defaultComparator}}{% else %}eq{% endif %}');
+    });
+</script>

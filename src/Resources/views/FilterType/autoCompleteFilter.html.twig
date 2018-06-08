@@ -1,0 +1,20 @@
+{% if data is defined and data.value is defined %}
+	{% set value = data.value.value %}
+	{% set label = data.value.label %}
+{% else %}
+	{% set value = null %}
+	{% set label = null %}
+{% endif %}
+<input class="form-control" id="{{nameprefix}}id_label{{namesuffix}}" type="text" value="{{ label }}" name="{{nameprefix}}value{{namesuffix}}_label"/>
+<input id="{{nameprefix}}id{{namesuffix}}" type="hidden" value="{{ value }}" name="{{nameprefix}}value{{namesuffix}}"/>
+<script>
+	$( "#{{nameprefix}}id_label{{namesuffix}}" ).autocomplete({
+      source: "{{ path(filtertype.route) }}",
+      minLength: 2,
+      select: function( event, item ) {
+        $('#{{nameprefix}}id_label{{namesuffix}}').val(item.item.label);
+        $('#{{nameprefix}}id{{namesuffix}}').val(item.item.value);
+        event.preventDefault();
+      }
+    });
+</script>

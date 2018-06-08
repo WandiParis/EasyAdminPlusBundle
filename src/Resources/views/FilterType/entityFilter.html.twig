@@ -1,0 +1,18 @@
+{% set current_grouplabel = '' %}
+<select name="{{nameprefix}}value{{namesuffix}}{% if filtertype.multiple %}[]{% endif %}" class="form-control select2" {% if filtertype.multiple %} multiple {% endif %}>
+    {% if not filtertype.multiple %}<option value=""></option>{% endif %}
+    {% set entities = filtertype.entities(data) %}
+    {% for entity in entities %}
+        {% if filtertype.groupby %}
+            {% set optgroup_label = filtertype.getLabelForOptGroup(entity) %}
+            {% if optgroup_label != current_grouplabel %}
+                {% set current_grouplabel = optgroup_label %}
+                {% if loop.first == false %}</optgroup>{% endif %}
+                <optgroup label="{{ optgroup_label }}">
+            {% endif %}
+        {% endif %}
+        {% set label = filtertype.getLabel(entity) %}
+        <option value="{{ entity.id }}" {% if data is defined and filtertype.isSelected(data,entity) %} selected {% endif %}>{{ label }}</option>
+    {% endfor %}
+    {% if filtertype.groupby  %}</optgroup>{% endif %}
+</select>

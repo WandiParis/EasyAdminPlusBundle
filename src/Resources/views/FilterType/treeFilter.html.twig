@@ -1,0 +1,13 @@
+<select class="form-control select2 select2-hidden-accessible" name="{{nameprefix}}value{{namesuffix}}{% if filtertype.multiple %}[]{% endif %}" {% if filtertype.multiple %} multiple {% endif %}>
+    <option value=""></option>
+    {% for entity in filtertype.entities %}
+      {% if filtertype.display(entity) %}
+        <option value="{{ entity.id }}" 
+          {% if data is defined and filtertype.isSelected(data,entity) %}
+            selected 
+          {% endif %}>
+          {{ filtertype.getValueEntity(entity) }}
+        </option>
+      {% endif %}
+    {% endfor %}
+</select>

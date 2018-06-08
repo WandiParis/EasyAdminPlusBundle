@@ -37,12 +37,26 @@ services:
     lle.easy_admin_plus.exporter.configuration.normalizer_config_pass:
         class: Lle\EasyAdminPlusBundle\Exporter\Configuration\NormalizerConfigPass
         public: true
+        tags:
+            - { name: easyadmin.config_pass }
+
     lle.easy_admin_plus.exporter.configuration.property_config_pass:
         class: Lle\EasyAdminPlusBundle\Exporter\Configuration\PropertyConfigPass
         public: true
+        tags:
+            - { name: easyadmin.config_pass }
+
     lle.easy_admin_plus.exporter.configuration.template_config_pass:
         class: Lle\EasyAdminPlusBundle\Exporter\Configuration\TemplateConfigPass
         public: true
+        tags:
+            - { name: easyadmin.config_pass }
+
+    lle.easy_admin_plus.filter.configuration.property_config_pass:
+        class: Lle\EasyAdminPlusBundle\Filter\Configuration\PropertyConfigPass
+        public: true
+        tags:
+            - { name: easyadmin.config_pass }
 
     lle.easy_admin_plus.generator.base:
         abstract: true

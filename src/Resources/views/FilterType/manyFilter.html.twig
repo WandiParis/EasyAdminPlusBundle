@@ -1,0 +1,5 @@
+<select name="{{nameprefix}}value{{namesuffix}}{% if filtertype.multiple %}[]{% endif %}" {% if filtertype.multiple %} multiple {% endif %}>
+    {% for entity in filtertype.entities %}
+        <option value="{{ entity.id }}" {% if data is defined and data.value == entity.id %} selected {% endif %}>{{ entity }}</option>
+    {% endfor %}
+</select>

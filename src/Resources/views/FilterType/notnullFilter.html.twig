@@ -1,0 +1,5 @@
+<select class="form-control" name="{{nameprefix}}value{{namesuffix}}">
+    <option value="">Tous</option>
+    <option value="null" {% if data.value is defined and data.value == "null" %} selected="selected" {% endif %}>Non renseigné</option>
+    <option value="notnull" {% if data.value is defined and data.value == "notnull" %} selected="selected" {% endif %}>Renseigné</option>
+</select>

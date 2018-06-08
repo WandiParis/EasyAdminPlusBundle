@@ -7,6 +7,49 @@
     {% endif %}
 {% endblock %}
 
+{% block content_header %}
+{{ parent() }}
+<div class="adminlist-filter">
+    <form method="POST" action="#" class="form-horizontal ">
+
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h4 class="box-title"><i class="icon fa fa-search"></i>&nbsp;Rechercher</h4>
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div><!-- /.box-header -->
+
+        <div class="box-body">
+          <div class="row">
+
+          <!-- FILTER -->
+          {% for filter in _entity_config.filter.fields %}
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px">
+                        <div class="form-group">
+                            <label for="date" class="col-sm-4 control-label text-nowrap">
+                                {{ filter.label }}
+                            </label>
+                            <div class="col-sm-8">
+                              {% set vars = {'nameprefix': 'filter_' ~ filter.code ~ '_', 'namesuffix':''} %}
+                              {% include filter.template with vars %}
+                            </div>
+                        </div> <!-- form group -->
+                    </div>
+          {% endfor %}
+          </div><!-- row -->
+        </div><!-- box-body -->
+
+        <div class="box-footer">
+            <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">Filtrer</button>
+            <a href="/ademas/admin/importsecu/?reset=1" class="btn btn-default">Effacer</a>
+        </div>
+    </div>
+
+    </form>
+</div>
+{% endblock %}
+
 {% block new_action %}
     {# Do not display EXPORT button if not defined and not granted #}
     {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
