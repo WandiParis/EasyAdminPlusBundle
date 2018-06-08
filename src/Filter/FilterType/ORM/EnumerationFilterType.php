@@ -46,6 +46,6 @@ class EnumerationFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:enumerationFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:enumerationFilter.html.twig';
     }
 }

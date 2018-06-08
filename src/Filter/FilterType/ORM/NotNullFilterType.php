@@ -40,6 +40,6 @@ class NotNullFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:notnullFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:notnullFilter.html.twig';
     }
 }

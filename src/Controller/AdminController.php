@@ -104,6 +104,7 @@ class AdminController extends BaseAdminController
         return parent::isActionAllowed($actionName);
     }
 
+
     /**
      * export action.
      *
@@ -158,6 +159,70 @@ class AdminController extends BaseAdminController
         return $this->getExportFile($paginator, $this->config['entities'][$entityName]['export']['fields']);
     }
 
+
+    /**
+     * The method that is executed when the user performs a 'list' action on an entity.
+     *
+     * @return Response
+     */
+    protected function listAction()
+    {
+        $this->dispatch(EasyAdminEvents::PRE_LIST);
+
+        $fields = $this->entity['list']['fields'];
+        $paginator = $this->findFiltered($this->entity, $this->entity['class'], $this->request->query->get('page', 1), $this->entity['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
+
+        $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
+
+        $parameters = array(
+            'paginator' => $paginator,
+            'fields' => $fields,
+            'delete_form_template' => $this->createDeleteForm($this->entity['name'], '__id__')->createView(),
+        );
+
+        return $this->executeDynamicMethod('render<EntityName>Template', array('list', $this->entity['templates']['list'], $parameters));
+    }
+
+    /**
+     * Performs a database query to get all the records related to the given
+     * entity. It supports pagination and field sorting.
+     *
+     * @param string      $entityConfig
+     * @param string      $entityClass
+     * @param int         $page
+     * @param int         $maxPerPage
+     * @param string|null $sortField
+     * @param string|null $sortDirection
+     * @param string|null $dqlFilter
+     *
+     * @return Pagerfanta The paginated query results
+     */
+    protected function findFiltered($entity, $entityClass, $page = 1, $maxPerPage = 15, $sortField = null, $sortDirection = null, $dqlFilter = null)
+    {
+        if (empty($sortDirection) || !in_array(strtoupper($sortDirection), array('ASC', 'DESC'))) {
+            $sortDirection = 'DESC';
+        }
+        print $this->request->query->get('filter');
+
+        $queryBuilder = $this->executeDynamicMethod('create<EntityName>ListQueryBuilder', array($entityClass, $sortDirection, $sortField, $dqlFilter));
+        foreach($entity['filter']['fields'] as $filterType) {
+          $ftype = $filterType['filtertype'];
+          $ftype->setQueryBuilder($queryBuilder);
+          $data = [];
+          $ftype->apply($data, $filterType['property'], 'b', $filterType['property']);
+        }
+
+        $this->dispatch(EasyAdminEvents::POST_LIST_QUERY_BUILDER, array(
+            'query_builder' => $queryBuilder,
+            'sort_field' => $sortField,
+            'sort_direction' => $sortDirection,
+        ));
+
+        return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
+    }
+
+
+
     /**
      * Format CSV file
      *
@@ -198,26 +263,21 @@ class AdminController extends BaseAdminController
         ));
     }
 
-    /**
-     * Login action.
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function loginAction()
+
+    protected function embeddedListAction()
     {
-        $authenticationUtils = $this->get('security.authentication_utils');
-        $error = $authenticationUtils->getLastAuthenticationError();
+        $this->dispatch(EasyAdminEvents::PRE_LIST);
 
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $fields = $this->entity['list']['fields'];
+        $paginator = $this->findAll($this->entity['class'], $this->request->query->get('page', 1), $this->config['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'));
 
-        return $this->render(
-            '@LleEasyAdminPlus/Admin/login.html.twig',
-            [
-                'error' => $error,
-                'lastUsername' => $lastUsername,
-                'config' => $this->getParameter('easyadmin.config'),
-            ]
-        );
+        $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
+
+        return $this->render('@EasyAdminExtension/default/embedded_list.html.twig', array(
+            'paginator' => $paginator,
+            'fields' => $fields,
+            'masterRequest' => $this->get('request_stack')->getMasterRequest(),
+        ));
     }
 
     /**

@@ -58,7 +58,7 @@ class DateFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:dateFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:dateFilter.html.twig';
     }
 
     public function getDatePickerOptions(){

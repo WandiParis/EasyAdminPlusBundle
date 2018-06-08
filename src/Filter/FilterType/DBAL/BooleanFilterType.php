@@ -43,6 +43,6 @@ class BooleanFilterType extends AbstractDBALFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:booleanFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:booleanFilter.html.twig';
     }
 }

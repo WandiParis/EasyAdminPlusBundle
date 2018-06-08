@@ -2,15 +2,18 @@
 
 {# Do not display SEARCH form if not granted #}
 {% block search_action %}
-    {% if is_easyadmin_granted(_entity_config, 'search') %}
-        {{ parent() }}
+    {% if _entity_config.search is defined and is_easyadmin_granted(_entity_config, 'search') %}
+        {# Do not display SEARCH at all #}
+        {# { parent() } #}
     {% endif %}
 {% endblock %}
 
 {% block content_header %}
 {{ parent() }}
+{% if _entity_config.filter is defined %}
+
 <div class="adminlist-filter">
-    <form method="POST" action="#" class="form-horizontal ">
+    <form method="POST" action="{{ path('easyadmin', app.request.query|merge({ filter: "y" })) }}" class="form-horizontal ">
 
     <div class="box box-info">
         <div class="box-header with-border">
@@ -31,7 +34,7 @@
                                 {{ filter.label }}
                             </label>
                             <div class="col-sm-8">
-                              {% set vars = {'nameprefix': 'filter_' ~ filter.code ~ '_', 'namesuffix':''} %}
+                              {% set vars = {'nameprefix': 'filter_' ~ filter.code ~ '_', 'namesuffix':'', 'filtertype':filter.filtertype} %}
                               {% include filter.template with vars %}
                             </div>
                         </div> <!-- form group -->
@@ -42,12 +45,13 @@
 
         <div class="box-footer">
             <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">Filtrer</button>
-            <a href="/ademas/admin/importsecu/?reset=1" class="btn btn-default">Effacer</a>
+            <a href="" class="btn btn-default">Effacer</a>
         </div>
     </div>
 
     </form>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block new_action %}

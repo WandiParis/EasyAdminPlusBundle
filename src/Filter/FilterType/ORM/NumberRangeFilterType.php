@@ -57,6 +57,6 @@ class NumberRangeFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:numberRangeFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:numberRangeFilter.html.twig';
     }
 }

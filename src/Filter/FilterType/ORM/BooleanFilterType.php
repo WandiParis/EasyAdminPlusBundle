@@ -43,6 +43,6 @@ class BooleanFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:booleanFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:booleanFilter.html.twig';
     }
 }

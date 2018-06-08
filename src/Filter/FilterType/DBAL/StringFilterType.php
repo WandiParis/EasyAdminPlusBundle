@@ -62,6 +62,6 @@ class StringFilterType extends AbstractDBALFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:stringFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:stringFilter.html.twig';
     }
 }

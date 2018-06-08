@@ -117,7 +117,7 @@ class EntityFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:entityFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:entityFilter.html.twig';
     }
 
     public function getMultiple(){

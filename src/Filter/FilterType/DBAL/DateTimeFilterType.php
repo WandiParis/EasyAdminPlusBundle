@@ -51,6 +51,6 @@ class DateTimeFilterType extends AbstractDBALFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:dateTimeFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:dateTimeFilter.html.twig';
     }
 }

@@ -77,6 +77,6 @@ class TreeFilterType extends EntityFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:treeFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:treeFilter.html.twig';
     }
 }

@@ -62,6 +62,6 @@ class NumberFilterType extends AbstractDBALFilterType
      */
     public function getTemplate()
     {
-        return 'LleAdminListBundle:FilterType:numberFilter.html.twig';
+        return 'LleEasyAdminPlusBundle:FilterType:numberFilter.html.twig';
     }
 }
