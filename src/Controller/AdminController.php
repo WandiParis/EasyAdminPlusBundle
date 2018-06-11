@@ -209,6 +209,8 @@ class AdminController extends BaseAdminController
             $ftype = $filterType['filtertype'];
             $ftype->setQueryBuilder($queryBuilder);
             $ftype->setRequest($this->request);
+            $ftype->setEm($this->em);
+
             $data = [];
             if ($ftype->bindRequest($data, $filterType['property'])) {
               $ftype->setData($data);
@@ -224,7 +226,6 @@ class AdminController extends BaseAdminController
 
         return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
     }
-
 
 
     /**

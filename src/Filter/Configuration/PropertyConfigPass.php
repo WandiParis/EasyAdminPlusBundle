@@ -11,6 +11,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigPassInterface;
  */
 class PropertyConfigPass implements ConfigPassInterface
 {
+    // ne marche pas pour le moment
+    private $autoFieldType = [
+      'date'=> 'DateFilterType',
+      'time'=> 'DateTimeFilterType',
+      'datetime'=> 'DateTimeFilterType',
+      'bigint' => 'NumberFilterType',
+      'integer' => 'NumberFilterType',
+      'smallint' => 'NumberFilterType',
+      'decimal' => 'NumberFilterType',
+      'float' => 'NumberFilterType',
+      'varchar'  => 'StringFilterType'
+    ];
 
     public function process(array $backendConfig)
     {
@@ -35,7 +47,12 @@ class PropertyConfigPass implements ConfigPassInterface
                     continue;
                 }
                 foreach ($entityConfig[$view]['fields'] as $fieldName => $fieldConfig) {
-                    $class = $fieldConfig['filter_type'];
+                    if (isset($fieldConfig['filter_type'])) {
+                      $class = $fieldConfig['filter_type'];
+                    } else {
+                      $class = 'StringFilterType';
+                    }
+
                     if (strpos($class, '\\') === false) {
                       $class= "Lle\\EasyAdminPlusBundle\\Filter\\FilterType\\ORM\\".$class;
                     }

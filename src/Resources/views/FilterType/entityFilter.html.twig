@@ -12,7 +12,7 @@
             {% endif %}
         {% endif %}
         {% set label = filtertype.getLabel(entity) %}
-        <option value="{{ entity.id }}" {% if data is defined and filtertype.isSelected(data,entity) %} selected {% endif %}>{{ label }}</option>
+        <option value="{{ entity.id }}" {% if data['value'] is defined and filtertype.isSelected(data,entity) %} selected {% endif %}>{{ label }}</option>
     {% endfor %}
     {% if filtertype.groupby  %}</optgroup>{% endif %}
 </select>

@@ -129,7 +129,7 @@ class EntityFilterType extends AbstractORMFilterType
     }
 
     public function getLabelForOptGroup($entity) {
-        
+
         $group_by = $this->getGroupBy();
         $method = "get".ucfirst($group_by);
 
