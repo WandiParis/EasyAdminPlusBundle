@@ -3,7 +3,7 @@
 
 
  <button type="button" class="btn btn-default dropdown-toggle {{nameprefix}}button{{namesuffix}}" data-toggle="dropdown" aria-expanded="false">
-          
+
           <i title="Avant le" class="fa fa-angle-left before"></i>
           <i title="Après le" class="fa fa-angle-right after"></i>
           <i title="Le" class="fa fa-calendar-o equal"></i>
@@ -30,11 +30,12 @@
 </div><!-- /input-group -->
 
 <script>
-    $('#_{{nameprefix}}value{{namesuffix}}').datepicker({
-        {% for option,value in filtertype.datePickerOptions %}
-            {{ option }}: '{{ value }}',
-        {%  endfor %}
-    });
+    //$('#_{{nameprefix}}value{{namesuffix}}').datepicker({
+    //    {% for option,value in filtertype.datePickerOptions %}
+    //        {{ option }}: '{{ value }}',
+    //    {%  endfor %}
+    //});
+    
     $(document).ready(function() {
       lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','{% if data.comparator is defined %}{{data.comparator}}{% else %}equal{% endif %}');
     });
