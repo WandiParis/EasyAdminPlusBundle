@@ -1,21 +1,4 @@
-/** AUTH **/
-.login-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-}
 
-.login-container .page-title {
-    text-align: center;
-    overflow:hidden;
-}
-
-.login-container .page-title *{
-    max-width: 100%;
-}
-/** /AUTH **/
 
 /** TRANSLATIONS **/
 form .row {

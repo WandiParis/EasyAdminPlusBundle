@@ -34,7 +34,7 @@
                                 {{ filter.label }}
                             </label>
                             <div class="col-sm-8">
-                              {% set vars = {'nameprefix': 'filter_' ~ filter.code ~ '_', 'namesuffix':'', 'filtertype':filter.filtertype} %}
+                              {% set vars = {'data': filter.filtertype.data, 'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.code, 'filtertype':filter.filtertype} %}
                               {% include filter.template with vars %}
                             </div>
                         </div> <!-- form group -->
@@ -45,7 +45,7 @@
 
         <div class="box-footer">
             <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">Filtrer</button>
-            <a href="" class="btn btn-default">Effacer</a>
+            <a href="{{ path('easyadmin', app.request.query|merge({ filter_reset: "y" })) }}" class="btn btn-default">Effacer</a>
         </div>
     </div>
 
@@ -75,4 +75,103 @@
 {% block item_actions %}
     {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config) %}
     {{ parent() }}
+{% endblock %}
+
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+
+    var lle = {
+        dialog: function(title,msg){
+            $('<div>'+msg+'</div>').dialog({title:title});
+        },
+
+        ajaxForm: function( $form, callback, type , elm, action){
+          var values = {};
+          var type = (type)? type:'json';
+          var formdata = (window.FormData) ? new FormData($form[0]) : null;
+          var data = (formdata !== null) ? formdata : $form.serialize();
+          var action = (action)? action:$form.attr( 'action' );
+          /*$.each( $form.serializeArray(), function(i, field) {
+            values[field.name] = field.value;
+          });*/
+          $.ajax({
+            type        : $form.attr( 'method' ),
+            url         : action,
+            contentType : false, // obligatoire pour de l'upload
+            processData : false, // obligatoire pour de l'upload
+            data        : data,
+            dataType    : type,
+            success     : function(data) {
+              //var offset = $(field.id).offset().top
+              //$('html, body').animate({scrollTop: offset}, 'slow');
+              if(elm){
+                callback( elm, data );
+              }else{
+                callback( data );
+              }
+
+            }
+          });
+        },
+
+        ajax: function(elm){
+            var type = (elm.attr('data-type'))? elm.attr('data-type'):'json';
+            if(elm.attr('data-confirm')){
+            if(!confirm(elm.attr('data-confirm'))) return;
+            }
+            var callback = window[elm.attr('data-callback')];
+            var preCallback = (elm.attr('data-pre-callback'))? window[elm.attr('data-pre-callback')]:null;
+            var errCallback = (elm.attr('data-err-callback'))? window[elm.attr('data-err-callback')]:null;
+            if(preCallback){
+                preCallback(elm);
+            }
+            var url = (elm.attr('data-url'))? elm.attr('data-url'):elm.attr('href');
+            var name = (elm.attr('name'))? elm.attr('name'):null;
+            var method = (elm.attr('data-method'))? elm.attr('data-method'):'post';
+            var values = {};
+            if(elm.attr('data-group')) {
+              $(elm.attr('data-group')).each(function () {
+                  if ($(this).attr('type') == 'radio') {
+                      if ($(this).is(':checked')) values[$(this).attr('name')] = $(this).val();
+                  } else if ($(this).attr('type') == 'checkbox') {
+                      if ($(this).is(':checked')) {
+                          if (!values[$(this).attr('name')]) values[$(this).attr('name')] = [];
+                          values[$(this).attr('name')].push($(this).val());
+                      }
+                  } else {
+                      values[$(this).attr('name')] = $(this).val();
+                  }
+              });
+            }
+            name = (elm.attr('data-name'))? elm.attr('data-name'):elm.attr('name');
+            var donnes = (elm.attr('data-donnes'))? JSON.parse(elm.attr('data-donnes').replace(/\'/gi,'"')):[];
+            var data = {'data':donnes,'value':elm.val(),'values':values,'name':name};
+            if(elm.attr('data-no')) data = null;
+            $.ajax({
+                type        : method,
+                url         : url,
+                data        : data,
+                dataType    : type,
+                success     : function(data) {
+                    if (callback) callback(elm, data);
+                },
+                error : function(xhr, ajaxOptions, thrownError){
+                    if (errCallback) errCallback(elm, xhr, ajaxOptions, thrownError);
+                }
+            });
+        },
+
+        filter_set_button: function(id, id_button, val) {
+
+          $(id).val(val);
+          $(id_button + ' .fa').hide();
+          $(id_button + ' .'+val).show();
+          return false;
+        }
+    }
+
+    </script>
 {% endblock %}

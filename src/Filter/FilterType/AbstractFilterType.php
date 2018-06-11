@@ -22,6 +22,8 @@ abstract class AbstractFilterType implements FilterTypeInterface
 
     protected $request = null;
 
+    protected $data = null;
+
     /**
      * @param string $columnName The column name
      * @param string $alias      The alias
@@ -31,6 +33,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
         $this->columnName = $columnName;
         $this->alias      = $alias;
         $this->hidden = (isset($config['hidden']))? $config['hidden']:false;
+        $this->data = [];
     }
 
     /**
@@ -67,7 +70,26 @@ abstract class AbstractFilterType implements FilterTypeInterface
         return $this->request;
     }
 
-    public function getValueSession($id){
-        return (isset($this->request[$id]))? $this->request[$id]:null;
+    public function getValueSession($id) {
+      $session = $this->request->getSession();
+      if ($this->request->query->get('filter_reset')) {
+        $session->remove($id);
+        return null;
+      }
+      $new_val = $this->request->request->get($id, null);
+      if ($new_val) {
+        $session->set($id, $new_val);
+        return $new_val;
+      } else {
+        return $session->get($id, null);
+      }
+    }
+
+    public function setData($data){
+        $this->data = $data;
+    }
+
+    public function getData(){
+        return $this->data;
     }
 }

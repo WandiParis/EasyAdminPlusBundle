@@ -3,3 +3,8 @@ lle_easy_admin_plus_translations:
     path: /translations
     defaults:
         _controller: LleEasyAdminPlusBundle:Admin:translations
+
+lle_easy_admin_plus:
+    path: /
+    defaults:
+        _controller: LleEasyAdminPlusBundle:Admin:index

@@ -202,16 +202,20 @@ class AdminController extends BaseAdminController
         if (empty($sortDirection) || !in_array(strtoupper($sortDirection), array('ASC', 'DESC'))) {
             $sortDirection = 'DESC';
         }
-        print $this->request->query->get('filter');
 
         $queryBuilder = $this->executeDynamicMethod('create<EntityName>ListQueryBuilder', array($entityClass, $sortDirection, $sortField, $dqlFilter));
-        foreach($entity['filter']['fields'] as $filterType) {
-          $ftype = $filterType['filtertype'];
-          $ftype->setQueryBuilder($queryBuilder);
-          $data = [];
-          $ftype->apply($data, $filterType['property'], 'b', $filterType['property']);
+        if (isset($entity['filter'])) {
+          foreach($entity['filter']['fields'] as $filterType) {
+            $ftype = $filterType['filtertype'];
+            $ftype->setQueryBuilder($queryBuilder);
+            $ftype->setRequest($this->request);
+            $data = [];
+            if ($ftype->bindRequest($data, $filterType['property'])) {
+              $ftype->setData($data);
+              $ftype->apply($data, $filterType['property'], 'entity.', $filterType['property']);
+            }
+          }
         }
-
         $this->dispatch(EasyAdminEvents::POST_LIST_QUERY_BUILDER, array(
             'query_builder' => $queryBuilder,
             'sort_field' => $sortField,
