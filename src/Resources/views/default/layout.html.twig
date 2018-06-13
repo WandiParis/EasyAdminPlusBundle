@@ -1,1 +1,6 @@
 {% extends '@BaseEasyAdmin/default/layout.html.twig' %}
+
+{% block head_javascript %}
+    {{  parent() }}
+    <script src="{{ asset('bundles/lleeasyadminplus/javascript/json-editor.min.js') }}"></script>
+{% endblock %}

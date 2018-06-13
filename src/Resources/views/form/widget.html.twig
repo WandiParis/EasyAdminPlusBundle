@@ -1,0 +1,21 @@
+{% block json_widget %}
+    <div id="{{ id }}_json"></div>
+    <script>
+        JSONEditor.defaults.options.theme = 'bootstrap2';
+        var editor = new JSONEditor(document.getElementById("{{ id }}_json"),{
+            schema: {{  schema|raw }},
+            disable_collapse: true,
+            disable_properties: true,
+            form_name_root: '{{ full_name }}',
+            disable_edit_json: {{ disableEditJson }},
+            no_additional_properties: {{ noAdditionalProperties }}
+        });
+        editor.setValue({{ value|json_encode()|raw }});
+        editor.on("change",  function() {
+            var errors = editor.validate();
+            if(errors.length) {
+                console.log(errors);
+            }
+        });
+    </script>
+{% endblock %}

@@ -20,6 +20,14 @@ class LleEasyAdminPlusExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+
+        if ($container->hasParameter('twig.form.resources')) {
+            $container->setParameter('twig.form.resources', array_merge(
+                ['LleEasyAdminPlusBundle:form:widget.html.twig'],
+                $container->getParameter('twig.form.resources')
+            ));
+        }
+        
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
@@ -28,7 +36,8 @@ class LleEasyAdminPlusExtension extends Extension
         $container->setParameter('easy_admin_plus', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader->load('services.yaml');
+        $loader->load('form.yaml');
     }
 
     private function processConfigTranslator(array $config, ContainerBuilder $container): array
