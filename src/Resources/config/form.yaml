@@ -4,7 +4,7 @@ services:
 
     _defaults:
         autowire: true
-        public: true
+        public: false
         autoconfigure: true
 
     Lle\BpmBundle\Form\Type\JsonType:

@@ -28,15 +28,17 @@ class JsonType extends AbstractType {
                     "name" => ["type"=>"string"]
                 ]
             ],
-            "disableEditJson" => false,
-            "noAdditionalProperties" => false
+            "disable_edit_json" => true,
+            "no_additional_properties" => false,
+            "required_by_default" => true,
         ]);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options){
         $view->vars['schema'] = json_encode($options['schema']);
-        $view->vars['disableEditJson'] = ($options['disableEditJson'])? 'true':'false';
-        $view->vars['noAdditionalProperties'] = ($options['noAdditionalProperties'])? 'true':'false';
+        $view->vars['disable_edit_json'] = ($options['disable_edit_json'])? 'true':'false';
+        $view->vars['no_additional_properties'] = ($options['no_additional_properties'])? 'true':'false';
+        $view->vars['required_by_default'] = ($options['required_by_default'])? 'true':'false';
     }
 
 

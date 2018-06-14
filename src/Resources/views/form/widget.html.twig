@@ -1,21 +1,41 @@
 {% block json_widget %}
+    <div id="{{ id }}_errors"></div>
     <div id="{{ id }}_json"></div>
     <script>
-        JSONEditor.defaults.options.theme = 'bootstrap2';
-        var editor = new JSONEditor(document.getElementById("{{ id }}_json"),{
-            schema: {{  schema|raw }},
-            disable_collapse: true,
-            disable_properties: true,
-            form_name_root: '{{ full_name }}',
-            disable_edit_json: {{ disableEditJson }},
-            no_additional_properties: {{ noAdditionalProperties }}
-        });
-        editor.setValue({{ value|json_encode()|raw }});
-        editor.on("change",  function() {
-            var errors = editor.validate();
-            if(errors.length) {
-                console.log(errors);
+        var {{ id }}schema = {{  schema|raw }}
+        window.editor{{ id }}startval = null
+        function {{ id }}_load(value, schema){
+            var schema = (schema)? schema:{{  schema|raw }};
+            JSONEditor.defaults.options.theme = 'bootstrap2';
+            if(value){
+                window.editor{{ id }}startval = value;
             }
-        });
+            if(window.editor{{ id }}) {
+                window.editor{{ id }}.destroy()
+            }
+            window.editor{{ id }} = new JSONEditor(document.getElementById("{{ id }}_json"),{
+                schema: schema,
+                disable_collapse: true,
+                disable_properties: true,
+                form_name_root: '{{ full_name }}',
+                disable_edit_json: {{ disable_edit_json }},
+                no_additional_properties: {{ no_additional_properties }},
+                required_by_default: {{ required_by_default }}
+            });
+
+            if(value){
+                window.editor{{ id }}.setValue(value);
+            }else{
+                window.editor{{ id }}.setValue(window.editor{{ id }}startval);
+            }
+            window.editor{{ id }}.on("change",  function() {
+                var errors = window.editor{{ id }}.validate();
+                $('#{{ id }}_errors').html("");
+                if(errors.length) {
+                    $('#{{ id }}_errors').html("Erreur schema");
+                }
+            });
+        };
+        {{ id }}_load({{ value|json_encode()|raw }},{{ id }}schema);
     </script>
 {% endblock %}
