@@ -30,6 +30,10 @@ easy_admin:
 
 A new panel is visible on top of `List` action with all the filters widget.
 
+  <p align="center">
+      <img src="images/filter.png" align="center" alt="Generator generate" />
+  </p>
+ 
 The filters params are stored in session and can be reset by the Cancel button. When you return on the list the filter is reminded
 
 -------
