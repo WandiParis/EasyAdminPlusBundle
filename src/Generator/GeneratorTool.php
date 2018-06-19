@@ -134,7 +134,7 @@ class GeneratorTool
         if (null === self::$translation) {
             self::$translation = new Translator($userLocale);
             self::$translation->addLoader('yaml', new YamlFileLoader());
-            self::$translation->addResource('yaml', $projectDir.'/vendor/lle/easyadmin-plus-bundle/src/Resources/translations/'.$fileName.'.'.$userLocale.'.yaml', $userLocale);
+            self::$translation->addResource('yaml', $projectDir.'/vendor/2lenet/easyadmin-plus-bundle/src/Resources/translations/'.$fileName.'.'.$userLocale.'.yaml', $userLocale);
         }
     }
 
