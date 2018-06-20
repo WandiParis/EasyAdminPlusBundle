@@ -37,7 +37,8 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.1",
-        "easycorp/easyadmin-bundle": "^1.17"
+        "easycorp/easyadmin-bundle": "^1.17",
+        "symfony/templating": "^4.0"
     },
     "require-dev": {
     },
