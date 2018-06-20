@@ -98,7 +98,7 @@ class Entity
 
     public static function buildName(array $nameData): string
     {
-        return strtolower($nameData['bundle'].'_'.$nameData['entity']);
+        return ucwords(strtolower($nameData['entity']));
     }
 
     /**
