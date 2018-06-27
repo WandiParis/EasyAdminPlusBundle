@@ -4,25 +4,8 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
 
 use Symfony\Component\HttpFoundation\Request;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\ORM\AbstractORMFilterType;
+use Lle\EasyAdminPlusBundle\Filter\HiddenEntity;
 
-/**
- * StringFilterType
- */
-
-class HiddenEntity{
-    private $value;
-    public function __construct($value){
-        $this->value = $value;
-    }
-
-    public function __toString(){
-        return (string)$this->value;
-    }
-
-    public function getId(){
-        return $this->value;
-    }
-}
 class EntityFilterType extends AbstractORMFilterType
 {
 
