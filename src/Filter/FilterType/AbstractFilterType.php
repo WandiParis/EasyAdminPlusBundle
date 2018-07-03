@@ -92,4 +92,9 @@ abstract class AbstractFilterType implements FilterTypeInterface
     public function getData(){
         return $this->data;
     }
+    
+    public function __sleep()
+    {
+        return array('columnName','alias','data');
+    }
 }
