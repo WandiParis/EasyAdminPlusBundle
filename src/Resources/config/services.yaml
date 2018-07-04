@@ -88,3 +88,5 @@ services:
         class: Lle\EasyAdminPlusBundle\Generator\Command\GeneratorEntityCommand
         tags:
             -  { name: console.command, command: lle:easy-admin-plus:generator:entity }
+
+            

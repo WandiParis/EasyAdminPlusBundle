@@ -39,3 +39,36 @@
         {{ id }}_load({{ value|json_encode()|raw }},{{ id }}schema);
     </script>
 {% endblock %}
+
+{% block url_autocomplete_widget %}
+<select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name}}-autocomplete-url='{{ url }}'>
+    <option value="{{value}}" selected="selected">{{ include(template_from_string("{{ value |"~ value_filter~ "}}")) }}</option>
+</select>
+
+<script>
+    $(document).ready(function(){
+        var autocompleteFields = $('[data-{{name}}-autocomplete-url]');
+
+        autocompleteFields.each(function () {
+            var $this = $(this);
+            var url = $this.data('{{name}}-autocomplete-url');
+
+            // JQuery select2 config
+            $this.select2({
+                theme: 'bootstrap',
+                ajax: {
+                    url: url,
+                    dataType: 'json',
+                    xhrFields: {
+                        withCredentials: true // allows sending of cookies as we need to be logged in
+                    },
+                    delay: 250,
+                    cache: true
+                },
+                placeholder: 'Sélectionnez une valeur',
+                allowClear: true
+            });
+        });
+    })
+</script>
+{% endblock %}
