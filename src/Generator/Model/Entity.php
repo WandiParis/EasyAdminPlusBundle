@@ -175,7 +175,6 @@ class Entity
                 $action = new Action();
                 $action->setName($actionName);
                 $action->setIcon($action->getIconFromAction($eaToolParams['icons']['actions']));
-                $action->setLabel($actionName);
                 $method->addAction($action);
             }
 

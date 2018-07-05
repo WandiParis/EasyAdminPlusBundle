@@ -6,12 +6,6 @@ class Action
 {
     private $name;
     private $icon;
-    private $label;
-
-    public function __construct()
-    {
-        $this->label = '';
-    }
 
     /**
      * @return mixed
@@ -54,26 +48,6 @@ class Action
     }
 
     /**
-     * @return mixed
-     */
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param mixed $label
-     *
-     * @return $this
-     */
-    public function setLabel(string $label): Action
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    /**
      * @param array $parameters
      *
      * @return string
@@ -90,7 +64,6 @@ class Action
     {
         return [
             'name' => $this->name,
-            'label' => $this->label,
             'icon' => $this->icon,
         ];
     }
