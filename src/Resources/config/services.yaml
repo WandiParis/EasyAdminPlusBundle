@@ -88,5 +88,9 @@ services:
         class: Lle\EasyAdminPlusBundle\Generator\Command\GeneratorEntityCommand
         tags:
             -  { name: console.command, command: lle:easy-admin-plus:generator:entity }
+    twig.extension.stringloader:
+        class: Twig_Extension_StringLoader
+        tags:
+            - { name: twig.extension }
 
             
