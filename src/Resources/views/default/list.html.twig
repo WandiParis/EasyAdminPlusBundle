@@ -71,11 +71,6 @@
     {% endif %}
 {% endblock %}
 
-{# Do not display list action items if not granted #}
-{% block item_actions %}
-    {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config) %}
-    {{ parent() }}
-{% endblock %}
 
 
 {% block body_javascript %}
@@ -175,3 +170,46 @@
 
     </script>
 {% endblock %}
+
+        {% block table_body %}
+            {% for item in paginator.currentPageResults %}
+                {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
+                {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
+                {% if _entity_config.tree %}
+                    <tr data-id="{{ _item_id }}" data-parent-id="{{item.lft}}">
+                {% else %}
+                    <tr data-id="{{ _item_id }}">
+                {% endif %}
+                    {% for field, metadata in fields %}
+                        {% set isSortingField = metadata.property == app.request.get('sortField') %}
+                        {% set _column_label =  (metadata.label ?: field|humanize)|trans(_trans_parameters)  %}
+
+                        <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
+                            {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
+                        </td>
+                    {% endfor %}
+
+                    {% if _list_item_actions|length > 0 %}
+                        {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
+                        <td data-label="{{ _column_label }}" class="actions">
+                        {% block item_actions %}
+                            {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config) %}
+                            {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
+                                actions: _list_item_actions,
+                                request_parameters: _request_parameters,
+                                translation_domain: _entity_config.translation_domain,
+                                trans_parameters: _trans_parameters,
+                                item_id: _item_id
+                            }, with_context = false) }}
+                        {% endblock item_actions %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td class="no-results" colspan="{{ _list_item_actions|length > 0 ? fields|length + 1 : fields|length }}">
+                        {{ 'search.no_results'|trans(_trans_parameters, 'EasyAdminBundle') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endblock table_body %}
