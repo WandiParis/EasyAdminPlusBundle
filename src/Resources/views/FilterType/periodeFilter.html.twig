@@ -1,34 +1,35 @@
 {% set choices = filtertype.getChoices() %}
 {% set isChoices = filtertype.choices|length %}
-
-{% if isChoices %}
-  <div class="col-md-12">
-    {% for label,choice in choices %}
-      <select name="{{nameprefix}}choice{{namesuffix}}[{{ choice.list }}]" class="form-control {{nameprefix}}choices-from-to{{namesuffix}}">
-        <option value="">{{ label }}</option>
-        {% for item in choice.items %}
-          <option value="{{ item.id }}" data-to="{{ item.to }}" data-from="{{ item.from }}" {% if filtertype.isSelected(choice.list,item) %} selected {% endif %}>{{ item.label }}</option>
-        {% endfor %}
-      </select>
-    {% endfor %}
+<div class="row">
+  {% if isChoices %}
+    <div class="col-md-12">
+      {% for label,choice in choices %}
+        <select name="{{nameprefix}}choice{{namesuffix}}[{{ choice.list }}]" class="form-control {{nameprefix}}choices-from-to{{namesuffix}}">
+          <option value="">{{ label }}</option>
+          {% for item in choice.items %}
+            <option value="{{ item.id }}" data-to="{{ item.to }}" data-from="{{ item.from }}" {% if filtertype.isSelected(choice.list,item) %} selected {% endif %}>{{ item.label }}</option>
+          {% endfor %}
+        </select>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="col-md-6">
+  <input 
+    type="text" 
+    name="{{nameprefix}}value{{namesuffix}}[from]" 
+    class="form-control datepicker form_datepicker" 
+    id="_{{nameprefix}}value_from{{namesuffix}}"  
+     placeholder="du"
+    {% if data.value is defined and data.value.from is defined %}value="{{data.value.from}}"{% endif %} />
   </div>
-{% endif %}
-<div class="col-md-6">
-<input 
-  type="text" 
-  name="{{nameprefix}}value{{namesuffix}}[from]" 
-  class="form-control datepicker form_datepicker" 
-  id="_{{nameprefix}}value_from{{namesuffix}}"  
-   placeholder="du"
-  {% if data.value is defined and data.value.from is defined %}value="{{data.value.from}}"{% endif %} />
-</div>
-<div class="col-md-6">
-<input type="text" 
-  name="{{nameprefix}}value{{namesuffix}}[to]" 
-  class="form-control datepicker form_datepicker" 
-  id="_{{nameprefix}}value_to{{namesuffix}}"  
-   placeholder="au"
-  {% if data.value is defined and data.value.to is defined %}value="{{data.value.to}}"{% endif %} />
+  <div class="col-md-6">
+  <input type="text" 
+    name="{{nameprefix}}value{{namesuffix}}[to]" 
+    class="form-control datepicker form_datepicker" 
+    id="_{{nameprefix}}value_to{{namesuffix}}"  
+     placeholder="au"
+    {% if data.value is defined and data.value.to is defined %}value="{{data.value.to}}"{% endif %} />
+  </div>
 </div>
 <script>
 $('.{{nameprefix}}choices-from-to{{namesuffix}}').change(function(e){
