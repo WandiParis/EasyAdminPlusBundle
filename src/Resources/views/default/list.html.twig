@@ -176,7 +176,7 @@
                 {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
                 {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
                 {% if _entity_config.tree is defined and _entity_config.tree %}
-                    <tr data-id="{{ _item_id }}" data-parent-id="{{item.lft}}">
+                    <tr data-id="{{ _item_id }}" data-parent-id="{{item.parent.id}}">
                 {% else %}
                     <tr data-id="{{ _item_id }}">
                 {% endif %}
