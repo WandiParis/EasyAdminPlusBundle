@@ -41,29 +41,44 @@
 {% endblock %}
 
 {% block url_autocomplete_widget %}
-<select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name}}-autocomplete-url='{{ url }}'>
-    <option value="{{value}}" selected="selected">{{ include(template_from_string("{{ value |"~ value_filter~ "}}")) }}</option>
+<select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name}}-autocomplete-url-lle='{{ url }}'>
+    <option value="{{value}}" selected="selected">{{ value_filter ? include(template_from_string( "{{ value |" ~ value_filter ~ "}}")) : value }}</option>
 </select>
 
 <script>
-    $(document).ready(function(){
-        var autocompleteFields = $('[data-{{name}}-autocomplete-url]');
+    $(document).ready(function() {
+        var lleAutocompleteFields = $('[data-{{name}}-autocomplete-url-lle]');
 
-        autocompleteFields.each(function () {
+        lleAutocompleteFields.each(function() {
             var $this = $(this);
-            var url = $this.data('{{name}}-autocomplete-url');
+            var url = $this.data('{{name}}-autocomplete-url-lle');
 
-            // JQuery select2 config
+            // select2 config for easyadmin
             $this.select2({
                 theme: 'bootstrap',
                 ajax: {
                     url: url,
                     dataType: 'json',
                     xhrFields: {
-                        withCredentials: true // allows sending of cookies as we need to be logged in
+                        withCredentials: true
                     },
                     delay: 250,
-                    cache: true
+
+                    // paramètres GET
+                    data: function (params) {
+                        // the _ is here to force easyadmin return results even if query is empty
+                        return { 'query': params.term || "_", 'page': params.page };
+                    },
+
+                    // analyse json reçu
+                    processResults: function (data, params) {
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: data.has_next_page
+                            }
+                        };
+                    }
                 },
                 placeholder: 'Sélectionnez une valeur',
                 allowClear: true

@@ -45,3 +45,4 @@ easy_admin_bundle:
 3. [Translation Action](doc/chapter-3.md)
 4. [ACL](doc/chapter-4.md)
 5. [Export Action](doc/chapter-5.md)
+6. [Custom Form Types](doc/chapter-7.md)
