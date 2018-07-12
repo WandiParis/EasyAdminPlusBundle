@@ -3,4 +3,12 @@
 {% block head_javascript %}
     {{  parent() }}
     <script src="{{ asset('bundles/lleeasyadminplus/javascript/json-editor.min.js') }}"></script>
+    <script src="{{ asset('bundles/lleeasyadminplus/javascript/jquery.treetable.js') }}"></script>
+
+{% endblock %}
+
+{% block head_stylesheets %}
+    {{  parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/lleeasyadminplus/css/jquery.treetable.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/lleeasyadminplus/css/jquery.treetable.theme.default.css') }}">
 {% endblock %}

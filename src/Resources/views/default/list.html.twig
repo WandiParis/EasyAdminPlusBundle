@@ -72,11 +72,13 @@
 {% endblock %}
 
 
-
 {% block body_javascript %}
     {{ parent() }}
     <script type="text/javascript">
+    $(document).ready(function(){
 
+        $("body.list .table-responsive table.table").treetable({ expandable: true, nodeIdAttr: 'id', parentIdAttr: 'parentId' });
+    });
 
     var lle = {
         dialog: function(title,msg){
@@ -172,11 +174,32 @@
 {% endblock %}
 
         {% block table_body %}
+            {% if _entity_config.tree is defined and _entity_config.tree %}
+                {% set tree_parents = [] %}
+                {% set previous_item = null %}
+                {% set parent_id = null %}
+            {% endif %}
+
             {% for item in paginator.currentPageResults %}
                 {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
                 {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
+
+                {# TREE MANAGMENT #}
                 {% if _entity_config.tree is defined and _entity_config.tree %}
-                    <tr data-id="{{ _item_id }}" data-parent-id="{{item.parent.id}}">
+                    {% if previous_item %}
+                        {% if previous_item.rgt > item.lft %}{# we go up #}
+                            {% set parent_id = previous_item.id %}
+                            {% set tree_parents = tree_parents|merge([{
+                                'id':previous_item.id, 
+                                'lft':previous_item.lft, 
+                                'rgt':previous_item.rgt}]) %}
+                        {% else %}
+                            {% set tree_parents = tree_parents|slice(0, item.level) %}
+                            {% set parent = tree_parents|last %}
+                            {% set parent_id = parent.id %}
+                        {% endif %}
+                    {% endif %}
+                    <tr data-id="{{ _item_id }}" {% if parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
                 {% else %}
                     <tr data-id="{{ _item_id }}">
                 {% endif %}
@@ -205,6 +228,8 @@
                         </td>
                     {% endif %}
                 </tr>
+                {% set previous_item = item %}
+
             {% else %}
                 <tr>
                     <td class="no-results" colspan="{{ _list_item_actions|length > 0 ? fields|length + 1 : fields|length }}">
