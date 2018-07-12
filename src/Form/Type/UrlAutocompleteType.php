@@ -23,7 +23,7 @@ class UrlAutocompleteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver){
         $resolver->setDefaults([
             "url" => "#",
-            "value_filter" => ''
+            "value_filter" => null,
         ]);
     }
 
