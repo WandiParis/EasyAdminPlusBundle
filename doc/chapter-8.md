@@ -7,11 +7,6 @@
 </p>
 
 -------
-##How to activate
-
-This type allows you to make an autocomplete field like the easyadmin's one, but with customizable URL meaning that you can get autocomplete data from other websites/APIs with AJAX calls. This uses the JQuery's select2.
-
--------
 ### How to use it
 
 Configure the nested set entity with tree: true :
