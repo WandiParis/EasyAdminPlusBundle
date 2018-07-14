@@ -1,7 +1,5 @@
 # EasyAdminPlusBundle
 
-### :exclamation: Disclaimer :exclamation: 
-
 ### About
 
 EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle) which includes some extra features. 
@@ -13,6 +11,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 - [x] ACL to restrict access based on `entity/action role permissions`
 - [x] Add an action to export entities in CSV.
 - [x] Filters on entity
+- [X] Nested tree compatible
 
 ### Requirements
 
@@ -46,3 +45,4 @@ easy_admin_bundle:
 4. [ACL](doc/chapter-4.md)
 5. [Export Action](doc/chapter-5.md)
 6. [Custom Form Types](doc/chapter-7.md)
+7. [Nested Tree](doc/chapter-8.md)
