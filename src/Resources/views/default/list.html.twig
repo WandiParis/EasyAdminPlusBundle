@@ -31,7 +31,7 @@
           <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px">
                         <div class="form-group">
                             <label for="date" class="col-sm-4 control-label text-nowrap">
-                                {{ filter.label }}
+                                {{ filter.label|trans() }}
                             </label>
                             <div class="col-sm-8">
                               {% set vars = {'data': filter.filtertype.data, 'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.code, 'filtertype':filter.filtertype} %}
