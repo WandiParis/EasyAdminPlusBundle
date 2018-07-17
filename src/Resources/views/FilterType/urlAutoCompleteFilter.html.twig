@@ -6,17 +6,17 @@
 	{% set label = null %}
 {% endif %}
 
-<select id="{{nameprefix}}id{{namesuffix}}" name="{{nameprefix}}value{{namesuffix}}" class="form-control" data-{{namesuffix}}-autocomplete-url-lle='{{ filtertype.url  }}'>
+<select id="{{nameprefix}}id{{namesuffix}}" name="{{nameprefix}}value{{namesuffix}}" class="form-control" data-{{namesuffix|lower}}-autocomplete-url-lle='{{ filtertype.url  }}'>
     <option value="{{value}}" selected="selected">{{ filtertype.valueFilter ? include(template_from_string( "{{ value |" ~ filtertype.valueFilter ~ "}}")) : value }}</option>
 </select>
 
 <script>
     $(document).ready(function() {
-        var lleAutocompleteFields = $('[data-{{namesuffix}}-autocomplete-url-lle]');
+        var lleAutocompleteFields = $('[data-{{namesuffix|lower}}-autocomplete-url-lle]');
 
         lleAutocompleteFields.each(function() {
             var $this = $(this);
-            var url = $this.data('{{namesuffix}}-autocomplete-url-lle');
+            var url = $this.data('{{namesuffix|lower}}-autocomplete-url-lle');
 
             // select2 config for easyadmin
             $this.select2({

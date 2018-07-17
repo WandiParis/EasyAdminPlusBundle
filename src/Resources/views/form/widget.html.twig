@@ -41,17 +41,17 @@
 {% endblock %}
 
 {% block url_autocomplete_widget %}
-<select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name}}-autocomplete-url-lle='{{ url }}'>
+<select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name|lower}}-autocomplete-url-lle='{{ url }}'>
     <option value="{{value}}" selected="selected">{{ value_filter ? include(template_from_string( "{{ value |" ~ value_filter ~ "}}")) : value }}</option>
 </select>
 
 <script>
     $(document).ready(function() {
-        var lleAutocompleteFields = $('[data-{{name}}-autocomplete-url-lle]');
+        var lleAutocompleteFields = $('[data-{{name|lower}}-autocomplete-url-lle]');
 
         lleAutocompleteFields.each(function() {
             var $this = $(this);
-            var url = $this.data('{{name}}-autocomplete-url-lle');
+            var url = $this.data('{{name|lower}}-autocomplete-url-lle');
 
             // select2 config for easyadmin
             $this.select2({
