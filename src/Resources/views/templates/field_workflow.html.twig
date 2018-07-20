@@ -1,0 +1,14 @@
+--{{ item.etat|trans}}--
+{% if view == 'list' %}
+    <br>
+
+    {% for transition in workflow_transitions(item) %}
+        {% if workflow_can(item, transition.name) %}
+            <a href="{{ path('ticket_workflow', { id: item.id , action: 'list', work: transition.name} ) }}" class="btn btn-xs btn-workflow">{{ transition.name|trans }}</a>
+        {% endif %}
+    {% endfor %}
+    
+        <script>
+            $('tr[data-id={{item.id}}]').addClass( "ticket-{{item.etat}}" );
+        </script>
+{% endif %}

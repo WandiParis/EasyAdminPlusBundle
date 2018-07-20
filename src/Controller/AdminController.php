@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+//use Symfony\Component\Workflow\Registry;
 
 class AdminController extends BaseAdminController
 {
@@ -284,6 +285,27 @@ class AdminController extends BaseAdminController
             'masterRequest' => $this->get('request_stack')->getMasterRequest(),
         ));
     }
+
+/*    public function workflowAction( Registry $workflows)
+    {
+        $id = $this->request->query->get('id');
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+
+        $work = $this->request->query->get('work');
+        $workflows = $this->get('workflow.registry');
+        $workflow = $workflows->get($entity);
+
+        try {
+            $workflow->apply($entity, $work);
+            $em->flush();
+
+        } catch (LogicException $exception) {
+        }
+        
+        //return $this->redirectToReferrer();
+    }
+*/
 
     /**
      * Manage translations.
