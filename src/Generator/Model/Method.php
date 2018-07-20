@@ -56,19 +56,7 @@ class Method
      */
     public function buildTitle(string $entityName): void
     {
-        /** @var Translator $translator */
-        $translator = GeneratorTool::getTranslation();
-
-        $splitName = explode('_', $entityName);
-
-        if (empty($splitName) || in_array($entityName, $splitName) || count($splitName) < 2) {
-            $title = $entityName;
-        } else {
-            unset($splitName[0]);
-            $title = implode(' ', $splitName);
-        }
-
-        $this->title = $translator->trans('generator.method.title.'.$this->name, ['%entity%' => $title]);
+        $this->title = "title.".strtolower($entityName).".".$this->name;
     }
 
     /**

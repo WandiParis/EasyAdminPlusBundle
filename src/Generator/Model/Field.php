@@ -92,7 +92,7 @@ class Field
     {
         $structure = [
             'property' => $this->name,
-            'label' => $this->name,
+            'label' => 'field.'.$this->name,
             'type' => $this->forcedType,
             'type_options' => $this->typeOptions,
             'help' => $this->help,
@@ -211,7 +211,7 @@ class Field
     {
         $this->name = $propertyConfig['name'];
         $this->type = $propertyConfig['typeConfig']['easyAdminType'];
-        $this->label = $propertyConfig['name'];
+        $this->label = 'field.'.$propertyConfig['name'];
 
         if ($propertyConfig['typeConfig']['typeForced'] && (empty($propertyConfig['typeConfig']['methodsTypeForced'])
             || !in_array($method->getName(), $propertyConfig['typeConfig']['methodsTypeForced']))) {

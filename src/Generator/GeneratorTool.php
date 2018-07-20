@@ -297,7 +297,7 @@ class GeneratorTool
     {
         return [
             'entity' => $nameEntity,
-            'label' => str_replace('_', ' ', preg_replace('/(?<! )(?<!^)[A-Z]/', ' $0', $nameEntity)),
+            'label' => 'menu.'.strtolower($nameEntity),
         ];
     }
 
