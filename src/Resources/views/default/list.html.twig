@@ -17,7 +17,7 @@
 
     <div class="box box-info">
         <div class="box-header with-border">
-            <h4 class="box-title"><i class="icon fa fa-search"></i>&nbsp;Rechercher</h4>
+            <h4 class="box-title"><i class="icon fa fa-search"></i>&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}</h4>
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             </div>
@@ -44,8 +44,8 @@
         </div><!-- box-body -->
 
         <div class="box-footer">
-            <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">Filtrer</button>
-            <a href="{{ path('easyadmin', app.request.query|merge({ filter_reset: "y" })) }}" class="btn btn-default">Effacer</a>
+            <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}</button>
+            <a href="{{ path('easyadmin', app.request.query|merge({ filter_reset: "y" })) }}" class="btn btn-default">{{'Effacer'|trans({}, 'EasyAdminPlusBundle') }}</a>
         </div>
     </div>
 
@@ -171,7 +171,7 @@
     }
 
     </script>
-    
+
     {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
 {% endblock %}
 
@@ -192,8 +192,8 @@
                         {% if previous_item.rgt > item.lft %}{# we go up #}
                             {% set parent_id = previous_item.id %}
                             {% set tree_parents = tree_parents|merge([{
-                                'id':previous_item.id, 
-                                'lft':previous_item.lft, 
+                                'id':previous_item.id,
+                                'lft':previous_item.lft,
                                 'rgt':previous_item.rgt}]) %}
                         {% else %}
                             {% set tree_parents = tree_parents|slice(0, item.level) %}
