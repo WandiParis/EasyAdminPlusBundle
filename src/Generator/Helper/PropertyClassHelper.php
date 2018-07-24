@@ -452,7 +452,8 @@ class PropertyClassHelper extends AbstractPropertyHelper
         /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
-        if ($range->min && $range->max) {
+
+        if (null !== $range->min && null !== $range->max) {
             if ($range->min == $range->max) {
                 $helpMessage = $translator->trans('generator.range.equal', ['%value%' => $range->min]);
             } else {
@@ -462,10 +463,11 @@ class PropertyClassHelper extends AbstractPropertyHelper
                 ]);
             }
         }
-        if ($range->min && !$range->max) {
+
+        if (is_numeric($range->min) && null === $range->max) {
             $helpMessage = $translator->trans('generator.range.min', ['%min%' => $range->min]);
         }
-        if (!$range->min && $range->max) {
+        if (null === $range->min && is_numeric($range->max)) {
             $helpMessage = $translator->trans('generator.range.max', ['%max%' => $range->max]);
         }
 
@@ -483,7 +485,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
         /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
-        if ($count->min && $count->max) {
+        if (null !== $count->min && null !== $count->max) {
             if ($count->min == $count->max) {
                 $helpMessage = $translator->trans('generator.count.equal', ['%value%' => $count->min]);
             } else {
@@ -493,16 +495,17 @@ class PropertyClassHelper extends AbstractPropertyHelper
                 ]);
             }
         }
-        if ($count->min && !$count->max) {
+
+        if (is_numeric($count->min) && null === $count->max) {
             $helpMessage = $translator->trans('generator.count.min', ['%min%' => $count->min]);
         }
-        if (!$count->min && $count->max) {
+        if (null === $count->min && is_numeric($count->max)) {
             $helpMessage = $translator->trans('generator.count.max', ['%max%' => $count->max]);
         }
 
         $field->setHelp($helpMessage);
     }
-
+    
     /**
      * @param Bic    $bic
      * @param Field  $field
