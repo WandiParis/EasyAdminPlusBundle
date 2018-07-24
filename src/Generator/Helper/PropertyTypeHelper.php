@@ -69,6 +69,10 @@ class PropertyTypeHelper extends AbstractPropertyHelper
             throw new EaException('No vich mappings detected');
         }
 
+        if (!isset((GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()])) {
+            throw new EaException('No vich mappings detected for ' . $uploadableField->getMapping());
+        }
+
         $mapping = (GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()];
 
         if (!isset($mapping['uri_prefix'])) {
@@ -106,7 +110,7 @@ class PropertyTypeHelper extends AbstractPropertyHelper
             if (!isset($typeOptions['attr']['pattern'])) {
                 $regex = '^(?=(\D*[0-9]){0,'.$column->precision.'}$)-?[0-9]*(\.[0-9]{0,'.$column->scale.'})?$';
                 $typeOptions['attr']['pattern'] = $regex;
-                $typeOptions['attr']['title'] = $translator->trans('ea_tool.decimal.title', ['%value%' => $column->scale]);
+                $typeOptions['attr']['title'] = $translator->trans('generator.decimal.title', ['%value%' => $column->scale]);
                 $field->setTypeOptions($typeOptions);
             }
         }
@@ -176,7 +180,7 @@ class PropertyTypeHelper extends AbstractPropertyHelper
                 throw new EAException('Bad fileNameProperty (Vich property)');
             }
             $config = array_values(array_filter(TypeGuesser::$generatorTypesConfiguration, function ($type) {
-                return EasyAdminType::IMAGE == $type['EasyAdminType'];
+                return EasyAdminType::IMAGE == $type['easyAdminType'];
             }))[0];
 
             foreach ($properties as &$property) {
