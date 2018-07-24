@@ -97,4 +97,9 @@ services:
         class:  Lle\EasyAdminPlusBundle\Configuration\ActionConfigPass
         tags:
             - { name: easyadmin.config_pass, priority: 65}
+
+    lle.easy_admin_plus.twig.extension:
+        class: Lle\EasyAdminPlusBundle\Twig\LleEasyAdminPlusTwigExtension
+        tags:
+            - { name: twig.extension }
             
