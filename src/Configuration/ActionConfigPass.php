@@ -250,14 +250,24 @@ class ActionConfigPass implements ConfigPassInterface
     private function getDefaultActionsConfig($view)
     {
         $actions = $this->doNormalizeActionsConfig(array(
-            'delete' => array('name' => 'delete', 'label' => 'action.delete', 'icon' => 'times', 'css_class' => 'btn-xs btn-danger'),
-            'edit' => array('name' => 'edit', 'label' => 'action.edit', 'icon' => 'pencil', 'css_class' => 'btn-xs btn-primary'),
+            'delete' => array('name' => 'delete', 'label' => 'action.delete', 'icon' => 'times', 'css_class' => 'btn btn-danger'),
+            'edit' => array('name' => 'edit', 'label' => 'action.edit', 'icon' => 'pencil', 'css_class' => 'btn btn-primary'),
             'new' => array('name' => 'new', 'label' => 'action.new', 'css_class' => 'btn btn-primary'),
             'search' => array('name' => 'search', 'label' => 'action.search'),
             'show' => array('name' => 'show', 'label' => 'action.show'),
             'list' => array('name' => 'list', 'label' => 'action.list', 'css_class' => 'btn btn-secondary'),
         ));
 
+        // minor tweaks for some action + view combinations
+        if ('list' === $view) {
+            $actions['delete']['title'] = $actions['delete']['label'];
+            $actions['delete']['label'] = '';
+            $actions['delete']['css_class'] = 'btn btn-xs btn-danger';
+            $actions['edit']['title'] = $actions['delete']['label'];
+            $actions['edit']['label'] = '';
+            $actions['edit']['css_class'] = 'btn btn-xs btn-primary';
+            $actions['list']['css_class'] = '';
+        }
         return $actions;
     }
 
