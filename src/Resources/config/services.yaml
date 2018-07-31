@@ -1,3 +1,6 @@
+parameters:
+    lle.service.gedmo_translatable_field_manager.class: Lle\EasyAdminPlusBundle\Service\GedmoTranslatableFieldManager
+
 services:
     lle.easy_admin_plus.translator:
         class: Lle\EasyAdminPlusBundle\Translator\Translator
@@ -102,4 +105,8 @@ services:
         class: Lle\EasyAdminPlusBundle\Twig\LleEasyAdminPlusTwigExtension
         tags:
             - { name: twig.extension }
+
+    lle.service.gedmo_translatable_field_manager:
+        class:  '%lle.service.gedmo_translatable_field_manager.class%'
+        arguments: ["@doctrine"]
             

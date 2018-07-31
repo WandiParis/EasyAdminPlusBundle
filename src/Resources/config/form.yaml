@@ -9,3 +9,9 @@ services:
 
     Lle\BpmBundle\Form\Type\JsonType:
         tags: [form.type]
+
+    Lle.form.gedmo_translatable:
+        class: Lle\EasyAdminPlusBundle\Form\Type\GedmoTranslatableType
+        arguments: ['fr', '%easy_admin_plus.translator.locales%', '@lle.service.gedmo_translatable_field_manager', '@translator']
+        tags:
+           - { name: form.type, alias: lego_gedmo_translatable }

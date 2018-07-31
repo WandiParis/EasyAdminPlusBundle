@@ -87,3 +87,32 @@
     })
 </script>
 {% endblock %}
+
+
+{% block lego_gedmo_translatable_widget %}
+    {% spaceless %}
+        {% set fieldname = form.vars.name %}
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                {% for locale in locales %}
+                    {% set isActiveTab = (locale == currentlocale) ? 'active' : '' %}
+                    {# TAB LABEL #}
+                    <li class="{{ isActiveTab }}">
+                        <a aria-expanded="true" href="{{ '#' ~ fieldname ~ '_' ~ locale }}" data-toggle="tab">
+                            {{ tablabels[locale] }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for locale in locales %}
+                    {% set isActiveTabContent = (locale == currentlocale) ? 'active' : '' %}
+                    {# TAB CONTENT #}
+                    <div class="tab-pane {{ isActiveTabContent }}" id="{{ fieldname ~ '_' ~ locale }}">
+                        {{ form_widget(attribute(form, locale)) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock %}

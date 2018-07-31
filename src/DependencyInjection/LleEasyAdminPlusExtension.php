@@ -34,7 +34,7 @@ class LleEasyAdminPlusExtension extends Extension
         $config = $this->processConfigTranslator($config, $container);
 
         $container->setParameter('easy_admin_plus', $config);
-
+        $container->setParameter('easy_admin_plus.translator.locales', $config['translator']['locales']);
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
         $loader->load('form.yaml');
