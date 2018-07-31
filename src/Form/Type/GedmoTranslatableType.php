@@ -44,7 +44,6 @@ class GedmoTranslatableType extends AbstractType
         $fieldName = $builder->getName();
         $locales = $this->locales;
         $defaultLocale = $this->defaultLocale;
-        // set fields
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($fieldName, $locales, $options) {
             $form = $event->getForm();
             foreach ($locales as $locale) {
