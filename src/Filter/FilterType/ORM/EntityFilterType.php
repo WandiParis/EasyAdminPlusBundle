@@ -58,6 +58,7 @@ class EntityFilterType extends AbstractORMFilterType
             }else{
                 $qb->andWhere($qb->expr()->eq($alias . $col, ':var_' . $uniqueId));
             }
+
             $qb->setParameter('var_' . $uniqueId, $data['value']);
         }
     }

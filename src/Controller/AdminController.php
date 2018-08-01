@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+use Lle\EasyAdminPlusBundle\Lib\QueryHelper;
+
 //use Symfony\Component\Workflow\Registry;
 
 class AdminController extends BaseAdminController
@@ -188,10 +190,10 @@ class AdminController extends BaseAdminController
      * Performs a database query to get all the records related to the given
      * entity. It supports pagination and field sorting.
      *
-     * @param string      $entityConfig
-     * @param string      $entityClass
-     * @param int         $page
-     * @param int         $maxPerPage
+     * @param string $entityConfig
+     * @param string $entityClass
+     * @param int $page
+     * @param int $maxPerPage
      * @param string|null $sortField
      * @param string|null $sortDirection
      * @param string|null $dqlFilter
@@ -206,18 +208,21 @@ class AdminController extends BaseAdminController
 
         $queryBuilder = $this->executeDynamicMethod('create<EntityName>ListQueryBuilder', array($entityClass, $sortDirection, $sortField, $dqlFilter));
         if (isset($entity['filter'])) {
-          foreach($entity['filter']['fields'] as $filterType) {
-            $ftype = $filterType['filtertype'];
-            $ftype->setQueryBuilder($queryBuilder);
-            $ftype->setRequest($this->request);
-            $ftype->setEm($this->em);
+            foreach ($entity['filter']['fields'] as $filterType) {
+                $ftype = $filterType['filtertype'];
+                $ftype->setQueryBuilder($queryBuilder);
+                $ftype->setRequest($this->request);
+                $ftype->setEm($this->em);
 
-            $data = [];
-            if ($ftype->bindRequest($data, $filterType['property'])) {
-              $ftype->setData($data);
-              $ftype->apply($data, $filterType['property'], 'entity.', $filterType['property']);
+                $data = [];
+                if ($ftype->bindRequest($data, str_replace('.', '_', $filterType['property']))) {
+                    $ftype->setData($data);
+                    //$ftype->apply($data, $filterType['property'], 'entity.', $filterType['property']);
+                    $queryHelper = new QueryHelper();
+                    $donnes = $queryHelper->getPath($queryBuilder, 'entity', $filterType['property']);
+                    $ftype->apply($data, str_replace('.', '_',$filterType['property']), $donnes['alias'], $donnes['column']);
+                }
             }
-          }
         }
         $this->dispatch(EasyAdminEvents::POST_LIST_QUERY_BUILDER, array(
             'query_builder' => $queryBuilder,
@@ -242,7 +247,7 @@ class AdminController extends BaseAdminController
 
         // first legend line
         $keys = array_keys($fields);
-        for($i=0, $count=count($keys) ; $i<$count ; $i++){
+        for ($i = 0, $count = count($keys); $i < $count; $i++) {
             $keys[$i] = $fields[$keys[$i]]['label'] ?? $keys[$i];
         }
         fputcsv($handle, $keys, ';', '"');
@@ -263,7 +268,7 @@ class AdminController extends BaseAdminController
         $content = stream_get_contents($handle);
         fclose($handle);
 
-        return new Response("\xEF\xBB\xBF".$content, 200, array(
+        return new Response("\xEF\xBB\xBF" . $content, 200, array(
             'Content-Type' => 'application/force-download',
             'Content-Disposition' => 'attachment; filename="' . sprintf('export-%s-%s.csv', strtolower($this->entity['name']), date('Ymd_His')) . '"'
         ));
@@ -286,26 +291,26 @@ class AdminController extends BaseAdminController
         ));
     }
 
-/*    public function workflowAction( Registry $workflows)
-    {
-        $id = $this->request->query->get('id');
-        $easyadmin = $this->request->attributes->get('easyadmin');
-        $entity = $easyadmin['item'];
+    /*    public function workflowAction( Registry $workflows)
+        {
+            $id = $this->request->query->get('id');
+            $easyadmin = $this->request->attributes->get('easyadmin');
+            $entity = $easyadmin['item'];
 
-        $work = $this->request->query->get('work');
-        $workflows = $this->get('workflow.registry');
-        $workflow = $workflows->get($entity);
+            $work = $this->request->query->get('work');
+            $workflows = $this->get('workflow.registry');
+            $workflow = $workflows->get($entity);
 
-        try {
-            $workflow->apply($entity, $work);
-            $em->flush();
+            try {
+                $workflow->apply($entity, $work);
+                $em->flush();
 
-        } catch (LogicException $exception) {
+            } catch (LogicException $exception) {
+            }
+
+            //return $this->redirectToReferrer();
         }
-        
-        //return $this->redirectToReferrer();
-    }
-*/
+    */
 
     /**
      * Manage translations.
@@ -337,11 +342,11 @@ class AdminController extends BaseAdminController
             // dispatch event
             $fileNames = [];
             $locales = $translator->getLocales();
-            foreach(array_keys($request->request->get('dictionaries')[$domain]) as $fileName){
-                if (!preg_match('/^(.*)\/([^\.]+)\.([^\.]+)$/', $fileName, $match)){
+            foreach (array_keys($request->request->get('dictionaries')[$domain]) as $fileName) {
+                if (!preg_match('/^(.*)\/([^\.]+)\.([^\.]+)$/', $fileName, $match)) {
                     continue;
                 }
-                foreach($locales as $locale){
+                foreach ($locales as $locale) {
                     $fileNames[] = $match[1] . '/' . $match[2] . '.' . $locale . '.' . $match[3];
                 }
             }
