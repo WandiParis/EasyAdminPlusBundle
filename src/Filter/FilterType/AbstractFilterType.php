@@ -26,13 +26,13 @@ abstract class AbstractFilterType implements FilterTypeInterface
 
     /**
      * @param string $columnName The column name
-     * @param string $alias      The alias
+     * @param string $alias The alias
      */
     public function __construct($columnName, $config = array(), $alias = 'b')
     {
         $this->columnName = $columnName;
-        $this->alias      = $alias;
-        $this->hidden = (isset($config['hidden']))? $config['hidden']:false;
+        $this->alias = $alias;
+        $this->hidden = (isset($config['hidden'])) ? $config['hidden'] : false;
         $this->data = [];
     }
 
@@ -54,47 +54,60 @@ abstract class AbstractFilterType implements FilterTypeInterface
         return $this->alias . '.';
     }
 
-    public function isHidden(){
+    public function isHidden()
+    {
         return $this->hidden;
     }
 
-    public function setHidden($hidden){
+    public function setHidden($hidden)
+    {
         $this->hidden = $hidden;
     }
 
-    public function setRequest($request){
+    public function setRequest($request)
+    {
         $this->request = $request;
     }
 
-    public function getRequest(){
+    public function getRequest()
+    {
         return $this->request;
     }
 
-    public function getValueSession($id) {
-      $session = $this->request->getSession();
-      if ($this->request->request->has('reset') && $this->request->request->get('reset') === 'reset') {
-        $session->remove($id);
-        return null;
-      }
-      $new_val = $this->request->request->get($id, null);
-      if ($new_val) {
-        $session->set($id, $new_val);
-        return $new_val;
-      } else {
-        return $session->get($id, null);
-      }
+    public function getValueSession($id)
+    {
+        $session = $this->request->getSession();
+        if ($this->request->request->has('reset') && $this->request->request->get('reset') === 'reset') {
+            $session->remove($id);
+            return null;
+        }
+        $new_val = $this->request->request->get($id, null);
+        if ($new_val) {
+            $session->set($id, $new_val);
+            return $new_val;
+        } else {
+            if (!($this->request->request->has('filter') && $this->request->request->get('filter') === 'filter')) {
+                return $session->get($id, null);
+            } else {
+                $session->remove($id);
+                return null;
+            }
+        }
+
     }
 
-    public function setData($data){
+    public function setData($data)
+    {
         $this->data = $data;
     }
 
-    public function getData(){
+    public function getData()
+    {
         return $this->data;
     }
-    
+
     public function __sleep()
     {
-        return array('columnName','alias','data');
+        return array('columnName', 'alias', 'data');
     }
 }
