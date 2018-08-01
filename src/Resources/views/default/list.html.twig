@@ -45,7 +45,7 @@
 
         <div class="box-footer">
             <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}</button>
-            <a href="{{ path('easyadmin', app.request.query|merge({ filter_reset: "y" })) }}" class="btn btn-default">{{'Effacer'|trans({}, 'EasyAdminPlusBundle') }}</a>
+            <button class="btn btn-default" name="reset" value="reset" type="submit">{{'Effacer'|trans({}, 'EasyAdminPlusBundle') }}</button>
         </div>
     </div>
 

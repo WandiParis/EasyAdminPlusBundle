@@ -72,7 +72,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
 
     public function getValueSession($id) {
       $session = $this->request->getSession();
-      if ($this->request->query->get('filter_reset')) {
+      if ($this->request->request->has('reset') && $this->request->request->get('reset') === 'reset') {
         $session->remove($id);
         return null;
       }
