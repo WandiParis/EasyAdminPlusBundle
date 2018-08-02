@@ -7,7 +7,7 @@ services:
         public: false
         autoconfigure: true
 
-    Lle\BpmBundle\Form\Type\JsonType:
+    Lle\EasyAdminPlusBundle\Form\Type\JsonType:
         tags: [form.type]
 
     Lle.form.gedmo_translatable:
