@@ -59,7 +59,7 @@ class PropertyConfigPass implements ConfigPassInterface
                     $columnName = $fieldConfig['property'];
                     $config = $fieldConfig['config'] ?? [];
                     $reflection_class = new \ReflectionClass($class);
-                    $filterObj = $reflection_class->newInstanceArgs([$columnName, $config]);
+                    $filterObj = $reflection_class->newInstanceArgs([$columnName, $config, 'entity']);
                     $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['code'] = $columnName;
                     $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['filtertype'] = $filterObj;
                     $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['template'] = $filterObj->getTemplate();

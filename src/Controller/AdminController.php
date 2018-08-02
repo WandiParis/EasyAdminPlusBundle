@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
-use Lle\EasyAdminPlusBundle\Lib\QueryHelper;
 
 //use Symfony\Component\Workflow\Registry;
 
@@ -217,9 +216,7 @@ class AdminController extends BaseAdminController
                 $data = [];
                 if ($ftype->bindRequest($data, str_replace('.', '_', $filterType['property']))) {
                     $ftype->setData($data);
-                    //$ftype->apply($data, $filterType['property'], 'entity.', $filterType['property']);
-                    $queryHelper = new QueryHelper();
-                    $donnes = $queryHelper->getPath($queryBuilder, 'entity', $filterType['property']);
+                    $donnes = $ftype->init();
                     $ftype->apply($data, str_replace('.', '_',$filterType['property']), $donnes['alias'], $donnes['column']);
                 }
             }

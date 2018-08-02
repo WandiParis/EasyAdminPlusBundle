@@ -43,9 +43,7 @@ abstract class AbstractORMFilterType extends AbstractFilterType
 
     public function init(){
         $queryHelper = new QueryHelper();
-        $path = $queryHelper->getPath($this->queryBuilder,str_replace('.','',$this->getAlias()),$this->columnName);
-        //echo $this->getAlias().':'.$this->columnName.'  --> '.$path['alias'].$path['column'].'<br/>';
-        return $path;
+        return $queryHelper->getPath($this->queryBuilder,str_replace('.','',$this->getAlias()),$this->columnName);
     }
 
 

@@ -28,7 +28,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
      * @param string $columnName The column name
      * @param string $alias The alias
      */
-    public function __construct($columnName, $config = array(), $alias = 'b')
+    public function __construct($columnName, $config = array(), $alias = 'entity')
     {
         $this->columnName = $columnName;
         $this->alias = $alias;
