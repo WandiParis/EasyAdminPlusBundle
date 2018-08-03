@@ -66,10 +66,12 @@
         {% endif %}
         {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
             {% set referer = app.request.server.get('http-referer')|default('/') %}
-            <a class="btn btn-primary" style="margin-right:5px;" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
-                <i class="fa fa-download"></i>
-                {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
-            </a>
+            {%  for format in _entity_config.export.formats %}
+                <a class="btn btn-primary" style="margin-right:5px;" href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}">
+                    <i class="fa fa-download"></i>
+                    {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }} {{ format }}
+                </a>
+            {%  endfor %}
         {% endif %}
     </div>
 

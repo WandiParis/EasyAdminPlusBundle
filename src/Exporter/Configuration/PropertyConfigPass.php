@@ -3,6 +3,7 @@
 namespace Lle\EasyAdminPlusBundle\Exporter\Configuration;
 
 use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigPassInterface;
+use Lle\EasyAdminPlusBundle\Service\ExportManager;
 
 /**
  * Processes the entity fields to complete their configuration and to treat
@@ -77,6 +78,9 @@ class PropertyConfigPass implements ConfigPassInterface
             foreach (array('export') as $view) {
                 if (!array_key_exists($view, $backendConfig['entities'][$entityName])){
                     continue;
+                }
+                if(!array_key_exists('formats', $backendConfig['entities'][$entityName]['export'])){
+                    $backendConfig['entities'][$entityName]['export']['formats'] = [ExportManager::EXT_CSV];
                 }
                 foreach ($entityConfig[$view]['fields'] as $fieldName => $fieldConfig) {
 

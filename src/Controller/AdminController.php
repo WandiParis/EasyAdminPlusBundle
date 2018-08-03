@@ -159,7 +159,7 @@ class AdminController extends BaseAdminController
             ],
         ]);
 
-        return $this->getExportFile($paginator, $this->config['entities'][$entityName]['export']['fields'], ExportManager::EXT_CSV);
+        return $this->getExportFile($paginator, $this->config['entities'][$entityName]['export']['fields'], $this->request->get('format'));
     }
 
 
