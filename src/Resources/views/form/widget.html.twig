@@ -6,7 +6,7 @@
         window.editor{{ id }}startval = null
         function {{ id }}_load(value, schema){
             var schema = (schema)? schema:{{  schema|raw }};
-            JSONEditor.defaults.options.theme = 'bootstrap2';
+            JSONEditor.defaults.options.theme = '{{ theme }}';
             if(value){
                 window.editor{{ id }}startval = value;
             }
@@ -32,7 +32,8 @@
                 var errors = window.editor{{ id }}.validate();
                 $('#{{ id }}_errors').html("");
                 if(errors.length) {
-                    $('#{{ id }}_errors').html("Erreur schema");
+                    console.log(errors);
+                    //$('#{{ id }}_errors').html("Erreur schema");
                 }
             });
         };
