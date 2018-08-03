@@ -111,6 +111,7 @@ easy_admin:
             delete:
                 # ...
             export:
+                formats: ['csv','xlsx']
                 fields:
                     - { property: 'id', label: 'ID' }
                     - { property: 'title', label: 'Titre' }
