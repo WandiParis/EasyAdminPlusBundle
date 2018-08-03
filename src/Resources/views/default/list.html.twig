@@ -55,20 +55,24 @@
 {% endblock %}
 
 {% block new_action %}
-    {# Do not display EXPORT button if not defined and not granted #}
-    {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
-        {% set referer = app.request.server.get('http-referer')|default('/') %}
-        <div class="button-action">
-            <a class="btn btn-primary" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
+
+    <div class="button-action">
+
+        {% if is_easyadmin_granted(_entity_config, 'new') %}
+        <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ action: _action.name })) }}" target="{{ _action.target }}">
+            {% if _action.icon %}<i class="fa fa-{{ _action.icon }}"></i>{% endif %}
+            {{ _action.label is defined and not _action.label is empty ? _action.label|trans(_trans_parameters) }}
+        </a>
+        {% endif %}
+        {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
+            {% set referer = app.request.server.get('http-referer')|default('/') %}
+            <a class="btn btn-primary" style="margin-right:5px;" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
                 <i class="fa fa-download"></i>
                 {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
             </a>
-        </div>
-    {% endif %}
-    {# Do not display NEW button if not granted #}
-    {% if is_easyadmin_granted(_entity_config, 'new') %}
-        {{ parent() }}
-    {% endif %}
+        {% endif %}
+    </div>
+
 {% endblock %}
 
 

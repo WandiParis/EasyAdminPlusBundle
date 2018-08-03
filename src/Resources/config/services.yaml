@@ -1,5 +1,6 @@
 parameters:
     lle.service.gedmo_translatable_field_manager.class: Lle\EasyAdminPlusBundle\Service\GedmoTranslatableFieldManager
+    lle.service.export_manager.class: Lle\EasyAdminPlusBundle\Service\ExportManager
 
 services:
     lle.easy_admin_plus.translator:
@@ -104,4 +105,9 @@ services:
     lle.service.gedmo_translatable_field_manager:
         class:  '%lle.service.gedmo_translatable_field_manager.class%'
         arguments: ["@doctrine"]
+
+    lle.service.export_manager:
+        public: true
+        class:  '%lle.service.export_manager.class%'
+        arguments: ["@easyadmin.config.manager","@property_accessor"]
             

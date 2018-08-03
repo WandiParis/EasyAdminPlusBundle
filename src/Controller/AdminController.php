@@ -6,6 +6,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminContr
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use EasyCorp\Bundle\EasyAdminBundle\Search\Paginator;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
+use Lle\EasyAdminPlusBundle\Service\ExportManager;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -240,35 +241,9 @@ class AdminController extends BaseAdminController
      */
     public function getExportFile($paginator, $fields)
     {
-        $handle = fopen('php://memory', 'r+');
-
-        // first legend line
-        $keys = array_keys($fields);
-        for ($i = 0, $count = count($keys); $i < $count; $i++) {
-            $keys[$i] = $fields[$keys[$i]]['label'] ?? $keys[$i];
-        }
-        fputcsv($handle, $keys, ';', '"');
-
-        $twig = $this->get('twig');
-        $ea_twig = $twig->getExtension(EasyAdminTwigExtension::class);
-
-        foreach ($paginator as $entity) {
-            $row = [];
-            foreach ($fields as $field) {
-                $value = $ea_twig->renderEntityField($twig, 'list', $this->entity['name'], $entity, $field);
-                $row[] = trim($value);
-            }
-            fputcsv($handle, $row, ';', '"');
-        }
-
-        rewind($handle);
-        $content = stream_get_contents($handle);
-        fclose($handle);
-
-        return new Response("\xEF\xBB\xBF" . $content, 200, array(
-            'Content-Type' => 'application/force-download',
-            'Content-Disposition' => 'attachment; filename="' . sprintf('export-%s-%s.csv', strtolower($this->entity['name']), date('Ymd_His')) . '"'
-        ));
+        $exportManager = $this->get('lle.service.export_manager');
+        $filename = sprintf('export-%s-%s.csv', strtolower($this->entity['name']), date('Ymd_His'));
+        return $exportManager->generateResponse($paginator, $fields, $filename, ExportManager::EXT_CSV);
     }
 
 
