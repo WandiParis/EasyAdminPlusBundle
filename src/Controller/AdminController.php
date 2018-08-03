@@ -159,7 +159,7 @@ class AdminController extends BaseAdminController
             ],
         ]);
 
-        return $this->getExportFile($paginator, $this->config['entities'][$entityName]['export']['fields']);
+        return $this->getExportFile($paginator, $this->config['entities'][$entityName]['export']['fields'], ExportManager::EXT_CSV);
     }
 
 
@@ -239,11 +239,11 @@ class AdminController extends BaseAdminController
      * @param array $fields fields to display
      * @return Response
      */
-    public function getExportFile($paginator, $fields)
+    public function getExportFile($paginator, $fields, $format)
     {
         $exportManager = $this->get('lle.service.export_manager');
-        $filename = sprintf('export-%s-%s.csv', strtolower($this->entity['name']), date('Ymd_His'));
-        return $exportManager->generateResponse($paginator, $fields, $filename, ExportManager::EXT_CSV);
+        $filename = sprintf('export-%s-%s', strtolower($this->entity['name']), date('Ymd_His'));
+        return $exportManager->generateResponse($paginator, $fields, $filename, $format);
     }
 
 

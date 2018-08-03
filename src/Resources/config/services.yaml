@@ -109,5 +109,5 @@ services:
     lle.service.export_manager:
         public: true
         class:  '%lle.service.export_manager.class%'
-        arguments: ["@easyadmin.config.manager","@property_accessor"]
+        arguments: ["@easyadmin.config.manager","@property_accessor","@translator"]
             
