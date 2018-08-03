@@ -14,7 +14,7 @@ translator:
         success: "%nbFiles% fichier a été sauvegardé|]1,+Inf]%nbFiles% fichiers de traduction ont été sauvegardés."
 
 exporter:
-    export: Exporter
+    export: Exporter %format%
 
 generator:
     image:

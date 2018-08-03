@@ -69,7 +69,7 @@
             {%  for format in _entity_config.export.formats %}
                 <a class="btn btn-primary" style="margin-right:5px;" href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}">
                     <i class="fa fa-download"></i>
-                    {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }} {{ format }}
+                    {{ 'exporter.export'|trans({'%format%':format}, 'EasyAdminPlusBundle') }}
                 </a>
             {%  endfor %}
         {% endif %}
