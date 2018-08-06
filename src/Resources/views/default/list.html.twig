@@ -213,7 +213,7 @@
         {% endif %}
         
         {# ROW #}
-        <tr data-id="{{ _item_id }}" {% if parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
+        <tr data-id="{{ _item_id }}" {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
             {# FIELDS #}
             {% for field, metadata in fields %}
                 {% set isSortingField = metadata.property == app.request.get('sortField') %}
