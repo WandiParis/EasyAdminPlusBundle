@@ -181,72 +181,82 @@
     {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
 {% endblock %}
 
-        {% block table_body %}
-            {% if _entity_config.tree is defined and _entity_config.tree %}
-                {% set tree_parents = [] %}
-                {% set previous_item = null %}
-                {% set parent_id = null %}
-            {% endif %}
+{% block table_body %}
 
-            {% for item in paginator.currentPageResults %}
-                {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
-                {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
+    {# Initialize #}
+    {% if _entity_config.tree is defined and _entity_config.tree %}
+        {% set levelShift = (paginator.currentPageResults|first).level %}
+        {% set tree_parents = [] %}
+        {% set previous_item = null %}
+        {% set parent_id = null %}
+    {% endif %}
 
-                {# TREE MANAGMENT #}
-                {% if _entity_config.tree is defined and _entity_config.tree %}
-                    {% if previous_item %}
-                        {% if previous_item.rgt > item.lft %}{# we go up #}
-                            {% set parent_id = previous_item.id %}
-                            {% set tree_parents = tree_parents|merge([{
-                                'id':previous_item.id,
-                                'lft':previous_item.lft,
-                                'rgt':previous_item.rgt}]) %}
-                        {% else %}
-                            {% set tree_parents = tree_parents|slice(0, item.level) %}
-                            {% set parent = tree_parents|last %}
-                            {% set parent_id = parent.id %}
-                        {% endif %}
-                    {% endif %}
-                    <tr data-id="{{ _item_id }}" {% if parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
+    {% for item in paginator.currentPageResults %}
+        {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
+        {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
+
+        {# TREE MANAGMENT #}
+        {% if _entity_config.tree is defined and _entity_config.tree %}
+            {% if previous_item %}
+                {% if previous_item.rgt > item.lft %}{# we go up #}
+                    {% set parent_id = previous_item.id %}
+                    {% set tree_parents = tree_parents|merge([{
+                        'id':previous_item.id,
+                        'lft':previous_item.lft,
+                        'rgt':previous_item.rgt}]) %}
                 {% else %}
-                    <tr data-id="{{ _item_id }}">
+                    {% set tree_parents = tree_parents|slice(0, item.level - levelShift) %}
+                    {% set parent = tree_parents|last %}
+                    {% set parent_id = parent.id %}
                 {% endif %}
-                    {% for field, metadata in fields %}
-                        {% set isSortingField = metadata.property == app.request.get('sortField') %}
-                        {% set _column_label =  (metadata.label ?: field|humanize)|trans(_trans_parameters)  %}
+            {% endif %}
+        {% endif %}
+        
+        {# ROW #}
+        <tr data-id="{{ _item_id }}" {% if parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
+            {# FIELDS #}
+            {% for field, metadata in fields %}
+                {% set isSortingField = metadata.property == app.request.get('sortField') %}
+                {% set _column_label =  (metadata.label ?: field|humanize)|trans(_trans_parameters)  %}
 
-                        <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
-                            {%  if metadata.link is defined %}
-                                <a href="{{ path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id })) }}">
-                            {%  endif %}
-                            {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
-                            {%  if metadata.link is defined %}</a>{% endif %}
-                        </td>
-                    {% endfor %}
-
-                    {% if _list_item_actions|length > 0 %}
-                        {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
-                        <td data-label="{{ _column_label }}" class="actions">
-                        {% block item_actions %}
-                            {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config) %}
-                            {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
-                                actions: _list_item_actions,
-                                request_parameters: _request_parameters,
-                                translation_domain: _entity_config.translation_domain,
-                                trans_parameters: _trans_parameters,
-                                item_id: _item_id
-                            }, with_context = false) }}
-                        {% endblock item_actions %}
-                        </td>
-                    {% endif %}
-                </tr>
-                {% set previous_item = item %}
-
-            {% else %}
-                <tr>
-                    <td class="no-results" colspan="{{ _list_item_actions|length > 0 ? fields|length + 1 : fields|length }}">
-                        {{ 'search.no_results'|trans(_trans_parameters, 'EasyAdminBundle') }}
-                    </td>
-                </tr>
+                <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
+                    {%  if metadata.link is defined %}
+                        <a href="{{ path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id })) }}">
+                    {%  endif %}
+                    {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
+                    {%  if metadata.link is defined %}</a>{% endif %}
+                </td>
             {% endfor %}
-        {% endblock table_body %}
+
+            {# ACTIONS #}
+            {% if _list_item_actions|length > 0 %}
+                {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
+                <td data-label="{{ _column_label }}" class="actions">
+                {% block item_actions %}
+                    {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config) %}
+                    {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
+                        actions: _list_item_actions,
+                        request_parameters: _request_parameters,
+                        translation_domain: _entity_config.translation_domain,
+                        trans_parameters: _trans_parameters,
+                        item_id: _item_id
+                    }, with_context = false) }}
+                {% endblock item_actions %}
+                </td>
+            {% endif %}
+        </tr>
+        {# END ROW #}
+        
+        {% set previous_item = item %}
+
+    {# NO RESULTS #}
+    {% else %}
+        <tr>
+            <td class="no-results" colspan="{{ _list_item_actions|length > 0 ? fields|length + 1 : fields|length }}">
+                {{ 'search.no_results'|trans(_trans_parameters, 'EasyAdminBundle') }}
+            </td>
+        </tr>
+    {% endfor %}
+
+{% endblock table_body %}
+
