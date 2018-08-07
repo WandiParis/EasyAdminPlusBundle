@@ -142,6 +142,47 @@ In this example, we:
 
 -------
 
+### ADD FORMAT EXPORTER
+
+```yaml
+App\Exporter\XmlExporter:
+    tags: [lle.exporter]
+```
+
+```php
+use Symfony\Component\HttpFoundation\Response;
+use Lle\EasyAdminPlusBundle\Service\Exporter\ExporterInterface;
+
+class XmlExporter implements ExporterInterface
+{
+
+    public function generateResponse(array $data, string $filename): Response
+    {
+        /* your code */
+        return $response;
+    }
+
+    public function getFormat():string
+    {
+        return 'xml';
+    }
+
+}
+```
+
+```yaml
+# config/packages/easy_admin.yaml
+easy_admin:
+    entities:
+        Product:
+            class: App\Entity\Product
+            #...
+            export:
+                formats: ['xml']
+                fields:
+                    # ...
+```
+
 ### ACL
 
 Thanks to [ACL](chapter-4.md) feature, you can restrict `Export` action to a specific `role`.

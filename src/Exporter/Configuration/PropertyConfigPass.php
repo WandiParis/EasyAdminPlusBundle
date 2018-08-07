@@ -80,7 +80,7 @@ class PropertyConfigPass implements ConfigPassInterface
                     continue;
                 }
                 if(!array_key_exists('formats', $backendConfig['entities'][$entityName]['export'])){
-                    $backendConfig['entities'][$entityName]['export']['formats'] = [ExportManager::EXT_CSV];
+                    $backendConfig['entities'][$entityName]['export']['formats'] = ['csv'];
                 }
                 foreach ($entityConfig[$view]['fields'] as $fieldName => $fieldConfig) {
 

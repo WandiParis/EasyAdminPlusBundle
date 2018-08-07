@@ -1,6 +1,8 @@
 parameters:
     lle.service.gedmo_translatable_field_manager.class: Lle\EasyAdminPlusBundle\Service\GedmoTranslatableFieldManager
     lle.service.export_manager.class: Lle\EasyAdminPlusBundle\Service\ExportManager
+    lle.service.csv_exporter.class: Lle\EasyAdminPlusBundle\Service\Exporter\CsvExporter
+    lle.service.xlsx_exporter.class: Lle\EasyAdminPlusBundle\Service\Exporter\XlsxExporter
 
 services:
     lle.easy_admin_plus.translator:
@@ -106,8 +108,19 @@ services:
         class:  '%lle.service.gedmo_translatable_field_manager.class%'
         arguments: ["@doctrine"]
 
+
+
+    lle.service.xlsx_exporter:
+        class:  '%lle.service.xlsx_exporter.class%'
+        tags: [lle.exporter]
+
+    lle.service.csv_exporter:
+        class:  '%lle.service.csv_exporter.class%'
+        tags: [lle.exporter]
+
+
     lle.service.export_manager:
         public: true
         class:  '%lle.service.export_manager.class%'
-        arguments: ["@easyadmin.config.manager","@property_accessor","@translator"]
+        arguments: ["@easyadmin.config.manager","@property_accessor","@translator", !tagged lle.exporter]
             
