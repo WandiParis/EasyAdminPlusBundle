@@ -138,7 +138,7 @@ class AdminController extends BaseAdminController
         $this->dispatch(EasyAdminEvents::PRE_LIST);
         $paginator = $this->findFiltered(
             $this->entity, $this->entity['class'],
-            $this->request->query->get('page', 1),
+            1,
             PHP_INT_MAX, $this->request->query->get('sortField'),
             $this->request->query->get('sortDirection'),
             $this->entity['list']['dql_filter']);
