@@ -4,9 +4,6 @@ namespace Lle\EasyAdminPlusBundle\Controller;
 
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
-use EasyCorp\Bundle\EasyAdminBundle\Search\Paginator;
-use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
-use Lle\EasyAdminPlusBundle\Service\ExportManager;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -138,14 +135,14 @@ class AdminController extends BaseAdminController
         $this->config = $this->get('lle.easy_admin_plus.exporter.configuration.property_config_pass')->process($this->config);
         $this->config = $this->get('lle.easy_admin_plus.exporter.configuration.template_config_pass')->process($this->config);
 
-        // get paginator from search
         $this->dispatch(EasyAdminEvents::PRE_LIST);
-        $searchableFields = $this->entity['search']['fields'];
-        $paginator = $this->findBy($this->entity['class'],
-            $this->request->query->get('query'), $searchableFields, 1, PHP_INT_MAX,
-            $this->request->query->get('sortField'),
+        $paginator = $this->findFiltered(
+            $this->entity, $this->entity['class'],
+            $this->request->query->get('page', 1),
+            PHP_INT_MAX, $this->request->query->get('sortField'),
             $this->request->query->get('sortDirection'),
-            $this->entity['search']['dql_filter']);
+            $this->entity['list']['dql_filter']);
+
         $fields = $this->entity['list']['fields'];
         $this->dispatch(EasyAdminEvents::POST_LIST, [
             'fields' => $fields,
@@ -159,7 +156,9 @@ class AdminController extends BaseAdminController
             ],
         ]);
 
-        return $this->getExportFile($paginator, $this->config['entities'][$entityName]['export']['fields'], $this->request->get('format'));
+        $exportManager = $this->get('lle.service.export_manager');
+        $filename = sprintf('export-%s-%s', strtolower($this->entity['name']), date('Ymd_His'));
+        return $exportManager->generateResponse($paginator, $this->config['entities'][$entityName]['export']['fields'], $filename, $this->request->get('format'));
     }
 
 
@@ -229,21 +228,6 @@ class AdminController extends BaseAdminController
         ));
 
         return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
-    }
-
-
-    /**
-     * Format CSV file
-     *
-     * @param Paginator $paginator recordsets to export
-     * @param array $fields fields to display
-     * @return Response
-     */
-    public function getExportFile($paginator, $fields, $format)
-    {
-        $exportManager = $this->get('lle.service.export_manager');
-        $filename = sprintf('export-%s-%s', strtolower($this->entity['name']), date('Ymd_His'));
-        return $exportManager->generateResponse($paginator, $fields, $filename, $format);
     }
 
 
