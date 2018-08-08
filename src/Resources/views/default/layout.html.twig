@@ -5,9 +5,11 @@
     <script src="{{ asset('bundles/lleeasyadminplus/javascript/json-editor.min.js') }}"></script>
     <script src="{{ asset('bundles/lleeasyadminplus/javascript/jquery.treetable.js') }}"></script>
     <script src="{{ asset('bundles/lleeasyadminplus/javascript/jQueryUI/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('bundles/lleeasyadminplus/javascript/jQueryUI/i18n/datepicker-' ~ app.request.locale ~ '.js') }}"></script>
     <script src="{{ asset('bundles/lleeasyadminplus/javascript/jQueryUI/jqueryuidatetimepicker.js') }}"></script>
-    <script src="{{ asset('bundles/lleeasyadminplus/javascript/jQueryUI/i18n/addon/jquery-ui-timepicker-' ~ app.request.locale ~ '.js') }}"></script>
+    {% if app.request.locale != 'en' %}
+        <script src="{{ asset('bundles/lleeasyadminplus/javascript/jQueryUI/i18n/datepicker-' ~ app.request.locale ~ '.js') }}"></script>
+        <script src="{{ asset('bundles/lleeasyadminplus/javascript/jQueryUI/i18n/addon/jquery-ui-timepicker-' ~ app.request.locale ~ '.js') }}"></script>
+    {%  endif %}
 {% endblock %}
 
 {% block head_stylesheets %}
