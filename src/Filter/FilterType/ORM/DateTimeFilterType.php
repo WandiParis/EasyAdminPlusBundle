@@ -31,10 +31,13 @@ class DateTimeFilterType extends AbstractORMFilterType
     {
         if (isset($data['value']) && isset($data['comparator'])) {
             /** @var DateTime $datetime */
-            $date = empty($data['value']['date']) ? date('d/m/Y') : $data['value']['date'];
-            $time = empty($data['value']['time']) ? date('H:i')   : $data['value']['time'];
-            $datetime = DateTime::createFromFormat('d/m/Y H:i', $date . ' ' . $time)->format('Y-m-d H:i');
-
+            [$date, $time] = [null,null];
+            if(strstr($data['value']['date'], ' ')) {
+                [$date, $time] = explode(' ', $data['value']['date']);
+            }
+            $date = empty($date) ? date('d/m/Y') : $date;
+            $time = empty($time) ? date('H:i')   : $time;
+            $datetime = DateTime::createFromFormat('d/m/Y H:i', $date . ' ' . $time);
             switch ($data['comparator']) {
                 case 'before':
                     $this->queryBuilder->andWhere($this->queryBuilder->expr()->lte($alias . $col, ':var_' . $uniqueId));
@@ -42,8 +45,7 @@ class DateTimeFilterType extends AbstractORMFilterType
                 case 'after':
                     $this->queryBuilder->andWhere($this->queryBuilder->expr()->gt($alias . $col, ':var_' . $uniqueId));
                     break;
-                case 'equals':
-                    $datetime = DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+                case 'equal':
                     $this->queryBuilder->andWhere($alias . $col.' = :var_' . $uniqueId);
                     break;
             }

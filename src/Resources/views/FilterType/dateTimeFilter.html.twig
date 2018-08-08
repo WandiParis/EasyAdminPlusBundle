@@ -1,41 +1,43 @@
-<select name="{{nameprefix}}comparator{{namesuffix}}">
-    <option value="before" {% if data.comparator is defined and data.comparator == "before" %} selected="selected" {% endif %}>before</option>
-    <option value="after" {% if data.comparator is defined and data.comparator == "after" %} selected="selected" {% endif %}>after</option>
-    <option value="equals" {% if data.comparator is defined and data.comparator == "equals" %} selected="selected" {% endif %}>equals</option>
-</select>
-<input type="text" class="input-small form_datepicker{{ nameprefix }}{{ namesuffix }}" name="{{nameprefix}}value{{namesuffix}}[date]" {% if data.value['date'] is defined %}value="{{data.value['date']}}"{% endif %} />
-<input type="text" class="input-small form_timepicker{{ nameprefix }}{{ namesuffix }}" name="{{nameprefix}}value{{namesuffix}}[time]" {% if data.value['time'] is defined %}value="{{data.value['time']}}"{% endif %} />
-{% if nameprefix != "" and namesuffix != "" %}
-	<script>
-    	$(document).ready(function() {
-            $('.form_datepicker{{ nameprefix }}{{ namesuffix }}').datepicker({'format' : 'dd/mm/yyyy'});
-        	$('.form_datepicker{{ nameprefix }}{{ namesuffix }}').datepicker('setStartDate', '{{ datePicker_startDate }}');
-        	$('.form_datepicker{{ nameprefix }}{{ namesuffix }}').inputmask("date");
+<div class="input-group">
+    <div class="input-group-btn">
 
-            $(".form_timepicker{{ nameprefix }}{{ namesuffix }}").inputmask("hh:mm");
-            $(".form_timepicker{{ nameprefix }}{{ namesuffix }}").addClass('form_timepicker');
-            $(".form_timepicker{{ nameprefix }}{{ namesuffix }}").timepicker({
-                'showMeridian': false,
-                'minuteStep': 1,
-                'defaultTime': '00:00'
-            });
 
-        });
-	</script>
-{% else %}
-	<script>
-    	$(document).ready(function() {
-            $('.form_datepicker').datepicker({'format' : 'dd/mm/yyyy'});
-        	$('.form_datepicker').datepicker('update');
-        	$('.form_datepicker').inputmask("date");
+        <button type="button" class="btn btn-default dropdown-toggle {{ nameprefix }}button{{ namesuffix }}"
+                data-toggle="dropdown" aria-expanded="false">
 
-            $(".form_timepicker").inputmask("hh:mm");
-            $(".form_timepicker").addClass('form_timepicker');
-            $(".form_timepicker").timepicker({
-                'showMeridian': false,
-                'minuteStep': 1,
-                'defaultTime': '00:00'
-            });
-        });
-	</script>
-{% endif %}
+            <i title="Avant le" class="fa fa-angle-left before"></i>
+            <i title="Après le" class="fa fa-angle-right after"></i>
+            <i title="Le" class="fa fa-calendar-o equal"></i>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
+                                       onclick="return lle.filter_set_button('#{{ nameprefix }}comparator{{ namesuffix }}','.{{ nameprefix }}button{{ namesuffix }}','equal');">
+                    <i class="fa fa-calendar-o"></i>Le</a>
+            </li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
+                                       onclick="return lle.filter_set_button('#{{ nameprefix }}comparator{{ namesuffix }}','.{{ nameprefix }}button{{ namesuffix }}','before');">
+                    <i class="fa fa-angle-left"></i>Avant le</a>
+            </li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
+                                       onclick="return lle.filter_set_button('#{{ nameprefix }}comparator{{ namesuffix }}','.{{ nameprefix }}button{{ namesuffix }}','after');">
+                    <i class="fa fa fa-angle-right"></i>Aprés le</a>
+            </li>
+
+        </ul>
+
+
+    </div><!-- /btn-group -->
+    <input type="hidden" class="form-control" id="{{ nameprefix }}comparator{{ namesuffix }}"
+           name="{{ nameprefix }}comparator{{ namesuffix }}"
+           {% if data.comparator is defined %}value="{{ data.comparator }}"{% endif %}>
+    <input type="text" class="input-small form-control form_datepicker{{ nameprefix }}{{ namesuffix }}" name="{{nameprefix}}value{{namesuffix}}[date]" {% if data.value['date'] is defined %}value="{{data.value['date']}}"{% endif %} />
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.form_datepicker{{ nameprefix }}{{ namesuffix }}').datetimepicker({'format' : 'dd/mm/yyyy'});
+        lle.filter_set_button('#{{ nameprefix }}comparator{{ namesuffix }}', '.{{ nameprefix }}button{{ namesuffix }}', '{% if data.comparator is defined %}{{ data.comparator }}{% else %}equal{% endif %}');
+    });
+</script>
+

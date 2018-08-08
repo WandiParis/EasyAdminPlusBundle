@@ -26,3 +26,7 @@ pre.listing {
 pre.listing b {
   color: #f00;
 }
+
+.ui-datepicker-div{
+  z-index:3;
+}

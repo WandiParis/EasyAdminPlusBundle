@@ -32,6 +32,9 @@
   </div>
 </div>
 <script>
+$(function(){
+    $("#_{{nameprefix}}value_from{{namesuffix}}, #_{{nameprefix}}value_to{{namesuffix}}" ).datepicker();
+});
 $('.{{nameprefix}}choices-from-to{{namesuffix}}').change(function(e){
   var value = $(this).val();
   $('.{{nameprefix}}choices-from-to{{namesuffix}}').val('');
