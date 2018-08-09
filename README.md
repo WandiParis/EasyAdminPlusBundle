@@ -22,7 +22,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 ### Install
 
 ```shell
-$ composer require lle/easyadmin-plus-bundle
+$ composer require 2lenet/easyadmin-plus-bundle
 ```
 
 ### Replace EasyAdmin controller
