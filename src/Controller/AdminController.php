@@ -226,7 +226,7 @@ class AdminController extends BaseAdminController
             'sort_field' => $sortField,
             'sort_direction' => $sortDirection,
         ));
-
+        $page = ($this->request->request->has('filter'))? 1:$page;
         return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
     }
 

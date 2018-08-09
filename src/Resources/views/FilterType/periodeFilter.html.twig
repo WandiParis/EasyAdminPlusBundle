@@ -17,7 +17,7 @@
   <input 
     type="text" 
     name="{{nameprefix}}value{{namesuffix}}[from]" 
-    class="form-control datepicker form_datepicker" 
+    class="form-control form_datepicker"
     id="_{{nameprefix}}value_from{{namesuffix}}"  
      placeholder="du"
     {% if data.value is defined and data.value.from is defined %}value="{{data.value.from}}"{% endif %} />
@@ -25,7 +25,7 @@
   <div class="col-md-6">
   <input type="text" 
     name="{{nameprefix}}value{{namesuffix}}[to]" 
-    class="form-control datepicker form_datepicker" 
+    class="form-control form_datepicker"
     id="_{{nameprefix}}value_to{{namesuffix}}"  
      placeholder="au"
     {% if data.value is defined and data.value.to is defined %}value="{{data.value.to}}"{% endif %} />
