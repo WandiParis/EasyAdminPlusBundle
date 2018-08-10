@@ -31,7 +31,8 @@ class MenuHelper
                 && isset($entry['entity'])
                 && !$this->adminAuthorizationChecker->isEasyAdminGranted(
                     $entitiesConfig[$entry['entity']],
-                    isset($entry['params']) && isset($entry['params']['action']) ? $entry['params']['action'] : 'list'
+                    isset($entry['params']) && isset($entry['params']['action']) ? $entry['params']['action'] : 'list',
+                    null
                 )
             ) {
                 unset($menuConfig[$key]);
