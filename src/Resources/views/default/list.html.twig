@@ -181,82 +181,251 @@
     {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
 {% endblock %}
 
-{% block table_body %}
+{% block main %}
 
-    {# Initialize #}
-    {% if _entity_config.tree is defined and _entity_config.tree %}
-        {% set levelShift = (paginator.currentPageResults|first).level %}
-        {% set tree_parents = [] %}
-        {% set previous_item = null %}
-        {% set parent_id = null %}
+    {% if _entity_config.list.hasBatchActions %}
+        <form action="#" method="POST" name="bulkform">
     {% endif %}
 
-    {% for item in paginator.currentPageResults %}
-        {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
-        {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
+    {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
 
-        {# TREE MANAGMENT #}
-        {% if _entity_config.tree is defined and _entity_config.tree %}
-            {% if previous_item %}
-                {% if previous_item.rgt > item.lft %}{# we go up #}
-                    {% set parent_id = previous_item.id %}
-                    {% set tree_parents = tree_parents|merge([{
-                        'id':previous_item.id,
-                        'lft':previous_item.lft,
-                        'rgt':previous_item.rgt}]) %}
-                {% else %}
-                    {% set tree_parents = tree_parents|slice(0, item.level - levelShift) %}
-                    {% set parent = tree_parents|last %}
-                    {% set parent_id = parent.id %}
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+        {% block table_head %}
+            <tr>
+
+                {% if _entity_config.list.hasBatchActions %}
+                    <td data-priority="0" style="width: 30px;">
+                        <input type="checkbox" id="js-all-bulk-checkbox">
+                    </td>
                 {% endif %}
-            {% endif %}
-        {% endif %}
-        
-        {# ROW #}
-        <tr data-id="{{ _item_id }}" {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
-            {# FIELDS #}
-            {% for field, metadata in fields %}
-                {% set isSortingField = metadata.property == app.request.get('sortField') %}
-                {% set _column_label =  (metadata.label ?: field|humanize)|trans(_trans_parameters)  %}
+                
+                {% for field, metadata in fields %}
+                    {% set isSortingField = metadata.property == app.request.get('sortField')|split('.')|first %}
+                    {% set nextSortDirection = isSortingField ? (app.request.get('sortDirection') == 'DESC' ? 'ASC' : 'DESC') : 'DESC' %}
+                    {% set _column_label = (metadata.label ?: field|humanize)|trans(_trans_parameters) %}
+                    {% set _column_icon = isSortingField ? (nextSortDirection == 'DESC' ? 'fa-caret-up' : 'fa-caret-down') : 'fa-sort' %}
 
-                <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
-                    {%  if metadata.link is defined %}
-                        <a href="{{ path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id })) }}">
-                    {%  endif %}
-                    {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
-                    {%  if metadata.link is defined %}</a>{% endif %}
-                </td>
+                    <th data-property-name="{{ metadata.property }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.virtual ? 'virtual' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
+                        {% if metadata.sortable %}
+                            <a href="{{ path('easyadmin', _request_parameters|merge({ page: 1, sortField: metadata.property, sortDirection: nextSortDirection })) }}">
+                                <i class="fa {{ _column_icon }}"></i>
+                                {{ _column_label|raw }}
+                            </a>
+                        {% else %}
+                            <span>{{ _column_label|raw }}</span>
+                        {% endif %}
+                    </th>
+                {% endfor %}
+
+                {% if _list_item_actions|length > 0 %}
+                    <th  {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
+                        <span>{{ 'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') }}</span>
+                    </th>
+                {% endif %}
+            </tr>
+        {% endblock table_head %}
+        </thead>
+
+        <tbody>
+
+        {% block table_body %}
+
+            {# Initialize #}
+            
+            {% if _entity_config.tree is defined and _entity_config.tree %}
+                {% set levelShift = (paginator.currentPageResults|first).level %}
+                {% set tree_parents = [] %}
+                {% set previous_item = null %}
+                {% set parent_id = null %}
+            {% endif %}
+
+            {% for item in paginator.currentPageResults %}
+                {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
+                {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
+
+                {# TREE MANAGMENT #}
+                {% if _entity_config.tree is defined and _entity_config.tree %}
+                    {% if previous_item %}
+                        {% if previous_item.rgt > item.lft %}{# we go up #}
+                            {% set parent_id = previous_item.id %}
+                            {% set tree_parents = tree_parents|merge([{
+                                'id':previous_item.id,
+                                'lft':previous_item.lft,
+                                'rgt':previous_item.rgt}]) %}
+                        {% else %}
+                            {% set tree_parents = tree_parents|slice(0, item.level - levelShift) %}
+                            {% set parent = tree_parents|last %}
+                            {% set parent_id = parent.id %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                
+                {# ROW #}
+                <tr data-id="{{ _item_id }}" {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
+                    {% if _entity_config.list.hasBatchActions %}
+                        <th><input type="checkbox" name="ids[]" value="{{ _item_id }}" class="js-bulk-checkbox"></th>
+                    {% endif %}
+
+                    {# FIELDS #}
+                    {% for field, metadata in fields %}
+                        {% set isSortingField = metadata.property == app.request.get('sortField') %}
+                        {% set _column_label =  (metadata.label ?: field|humanize)|trans(_trans_parameters)  %}
+
+                        <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
+                            {%  if metadata.link is defined %}
+                                <a href="{{ path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id })) }}">
+                            {%  endif %}
+                            {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
+                            {%  if metadata.link is defined %}</a>{% endif %}
+                        </td>
+                    {% endfor %}
+
+                    {# ACTIONS #}
+                    {% if _list_item_actions|length > 0 %}
+                        {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
+                        <td data-label="{{ _column_label }}" class="actions">
+                        {% block item_actions %}
+                            {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, [], item) %}
+                            {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
+                                actions: _list_item_actions,
+                                request_parameters: _request_parameters,
+                                translation_domain: _entity_config.translation_domain,
+                                trans_parameters: _trans_parameters,
+                                item_id: _item_id
+                            }, with_context = false) }}
+                        {% endblock item_actions %}
+                        </td>
+                    {% endif %}
+                </tr>
+                {# END ROW #}
+                
+                {% set previous_item = item %}
+
+            {# NO RESULTS #}
+            {% else %}
+                <tr>
+                    <td class="no-results" colspan="{{ _list_item_actions|length > 0 ? fields|length + 1 : fields|length }}">
+                        {{ 'search.no_results'|trans(_trans_parameters, 'EasyAdminBundle') }}
+                    </td>
+                </tr>
             {% endfor %}
 
-            {# ACTIONS #}
-            {% if _list_item_actions|length > 0 %}
-                {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
-                <td data-label="{{ _column_label }}" class="actions">
-                {% block item_actions %}
-                    {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, [], item) %}
-                    {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
-                        actions: _list_item_actions,
-                        request_parameters: _request_parameters,
-                        translation_domain: _entity_config.translation_domain,
-                        trans_parameters: _trans_parameters,
-                        item_id: _item_id
-                    }, with_context = false) }}
-                {% endblock item_actions %}
-                </td>
-            {% endif %}
-        </tr>
-        {# END ROW #}
-        
-        {% set previous_item = item %}
+        {% endblock table_body %}
+        </tbody>
+    </table>
+    </div>
 
-    {# NO RESULTS #}
-    {% else %}
-        <tr>
-            <td class="no-results" colspan="{{ _list_item_actions|length > 0 ? fields|length + 1 : fields|length }}">
-                {{ 'search.no_results'|trans(_trans_parameters, 'EasyAdminBundle') }}
-            </td>
-        </tr>
-    {% endfor %}
+    {% block batchActions %}
+        {% if _entity_config.list.hasBatchActions %}
+                <div class="row">
+                    <div class="col-md-12 btn-group">
+                        {% for action in _entity_config.list.batchs %}
+                            {% if action.role is null or is_granted(action.role) %}
+                                {% if action.template is not null %}
+                                    {% include action.template with {'action': action} %}
+                                {% elseif action.choices %}
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-sm-4" for="bul_action_{{ action.name }}">{{ action.label }}</label>
+                                            <div class="col-sm-8">
+                                                <select id="bul_action_{{ action.name }}" name="value_{{ action.name }}" onchange="return doBulkAction('')" class="select2">
+                                                    <option value=""></option>
+                                                    {% for key,value in action.choices %}
+                                                        <option value="{{ key }}">{{ value }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <a href="#" onclick="return doBulkAction('')" class="btn btn-default disabled js-bulk-button pull-right">
+                                        {% if action.icon is not null %}
+                                            <i class="icon-{{ action.icon }} }}"></i> {{ action.label }}
+                                        {% else %}
+                                            {{ action.label }}
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <script>
+                    function doBulkAction(url) {
+                        // document.bulkform.action = url;
+                        document.bulkform.submit();
 
-{% endblock table_body %}
+                        return false;
+                    }
+
+
+                    function validateBulkCheckboxes() {
+                        var allChecked = true;
+                        var oneChecked = false;
+
+                        var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
+                        for (var i=0; i<checkboxes.length; i++) {
+                            var cb = checkboxes[i];
+                            if (cb.checked == true) {
+                                oneChecked = true;
+                            } else {
+                                allChecked = false;
+                            }
+                        }
+
+                        $('#js-all-bulk-checkbox').prop('checked', allChecked);
+
+                        if (oneChecked) {
+                            $('.js-bulk-button').removeClass('disabled');
+                        } else {
+                            $('.js-bulk-button').addClass('disabled');
+                        }
+                    }
+
+                    var allCheckbox = document.getElementById('js-all-bulk-checkbox');
+                    allCheckbox.onchange = function() {
+                        if (allCheckbox.checked == true) {
+                            $('.js-bulk-checkbox').prop('checked', true);
+                            $('.js-bulk-button').removeClass('disabled');
+                        } else {
+                            $('.js-bulk-checkbox').prop('checked', false);
+                            $('.js-bulk-button').addClass('disabled');
+                        }
+                    };
+
+                    var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
+                    for (var key in checkboxes) {
+                        checkboxes[key].onchange = validateBulkCheckboxes;
+                    }
+                </script>
+            </form>
+        {% endif %}
+
+    {% endblock batchActions %}
+
+
+    {% block paginator %}
+        {{ include(_entity_config.templates.paginator) }}
+    {% endblock paginator %}
+
+    {% block delete_form %}
+        {% set referer = paginator.currentPage == paginator.nbPages and 1 != paginator.currentPage and 1 == paginator.currentPageResults|length
+            ? path('easyadmin', app.request.query|merge({ page: app.request.query.get('page') - 1 }))
+            : app.request.requestUri
+        %}
+
+        {{ include('@EasyAdmin/default/includes/_delete_form.html.twig', {
+            view: 'list',
+            referer: referer|url_encode,
+            delete_form: delete_form_template,
+            _translation_domain: _entity_config.translation_domain,
+            _trans_parameters: _trans_parameters,
+            _entity_config: _entity_config,
+        }, with_context = false) }}
+    {% endblock delete_form %}
+
+{% endblock %}
+
 

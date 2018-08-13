@@ -64,6 +64,19 @@ services:
         tags:
             - { name: easyadmin.config_pass }
 
+
+    lle.easy_admin_plus.batch.configuration.normalizer_config_pass:
+        class: Lle\EasyAdminPlusBundle\Batch\Configuration\NormalizerConfigPass
+        public: true
+        tags:
+            - { name: easyadmin.config_pass }
+
+    lle.easy_admin_plus.batch.configuration.property_config_pass:
+        class: Lle\EasyAdminPlusBundle\Batch\Configuration\PropertyConfigPass
+        public: true
+        tags:
+            - { name: easyadmin.config_pass }
+
     lle.easy_admin_plus.generator.base:
         abstract: true
         autowire: true
