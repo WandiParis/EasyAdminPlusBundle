@@ -24,8 +24,10 @@
 <div class="nav-tabs-custom">
   <ul class="nav nav-tabs">
     <li class="active"><a href="#general" data-toggle="tab" aria-expanded="true">{{'tab.main'|trans({},'EasyAdminPlusBundle')}}</a></li>
+    {% set hasTab = false %}
     {% for field, metadata in fields    %}
       {% if metadata.type == 'tab' %}
+        {% set hasTab = true %}
         <li class="">
           <a href="#{{metadata.id}}" data-toggle="tab" aria-expanded="false">{{metadata.label|trans()}}
           </a>
@@ -105,8 +107,12 @@
                   </div></div></div>
               {% endif %}
           {% endblock %}
+    {% if hasTab == false %}
         </div>
+        <!-- /.tab-row -->
+      </div>
       <!-- /.tab-pane -->
+    {% endif %}
     </div>
     <!-- /.tab-content -->
   </div>
