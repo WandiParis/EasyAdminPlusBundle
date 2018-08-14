@@ -389,7 +389,7 @@ class AdminController extends BaseAdminController
         if(array_key_exists($name, $batchs)) {
             $service = $this->get($batchs[$name]['service']);
 
-            $service->execute($this->entity, $ids);
+            $service->execute($this->request, $this->entity, $ids);
             
         }
 

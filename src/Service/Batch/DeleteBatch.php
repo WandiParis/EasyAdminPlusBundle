@@ -21,7 +21,7 @@ class DeleteBatch
         $this->doctrine = $doctrine;
     }
 
-    public function execute(array $entityConfig, $ids) 
+    public function execute($request, array $entityConfig, $ids) 
     {
         if (null === $this->manager = $this->doctrine->getManagerForClass($entityConfig['class'])) {
             throw new \RuntimeException(sprintf('There is no Doctrine Entity Manager defined for the "%s" class', $entityConfig['class']));
@@ -31,6 +31,8 @@ class DeleteBatch
             $this->deleteItem($entityConfig, $itemId);
 
         }
+        $this->manager->flush();
+
     }
 
     /**
@@ -52,9 +54,6 @@ class DeleteBatch
         }
 
         $this->manager->remove($entity);
-        $this->manager->flush();
-
-        return $entity;
     }
 
 }
