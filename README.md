@@ -46,3 +46,4 @@ easy_admin_bundle:
 5. [Export Action](doc/chapter-5.md)
 6. [Custom Form Types](doc/chapter-7.md)
 7. [Nested Tree](doc/chapter-8.md)
+9. [Batch Action](doc/chapter-10.md)
