@@ -98,7 +98,7 @@ class AdminController extends BaseAdminController
     {
         if ($checkRole) {
             return false === in_array($actionName, $this->entity['disabled_actions'], true) &&
-                $this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName);
+                $this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName, null);
         }
 
         return parent::isActionAllowed($actionName);
