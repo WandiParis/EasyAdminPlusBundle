@@ -98,7 +98,7 @@ class AdminController extends BaseAdminController
     {
         if ($checkRole) {
             return false === in_array($actionName, $this->entity['disabled_actions'], true) &&
-                $this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName);
+                $this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->entity, $actionName, null);
         }
 
         return parent::isActionAllowed($actionName);
@@ -379,5 +379,30 @@ class AdminController extends BaseAdminController
                 'config' => $this->getParameter('easyadmin.config'),
             ]
         );
+    }
+
+
+    /**
+     * batch action.
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function batchAction()
+    {
+        $name = $this->request->request->get('name') ?? $this->request->query->get('name');
+        $ids = $this->request->request->get('ids') ?? $this->request->query->get('ids');
+
+        $batchs = $this->entity['list']['batchs'];
+        
+        if(array_key_exists($name, $batchs)) {
+            $service = $this->get($batchs[$name]['service']);
+
+            $service->execute($this->request, $this->entity, $ids);
+            
+        }
+
+        return $this->redirectToReferrer();
+
     }
 }
