@@ -2,7 +2,7 @@
 
 {# Do not display SEARCH form if not granted #}
 {% block search_action %}
-    {% if _entity_config.search is defined and is_easyadmin_granted(_entity_config, 'search') %}
+    {% if _entity_config.search is defined and is_easyadmin_granted(_entity_config, 'search', null) %}
         {# Do not display SEARCH at all #}
         {# { parent() } #}
     {% endif %}
@@ -58,13 +58,13 @@
 
     <div class="button-action">
 
-        {% if is_easyadmin_granted(_entity_config, 'new') %}
+        {% if is_easyadmin_granted(_entity_config, 'new', null) %}
         <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ action: _action.name })) }}" target="{{ _action.target }}">
             {% if _action.icon %}<i class="fa fa-{{ _action.icon }}"></i>{% endif %}
             {{ _action.label is defined and not _action.label is empty ? _action.label|trans(_trans_parameters) }}
         </a>
         {% endif %}
-        {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
+        {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export', null) %}
             {% set referer = app.request.server.get('http-referer')|default('/') %}
             {%  for format in _entity_config.export.formats %}
                 <a class="btn btn-primary" style="margin-right:5px;" href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}">
@@ -233,7 +233,7 @@
                 {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
                 <td data-label="{{ _column_label }}" class="actions">
                 {% block item_actions %}
-                    {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config) %}
+                    {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, [], item) %}
                     {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
                         actions: _list_item_actions,
                         request_parameters: _request_parameters,
