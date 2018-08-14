@@ -1,15 +1,146 @@
 {% extends '@BaseEasyAdmin/default/show.html.twig' %}
 
-{# Do not display list action items if not granted #}
-{% block item_actions %}
-  {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name)|prune_item_actions(_entity_config) %}
-  {% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
+{% block content_header %}
+  <div class="pull-right">
+  <ul class="inline">
+    {% if entity.createdAt is defined %}
+      <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y h:i')}} 
+      {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+      {{ entity.createdBy }}</li>
+    {% endif %}
+    {% if entity.updatedAt is defined %}
+      <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y h:i')}}       
+      {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+      {{ entity.updatedBy }}</li>
+    {% endif %}
+  </ul>
+  </div>
+  {{ parent() }}
 
-  {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
-      actions: _show_actions,
-      request_parameters: _request_parameters,
-      translation_domain: _entity_config.translation_domain,
-      trans_parameters: _trans_parameters,
-      item_id: _entity_id
-  }, with_context = false) }}
 {% endblock %}
+
+{% block main %}
+
+<div class="nav-tabs-custom">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#general" data-toggle="tab" aria-expanded="true">{{'tab.main'|trans({},'EasyAdminPlusBundle')}}</a></li>
+    {% for field, metadata in fields    %}
+      {% if metadata.type == 'tab' %}
+        <li class="">
+          <a href="#{{metadata.id}}" data-toggle="tab" aria-expanded="false">{{metadata.label|trans()}}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="general">
+
+      <div class="form-horizontal row">
+          {% block show_fields %}
+
+              {% set div_ouvert = false %}
+              {% for field, metadata in fields    %}
+                  {% if metadata.type == 'tab' %}
+                      {% if div_ouvert %}
+                          </div></div></div>
+                          {% set div_ouvert = false %}
+                      {% endif %}
+                    </div></div> <!-- /.tab-pane  and row-->
+                    <div class="tab-pane" id="{{metadata.id}}">
+                      {% set action = "" %}
+                      {% if ":" in metadata.action %}
+                        {% set action = metadata.action %}
+                      {% else %}
+                        {% set action = "Lle\\EasyAdminPlusBundle\\Controller\\AdminController:"~metadata.action %}
+                      {% endif %}
+
+                      {{ render(controller(action ,{'request':app.request, 'item':entity })) }}
+                    </div>
+                    <!-- /.tab-pane -->
+                  {% elseif metadata.type == 'group' %}
+                      {% if div_ouvert %}
+                          </div></div></div>
+                      {% endif %}
+                      {% set div_ouvert = true %}
+                      <div class="field-group col-xs-12 {{ metadata.css_class|default('') }}">
+                        <div class="box box-default">
+
+                          {% if metadata.label|default(false) or metadata.icon|default(false) %}
+                              <div class="box-header with-border">
+                                  <h3 class="box-title">
+                                      {% if metadata.icon|default(false) %}
+                                          <i class="fa fa-{{ metadata.icon }}"></i>
+                                      {% endif %}
+                                      {{ metadata.label|trans|raw }}
+                                  </h3>
+                              </div>
+                          {% endif %}
+
+                          <div class="box-body">
+                  {% else %}
+
+                      {% block show_field %}
+                          {% if easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) != '' %}
+                          <div class="form-group field-{{ metadata.type|default('default')|lower }} {{ metadata.css_class|default('') }}">
+                              <label class="col-sm-2 control-label">
+                                  {{ (metadata.label ?: field|humanize)|trans(_trans_parameters)|raw }}
+                              </label>
+                              <div class="col-sm-10">
+                                  <div class="form-control">
+                                      {{ easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) }}
+                                  </div>
+
+                                  {% if metadata.help|default('') != '' %}
+                                      <span class="help-block"><i class="fa fa-info-circle"></i> {{ metadata.help|trans|raw }}</span>
+                                  {% endif %}
+                              </div>
+                          </div>
+                      {% endif %}
+                      {% endblock %}
+                  {% endif %}
+
+              {% endfor %}
+              {% if div_ouvert %}
+                  </div></div></div>
+              {% endif %}
+          {% endblock %}
+        </div>
+      <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
+  </div>
+  <!-- /.nav-tabs-custom -->
+
+
+
+  <div class="form-group form-actions">
+      <div class="col-sm-10 col-sm-offset-2">
+      {% block item_actions %}
+          {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
+          {% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
+
+          {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
+              actions: _show_actions,
+              request_parameters: _request_parameters,
+              translation_domain: _entity_config.translation_domain,
+              trans_parameters: _trans_parameters,
+              item_id: _entity_id
+          }, with_context = false) }}
+      {% endblock item_actions %}
+      </div>
+  </div>
+</div>
+
+    {% block delete_form %}
+        {{ include('@EasyAdmin/default/includes/_delete_form.html.twig', {
+            view: 'show',
+            referer: app.request.query.get('referer', ''),
+            delete_form: delete_form,
+            _translation_domain: _entity_config.translation_domain,
+            _trans_parameters: _trans_parameters,
+            _entity_config: _entity_config,
+        }, with_context = false) }}
+    {% endblock delete_form %}
+{% endblock %}
+
