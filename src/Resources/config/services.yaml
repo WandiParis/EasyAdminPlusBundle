@@ -3,6 +3,7 @@ parameters:
     lle.service.export_manager.class: Lle\EasyAdminPlusBundle\Service\ExportManager
     lle.service.csv_exporter.class: Lle\EasyAdminPlusBundle\Service\Exporter\CsvExporter
     lle.service.xlsx_exporter.class: Lle\EasyAdminPlusBundle\Service\Exporter\XlsxExporter
+    lle.service.delete_batch.class: Lle\EasyAdminPlusBundle\Service\Batch\DeleteBatch
 
 services:
     lle.easy_admin_plus.translator:
@@ -136,4 +137,10 @@ services:
         public: true
         class:  '%lle.service.export_manager.class%'
         arguments: ["@easyadmin.config.manager","@property_accessor","@translator", !tagged lle.exporter]
+            
+
+    lle.service.delete_batch:
+        public: true
+        class:  '%lle.service.delete_batch.class%'
+        arguments: ["@doctrine"]
             

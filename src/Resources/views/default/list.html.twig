@@ -59,7 +59,7 @@
     <div class="button-action">
 
         {% if is_easyadmin_granted(_entity_config, 'new', null) %}
-        <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ action: _action.name })) }}" target="{{ _action.target }}">
+        <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ action: _action })) }}" target="{{ _action.target }}">
             {% if _action.icon %}<i class="fa fa-{{ _action.icon }}"></i>{% endif %}
             {{ _action.label is defined and not _action.label is empty ? _action.label|trans(_trans_parameters) }}
         </a>
@@ -321,18 +321,18 @@
         {% if _entity_config.list.hasBatchActions %}
                 <div class="row">
                     <div class="col-md-12 btn-group">
-                        {% for action in _entity_config.list.batchs %}
-                            {% if action.role is null or is_granted(action.role) %}
-                                {% if action.template is not null %}
-                                    {% include action.template with {'action': action} %}
-                                {% elseif action.choices %}
+                        {% for action, actiondata in _entity_config.list.batchs %}
+                            {% if actiondata.role is null or is_granted(actiondata.role) %}
+                                {% if actiondata.template is not null %}
+                                    {% include actiondata.template with {'action': action, 'actiondata' : actiondata} %}
+                                {% elseif actiondata.choices %}
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-sm-4" for="bul_action_{{ action.name }}">{{ action.label }}</label>
+                                            <label class="col-sm-4" for="bul_action_{{ action }}">{{ actiondata.label }}</label>
                                             <div class="col-sm-8">
-                                                <select id="bul_action_{{ action.name }}" name="value_{{ action.name }}" onchange="return doBulkAction('')" class="select2">
+                                                <select id="bul_action_{{ action }}" name="value_{{ action }}" onchange="return doBulkAction('')" class="select2">
                                                     <option value=""></option>
-                                                    {% for key,value in action.choices %}
+                                                    {% for key,value in actiondata.choices %}
                                                         <option value="{{ key }}">{{ value }}</option>
                                                     {% endfor %}
                                                 </select>
@@ -340,11 +340,11 @@
                                         </div>
                                     </div>
                                 {% else %}
-                                    <a href="#" onclick="return doBulkAction('')" class="btn btn-default disabled js-bulk-button pull-right">
-                                        {% if action.icon is not null %}
-                                            <i class="icon-{{ action.icon }} }}"></i> {{ action.label }}
+                                    <a href="#" onclick="return doBulkAction('{{ path('easyadmin', app.request.query|merge({ action: "batch", name: action })) }}')" class="btn btn-default disabled js-bulk-button pull-right">
+                                        {% if actiondata.icon is not null %}
+                                            <i class="icon-{{ actiondata.icon }} }}"></i> {{ actiondata.label }}
                                         {% else %}
-                                            {{ action.label }}
+                                            {{ actiondata.label }}
                                         {% endif %}
                                     </a>
                                 {% endif %}
@@ -354,7 +354,7 @@
                 </div>
                 <script>
                     function doBulkAction(url) {
-                        // document.bulkform.action = url;
+                        document.bulkform.action = url;
                         document.bulkform.submit();
 
                         return false;

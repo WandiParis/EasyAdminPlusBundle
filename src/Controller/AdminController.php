@@ -371,4 +371,29 @@ class AdminController extends BaseAdminController
             ]
         );
     }
+
+
+    /**
+     * batch action.
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function batchAction()
+    {
+        $name = $this->request->request->get('name') ?? $this->request->query->get('name');
+        $ids = $this->request->request->get('ids') ?? $this->request->query->get('ids');
+
+        $batchs = $this->entity['list']['batchs'];
+        
+        if(array_key_exists($name, $batchs)) {
+            $service = $this->get($batchs[$name]['service']);
+
+            $service->execute($this->entity, $ids);
+            
+        }
+
+        return $this->redirectToReferrer();
+
+    }
 }
