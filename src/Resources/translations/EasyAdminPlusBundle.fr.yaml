@@ -86,3 +86,14 @@ generator:
           show: "Fiche %entity%"
           new: "Ajouter %entity%"
           edit: "Editer %entity%"
+blame:
+    created_at: Créer le
+    updated_at: Maj le
+    by: par
+tab:
+    main: Général
+history:
+    action:
+        update: mis à jour par        
+        delete: supprimé par
+        create: crée par

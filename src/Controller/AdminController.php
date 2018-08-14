@@ -231,19 +231,12 @@ class AdminController extends BaseAdminController
     }
 
 
-    protected function embeddedListAction()
+    public function embeddedListAction($request)
     {
-        $this->dispatch(EasyAdminEvents::PRE_LIST);
-
-        $fields = $this->entity['list']['fields'];
-        $paginator = $this->findAll($this->entity['class'], $this->request->query->get('page', 1), $this->config['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'));
-
-        $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
-
-        return $this->render('@EasyAdminExtension/default/embedded_list.html.twig', array(
-            'paginator' => $paginator,
-            'fields' => $fields,
-            'masterRequest' => $this->get('request_stack')->getMasterRequest(),
+        //$fields = $this->entity['list']['fields'];
+        //$paginator = $this->findAll($this->entity['class'], $this->request->query->get('page', 1), $this->config['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'));
+        
+        return $this->render('@LleEasyAdminPlus/default/embedded_list.html.twig', array(
         ));
     }
 
@@ -267,6 +260,22 @@ class AdminController extends BaseAdminController
             //return $this->redirectToReferrer();
         }
     */
+
+    public function historyAction(Request $request, $item)
+    {
+        $this->em = $this->getDoctrine()->getManager();
+
+        $repo = $this->em->getRepository('Gedmo\Loggable\Entity\LogEntry'); // we use default log entry class
+        $logs = $repo->getLogEntries($item);
+
+        /*$logs = array(
+            ['date'=>date('y-m-d'),'who'=>'me'],
+            ['date'=>date('y-m-d H:m:s'),'who'=>'me'],     
+        );*/
+        return $this->render('@LleEasyAdminPlus/default/history.html.twig', array(
+            'logs'=>$logs
+        ));
+    }
 
     /**
      * Manage translations.

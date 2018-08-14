@@ -1,0 +1,41 @@
+<div class="row">
+ <div class="col-sm-12 col-md-6">
+{% if logs|length %}
+ <!-- The timeline -->
+                <ul class="timeline timeline-inverse">
+                  {% for log in logs %}
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-user "></i>
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 
+                        {{ log.loggedAt|date('d/m/Y H:i')}}
+                      </span>
+                      <h3 class="timeline-header">
+                        {{ "history.action."~log.action | trans({},'EasyAdminPlusBundle')}}
+                        <b>{{ log.username }}</b>
+                      </h3>
+                      <div class="timeline-body">
+                      {% for key,value in log.data %}
+                         {{ key }} -> 
+                         {% if value is iterable %}
+                            {% for val in value %}
+                                {{ val }}
+                            {% endfor %}
+                        {% else %}
+                            {{value}}
+                        {% endif %}
+                        <br>
+                      {% endfor %}                 
+                      </div>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  {% endfor %}                 
+                  <li>
+                    <i class="fa fa-clock-o bg-gray"></i>
+                  </li>
+                </ul>
+{% endif %}
+</div>
+</div>
