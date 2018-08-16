@@ -231,12 +231,16 @@ class AdminController extends BaseAdminController
     }
 
 
-    public function embeddedListAction($request)
+    public function embeddedListAction($request, $entity, $items)
     {
-        //$fields = $this->entity['list']['fields'];
-        //$paginator = $this->findAll($this->entity['class'], $this->request->query->get('page', 1), $this->config['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'));
-        
+        $this->initialize($request);
+        $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
+
+        $fields = $this->entity['list']['fields'];
         return $this->render('@LleEasyAdminPlus/default/embedded_list.html.twig', array(
+            'fields'=>$fields,
+            'items'=>$items,
+            'entity'=>$entity
         ));
     }
 
@@ -268,10 +272,6 @@ class AdminController extends BaseAdminController
         $repo = $this->em->getRepository('Gedmo\Loggable\Entity\LogEntry'); // we use default log entry class
         $logs = $repo->getLogEntries($item);
 
-        /*$logs = array(
-            ['date'=>date('y-m-d'),'who'=>'me'],
-            ['date'=>date('y-m-d H:m:s'),'who'=>'me'],     
-        );*/
         return $this->render('@LleEasyAdminPlus/default/history.html.twig', array(
             'logs'=>$logs
         ));
