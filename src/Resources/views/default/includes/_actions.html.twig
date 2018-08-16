@@ -23,9 +23,13 @@
             {% endif %}
         {% endif %}
 
-        {# Still allow to put labels, by specifying "title" #}
-        {% if action.title is defined and not action.title is empty %}
-            {{ action.title|trans(arguments = trans_parameters|merge({ '%entity_id%': item_id }), domain = translation_domain) }}
+        {% if 'list' == action.name %}
+            {# Still allow to put labels, by specifying "title" #}
+            {% if action.title is defined and not action.title is empty %}
+                {{ action.title|trans(arguments = trans_parameters|merge({ '%entity_id%': item_id }), domain = translation_domain) }}
+            {% endif %}
+        {% else %}
+            {{ action.label|trans(arguments = trans_parameters|merge({ '%entity_id%': item_id }), domain = translation_domain) }}
         {% endif %}
     </a>
 {% endfor %}
