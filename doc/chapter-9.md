@@ -2,6 +2,8 @@
 
 `EasyAdminPlus` provides a way to have tabs and to group fields in the show view.
 
+Sublist is also possible.
+
 <p align="center">
     <img src="images/show_tab.png" align="center" alt="show view with tab and group" />
 </p>
@@ -30,6 +32,10 @@ Configure the show entity like this
             - { property: validerPar, label: label.validerPar }
             - { property: responsableInterne, label: label.responsableInterne }
             - { property: responsableExterne, label: label.responsableExterne }
+
+            - { type: 'sublist', id: 'echeances', label: 'tab.echeances', entity: 'Controle', property: 'Controles'}
+            - { type: 'sublist', id: 'options', label: 'tab.options', entity: 'Ressource', property: 'Options'}
+            
             - { type: 'tab', css_class: 'col-sm-6', id: 'historique', label: 'Historique', action: 'historyAction' }
 ```
 
@@ -39,6 +45,8 @@ The tabs must alway be in the last positions.
 
 Action can be a fool custom action like this : 
 `App\Controller\CustomController:indexAction`
+
+For the sublist it use the list config from the 'Foreign' Entity declared in the entity Params. Options it the property to get le associated list.
 
 The show display also the "blame and timestamp" info on the record ( left in the title ) if the property exist. So just add the BlamableTrait  and Timestampable Trait to make it work
 
