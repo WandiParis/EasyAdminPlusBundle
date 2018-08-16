@@ -330,7 +330,7 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownBatchActionButton">
                                 {% for action, actiondata in _entity_config.list.batchs %}
                                     {% if actiondata.role is null or is_granted(actiondata.role) %}
-                                            <li><a href="#" onclick="return doBulkAction('{{ path('easyadmin', app.request.query|merge({ action: "batch", name: action })) }}')" >
+                                            <li><a href="#" onclick="return doBulkAction('{{ path('easyadmin', app.request.query|merge({ action: "batch", name: action })|merge(actiondata.params)) }}')" >
                                                 {% if actiondata.icon is not null %}
                                                     <i class="fa fa-{{ actiondata.icon }} }}"></i> {{ actiondata.label }}
                                                 {% else %}

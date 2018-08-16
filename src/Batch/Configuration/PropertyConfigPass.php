@@ -27,7 +27,9 @@ class PropertyConfigPass implements ConfigPassInterface
         // the path of the template used to render the field in 'show' and 'list' views
         'template' => null,
         // choices
-        'choices' => null
+        'choices' => null,
+        // params
+        'params' => null
     );
 
     public function process(array $backendConfig)
