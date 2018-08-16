@@ -1,14 +1,13 @@
 {# a *-to-many collection of values #}
 {% if value is iterable %}
     {% if value|length > 0 %}
-        {% for item in value %}
-            {{ item }}
-            {% if not loop.last %}, {% endif %}
-        {% endfor %}
-    {% else %}
-        {{ value }}
+        {% spaceless %}
+            {% for item in value %}
+                {{ item|trim }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        {% endspaceless %}
     {% endif %}
-{# a simple *-to-one value associated with an entity managed by this backend #}
+    {# a simple *-to-one value associated with an entity managed by this backend #}
 {% else %}
     {{ value }}
 {% endif %}
