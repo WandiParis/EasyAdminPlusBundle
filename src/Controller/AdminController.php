@@ -272,8 +272,28 @@ class AdminController extends BaseAdminController
         $repo = $this->em->getRepository('Gedmo\Loggable\Entity\LogEntry'); // we use default log entry class
         $logs = $repo->getLogEntries($item);
 
+        $result = [];
+
+        foreach ($logs as $log) {
+            $data = array();
+            if ($log->getData()) {
+                foreach($log->getData() as $k => $entry){
+                    if($entry instanceof \DateTime){
+                        $retour = $entry->format('d/m/Y H:m');
+                    }else if(is_object($entry)){
+                        $retour = (method_exists($entry,'__toString'))? $entry->toString():$entry->getId();
+                    }else if(is_array($entry)){
+                        $retour = implode('-',$entry);
+                    }else{
+                        $retour = $entry;
+                    }
+                    $data[$k] = $retour;
+                }
+            }
+            $result[] = array('log'=>$log,'data'=>$data);
+        }
         return $this->render('@LleEasyAdminPlus/default/history.html.twig', array(
-            'logs'=>$logs
+            'logs'=>$result
         ));
     }
 

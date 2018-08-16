@@ -3,7 +3,9 @@
 {% if logs|length %}
  <!-- The timeline -->
                 <ul class="timeline timeline-inverse">
-                  {% for log in logs %}
+                  {% for entry in logs %}
+
+                    {% set log = entry.log %}
                   <!-- timeline item -->
                   <li>
                     <i class="fa fa-user "></i>
@@ -16,15 +18,8 @@
                         <b>{{ log.username }}</b>
                       </h3>
                       <div class="timeline-body">
-                      {% for key,value in log.data %}
-                         {{ key }} -> 
-                         {% if value is iterable %}
-                            {% for val in value %}
-                                {{ val }}
-                            {% endfor %}
-                        {% else %}
-                            {{value}}
-                        {% endif %}
+                      {% for key,value in entry.data %}
+                         {{ key }} -> {{value}}
                         <br>
                       {% endfor %}                 
                       </div>
