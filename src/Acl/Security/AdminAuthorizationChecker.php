@@ -24,21 +24,20 @@ class AdminAuthorizationChecker
      * @param array  $entity
      * @param string $actionName
      */
-    public function checksUserAccess(array $entity, string $actionName)
+    public function checksUserAccess(array $entity, string $actionName, $subject)
     {
         $requiredRole = $this->getRequiredRole($entity, $actionName);
-
-        if ($requiredRole && !$this->authorizationChecker->isGranted($requiredRole)) {
+        if ($requiredRole && !$this->authorizationChecker->isGranted($requiredRole, $subject)) {
             throw new AccessDeniedException(
                 sprintf('You must be granted %s role to perform this entity action !', $requiredRole)
             );
         }
     }
 
-    public function isEasyAdminGranted(array $entity, string $actionName)
+    public function isEasyAdminGranted(array $entity, string $actionName, $subject)
     {
         try {
-            $this->checksUserAccess($entity, $actionName);
+            $this->checksUserAccess($entity, $actionName, $subject);
         } catch (AccessDeniedException $e) {
             return false;
         }

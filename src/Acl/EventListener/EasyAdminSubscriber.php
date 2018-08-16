@@ -53,7 +53,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         $entity = $event->getArguments()['entity'];
         $action = $request->query->get('action');
 
-        $this->adminAuthorizationChecker->checksUserAccess($entity, $action);
+        //$subject = $event->getSubject(); Is Entity config and not object
+
+        $this->adminAuthorizationChecker->checksUserAccess($entity, $action, null);
 
         return true;
     }

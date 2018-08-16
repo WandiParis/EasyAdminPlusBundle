@@ -120,6 +120,118 @@ If you are writing a custom action, you can use the twig filter to check a privi
 
 -------
 
+### Advanced ACL and voters
+
+You can also handle more precise right on the object. It's really needed for action right. Some time you can delete a custommer only if he doesn't have any Invoice. In Symfony you can do that with Voters ( http://symfony.com/doc/current/security/voters.html )
+In EasyAdmin you cannot do that directly
+
+In EasyAdminPlus, if you want to use your voter you have to do the following things:
+
+```php
+<?php
+
+namespace App\Security\Voter;
+
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+use App\Entity\Customer;
+
+const ROLE_PREFIX='ROLE_CUSTOMER_';
+
+class CustomerVoter extends Voter
+{
+    protected function supports($attribute, $subject)
+    {
+        if (in_array($attribute, [ROLE_PREFIX.'LIST', ROLE_PREFIX.'SEARCH'])) {
+            return true;
+        }
+        if ($subject instanceof Customer) {
+            return in_array($attribute, [ROLE_PREFIX.'SHOW', ROLE_PREFIX.'EDIT', ROLE_PREFIX.'DELETE']);
+        } else {
+            return false;
+        }
+    }
+
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    {
+        $user = $token->getUser();
+        // if the user is anonymous, do not grant access
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        // ... (check conditions and return true to grant permission) ...
+        switch ($attribute) {
+            case ROLE_PREFIX.'LIST':
+                return true;
+            case ROLE_PREFIX.'SEARCH':
+                return true;
+            case ROLE_PREFIX.'SHOW':
+                return $this->canView($subject, $token, $user);
+                break;
+            case ROLE_PREFIX.'EDIT':
+                return $this->canEdit($subject, $token, $user);
+            case ROLE_PREFIX.'DELETE':
+                return $this->canDelete($subject, $token, $user);
+                break;
+        }
+
+        return false;
+    }
+
+    private function canView(Customer $customer, $token,$user)
+    {
+        return true;
+    }
+
+    private function canEdit(Customer $customer, $token,$user)
+    {
+        return false;
+    }
+
+    private function canDelete(Customer $customer,$token, $user)
+    {
+        if( count($customer->getInvoices()) > 0 ) {
+            return false;
+        }
+        return true;
+    }   
+}
+
+```
+
+You have also to register your voter with a priority greater than the role_hierarchy_voter. If you don't do that you need to declare all the sub role in you security roles. ( not very fun )
+
+Instead of that you can juste declare your voter in services.yml like.
+
+```
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Migrations,Tests,Security}'
+
+    App\Security\Voter\:
+        resource: '../src/Security/Voter'
+        autoconfigure: false
+        tags:
+          - { name: 'security.voter', priority: 280 }
+```
+Don't forget to exclude the Security Foler in auto service declaration ( first 3 lines )
+
+Déclare your entity with a prefix role.
+
+```
+easy_admin:
+    entities:
+        Customer:
+            class: App\Entity\Customer
+            disabled_actions: []
+            role_prefix: ROLE_CUSTOMER
+```
+
+-------
+
 ### Known issues
 
 For the default access to admin area, Javier takes the first `Entity` in the settings and forward on it with default action `List`.
