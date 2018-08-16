@@ -12,6 +12,9 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 - [x] Add an action to export entities in CSV.
 - [x] Filters on entity
 - [X] Nested tree compatible
+- [X] Show Advanced design ( group and tabs )
+- [X] Batch action on list
+
 
 ### Requirements
 
@@ -46,5 +49,5 @@ easy_admin_bundle:
 5. [Export Action](doc/chapter-5.md)
 6. [Custom Form Types](doc/chapter-7.md)
 7. [Nested Tree](doc/chapter-8.md)
-7. [Show Group and Tabs](doc/chapter-9.md)
-
+8. [Show Group and Tabs](doc/chapter-9.md)
+9. [Batch Action](doc/chapter-10.md)
