@@ -333,9 +333,9 @@
                                     {% if actiondata.role is null or is_granted(actiondata.role) %}
                                             <li><a href="#" onclick="return doBulkAction('{{ path('easyadmin', app.request.query|merge({ action: "batch", name: action })|merge(actiondata.params)) }}')" >
                                                 {% if actiondata.icon is not null %}
-                                                    <i class="fa fa-{{ actiondata.icon }} }}"></i> {{ actiondata.label }}
+                                                    <i class="fa fa-{{ actiondata.icon }} }}"></i> {{ (actiondata.label)|trans }}
                                                 {% else %}
-                                                    {{ actiondata.label }}
+                                                    {{ (actiondata.label)|trans }}
                                                 {% endif %}
                                             </a></li>
                                     {% endif %}
