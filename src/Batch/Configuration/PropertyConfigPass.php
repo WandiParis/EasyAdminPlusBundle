@@ -29,7 +29,7 @@ class PropertyConfigPass implements ConfigPassInterface
         // choices
         'choices' => null,
         // params
-        'params' => null
+        'params' => []
     );
 
     public function process(array $backendConfig)
