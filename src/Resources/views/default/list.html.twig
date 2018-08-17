@@ -182,6 +182,7 @@
 {% endblock %}
 
 {% block main %}
+        {{ include(_entity_config.templates.paginator) }}
 
     {% if _entity_config.list.hasBatchActions %}
         <form action="#" method="POST" name="bulkform">
