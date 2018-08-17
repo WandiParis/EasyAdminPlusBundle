@@ -32,7 +32,7 @@
                     // paramètres GET
                     data: function (params) {
                         // the _ is here to force easyadmin return results even if query is empty
-                        return { 'query': params.term || "_", 'page': params.page };
+                        return { 'query': $.trim(params.term) || "_", 'page': params.page };
                     },
 
                     // analyse json reçu
