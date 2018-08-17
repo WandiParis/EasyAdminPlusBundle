@@ -23,7 +23,7 @@
             {% endif %}
         {% endif %}
 
-        {% if 'list' == action.name %}
+        {% if 'list' == app.request.query.get('action') %}        
             {# Still allow to put labels, by specifying "title" #}
             {% if action.title is defined and not action.title is empty %}
                 {{ action.title|trans(arguments = trans_parameters|merge({ '%entity_id%': item_id }), domain = translation_domain) }}
