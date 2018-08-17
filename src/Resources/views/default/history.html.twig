@@ -20,7 +20,11 @@
                       <div class="timeline-body">
                       <table>
                       {% for key,value in entry.data %}
-                          <tr><td>{{ ('field.'~key) | trans() }}</td><td>{{value}}</td></tr>
+                          <tr>
+                                <td>{{ ('field.'~key) | trans() }}</td>
+                                <td><i class="fa fa-arrow-right"></i></td>
+                                <td>{{value}}</td>
+                          </tr> 
                       {% endfor %}
                       </table>
                       </div>
