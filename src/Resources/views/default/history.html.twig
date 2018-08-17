@@ -14,14 +14,15 @@
                         {{ log.loggedAt|date('d/m/Y H:i')}}
                       </span>
                       <h3 class="timeline-header">
-                        {{ "history.action."~log.action | trans({},'EasyAdminPlusBundle')}}
+                        {{ ("history.action."~log.action) | trans({},'EasyAdminPlusBundle')}}
                         <b>{{ log.username }}</b>
                       </h3>
                       <div class="timeline-body">
+                      <table>
                       {% for key,value in entry.data %}
-                         {{ key }} -> {{value}}
-                        <br>
-                      {% endfor %}                 
+                          <tr><td>{{ ('field.'~key) | trans() }}</td><td>{{value}}</td></tr>
+                      {% endfor %}
+                      </table>
                       </div>
                     </div>
                   </li>
