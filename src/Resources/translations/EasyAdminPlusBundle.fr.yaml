@@ -87,7 +87,7 @@ generator:
           new: "Ajouter %entity%"
           edit: "Editer %entity%"
 blame:
-    created_at: Créer le
+    created_at: Créé le
     updated_at: Maj le
     by: par
 tab:
