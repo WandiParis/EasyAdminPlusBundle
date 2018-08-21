@@ -239,6 +239,7 @@
                 {% set levelShift = (paginator.currentPageResults|first).level %}
                 {% set tree_parents = [] %}
                 {% set previous_item = null %}
+                {% set root_item = null %}
                 {% set parent_id = null %}
             {% endif %}
 
@@ -248,11 +249,19 @@
 
                 {# TREE MANAGMENT #}
                 {% if _entity_config.tree is defined and _entity_config.tree %}
+                    {% if root_item != item.root.id %}
+                        {% set previous_item = null %}
+                        {% set root_item = null %}
+                        {% set parent_id = null %}
+                        {% set root_item = item.root.id %}
+                        {% set tree_parents = [] %}
+                    {% endif %}
                     {% if previous_item %}
                         {% if previous_item.rgt > item.lft %}{# we go up #}
                             {% set parent_id = previous_item.id %}
                             {% set tree_parents = tree_parents|merge([{
                                 'id':previous_item.id,
+                                'root':previous_item.root.id,
                                 'lft':previous_item.lft,
                                 'rgt':previous_item.rgt}]) %}
                         {% else %}
@@ -264,7 +273,10 @@
                 {% endif %}
                 
                 {# ROW #}
-                <tr data-id="{{ _item_id }}" {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}>
+                <tr data-id="{{ _item_id }}" 
+                    {% if root_item is defined and root_item %}data-root-id="{{root_item}}" {%endif%}
+                    {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}
+                    >
                     {% if _entity_config.list.hasBatchActions %}
                         <th><input type="checkbox" name="ids[]" value="{{ _item_id }}" class="js-bulk-checkbox"></th>
                     {% endif %}
