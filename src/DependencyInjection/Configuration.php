@@ -211,9 +211,7 @@ class Configuration implements ConfigurationInterface
 
     private function getAssetsResolverNode()
     {
-        $defaultJSValue = [
-            '/bundles/cksourceckfinder/ckfinder/ckfinder.js',
-        ];
+        $defaultJSValue = [];
         $treeBuilder = new TreeBuilder();
         $node = $treeBuilder->root('assets');
 
