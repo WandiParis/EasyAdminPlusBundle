@@ -59,7 +59,7 @@
     <div class="button-action">
 
         {% if is_easyadmin_granted(_entity_config, 'new', null) %}
-        <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ action: _action })) }}" target="{{ _action.target }}">
+        <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ 'action': 'new' })) }}" target="{{ _action.target }}">
             {% if _action.icon %}<i class="fa fa-{{ _action.icon }}"></i>{% endif %}
             {{ _action.label is defined and not _action.label is empty ? _action.label|trans(_trans_parameters) }}
         </a>
