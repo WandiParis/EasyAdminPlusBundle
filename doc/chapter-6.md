@@ -8,7 +8,7 @@ The `filter` is disabled by default.
 
 To enable it, you've to add a new action node (`filter`) in `EasyAdmin` configuration like others ones (`list`, `show`, `new`, `edit`, `form`, `delete`, `search`).
 
-Here's a list of all filters:
+Here's a list of all filters:<br/>
     - AbstractORMFilterType<br/>
     - AutocompleteFilterType<br/>
     - BooleanFilterType<br/>
