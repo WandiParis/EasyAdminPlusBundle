@@ -144,3 +144,8 @@ services:
         class:  '%lle.service.delete_batch.class%'
         arguments: ["@doctrine"]
             
+    lle.easy_admin_plus.autocomplete:
+        public: true
+        class:  'Lle\EasyAdminPlusBundle\Search\Autocomplete'
+        arguments: ["@easyadmin.config.manager", "@easyadmin.finder", "@property_accessor"]
+            

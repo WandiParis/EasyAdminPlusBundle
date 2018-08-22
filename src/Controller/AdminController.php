@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 //use Symfony\Component\Workflow\Registry;
 
 class AdminController extends BaseAdminController
@@ -425,4 +425,21 @@ class AdminController extends BaseAdminController
         return $this->redirectToReferrer();
 
     }
+
+    /**
+     * The method that returns the values displayed by an autocomplete field
+     * based on the user's input.
+     *
+     * @return JsonResponse
+     */
+    protected function autocompleteAction()
+    {
+        $results = $this->get('lle.easy_admin_plus.autocomplete')->find(
+            $this->request->query->get('entity'),
+            $this->request->query->get('query'),
+            $this->request->query->get('page', 1)
+        );
+
+        return new JsonResponse($results);
+    }    
 }
