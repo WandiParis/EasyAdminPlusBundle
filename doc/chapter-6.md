@@ -8,6 +8,26 @@ The `filter` is disabled by default.
 
 To enable it, you've to add a new action node (`filter`) in `EasyAdmin` configuration like others ones (`list`, `show`, `new`, `edit`, `form`, `delete`, `search`).
 
+Here's a list of all filters:
+    - AbstractORMFilterType
+    - AutocompleteFilterType
+    - BooleanFilterType
+    - ChoiceFilterType
+    - DateFilterType
+    - DateTimeFilterType
+    - EntityFilterType
+    - EnumerationFilterType
+    - ExactStringFilterType
+    - ManyFilterType
+    - NotNullFilterType
+    - NumberFilterType
+    - NumberRangeFilterType
+    - PeriodeFilterType
+    - StringFilterType
+    - TreeFilterType
+    - UrlAutoCompleteFilterType
+    - WorkflowFilterType
+
 You've to add this action on all Entities on which you want to enable `filter` feature.
 
 ```yaml
