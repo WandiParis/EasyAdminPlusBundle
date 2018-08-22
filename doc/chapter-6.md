@@ -9,24 +9,24 @@ The `filter` is disabled by default.
 To enable it, you've to add a new action node (`filter`) in `EasyAdmin` configuration like others ones (`list`, `show`, `new`, `edit`, `form`, `delete`, `search`).
 
 Here's a list of all filters:
-    - AbstractORMFilterType
-    - AutocompleteFilterType
-    - BooleanFilterType
-    - ChoiceFilterType
-    - DateFilterType
-    - DateTimeFilterType
-    - EntityFilterType
-    - EnumerationFilterType
-    - ExactStringFilterType
-    - ManyFilterType
-    - NotNullFilterType
-    - NumberFilterType
-    - NumberRangeFilterType
-    - PeriodeFilterType
-    - StringFilterType
-    - TreeFilterType
-    - UrlAutoCompleteFilterType
-    - WorkflowFilterType
+    - AbstractORMFilterType<br/>
+    - AutocompleteFilterType<br/>
+    - BooleanFilterType<br/>
+    - ChoiceFilterType<br/>
+    - DateFilterType<br/>
+    - DateTimeFilterType<br/>
+    - EntityFilterType<br/>
+    - EnumerationFilterType<br/>
+    - ExactStringFilterType<br/>
+    - ManyFilterType<br/>
+    - NotNullFilterType<br/>
+    - NumberFilterType<br/>
+    - NumberRangeFilterType<br/>
+    - PeriodeFilterType<br/>
+    - StringFilterType<br/>
+    - TreeFilterType<br/>
+    - UrlAutoCompleteFilterType<br/>
+    - WorkflowFilterType<br/>
 
 You've to add this action on all Entities on which you want to enable `filter` feature.
 
