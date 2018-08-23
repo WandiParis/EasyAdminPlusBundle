@@ -436,7 +436,7 @@ class AdminController extends BaseAdminController
     {
         $results = $this->get('lle.easy_admin_plus.autocomplete')->find(
             $this->request->query->get('entity'),
-            $this->request->query->get('query'),
+            $this->request->query->get('query') ?? '_', // %_% = anything
             $this->request->query->get('page', 1)
         );
 
