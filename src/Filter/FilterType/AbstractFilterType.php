@@ -2,6 +2,9 @@
 
 namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
+
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * AbstractFilterType
  *
@@ -69,27 +72,28 @@ abstract class AbstractFilterType implements FilterTypeInterface
         $this->request = $request;
     }
 
-    public function getRequest()
+    public function getRequest(): Request
     {
         return $this->request;
     }
 
     public function getValueSession($id)
     {
+        $gid = $this->request->get('entity', null).$id;
         $session = $this->request->getSession();
         if ($this->request->request->has('reset') && $this->request->request->get('reset') === 'reset') {
-            $session->remove($id);
+            $session->remove($gid);
             return null;
         }
         $new_val = $this->request->request->get($id, null);
         if ($new_val) {
-            $session->set($id, $new_val);
+            $session->set($gid, $new_val);
             return $new_val;
         } else {
             if (!($this->request->request->has('filter') && $this->request->request->get('filter') === 'filter')) {
-                return $session->get($id, null);
+                return $session->get($gid, null);
             } else {
-                $session->remove($id);
+                $session->remove($gid);
                 return null;
             }
         }

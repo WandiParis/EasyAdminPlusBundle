@@ -34,7 +34,7 @@
                                 {{ filter.label|trans() }}
                             </label>
                             <div class="col-sm-8">
-                              {% set vars = {'data': filter.filtertype.data, 'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.code, 'filtertype':filter.filtertype} %}
+                              {% set vars = {'data': filter.filtertype.data, 'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.code|replace({'.':'_'}), 'filtertype':filter.filtertype} %}
                               {% include filter.template with vars %}
                             </div>
                         </div> <!-- form group -->
