@@ -10,13 +10,45 @@ use Symfony\Component\HttpFoundation\Request;
 class StringFilterType extends AbstractORMFilterType
 {
     /**
+     * @var string
+     */
+    private $defaultValue;
+
+    /**
+     * @var string
+     */
+    private $defaultComparator;
+
+    /**
+     * @var array
+     */
+    private $additionalProperties;
+
+    /**
+     * @param string $columnName The column name
+     * @param string $alias      The alias
+     */
+    public function __construct($columnName, $config = array(), $alias = 'b')
+    {
+        parent::__construct($columnName, $config, $alias);
+        $this->defaultValue = $config['defaultValue'] ?? "";
+        $this->defaultComparator = $config['defaultComparator'] ?? "startswith";
+        $this->additionalProperties = $config['additionalProperties'] ?? [];
+        
+        // must be an array
+        if (!is_array($this->additionalProperties)) {
+            $this->additionalProperties = [];
+        }
+    }
+
+    /**
      * @param Request $request  The request
      * @param array   &$data    The data
      * @param string  $uniqueId The unique identifier
      */
     public function bindRequest(array &$data, $uniqueId)
     {
-        $data['comparator'] = $this->getDefaultComparator();
+        $data['comparator'] = $this->defaultComparator;
         if($this->getValueSession('filter_comparator_' . $uniqueId) == 'isnull') {
 
             $data['comparator'] = $this->getValueSession('filter_comparator_' . $uniqueId);
@@ -26,7 +58,9 @@ class StringFilterType extends AbstractORMFilterType
             $data['comparator'] = $this->getValueSession('filter_comparator_' . $uniqueId);
             $data['value']      = $this->getValueSession('filter_value_' . $uniqueId);
             return ($data['value'] != null);
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -35,45 +69,40 @@ class StringFilterType extends AbstractORMFilterType
      */
     public function apply(array $data, $uniqueId, $alias, $col)
     {
-        if (!array_key_exists('value', $data) || !isset($data['value']) ) {
-            $data['value'] = $this->defaultValue;
+        if (!array_key_exists("value", $data) || !isset($data["value"]) ) {
+            $data["value"] = $this->defaultValue;
         }
-        if(isset($data['comparator'])) {
-            if( $data['comparator'] == 'isnull') {
-                $this->queryBuilder->andWhere($alias . $col .' IS NULL or '.$alias . $col ." = '' ");
-            }
-            elseif( $data['comparator'] == 'isnotnull') {
-                $this->queryBuilder->andWhere($alias . $col .' IS NOT NULL AND '.$alias . $col ." <> '' ");
-            }
-            elseif (isset($data['value']) ) {
-                switch ($data['comparator']) {
-                    case 'equals':
-                        $this->queryBuilder->andWhere($alias . $col .' = :var_' . $uniqueId);
-                        $this->queryBuilder->setParameter('var_' . $uniqueId, $data['value']);
-                        break;
-                    case 'notequals':
-                        $this->queryBuilder->andWhere($alias . $col .' != :var_' . $uniqueId);
-                        $this->queryBuilder->setParameter('var_' . $uniqueId, $data['value']);
-                        break;
-                    case 'contains':
-                        $this->queryBuilder->andWhere($alias . $col .' LIKE :var_' . $uniqueId);
-                        $this->queryBuilder->setParameter('var_' . $uniqueId, '%' . $data['value'] . '%');
-                        break;
-                    case 'doesnotcontain':
-                        $this->queryBuilder->andWhere($alias . $col .' NOT LIKE :var_' . $uniqueId);
-                        $this->queryBuilder->setParameter('var_' . $uniqueId, '%' . $data['value'] . '%');
-                        break;
-                    case 'startswith':
-                        $this->queryBuilder->andWhere($alias . $col .' LIKE :var_' . $uniqueId);
-                        $this->queryBuilder->setParameter('var_' . $uniqueId, $data['value'] . '%');
-                        break;
-                    case 'endswith':
-                        $this->queryBuilder->andWhere($alias . $col .' LIKE :var_' . $uniqueId);
-                        $this->queryBuilder->setParameter('var_' . $uniqueId, '%' . $data['value']);
-                        break;
-                }
 
+        $value = trim($data["value"]) ?? $this->defaultValue;
+        $comparator = $data["comparator"] ?? "startswith";
+
+        // MAKE QUERY
+        $query = $this->getPattern($comparator, $uniqueId, $alias, $col);
+        foreach ($this->additionalProperties as $additionalCol) {
+            $pattern = $this->getPattern($comparator, $uniqueId, $alias, $additionalCol);
+
+            if ($pattern) {
+                $query .= " OR " . $pattern; 
             }
+        }
+
+        $this->queryBuilder->andWhere($query);
+
+        // SET QUERY PARAMETERS
+        switch ($comparator) {
+            case 'contains':
+            case 'doesnotcontain':
+                $this->queryBuilder->setParameter("val_" . $uniqueId, "%".$value."%");
+                break;
+            case 'startswith':
+                $this->queryBuilder->setParameter("val_" . $uniqueId, $value."%");
+                break;
+            case 'endswith':
+                $this->queryBuilder->setParameter("val_" . $uniqueId, "%".$value);
+                break;
+            case 'equals':
+            case 'notequals':
+                $this->queryBuilder->setParameter("val_" . $uniqueId, $value);
         }
     }
 
@@ -86,17 +115,35 @@ class StringFilterType extends AbstractORMFilterType
     }
 
     /**
-     * @param string $columnName The column name
-     * @param string $alias      The alias
+     * @return string
+     * @param string comparator the comparator to use
+     * @param string parameter the query parameter to set
      */
-    public function __construct($columnName, $config = array(), $alias = 'b')
+    private function getPattern($comparator, $uniqueId, $alias, $col)
     {
-        parent::__construct($columnName, $config, $alias);
-        $this->defaultValue = (isset($config['defaultValue']))? $config['defaultValue']:"";
-        $this->defaultComparator = (isset($config['defaultComparator']))? $config['defaultComparator']:"startswith";
-    }
+        $pattern = null;
+        switch ($comparator) {
+            case "isnull":
+                $pattern = $alias . $col .' IS NULL OR '.$alias . $col ." = '' ";
+                break;
+            case "isnotnull":
+                $pattern = $alias . $col .' IS NOT NULL AND '.$alias . $col ." <> '' ";
+                break;
+            case "equals":
+                $pattern = $alias . $col .' = :val_' . $uniqueId;
+                break;
+            case "notequals":
+                $pattern = $alias . $col .' != :val_' . $uniqueId;
+                break;
+            case "contains":
+            case "endswith":
+            case "startswith":
+                $pattern = $alias . $col .' LIKE :val_' . $uniqueId;
+                break;
+            case "doesnotcontain":
+                $pattern = $alias . $col .' NOT LIKE :val_' . $uniqueId;
+        }
 
-    public function getDefaultComparator() {
-        return $this->defaultComparator;
+        return $pattern ? "(".$pattern.")" : null;
     }
 }
