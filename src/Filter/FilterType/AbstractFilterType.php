@@ -85,7 +85,9 @@ abstract class AbstractFilterType implements FilterTypeInterface
             $session->remove($gid);
             return null;
         }
-        $new_val = $this->request->request->get($id, null);
+        $new_val_post = $this->request->request->get($id, null);
+        $new_val_get = $this->request->query->get($id, null);
+        $new_val = $new_val_post ?? $new_val_get;
         if ($new_val) {
             $session->set($gid, $new_val);
             return $new_val;
