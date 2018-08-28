@@ -36,7 +36,7 @@ Configure the show entity like this
             - { type: 'sublist', id: 'echeances', label: 'tab.echeances', entity: 'Controle', property: 'Controles'}
             - { type: 'sublist', id: 'options', label: 'tab.options', entity: 'Ressource', property: 'Options'}
             
-            - { type: 'tab', css_class: 'col-sm-6', id: 'historique', label: 'Historique', action: 'historyAction' }
+            - { type: 'tab', id: 'historique', label: 'Historique', action: 'historyAction' }
 ```
 
 every group open and close a box (bootstrap). If their is a label it show it in the header box.
