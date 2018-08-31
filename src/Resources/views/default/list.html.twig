@@ -249,9 +249,9 @@
 
                 {# TREE MANAGMENT #}
                 {% if _entity_config.tree is defined and _entity_config.tree %}
+
                     {% if root_item != item.root.id %}
                         {% set previous_item = null %}
-                        {% set root_item = null %}
                         {% set parent_id = null %}
                         {% set root_item = item.root.id %}
                         {% set tree_parents = [] %}
@@ -267,7 +267,9 @@
                         {% else %}
                             {% set tree_parents = tree_parents|slice(0, item.level - levelShift) %}
                             {% set parent = tree_parents|last %}
-                            {% set parent_id = parent.id %}
+                            {% if parent %}
+                                {% set parent_id = parent.id %}
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 {% endif %}
