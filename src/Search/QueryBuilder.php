@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
-
+use Lle\EasyAdminPlusBundle\Filter\FilterState;
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */

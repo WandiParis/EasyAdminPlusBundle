@@ -25,14 +25,14 @@ class FilterState
     public function __construct(Session $session)
     {
         $this->session = $session;
-        try {
+        /*try {
             $bag = $this->session->getBag('lle_filter');
         } catch (InvalidArgumentException $e) {
             $bag = new NamespacedAttributeBag('_lle_filter');
             $bag->setName('lle_filter');
             $this->session->registerBag($bag);
-        }
-        $this->bag = $bag;
+        }*/
+        $this->bag = null;
     }
     /**
      * @return string
