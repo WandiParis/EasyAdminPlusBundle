@@ -49,6 +49,11 @@ class QueryBuilder
     {
         /* @var EntityManager */
         $em = $this->doctrine->getManagerForClass($entityConfig['class']);
+
+        $disabled_filters = $entityConfig['disabled_filters'] ?? [];
+        foreach($disabled_filters as $filter) {
+            $em->getFilters()->disable($filter);
+        }
         /* @var DoctrineQueryBuilder */
 
         $qb_method = ($entityConfig['qb_method'] ?? null);
