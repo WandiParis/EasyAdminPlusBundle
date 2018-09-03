@@ -14,6 +14,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 - [X] Nested tree compatible
 - [X] Show Advanced design ( group and tabs )
 - [X] Batch action on list
+- [X] Configure Query Builder Method
 
 
 ### Requirements
@@ -51,3 +52,4 @@ easy_admin_bundle:
 7. [Nested Tree](doc/chapter-8.md)
 8. [Show Group and Tabs](doc/chapter-9.md)
 9. [Batch Action](doc/chapter-10.md)
+10. [Query Builder Method](doc/chapter-11.md)

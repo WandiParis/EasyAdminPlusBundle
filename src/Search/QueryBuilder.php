@@ -14,6 +14,8 @@ namespace Lle\EasyAdminPlusBundle\Search;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -22,10 +24,14 @@ class QueryBuilder
 {
     /** @var Registry */
     private $doctrine;
+    private $request;
+    private $filterState;
 
-    public function __construct(Registry $doctrine)
+    public function __construct(Registry $doctrine, RequestStack $requestStack, FilterState $filterState)
     {
         $this->doctrine = $doctrine;
+        $this->request = $requestStack->getCurrentRequest();
+        $this->filterState = $filterState;
     }
 
     /**
@@ -44,15 +50,21 @@ class QueryBuilder
         /* @var EntityManager */
         $em = $this->doctrine->getManagerForClass($entityConfig['class']);
         /* @var DoctrineQueryBuilder */
-        $queryBuilder = $em->createQueryBuilder()
-            ->select('entity')
-            ->from($entityConfig['class'], 'entity')
-        ;
+
+        $qb_method = ($entityConfig['qb_method'] ?? null);
+        if ($qb_method) {
+            $queryBuilder = $em->getRepository($entityConfig['class'])->$qb_method();
+        } else {
+            $queryBuilder = $em->createQueryBuilder()
+                ->select('entity')
+                ->from($entityConfig['class'], 'entity')
+            ;
+        }
 
         $isSortedByDoctrineAssociation = false !== strpos($sortField, '.');
         if ($isSortedByDoctrineAssociation) {
             $sortFieldParts = explode('.', $sortField);
-            $queryBuilder->leftJoin('entity.'.$sortFieldParts[0], $sortFieldParts[0]);
+            $queryBuilder->leftJoin($queryBuilder->getRootAlias().'.'.$sortFieldParts[0], $sortFieldParts[0]);
         }
 
         if (!empty($dqlFilter)) {
@@ -60,8 +72,26 @@ class QueryBuilder
         }
 
         if (null !== $sortField) {
-            $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : 'entity.', $sortField), $sortDirection);
+            $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias().'.', $sortField), $sortDirection);
         }
+
+        /*if (isset($entityConfig['filter'])) {
+
+            foreach ($entityConfig['filter']['fields'] as $filterType) {
+                $ftype = $filterType['filtertype'];
+                $ftype->setQueryBuilder($queryBuilder);
+                $ftype->setRequest($this->request);
+                $ftype->setEm($em);
+
+                $data = [];
+                if ($ftype->bindRequest($data, str_replace('.', '_', $filterType['property']), $this->filterState)) {
+                    $ftype->setData($data);
+                    $donnes = $ftype->init();
+                    $ftype->apply($data, str_replace('.', '_',$filterType['property']), $donnes['alias'], $donnes['column']);
+                }
+            }
+        }*/
+
 
         return $queryBuilder;
     }

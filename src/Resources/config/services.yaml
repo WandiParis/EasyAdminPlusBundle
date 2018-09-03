@@ -152,4 +152,4 @@ services:
     lle.easy_admin_plus.query_builder:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Search\QueryBuilder'
-        arguments: ["@doctrine"]
+        arguments: ["@doctrine", "@request_stack"]
