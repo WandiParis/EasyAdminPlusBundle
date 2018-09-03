@@ -148,4 +148,8 @@ services:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Search\Autocomplete'
         arguments: ["@easyadmin.config.manager", "@easyadmin.finder", "@property_accessor"]
-            
+    
+    lle.easy_admin_plus.query_builder:
+        public: true
+        class:  'Lle\EasyAdminPlusBundle\Search\QueryBuilder'
+        arguments: ["@doctrine"]
