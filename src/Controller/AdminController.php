@@ -173,8 +173,6 @@ class AdminController extends BaseAdminController
 
         $fields = $this->entity['list']['fields'];
         $paginator = $this->findFiltered($this->entity, $this->entity['class'], $this->request->query->get('page', 1), $this->entity['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
-        print $paginator->haveToPaginate();
-        die();
         $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
 
         $parameters = array(
@@ -209,8 +207,8 @@ class AdminController extends BaseAdminController
         $queryBuilder = $this->executeDynamicMethod('create<EntityName>ListQueryBuilder', array($entityClass, $sortDirection, $sortField, $dqlFilter));
 
         if ($entity['tree'] ?? false) {
-            $queryBuilder->orderBy('root');
-            $queryBuilder->addOrderBy('lft');
+            $queryBuilder->orderBy($queryBuilder->getRootAlias().'.root');
+            $queryBuilder->addOrderBy($queryBuilder->getRootAlias().'.lft');
         }
 
         if (isset($entity['filter'])) {
