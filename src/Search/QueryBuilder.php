@@ -52,7 +52,9 @@ class QueryBuilder
 
         $disabled_filters = $entityConfig['disabled_filters'] ?? [];
         foreach($disabled_filters as $filter) {
-            $em->getFilters()->disable($filter);
+            if($em->getFilters()->isEnabled($filter)){
+                $em->getFilters()->disable($filter);
+            }
         }
         /* @var DoctrineQueryBuilder */
 
