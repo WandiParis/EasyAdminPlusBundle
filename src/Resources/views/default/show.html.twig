@@ -1,21 +1,35 @@
 {% extends '@BaseEasyAdmin/default/show.html.twig' %}
 
 {% block content_header %}
-  <div class="pull-right">
+   <div class=" pull-right btn-group ">
+      {% block show_actions %}
+          {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
+          {% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
+
+          {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
+              actions: _show_actions,
+              request_parameters: _request_parameters,
+              translation_domain: _entity_config.translation_domain,
+              trans_parameters: _trans_parameters,
+              item_id: _entity_id
+          }, with_context = false) }}
+      {% endblock show_actions %}
+  </div>
+  {{ parent() }}
+  <div class="small">
   <ul class="inline">
     {% if entity.createdAt is defined %}
-      <li><i><small>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}</small></i>&nbsp;{{entity.createdAt|date('d/m/Y h:i')}}
-      <i><small>{{'blame.by'|trans({},'EasyAdminPlusBundle') }}</small></i>
+      <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y h:i')}}
+      {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
       {{ entity.createdBy }}</li>
     {% endif %}
     {% if entity.updatedAt is defined %}
-      <li><i><small>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}</small></i>&nbsp;{{entity.updatedAt|date('d/m/Y h:i')}}
-      <i><small>{{'blame.by'|trans({},'EasyAdminPlusBundle') }}</small></i>
+      <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y h:i')}}
+      {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
       {{ entity.updatedBy }}</li>
     {% endif %}
   </ul>
   </div>
-  {{ parent() }}
 
 {% endblock %}
 
