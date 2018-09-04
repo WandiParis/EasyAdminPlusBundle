@@ -5,7 +5,7 @@
 Sublist is also possible.
 
 <p align="center">
-    <img src="images/show_tab.png" align="center" alt="show view with tab and group" />
+    <img src="images/show_header_tab.png" align="center" alt="show view with tab and group with specific header" />
 </p>
 
 -------
@@ -15,6 +15,7 @@ Configure the show entity like this
 ```yaml
     show:
         title: 'title.echeance.show'
+        header_template : 'easy_admin/Controle/_show_header.html.twig'
         actions:
             - { name: edit, icon: edit }
             - { name: delete, icon: trash }
@@ -48,7 +49,7 @@ Action can be a fool custom action like this :
 
 For the sublist it use the list config from the 'Foreign' Entity declared in the entity Params. Options it the property to get le associated list.
 
-The show display also the "blame and timestamp" info on the record ( left in the title ) if the property exist. So just add the BlamableTrait  and Timestampable Trait to make it work
+The show display also the "blame and timestamp" info on the record ( under the title ) if the property exist. So just add the BlamableTrait  and Timestampable Trait to make it work
 
 ```
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -67,6 +68,8 @@ class Ressource
     use BlameableEntity;
     use TimestampableEntity;
 ```
+
+header_template is used to add specific header under the title. Define the path of the twig template to include.
 
 -------
 ### Dependency
