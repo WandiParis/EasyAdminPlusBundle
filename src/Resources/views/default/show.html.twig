@@ -16,19 +16,26 @@
       {% endblock show_actions %}
   </div>
   {{ parent() }}
+  {% if _entity_config.show.header_template is defined %}
+      {{ include(_entity_config.show.header_template, {
+          entity: entity,
+          trans_parameters: _trans_parameters,
+          item_id: _entity_id
+      }) }}
+  {% endif %}
   <div class="small">
-  <ul class="inline">
-    {% if entity.createdAt is defined %}
-      <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y h:i')}}
-      {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
-      {{ entity.createdBy }}</li>
-    {% endif %}
-    {% if entity.updatedAt is defined %}
-      <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y h:i')}}
-      {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
-      {{ entity.updatedBy }}</li>
-    {% endif %}
-  </ul>
+    <ul class="inline">
+      {% if entity.createdAt is defined %}
+        <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y h:i')}}
+        {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+        {{ entity.createdBy }}</li>
+      {% endif %}
+      {% if entity.updatedAt is defined %}
+        <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y h:i')}}
+        {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+        {{ entity.updatedBy }}</li>
+      {% endif %}
+    </ul>
   </div>
 
 {% endblock %}
