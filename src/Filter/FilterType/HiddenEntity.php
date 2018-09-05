@@ -1,6 +1,6 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 /**
  * Description of HiddenEntity
