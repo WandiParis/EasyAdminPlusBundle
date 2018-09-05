@@ -27,6 +27,7 @@ class JsonType extends AbstractType {
             ],
             "disable_edit_json" => true,
             "no_additional_properties" => false,
+            "display_required_only" => false,
             "required_by_default" => true,
             "theme" => "bootstrap2",
         ]);
@@ -37,6 +38,7 @@ class JsonType extends AbstractType {
         $view->vars['disable_edit_json'] = ($options['disable_edit_json'])? 'true':'false';
         $view->vars['no_additional_properties'] = ($options['no_additional_properties'])? 'true':'false';
         $view->vars['required_by_default'] = ($options['required_by_default'])? 'true':'false';
+        $view->vars['display_required_only'] = ($options['display_required_only'])? 'true':'false';
         $view->vars['theme']= ($options['theme'])? $options['theme']:'bootstrap2';
     }
 
