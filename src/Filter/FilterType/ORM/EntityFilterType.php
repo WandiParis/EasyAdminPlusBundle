@@ -4,7 +4,7 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
 
 use Symfony\Component\HttpFoundation\Request;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\ORM\AbstractORMFilterType;
-use Lle\EasyAdminPlusBundle\Filter\HiddenEntity;
+use Lle\EasyAdminPlusBundle\Filter\FilterType\HiddenEntity;
 
 class EntityFilterType extends AbstractORMFilterType
 {

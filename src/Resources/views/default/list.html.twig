@@ -10,9 +10,17 @@
 
 {% block content_header %}
 {{ parent() }}
+
 {% if _entity_config.filter is defined %}
 
-<div class="adminlist-filter">
+    {%  set hidden_filter = true  %}
+    {% for filter in _entity_config.filter.fields %}
+        {%  if not filter.filtertype.hidden  %}
+            {%  set hidden_filter = false  %}
+        {%  endif %}
+    {%  endfor  %}
+
+<div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
     <form method="POST" action="{{ path('easyadmin', app.request.query|merge({ filter: "y" })) }}" class="form-horizontal ">
 
     <div class="box box-info">
@@ -28,7 +36,8 @@
 
           <!-- FILTER -->
           {% for filter in _entity_config.filter.fields %}
-          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px">
+
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px; {%  if filter.filtertype.hidden %}display:none;{% endif %}">
                         <div class="form-group">
                             <label for="date" class="col-sm-4 control-label text-nowrap">
                                 {{ filter.label|trans() }}
