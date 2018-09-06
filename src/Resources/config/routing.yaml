@@ -4,6 +4,12 @@ lle_easy_admin_plus_translations:
     defaults:
         _controller: LleEasyAdminPlusBundle:Admin:translations
 
+lle_easy_admin_plus_wf:
+    path: /wf
+    defaults:
+        _controller: Lle\EasyAdminPlusBundle\Controller\AdminController::workflowAction
+
+
 lle_easy_admin_plus:
     path: /
     defaults:

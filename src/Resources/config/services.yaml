@@ -6,6 +6,7 @@ parameters:
     lle.service.delete_batch.class: Lle\EasyAdminPlusBundle\Service\Batch\DeleteBatch
 
 services:
+
     lle.easy_admin_plus.translator:
         class: Lle\EasyAdminPlusBundle\Translator\Translator
         public: true
@@ -158,3 +159,11 @@ services:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Search\QueryBuilder'
         arguments: ["@doctrine", "@request_stack", "@lle.easy_admin_plus.filter_state"]
+
+    lle.easy_admin_plus.wf_actions:
+        class:  'Lle\EasyAdminPlusBundle\Service\Actions\WorkflowAction'
+        autowire: true
+        autoconfigure: true
+        public: false
+        tags: [controller.service_arguments]
+
