@@ -174,8 +174,28 @@ class AdminController extends BaseAdminController
         $paginator = $this->findFiltered($this->entity, $this->entity['class'], $this->request->query->get('page', 1), $this->entity['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
         $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
 
+        // batch actions
+        $form_index = 0;
+        $batch_forms = [];
+        if (array_key_exists('batchs', $this->entity['list'] )) {
+            $formBuilder = $this->get('form.factory');
+
+            foreach ($this->entity['list']['batchs'] as $i => $actionConfig) {
+                // fields that don't define the 'property' name are special form design elements
+                $actionName = isset($actionConfig['name']) ? $actionConfig['name'] : '_easyadmin_action_batch_'.$form_index;
+
+                if(isset($actionConfig['form'])){
+                    $form = $formBuilder->create($actionConfig['form']);
+                    $form_view = $form->createView();
+                    $batch_forms[$actionName] = $form_view;
+                }
+                ++$form_index;
+            }
+        }
+
         $parameters = array(
             'paginator' => $paginator,
+            'batch_forms' => $batch_forms,
             'fields' => $fields,
             'delete_form_template' => $this->createDeleteForm($this->entity['name'], '__id__')->createView(),
         );

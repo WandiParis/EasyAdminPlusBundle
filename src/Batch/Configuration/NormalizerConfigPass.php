@@ -16,12 +16,10 @@ class NormalizerConfigPass implements ConfigPassInterface
    
     /** @var ContainerInterface */
     private $container;
-    private $formBuilder;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->formBuilder = $container->get('form.factory');
     }
     
     public function process(array $backendConfig)
@@ -36,37 +34,16 @@ class NormalizerConfigPass implements ConfigPassInterface
         $views = array('list');
 
         foreach ($backendConfig['entities'] as $entityName => $entityConfig) {
-            $designElementIndex = 0;
             foreach ($views as $view) {
-                $batchs = array();
-
                 $backendConfig['entities'][$entityName][$view]['hasBatchActions'] = false;
-
                 if(array_key_exists('batchs', $backendConfig['entities'][$entityName][$view])) {
                     $backendConfig['entities'][$entityName][$view]['hasBatchActions'] = true ;
                     if (!is_array($backendConfig['entities'][$entityName][$view]['batchs'])) {
                         throw new \InvalidArgumentException(sprintf('The "batchs" configuration for the "%s" view of the "%s" entity must be an array (a string was provided).', $view, $entityName));
                     }
-
-                    foreach ($entityConfig[$view]['batchs'] as $i => $actionConfig) {
-                        // fields that don't define the 'property' name are special form design elements
-                        $actionName = isset($actionConfig['name']) ? $actionConfig['name'] : '_easyadmin_action_batch_'.$designElementIndex;
-
-                        if(isset($actionConfig['form'])){
-                            $form = $this->formBuilder->create($actionConfig['form']);
-                            $actionConfig['viewForm'] = $form->createView();
-                        }
-
-                        $batchs[$actionName] = $actionConfig;
-
-                        ++$designElementIndex;
-                    }
-
-                    $backendConfig['entities'][$entityName][$view]['batchs'] = $batchs;
                 }
             }
         }
-
         return $backendConfig;
     }
 
