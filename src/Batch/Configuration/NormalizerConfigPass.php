@@ -13,6 +13,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class NormalizerConfigPass implements ConfigPassInterface
 {
+   
+    /** @var ContainerInterface */
+    private $container;
+    private $formBuilder;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+        $this->formBuilder = $container->get('form.factory');
+    }
+    
     public function process(array $backendConfig)
     {
         $backendConfig = $this->normalizeBatchConfig($backendConfig);
@@ -38,11 +49,16 @@ class NormalizerConfigPass implements ConfigPassInterface
                     }
 
                     foreach ($entityConfig[$view]['batchs'] as $i => $actionConfig) {
-
-
                         // fields that don't define the 'property' name are special form design elements
                         $actionName = isset($actionConfig['name']) ? $actionConfig['name'] : '_easyadmin_action_batch_'.$designElementIndex;
+
+                        if(isset($actionConfig['form'])){
+                            $form = $this->formBuilder->create($actionConfig['form']);
+                            $actionConfig['viewForm'] = $form->createView();
+                        }
+
                         $batchs[$actionName] = $actionConfig;
+
                         ++$designElementIndex;
                     }
 

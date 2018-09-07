@@ -536,6 +536,15 @@ class AdminController extends BaseAdminController
         if(array_key_exists($name, $batchs) && $ids) {
             $service = $this->get($batchs[$name]['service']);
             $data = [];
+            if($batchs[$name]['form']){
+                $form = $this->createForm($batchs[$name]['form']);
+                $form->handleRequest($this->request);
+    
+                if ($form->isSubmitted() && $form->isValid()) {
+                    // data is an array with "name", "email", and "message" keys
+                    $data = $form->getData();
+                }
+            }
             $service->execute($this->request, $this->entity, $ids, $data);
             
         }

@@ -21,7 +21,7 @@ class DeleteBatch implements BatchInterface
         $this->doctrine = $doctrine;
     }
 
-    public function execute($request, array $entityConfig, $ids) 
+    public function execute($request, array $entityConfig, $ids, array $data) 
     {
         if (null === $this->em = $this->doctrine->getManagerForClass($entityConfig['class'])) {
             throw new \RuntimeException(sprintf('There is no Doctrine Entity Manager defined for the "%s" class', $entityConfig['class']));

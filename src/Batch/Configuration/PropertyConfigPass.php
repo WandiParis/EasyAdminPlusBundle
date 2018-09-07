@@ -24,10 +24,10 @@ class PropertyConfigPass implements ConfigPassInterface
         'role' => null,
         // service
         'service' => null,
-        // the path of the template used to render the field in 'show' and 'list' views
+        // template
         'template' => null,
-        // choices
-        'choices' => null,
+        // form
+        'form' => null,
         // params
         'params' => []
     );
