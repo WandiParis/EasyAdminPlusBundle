@@ -366,7 +366,6 @@ class AdminController extends BaseAdminController
             print $filter->getName();
             $this->em->getFilters()->disable($filter->getName());
         }
-        die();
         $id = $this->request->query->get('id');
         $easyadmin = $this->request->attributes->get('easyadmin');
         $entity = $easyadmin['item'];
