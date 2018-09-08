@@ -15,6 +15,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 - [X] Show Advanced design ( group and tabs )
 - [X] Batch action on list
 - [X] Configure Query Builder Method
+- [X] Workflow automatic display
 
 
 ### Requirements
@@ -53,3 +54,4 @@ easy_admin_bundle:
 8. [Show Group and Tabs](doc/chapter-9.md)
 9. [Batch Action](doc/chapter-10.md)
 10. [Query Builder Method](doc/chapter-11.md)
+11. [Workflow handling](doc/chapter-workflow.md)
