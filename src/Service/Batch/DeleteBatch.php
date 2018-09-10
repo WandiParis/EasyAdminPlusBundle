@@ -5,12 +5,12 @@ namespace Lle\EasyAdminPlusBundle\Service\Batch;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
-class DeleteBatch
+class DeleteBatch implements BatchInterface
 {
 
     /** @var Registry */
     private $doctrine;
-    private $manager;
+    private $em;
 
     /**
      * @param Registry          $doctrine
@@ -21,9 +21,9 @@ class DeleteBatch
         $this->doctrine = $doctrine;
     }
 
-    public function execute($request, array $entityConfig, $ids) 
+    public function execute($request, array $entityConfig, $ids, array $data) 
     {
-        if (null === $this->manager = $this->doctrine->getManagerForClass($entityConfig['class'])) {
+        if (null === $this->em = $this->doctrine->getManagerForClass($entityConfig['class'])) {
             throw new \RuntimeException(sprintf('There is no Doctrine Entity Manager defined for the "%s" class', $entityConfig['class']));
         }
 
@@ -31,7 +31,7 @@ class DeleteBatch
             $this->deleteItem($entityConfig, $itemId);
 
         }
-        $this->manager->flush();
+        $this->em->flush();
 
     }
 
@@ -49,11 +49,11 @@ class DeleteBatch
     {
         
 
-        if (null === $entity = $this->manager->getRepository($entityConfig['class'])->find($itemId)) {
+        if (null === $entity = $this->em->getRepository($entityConfig['class'])->find($itemId)) {
             throw new EntityNotFoundException(array('entity_name' => $entityConfig['name'], 'entity_id_name' => $entityConfig['primary_key_field_name'], 'entity_id_value' => $itemId));
         }
 
-        $this->manager->remove($entity);
+        $this->em->remove($entity);
     }
 
 }

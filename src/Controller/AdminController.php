@@ -11,7 +11,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
 use Symfony\Component\HttpFoundation\JsonResponse;
-//use Symfony\Component\Workflow\Registry;
 
 class AdminController extends BaseAdminController
 {
@@ -175,8 +174,28 @@ class AdminController extends BaseAdminController
         $paginator = $this->findFiltered($this->entity, $this->entity['class'], $this->request->query->get('page', 1), $this->entity['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
         $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
 
+        // batch actions
+        $form_index = 0;
+        $batch_forms = [];
+        if (array_key_exists('batchs', $this->entity['list'] )) {
+            $formBuilder = $this->get('form.factory');
+
+            foreach ($this->entity['list']['batchs'] as $i => $actionConfig) {
+                // fields that don't define the 'property' name are special form design elements
+                $actionName = isset($actionConfig['name']) ? $actionConfig['name'] : '_easyadmin_action_batch_'.$form_index;
+
+                if(isset($actionConfig['form'])){
+                    $form = $formBuilder->create($actionConfig['form']);
+                    $form_view = $form->createView();
+                    $batch_forms[$actionName] = $form_view;
+                }
+                ++$form_index;
+            }
+        }
+
         $parameters = array(
             'paginator' => $paginator,
+            'batch_forms' => $batch_forms,
             'fields' => $fields,
             'delete_form_template' => $this->createDeleteForm($this->entity['name'], '__id__')->createView(),
         );
@@ -198,7 +217,7 @@ class AdminController extends BaseAdminController
      *
      * @return Pagerfanta The paginated query results
      */
-    protected function findFiltered($entity, $entityClass, $page = 1, $maxPerPage = 15, $sortField = null, $sortDirection = null, $dqlFilter = null)
+    protected function findFiltered($entity, $entityClass, $page = 1, $maxPerPage = 50, $sortField = null, $sortDirection = null, $dqlFilter = null)
     {
         if (empty($sortDirection) || !in_array(strtoupper($sortDirection), array('ASC', 'DESC'))) {
             $sortDirection = 'DESC';
@@ -263,26 +282,8 @@ class AdminController extends BaseAdminController
         ));
     }
 
-    /*    public function workflowAction( Registry $workflows)
-        {
-            $id = $this->request->query->get('id');
-            $easyadmin = $this->request->attributes->get('easyadmin');
-            $entity = $easyadmin['item'];
+    
 
-            $work = $this->request->query->get('work');
-            $workflows = $this->get('workflow.registry');
-            $workflow = $workflows->get($entity);
-
-            try {
-                $workflow->apply($entity, $work);
-                $em->flush();
-
-            } catch (LogicException $exception) {
-            }
-
-            //return $this->redirectToReferrer();
-        }
-    */
 
     public function historyAction(Request $request, $item)
     {
@@ -315,6 +316,124 @@ class AdminController extends BaseAdminController
             'logs'=>$result
         ));
     }
+
+
+    /**
+     * The method that is executed when the user performs a 'new' action on an entity.
+     *
+     * @return Response|RedirectResponse
+     */
+    protected function newAction()
+    {
+        $this->dispatch(EasyAdminEvents::PRE_NEW);
+
+        
+        $entity = $this->executeDynamicMethod('createNew<EntityName>Entity');
+
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $easyadmin['item'] = $entity;
+        $this->request->attributes->set('easyadmin', $easyadmin);
+
+        $fields = $this->entity['new']['fields'];
+
+        $newForm = $this->executeDynamicMethod('create<EntityName>NewForm', array($entity, $fields));
+
+        $newForm->handleRequest($this->request);
+        if ($newForm->isSubmitted() && $newForm->isValid()) {
+            // disable all filters for update cmd ( gedmo tree don't work if filter limit update sql)
+            foreach($this->em->getFilters()->getEnabledFilters() as $filter => $obj) {
+                $this->em->getFilters()->disable($filter);
+            }
+
+            $this->dispatch(EasyAdminEvents::PRE_PERSIST, array('entity' => $entity));
+
+            $this->executeDynamicMethod('prePersist<EntityName>Entity', array($entity, true));
+            $this->executeDynamicMethod('persist<EntityName>Entity', array($entity));
+
+            $this->dispatch(EasyAdminEvents::POST_PERSIST, array('entity' => $entity));
+
+            return $this->redirectToReferrer();
+        }
+
+        $this->dispatch(EasyAdminEvents::POST_NEW, array(
+            'entity_fields' => $fields,
+            'form' => $newForm,
+            'entity' => $entity,
+        ));
+
+        $parameters = array(
+            'form' => $newForm->createView(),
+            'entity_fields' => $fields,
+            'entity' => $entity,
+        );
+
+        return $this->executeDynamicMethod('render<EntityName>Template', array('new', $this->entity['templates']['new'], $parameters));
+    }
+
+
+    /**
+     * The method that is executed when the user performs a 'edit' action on an entity.
+     *
+     * @return Response|RedirectResponse
+     */
+    protected function editAction()
+    {
+        $this->dispatch(EasyAdminEvents::PRE_EDIT);
+
+
+        // disable all filters for update cmd ( gedmo tree don't work if filter limit update sql)
+        foreach($this->em->getFilters() as $filter) {
+            print $filter->getName();
+            $this->em->getFilters()->disable($filter->getName());
+        }
+        $id = $this->request->query->get('id');
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+
+        if ($this->request->isXmlHttpRequest() && $property = $this->request->query->get('property')) {
+            $newValue = 'true' === mb_strtolower($this->request->query->get('newValue'));
+            $fieldsMetadata = $this->entity['list']['fields'];
+
+            if (!isset($fieldsMetadata[$property]) || 'toggle' !== $fieldsMetadata[$property]['dataType']) {
+                throw new \RuntimeException(sprintf('The type of the "%s" property is not "toggle".', $property));
+            }
+
+            $this->updateEntityProperty($entity, $property, $newValue);
+
+            // cast to integer instead of string to avoid sending empty responses for 'false'
+            return new Response((int) $newValue);
+        }
+
+        $fields = $this->entity['edit']['fields'];
+
+        $editForm = $this->executeDynamicMethod('create<EntityName>EditForm', array($entity, $fields));
+        $deleteForm = $this->createDeleteForm($this->entity['name'], $id);
+
+        $editForm->handleRequest($this->request);
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->dispatch(EasyAdminEvents::PRE_UPDATE, array('entity' => $entity));
+
+            $this->executeDynamicMethod('preUpdate<EntityName>Entity', array($entity, true));
+            $this->executeDynamicMethod('update<EntityName>Entity', array($entity));
+
+            $this->dispatch(EasyAdminEvents::POST_UPDATE, array('entity' => $entity));
+
+            return $this->redirectToReferrer();
+        }
+
+        $this->dispatch(EasyAdminEvents::POST_EDIT);
+
+        $parameters = array(
+            'form' => $editForm->createView(),
+            'entity_fields' => $fields,
+            'entity' => $entity,
+            'delete_form' => $deleteForm->createView(),
+        );
+
+        return $this->executeDynamicMethod('render<EntityName>Template', array('edit', $this->entity['templates']['edit'], $parameters));
+    }
+
+
 
     /**
      * Manage translations.
@@ -436,8 +555,17 @@ class AdminController extends BaseAdminController
         
         if(array_key_exists($name, $batchs) && $ids) {
             $service = $this->get($batchs[$name]['service']);
-
-            $service->execute($this->request, $this->entity, $ids);
+            $data = [];
+            if($batchs[$name]['form']){
+                $form = $this->createForm($batchs[$name]['form']);
+                $form->handleRequest($this->request);
+    
+                if ($form->isSubmitted() && $form->isValid()) {
+                    // data is an array with "name", "email", and "message" keys
+                    $data = $form->getData();
+                }
+            }
+            $service->execute($this->request, $this->entity, $ids, $data);
             
         }
 

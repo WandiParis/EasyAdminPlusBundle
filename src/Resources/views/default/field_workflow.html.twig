@@ -1,4 +1,3 @@
-
 <div class="btn-group workflow">
   <button type="button" class="btn btn-xs dropdown-toggle btn-workflow-current" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     {{ ("wf.etat."~item.etat)|trans}} <span class="caret"></span>
@@ -7,7 +6,7 @@
    {% for transition in workflow_transitions(item) %}
         {% if workflow_can(item, transition.name) %}
             <li>
-                <a href="{{path('lle_easy_admin_plus_wf', {'id': item.id, 'transition':transition.name } ) }}" class="btn btn-xs btn-workflow">
+                <a href="{{path('lle_easy_admin_plus_wf', {'entity': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) }}" class="btn btn-xs btn-workflow">
                     <i class="fa fa-fw fa-angle-right"></i>
                         {{ ("wf.transition."~transition.name)|trans }}
                 </a>
@@ -16,7 +15,6 @@
     {% endfor %}
   </ul>
 </div>
-
 <script>
     $('tr[data-id={{item.id}}]').addClass( "wf-{{item.etat}}" );
 </script>
