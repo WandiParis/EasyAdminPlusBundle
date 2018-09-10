@@ -58,6 +58,6 @@ class DateTimeFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleEasyAdminPlusBundle:FilterType:dateTimeFilter.html.twig';
+        return '@LleEasyAdminPlus/FilterType/dateTimeFilter.html.twig';
     }
 }

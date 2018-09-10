@@ -23,7 +23,7 @@ class LleEasyAdminPlusExtension extends Extension
 
         if ($container->hasParameter('twig.form.resources')) {
             $container->setParameter('twig.form.resources', array_merge(
-                ['LleEasyAdminPlusBundle:form:widget.html.twig'],
+                ['@LleEasyAdminPlus/form/widget.html.twig'],
                 $container->getParameter('twig.form.resources')
             ));
         }

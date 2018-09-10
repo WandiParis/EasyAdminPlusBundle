@@ -102,6 +102,6 @@ class PeriodeFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleEasyAdminPlusBundle:FilterType:periodeFilter.html.twig';
+        return '@LleEasyAdminPlus/FilterType/periodeFilter.html.twig';
     }
 }

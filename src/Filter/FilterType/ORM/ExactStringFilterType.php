@@ -68,7 +68,7 @@ class ExactStringFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleEasyAdminPlusBundle:FilterType:exactStringFilter.html.twig';
+        return '@LleEasyAdminPlus/FilterType/exactStringFilter.html.twig';
     }
 
     /**

@@ -70,6 +70,6 @@ class NumberFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleEasyAdminPlusBundle:FilterType:numberFilter.html.twig';
+        return '@LleEasyAdminPlus/FilterType/numberFilter.html.twig';
     }
 }

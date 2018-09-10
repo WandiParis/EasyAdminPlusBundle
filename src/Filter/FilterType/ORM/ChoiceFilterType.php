@@ -73,7 +73,7 @@ class ChoiceFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleEasyAdminPlusBundle:FilterType:choiceFilter.html.twig';
+        return '@LleEasyAdminPlus/FilterType/choiceFilter.html.twig';
     }
 
     public function getMultiple(){

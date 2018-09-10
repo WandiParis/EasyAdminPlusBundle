@@ -36,7 +36,7 @@ Load routes from our `AdminController` or yours but make sure it extends `LleEas
 ```yaml
 # config/routes/easy_admin.yaml
 easy_admin_bundle:
-    resource: '@LleEasyAdminPlusBundle/Controller/AdminController.php'
+    resource: '@LleEasyAdminPlus/Controller/AdminController.php'
     prefix: /admin
     type: annotation
 ```

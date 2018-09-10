@@ -111,7 +111,7 @@ class StringFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleEasyAdminPlusBundle:FilterType:stringFilter.html.twig';
+        return '@LleEasyAdminPlus/FilterType/stringFilter.html.twig';
     }
 
     /**

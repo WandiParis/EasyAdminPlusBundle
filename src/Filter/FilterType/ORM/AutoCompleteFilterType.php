@@ -57,7 +57,7 @@ class AutoCompleteFilterType extends AbstractORMFilterType
      */
     public function getTemplate()
     {
-        return 'LleEasyAdminPlusBundle:FilterType:autoCompleteFilter.html.twig';
+        return '@LleEasyAdminPlus/FilterType/autoCompleteFilter.html.twig';
     }
 
     public function getRoute(){
