@@ -552,7 +552,7 @@ class AdminController extends BaseAdminController
         $ids = $this->request->request->get('ids') ?? $this->request->query->get('ids');
 
         $batchs = $this->entity['list']['batchs'];
-        
+        $ret = null;
         if(array_key_exists($name, $batchs) && $ids) {
             $service = $this->get($batchs[$name]['service']);
             $data = [];
@@ -565,10 +565,12 @@ class AdminController extends BaseAdminController
                     $data = $form->getData();
                 }
             }
-            $service->execute($this->request, $this->entity, $ids, $data);
+            $ret = $service->execute($this->request, $this->entity, $ids, $data);
             
         }
-
+        if($ret) {
+            return $ret;
+        }
         return $this->redirectToReferrer();
 
     }
