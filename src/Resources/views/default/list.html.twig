@@ -191,13 +191,26 @@
 {% endblock %}
 
 {% block main %}
-        {{ include(_entity_config.templates.paginator) }}
+    {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
 
     {% if _entity_config.list.hasBatchActions %}
         <form action="#" method="POST" name="bulkform">
+       
     {% endif %}
 
-    {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
+    {{ include(_entity_config.templates.paginator) }}
+
+    {% if _entity_config.list.hasBatchActions %}
+        <div class="clearfix">
+            <input type="hidden" name="all-selection" value="0" id="all-selection">
+            <div class="col-md-12 alert alert-info hidden js-all-selection-none">
+                {{ 'label.batchthispage' | trans }} | <a class="js-all-selection">{{ 'action.batchselectall' | trans }}</a>
+            </div>
+            <div class="col-md-12 alert alert-info hidden js-all-selection-active">
+                {{ 'label.batchallselectactive' | trans }} | <a class="js-all-selection">{{ 'action.batchselectpage' | trans }}</a>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="table-responsive">
     <table class="table">
@@ -207,7 +220,7 @@
 
                 {% if _entity_config.list.hasBatchActions %}
                     <td data-priority="0" style="width: 30px;">
-                        <input type="checkbox" id="js-all-bulk-checkbox">
+                        <input type="checkbox" id="js-all-bulk-checkbox" title="{{'label.batchselectall'|trans}}">
                     </td>
                 {% endif %}
                 

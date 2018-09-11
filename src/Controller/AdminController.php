@@ -231,7 +231,21 @@ class AdminController extends BaseAdminController
         }
 
         if (isset($entity['filter'])) {
-            foreach ($entity['filter']['fields'] as $filterType) {
+            $this->applyFilters($entity, $queryBuilder);
+        }
+
+        $this->dispatch(EasyAdminEvents::POST_LIST_QUERY_BUILDER, array(
+            'query_builder' => $queryBuilder,
+            'sort_field' => $sortField,
+            'sort_direction' => $sortDirection,
+        ));
+        $page = ($this->request->request->has('filter'))? 1:$page;
+        return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
+    }
+
+    protected function applyFilters($entity, $queryBuilder)
+    {
+        foreach ($entity['filter']['fields'] as $filterType) {
                 $ftype = $filterType['filtertype'];
                 $ftype->setQueryBuilder($queryBuilder);
                 $ftype->setRequest($this->request);
@@ -243,16 +257,36 @@ class AdminController extends BaseAdminController
                     $donnes = $ftype->init();
                     $ftype->apply($data, str_replace('.', '_',$filterType['property']), $donnes['alias'], $donnes['column']);
                 }
-            }
         }
-        $this->dispatch(EasyAdminEvents::POST_LIST_QUERY_BUILDER, array(
-            'query_builder' => $queryBuilder,
-            'sort_field' => $sortField,
-            'sort_direction' => $sortDirection,
-        ));
-        $page = ($this->request->request->has('filter'))? 1:$page;
-        return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
     }
+
+    /**
+     * Performs a database query to get all the records related to the given
+     * entity. It supports pagination and field sorting.
+     *
+     * @param string $entityConfig
+     * @param string $entityClass
+     * @param string|null $sortField
+     * @param string|null $sortDirection
+     * @param string|null $dqlFilter
+     *
+     * @return query results
+     */
+    protected function findSelection($entity, $entityClass, $sortField = null, $sortDirection = null, $dqlFilter = null)
+    {
+
+        $queryBuilder = $this->executeDynamicMethod('create<EntityName>ListQueryBuilder', array($entityClass, $sortDirection, $sortField, $dqlFilter));
+
+        if (isset($entity['filter'])) {
+            $this->applyFilters($entity, $queryBuilder);
+        }
+
+        $queryBuilder->select($queryBuilder->getRootAlias().'.id');
+        $result =  $queryBuilder->getQuery()->getResult();
+        $ids = array_column($result, "id");
+        return $ids;
+    }
+
 
     /**
      * Creates Query Builder instance for all the records.
@@ -550,7 +584,14 @@ class AdminController extends BaseAdminController
     {
         $name = $this->request->request->get('name') ?? $this->request->query->get('name');
         $ids = $this->request->request->get('ids') ?? $this->request->query->get('ids');
+        $allSelection = $this->request->request->get('all-selection');
 
+        if($allSelection) {
+
+            $ids = $this->findSelection($this->entity, $this->entity['class'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
+            
+
+        }
         $batchs = $this->entity['list']['batchs'];
         $ret = null;
         if(array_key_exists($name, $batchs) && $ids) {
