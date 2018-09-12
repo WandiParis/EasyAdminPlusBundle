@@ -1,4 +1,4 @@
-{% for action in actions %}
+{% for action in actions if not action.global is defined %}
     {% if 'list' == action.name %}
         {% set action_href = request_parameters.referer|default('') ? request_parameters.referer|easyadmin_urldecode : path('easyadmin', request_parameters|merge({ action: 'list' })) %}
     {% elseif 'method' == action.type %}

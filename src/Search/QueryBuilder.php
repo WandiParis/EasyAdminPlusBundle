@@ -120,10 +120,16 @@ class QueryBuilder
         /* @var EntityManager */
         $em = $this->doctrine->getManagerForClass($entityConfig['class']);
         /* @var DoctrineQueryBuilder */
-        $queryBuilder = $em->createQueryBuilder()
-            ->select('entity')
-            ->from($entityConfig['class'], 'entity')
-        ;
+
+        $qb_method = ($entityConfig['qb_method'] ?? null);
+        if ($qb_method) {
+            $queryBuilder = $em->getRepository($entityConfig['class'])->$qb_method();
+        } else {
+            $queryBuilder = $em->createQueryBuilder()
+                ->select('entity')
+                ->from($entityConfig['class'], 'entity')
+            ;
+        }        
 
         $isSearchQueryNumeric = is_numeric($searchQuery);
         $isSearchQuerySmallInteger = (is_int($searchQuery) || ctype_digit($searchQuery)) && $searchQuery >= -32768 && $searchQuery <= 32767;
