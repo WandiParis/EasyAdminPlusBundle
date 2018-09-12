@@ -10,7 +10,8 @@
 
 {% block content_header %}
 {{ parent() }}
-
+{% block content_list_header %}
+{% endblock %}
 {% if _entity_config.filter is defined %}
 
     {%  set hidden_filter = true  %}
@@ -382,6 +383,9 @@
             _entity_config: _entity_config,
         }, with_context = false) }}
     {% endblock delete_form %}
+    
+{% block content_list_footer %}
+{% endblock %}
 
 {% endblock %}
 
