@@ -26,7 +26,7 @@
   <div class="small">
     <ul class="inline">
       {% if entity.createdAt is defined %}
-        <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y h:i')}}
+        <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y H:i')}}
           {% if entity.createdBy %}
             {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
             {{ entity.createdBy }}
@@ -34,7 +34,7 @@
         </li>
       {% endif %}
       {% if entity.updatedAt is defined %}
-        <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y h:i')}}
+        <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y H:i')}}
           {% if entity.updatedBy %}
             {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
             {{ entity.updatedBy }}
