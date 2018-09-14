@@ -306,7 +306,7 @@ class AdminController extends BaseAdminController
         return $this->get('lle.easy_admin_plus.query_builder')->createListQueryBuilder($this->entity, $sortField, $sortDirection, $dqlFilter);
     }
 
-    public function embeddedListAction($request, $entity, $items, $with_add)
+    public function embeddedListAction($request, $entity, $items, $metadata)
     {
         $this->initialize($request);
         $this->master_entity = $this->entity;
@@ -314,25 +314,33 @@ class AdminController extends BaseAdminController
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
         $fields = $this->entity['list']['fields'];
-        if ($with_add) {
-            $add_form = $this->createFormBuilder(null, array(
-                'action' => $this->generateUrl('lle_easy_admin_plus_add_sublist', [
-                    'parent_id'=> $request->query->get('id') ,
-                    'parent_entity'=> $this->master_entity['class'],
-                    'entity'=> "App\\Entity\\$entity" ]),
-                'method' => 'POST',
-            ))
-            ->add('item_id', EasyAdminAutocompleteType::class, array(
-                'class' => "App\\Entity\\$entity",
-                'label' => false,
-                'attr' => [
-                    'data-easyadmin-autocomplete-url'  => $this->generateUrl('easyadmin', 
-                        [ 'action' => 'autocomplete', 'entity'=> $entity ]
-                    )
-                ]
-            ))
-            ->add('submit', SubmitType::class, array('label' => 'sublist.add'))
-            ->getForm()->createView();
+        if ($metadata['with_add'] ?? false) {
+            if ($metadata['add_form'] ?? false) {
+                $add_form = $this->createForm($metadata['add_form'], null, [
+                    'action' => $this->generateUrl($metadata['add_route'], ['id' => $request->query->get('id')]),
+                    'method' => 'POST',
+                    'attr' => ['class'=>'form-inline']
+                ])
+                ->createView();
+            } else {
+                $add_form = $this->createFormBuilder(null, array(
+                    'action' => $this->generateUrl('lle_easy_admin_plus_add_sublist', [
+                        'parent_id'=> $request->query->get('id') ,
+                        'parent_entity'=> $this->master_entity['class'],
+                        'entity'=> "App\\Entity\\$entity" ]),
+                    'method' => 'POST',
+                ))
+                ->add('item_id', EasyAdminAutocompleteType::class, array(
+                    'class' => "App\\Entity\\$entity",
+                    'label' => false,
+                    'attr' => [
+                        'data-easyadmin-autocomplete-url'  => $this->generateUrl('easyadmin', 
+                            [ 'action' => 'autocomplete', 'entity'=> $entity ]
+                        )
+                    ]
+                ))
+                ->getForm()->createView();
+            }
         } else {
             $add_form = null;
         }

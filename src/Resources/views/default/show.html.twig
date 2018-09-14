@@ -133,8 +133,7 @@
                 {% set action = "Lle\\EasyAdminPlusBundle\\Controller\\AdminController:embeddedListAction" %}
                 {% set items = attribute(entity, metadata.property) %}
                 {% set entity_name = metadata.entity %}   
-                {% set with_add = metadata.with_add | default(false) %}
-                {{ render(controller(action ,{'request':app.request, 'entity':entity_name, 'items':items, 'with_add': with_add })) }}
+                {{ render(controller(action ,{'request':app.request, 'entity':entity_name, 'items':items, 'metadata': metadata })) }}
               </div>
               <!-- /.tab-pane -->
             {% endif %}              
