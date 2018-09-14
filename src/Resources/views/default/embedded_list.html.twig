@@ -104,10 +104,25 @@
         </table>
     </div>
     {% if add_form %}
-    {{ form(add_form) }}
+        {% form_theme add_form with easyadmin_config('design.form_theme') %}
+        {{ form_start(add_form) }}
+        {{ form_widget(add_form.item_id) }}
+        {{ form_widget(add_form.submit) }}
+        {{ form_end(add_form) }}
     {% endif %}
     
     {#% block paginator %}{{ include(_entity_config.templates.paginator) }}{% endblock paginator %#}
 
 </div>
 {% endblock main %}
+
+{% block body_javascript %}
+
+    <script type="text/javascript">
+        $(function () {
+            createAutoCompleteFields();
+        });    
+    </script>
+
+    {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
+{% endblock %}

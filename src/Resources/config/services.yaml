@@ -168,3 +168,10 @@ services:
         public: false
         tags: [controller.service_arguments]
 
+    lle.easy_admin_plus.sublist_actions:
+        class:  'Lle\EasyAdminPlusBundle\Service\Actions\AddSublistAction'
+        autowire: true
+        autoconfigure: true
+        public: false
+        tags: [controller.service_arguments]
+

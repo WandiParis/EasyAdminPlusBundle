@@ -13,3 +13,9 @@ lle_easy_admin_plus_wf:
     path: /wf
     defaults:
         _controller: lle.easy_admin_plus.wf_actions
+
+
+lle_easy_admin_plus_add_sublist:
+    path: /sublist/add
+    defaults:
+        _controller: lle.easy_admin_plus.sublist_actions

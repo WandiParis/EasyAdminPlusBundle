@@ -13,6 +13,7 @@ use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AdminController extends BaseAdminController
 {
@@ -308,17 +309,29 @@ class AdminController extends BaseAdminController
     public function embeddedListAction($request, $entity, $items, $with_add)
     {
         $this->initialize($request);
+        $this->master_entity = $this->entity;
+
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
         $fields = $this->entity['list']['fields'];
         if ($with_add) {
             $add_form = $this->createFormBuilder(null, array(
-                'action' => '/add',
-                'method' => 'GET',
+                'action' => $this->generateUrl('lle_easy_admin_plus_add_sublist', [
+                    'parent_id'=> $request->query->get('id') ,
+                    'parent_entity'=> $this->master_entity['class'],
+                    'entity'=> "App\\Entity\\$entity" ]),
+                'method' => 'POST',
             ))
-            ->add('add', EasyAdminAutocompleteType::class, array(
-                'class' => "App\\Entity\\$entity"
+            ->add('item_id', EasyAdminAutocompleteType::class, array(
+                'class' => "App\\Entity\\$entity",
+                'label' => false,
+                'attr' => [
+                    'data-easyadmin-autocomplete-url'  => $this->generateUrl('easyadmin', 
+                        [ 'action' => 'autocomplete', 'entity'=> $entity ]
+                    )
+                ]
             ))
+            ->add('submit', SubmitType::class, array('label' => 'sublist.add'))
             ->getForm()->createView();
         } else {
             $add_form = null;
