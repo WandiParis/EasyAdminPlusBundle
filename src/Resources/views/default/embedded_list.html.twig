@@ -103,7 +103,10 @@
             </tbody>
         </table>
     </div>
-
+    {% if add_form %}
+    {{ form(add_form) }}
+    {% endif %}
+    
     {#% block paginator %}{{ include(_entity_config.templates.paginator) }}{% endblock paginator %#}
 
 </div>

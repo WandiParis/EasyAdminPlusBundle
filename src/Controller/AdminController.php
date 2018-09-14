@@ -11,6 +11,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
 
 class AdminController extends BaseAdminController
 {
@@ -303,16 +305,29 @@ class AdminController extends BaseAdminController
         return $this->get('lle.easy_admin_plus.query_builder')->createListQueryBuilder($this->entity, $sortField, $sortDirection, $dqlFilter);
     }
 
-    public function embeddedListAction($request, $entity, $items)
+    public function embeddedListAction($request, $entity, $items, $with_add)
     {
         $this->initialize($request);
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
         $fields = $this->entity['list']['fields'];
+        if ($with_add) {
+            $add_form = $this->createFormBuilder(null, array(
+                'action' => '/add',
+                'method' => 'GET',
+            ))
+            ->add('add', EasyAdminAutocompleteType::class, array(
+                'class' => "App\\Entity\\$entity"
+            ))
+            ->getForm()->createView();
+        } else {
+            $add_form = null;
+        }
         return $this->render('@LleEasyAdminPlus/default/embedded_list.html.twig', array(
             'fields'=>$fields,
             'items'=>$items,
-            'entity'=>$entity
+            'entity'=>$entity,
+            'add_form'=>$add_form
         ));
     }
 

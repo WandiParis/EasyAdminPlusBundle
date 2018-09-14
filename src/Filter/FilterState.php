@@ -22,17 +22,9 @@ class FilterState
     /**
      * @param Session $session
      */
-    public function __construct(Session $session)
+    public function __construct()
     {
-        $this->session = $session;
-        /*try {
-            $bag = $this->session->getBag('lle_filter');
-        } catch (InvalidArgumentException $e) {
-            $bag = new NamespacedAttributeBag('_lle_filter');
-            $bag->setName('lle_filter');
-            $this->session->registerBag($bag);
-        }*/
-        $this->bag = null;
+       
     }
     /**
      * @return string
@@ -46,7 +38,10 @@ class FilterState
     {
         $this->bag->clear();
     }
+    
+    public function handleRequest($request) {
 
+    }
     public function getValueSession($id)
     {
         $gid = $this->request->get('entity', null).$id;
