@@ -19,15 +19,17 @@ class FilterSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $bag = new NamespacedAttributeBag('_lle_filter');
-        $bag->setName('lle_filter');
-        $this->session->registerBag($bag);
+        if ($event->isMasterRequest()) {
+            $bag = new NamespacedAttributeBag('_lle_filter');
+            $bag->setName('lle_filter');    
+            $this->session->registerBag($bag);
+        }
     }
 
     public static function getSubscribedEvents()
     {
         return [
-           'kernel.request' => ['onKernelRequest',1024],
+           'kernel.request' => ['onKernelRequest', 3024],
         ];
     }
 }
