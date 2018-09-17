@@ -22,9 +22,9 @@ class FilterState
     /**
      * @param Session $session
      */
-    public function __construct()
+    public function __construct($session)
     {
-       
+       $this->session = $session;
     }
     /**
      * @return string
@@ -38,7 +38,7 @@ class FilterState
     {
         $this->bag->clear();
     }
-    
+
     public function handleRequest($request) {
 
     }
