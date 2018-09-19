@@ -226,7 +226,6 @@ class GeneratorTool
     {
         $structure = [
             'easy_admin' => [
-                'translation_domain' => $this->parameters['translation_domain'],
                 'formats' => [
                     'datetime' => 'd/m/Y à H\hi',
                     'date' => 'd/m/Y',
