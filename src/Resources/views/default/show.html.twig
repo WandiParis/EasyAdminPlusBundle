@@ -1,6 +1,8 @@
 {% extends '@BaseEasyAdmin/default/show.html.twig' %}
 
 {% block content_header %}
+{% set _trans_parameters = _trans_parameters|merge({ '%entity_toString%': entity }) %}
+
    <div class=" pull-right btn-group ">
       {% block show_actions %}
           {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
