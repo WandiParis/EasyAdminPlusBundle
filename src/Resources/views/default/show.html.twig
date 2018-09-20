@@ -1,5 +1,10 @@
 {% extends '@BaseEasyAdmin/default/show.html.twig' %}
 
+{% block page_title %}
+{% set _trans_parameters = _trans_parameters|merge({ '%entity_toString%': entity }) %}
+{{ block('content_title')|striptags|raw }}
+{% endblock %}
+
 {% block content_header %}
 {% set _trans_parameters = _trans_parameters|merge({ '%entity_toString%': entity }) %}
 
