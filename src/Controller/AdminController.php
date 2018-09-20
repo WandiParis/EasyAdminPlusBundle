@@ -303,7 +303,7 @@ class AdminController extends BaseAdminController
      */
     protected function createListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
     {
-        return $this->get('lle.easy_admin_plus.query_builder')->createListQueryBuilder($this->entity, $sortField, $sortDirection, $dqlFilter);
+        return $this->get('lle.easy_admin_plus.query_builder')->createListQueryBuilder($this->entity, $sortField, $sortDirection, $dqlFilter, $this->request);
     }
 
     public function embeddedListAction($request, $entity, $items, $metadata)

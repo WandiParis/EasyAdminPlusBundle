@@ -45,11 +45,13 @@ class QueryBuilder
      *
      * @return DoctrineQueryBuilder
      */
-    public function createListQueryBuilder(array $entityConfig, $sortField = null, $sortDirection = null, $dqlFilter = null)
+    public function createListQueryBuilder(array $entityConfig, $sortField = null, $sortDirection = null, $dqlFilter = null, $request)
     {
         /* @var EntityManager */
         $em = $this->doctrine->getManagerForClass($entityConfig['class']);
-
+        if (isset($entityConfig['filter'])) {
+            $this->filterState->bindRequest($request, $entityConfig['filter']);
+        }
         $disabled_filters = $entityConfig['disabled_filters'] ?? [];
         foreach($disabled_filters as $filter) {
             if($em->getFilters()->isEnabled($filter)){

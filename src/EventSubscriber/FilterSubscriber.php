@@ -20,8 +20,8 @@ class FilterSubscriber implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         if ($event->isMasterRequest()) {
-            $bag = new NamespacedAttributeBag('_lle_filter');
-            $bag->setName('lle_filter');    
+            $bag = new NamespacedAttributeBag('_admin_filters');
+            $bag->setName('admin_filters');    
             $this->session->registerBag($bag);
         }
     }

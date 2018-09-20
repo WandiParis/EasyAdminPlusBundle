@@ -25,6 +25,7 @@ class FilterState
     public function __construct($session)
     {
        $this->session = $session;
+       $this->bag = $session->getBag('admin_filters');
     }
     /**
      * @return string
@@ -34,13 +35,31 @@ class FilterState
         return 'session';
     }
 
-    public function reset()
+    public function clear_bag($prefix)
     {
-        $this->bag->clear();
+        $this->bag->clear($prefix);
     }
 
-    public function handleRequest($request) {
+    public function bindRequest($request, $filters) {
 
+        $prefix = $request->get('entity', null);
+        if ($request->request->has('reset') && $request->request->get('reset') === 'reset') {
+            print_r($this->bag->get($prefix));
+            
+        }
+/*
+        // get filter has priority
+        $has_get = false;
+        foreach($filters as $filter) {
+            $new_get_value = $request->query->get($id, null);
+            if ($new_get_value) {
+                if ( !$has_get ) {
+                    $this->clear($prefix);
+                    $has_get = true;
+                }
+                $this->bag->set($prefix.'/'.$new_get_value); 
+            }
+        }*/
     }
     public function getValueSession($id)
     {
