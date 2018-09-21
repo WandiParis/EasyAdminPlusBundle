@@ -5,29 +5,25 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-            <a class="dropdown-toggle" id="dropdownBatchActionButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="dropdown-toggle" id="dropdownBatchActionButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btn-batch">
             {{ 'label.batchActions.title'|trans }}
             <span class="caret"></span>
             </a>
               
-            <ul class="dropdown-menu" aria-labelledby="dropdownBatchActionButton">
+            <ul class="dropdown-menu" aria-labelledby="dropdownBatchActionButton" id="dropdown-batch">
                 {% for action, actiondata in _entity_config.list.batchs %}
                     {% if actiondata.role is null or is_granted(actiondata.role) %}
-                            <li><a href="javascript:void(0)" 
-                                {% if batch_forms[actiondata.name] is defined %}
+                            <li><a href="javascript:void(0)"
                                     onclick="showBatchForm('{{actiondata.name}}')" 
-                                {% else %}
-                                    onclick="return doBulkAction('{{ path('easyadmin', app.request.query|merge({ action: "batch", name: action })|merge(actiondata.params)) }}')" 
-                                {% endif %}
                                 >
                                 {% if actiondata.icon is not null %}
                                     <i class="fa fa-{{ actiondata.icon }} }}"></i> {{ (actiondata.label)|trans }}
                                 {% else %}
                                     {{ (actiondata.label)|trans }}
                                 {% endif %}
-                                {% if batch_forms[actiondata.name] is defined %}
-                                    <span class="pull-right fa fa-angle-right"></span>
-                                {% endif %}
+                                {# {% if batch_forms[actiondata.name] is defined %} #}
+                                    &nbsp;<span class="pull-right fa fa-angle-right"></span>
+                                {# {% endif %} #}
                             </a></li>
                     {% endif %}
                 {% endfor %}
@@ -36,11 +32,20 @@
       </ul>
       <div class="navbar-form navbar-left navbar-batch">
         {% for action, actiondata in _entity_config.list.batchs %}
-            {% if (actiondata.role is null or is_granted(actiondata.role)) and batch_forms[actiondata.name] is defined %}
-            <div  id="batch_{{actiondata.name}}" class="batch_form hidden">
-                <div class="batchForms form-group form-inline">
-                    {{ form_widget(batch_forms[actiondata.name]) }}
-                </div>
+            {% if (actiondata.role is null or is_granted(actiondata.role)) %}
+                <div  id="batch_{{actiondata.name}}" class="batch_form hidden">
+                
+                     {% if actiondata.icon is not null %}
+                        <i class="fa fa-{{ actiondata.icon }} }}"></i> {{ (actiondata.label)|trans }}
+                    {% else %}
+                        {{ (actiondata.label)|trans }}
+                    {% endif %}
+                   
+                {% if  batch_forms[actiondata.name] is defined %}
+                    <div class="batchForms form-group form-inline">
+                        {{ form_widget(batch_forms[actiondata.name]) }}
+                    </div>
+                {% endif %}
                 <button class="btn btn-default js-bulk-button disabled"  onclick="return doBulkAction('{{ path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) }}')" >{{'batch.execute'|trans}}</button>
             </div>
             {% endif %}
@@ -129,4 +134,5 @@
     for (var key in checkboxes) {
         checkboxes[key].onchange = validateBulkCheckboxes;
     }
+
 </script>
