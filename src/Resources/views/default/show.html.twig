@@ -62,7 +62,7 @@
     {% for field, metadata in fields    %}
       {% if metadata.type == 'tab' or metadata.type == 'sublist' %}
         <li class="">
-          <a href="#{{metadata.id}}" data-toggle="tab" aria-expanded="false">{{metadata.label|trans()}}
+          <a href="#{{metadata.id}}" id="tab-{{metadata.id}}" data-toggle="tab" aria-expanded="false">{{metadata.label|trans()}}
           </a>
         </li>
       {% endif %}
@@ -176,5 +176,22 @@
             _entity_config: _entity_config,
         }, with_context = false) }}
     {% endblock delete_form %}
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        if(window.location.hash) {
+            $('#tab-'+window.location.hash.substr(1)).tab('show');
+        }
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            tab = $(e.target).attr('href');
+            window.location.hash = tab;
+        })
+
+    });
+    </script>
 {% endblock %}
 
