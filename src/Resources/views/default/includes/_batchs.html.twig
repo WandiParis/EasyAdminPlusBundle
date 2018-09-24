@@ -46,7 +46,7 @@
                         {{ form_widget(batch_forms[actiondata.name]) }}
                     </div>
                 {% endif %}
-                <button class="btn btn-default js-bulk-button disabled"  onclick="return doBulkAction('{{ path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) }}')" >{{'batch.execute'|trans}}</button>
+                <button class="btn btn-default js-bulk-button disabled"  data-toggle="modal" data-target="#confirm-batch" data-href="{{ path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) }}" >{{'batch.execute'|trans}}</button>
             </div>
             {% endif %}
         {% endfor %}
@@ -54,6 +54,25 @@
     </div><!-- /.navbar-collapse -->
   </div>
 </nav>
+
+<div id="confirm-batch" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>{{ 'batch_modal.title'|trans }}</h4>
+                <p>{{ 'batch_modal.content'|trans }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn">
+                    {{ 'action.cancel'|trans }}
+                </button>
+                <button type="button" data-dismiss="modal" class="btn btn-danger btn-ok" id="modal-delete-button" >
+                    {{ 'batch_modal.action'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     function doBulkAction(url) {
@@ -134,5 +153,23 @@
     for (var key in checkboxes) {
         checkboxes[key].onchange = validateBulkCheckboxes;
     }
+    
+    $('#confirm-batch').on('click', '.btn-ok', function(e) {
+            var $modalDiv = $(e.delegateTarget);
+            var href = $(this).data('href');
+            doBulkAction(href);
+            $modalDiv.addClass('loading');
+            setTimeout(function() {
+                $modalDiv.modal('hide').removeClass('loading');
+            }, 1000)
+        });
+    $('#confirm-batch').on('show.bs.modal', function(e) {
+            var data = $(e.relatedTarget).data();
+            $('.btn-ok', this).data('href', data.href);
+        });
 
+    $('.js-bulk-button').on('click', function(e){
+      e.preventDefault();
+    });
+   
 </script>
