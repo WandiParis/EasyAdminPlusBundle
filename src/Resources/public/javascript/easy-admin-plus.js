@@ -1,5 +1,8 @@
 $(function(){
+    var date=new Date();
     $('.datepicker').datepicker();
+    $('.datepicker-future').datepicker({minDate: 'now'});
+    $('.datepicker-past').datepicker({maxDate: 'now'});
     $('.datetimepicker').datetimepicker();
 });
 
