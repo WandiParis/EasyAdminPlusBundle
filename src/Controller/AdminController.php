@@ -314,6 +314,9 @@ class AdminController extends BaseAdminController
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
         $fields = $this->entity['list']['fields'];
+        foreach($metadata['ignore_fields']??[] as $field_to_del) {
+            unset($fields[$field_to_del]);
+        }
         if ($metadata['with_add'] ?? false) {
             if ($metadata['add_form'] ?? false) {
                 $add_form = $this->createForm($metadata['add_form'], null, [
