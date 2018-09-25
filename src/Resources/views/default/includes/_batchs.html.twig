@@ -53,7 +53,7 @@
                     {% else %}
                         onclick="return doBulkAction('{{ href }}')"
                     {% endif %}
-                    >{{'batch.execute'|trans}}</button>
+                    >{{'batch.execute'|trans({}, 'EasyAdminPlusBundle')}}</button>
             </div>
             {% endif %}
         {% endfor %}
@@ -66,15 +66,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <h4>{{ 'batch_modal.title'|trans }}</h4>
-                <p>{{ 'batch_modal.content'|trans }}</p>
+                <h4>{{ 'batch_modal.title'|trans({}, 'EasyAdminPlusBundle') }}</h4>
+                <p>{{ 'batch_modal.content'|trans({}, 'EasyAdminPlusBundle') }}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn">
-                    {{ 'action.cancel'|trans }}
+                    {{ 'action.cancel'|trans({}, 'EasyAdminPlusBundle') }}
                 </button>
                 <button type="button" data-dismiss="modal" class="btn btn-danger btn-ok" id="modal-delete-button" >
-                    {{ 'batch_modal.action'|trans }}
+                    {{ 'batch_modal.action'|trans({}, 'EasyAdminPlusBundle') }}
                 </button>
             </div>
         </div>
