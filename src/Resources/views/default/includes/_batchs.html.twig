@@ -46,7 +46,14 @@
                         {{ form_widget(batch_forms[actiondata.name]) }}
                     </div>
                 {% endif %}
-                <button class="btn btn-default js-bulk-button disabled"  data-toggle="modal" data-target="#confirm-batch" data-href="{{ path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) }}" >{{'batch.execute'|trans}}</button>
+                {% set href = path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) %}
+                <button class="btn btn-default js-bulk-button disabled"  
+                    {% if actiondata.confirm %} 
+                        data-toggle="modal" data-target="#confirm-batch" data-href="{{ href }}" 
+                    {% else %}
+                        onclick="return doBulkAction('{{ href }}')"
+                    {% endif %}
+                    >{{'batch.execute'|trans}}</button>
             </div>
             {% endif %}
         {% endfor %}
