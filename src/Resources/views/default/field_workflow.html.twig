@@ -6,7 +6,7 @@
    {% for transition in workflow_transitions(item) %}
         {% if workflow_can(item, transition.name) %}
             <li>
-                <a href="{{path('lle_easy_admin_plus_wf', {'entity': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) }}" class="btn btn-xs btn-workflow">
+                <a data-toggle="modal" data-target="#confirm-wf" data-href="{{path('lle_easy_admin_plus_wf', {'entity': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) }}" class="btn btn-xs btn-workflow">
                     <i class="fa fa-fw fa-angle-right"></i>
                         {{ ("wf.transition."~transition.name)|trans }}
                 </a>
@@ -15,6 +15,45 @@
     {% endfor %}
   </ul>
 </div>
+
+
+<div id="confirm-wf" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>{{ 'wf_modal.title'|trans({}, 'EasyAdminPlusBundle') }}</h4>
+                <p>{{ 'wf_modal.content'|trans({}, 'EasyAdminPlusBundle') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn">
+                    {{ 'action.cancel'|trans({}, 'EasyAdminPlusBundle') }}
+                </button>
+                <button type="button" data-dismiss="modal" class="btn btn-danger btn-ok" id="modal-wf-button" >
+                    {{ 'wf_modal.action'|trans({}, 'EasyAdminPlusBundle') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     $('tr[data-id={{item.id}}]').addClass( "wf-{{item.etat}}" );
+    
+    $('#confirm-wf').on('click', '.btn-ok', function(e) {
+            var $modalDiv = $(e.delegateTarget);
+            var href = $(this).data('href');
+            document.location.href= href;
+            $modalDiv.addClass('loading');
+            setTimeout(function() {
+                $modalDiv.modal('hide').removeClass('loading');
+            }, 1000)
+        });
+
+    $('#confirm-wf').on('show.bs.modal', function(e) {
+            var data = $(e.relatedTarget).data();
+            $('.btn-ok', this).data('href', data.href);
+        });
+
+
 </script>

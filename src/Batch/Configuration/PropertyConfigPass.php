@@ -29,7 +29,9 @@ class PropertyConfigPass implements ConfigPassInterface
         // form
         'form' => null,
         // params
-        'params' => []
+        'params' => [],
+
+        'confirm' => true
     );
 
     public function process(array $backendConfig)
