@@ -53,7 +53,7 @@ class ExportManager
         $data= [];
         $keys = array_keys($fields);
         for ($i = 0, $count = count($keys); $i < $count; $i++) {
-            $data[0][$i] = $this->translator->trans([$keys[$i]]['label'] ?? $keys[$i]);
+            $data[0][$i] = $this->translator->trans($fields[$keys[$i]]['label'] ?? $keys[$i]);
         }
         $i = 1;
         foreach ($paginator as $entity) {
