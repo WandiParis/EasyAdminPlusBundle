@@ -1,3 +1,13 @@
+
+{% set confirm = true %}
+{% if field_options['confirm'] is defined %}
+  {% set confirm = field_options['confirm'] %}
+{% endif %}
+{% if entity_config['wf_confirm'] is defined %}
+  {% set confirm = entity_config['wf_confirm'] %}
+{% endif %}
+
+
 <div class="btn-group workflow">
   <button type="button" class="btn btn-xs dropdown-toggle btn-workflow-current" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     {{ ("wf.etat."~item.etat)|trans}} <span class="caret"></span>
@@ -5,8 +15,17 @@
   <ul class="dropdown-menu">
    {% for transition in workflow_transitions(item) %}
         {% if workflow_can(item, transition.name) %}
+            {% set path = path('lle_easy_admin_plus_wf', {'entity': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) %}
             <li>
-                <a data-toggle="modal" data-target="#confirm-wf" data-href="{{path('lle_easy_admin_plus_wf', {'entity': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) }}" class="btn btn-xs btn-workflow">
+                <a class="btn btn-xs btn-workflow"
+                  {% if confirm %}
+                    data-toggle="modal" data-target="#confirm-wf" data-href="{{path }}" 
+                  {% else %}
+                    href="{{ path }}"
+                  {% endif %}
+
+                >
+
                     <i class="fa fa-fw fa-angle-right"></i>
                         {{ ("wf.transition."~transition.name)|trans }}
                 </a>
