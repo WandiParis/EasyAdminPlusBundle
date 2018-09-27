@@ -1,5 +1,5 @@
 <select class="form-control" name="{{nameprefix}}value{{namesuffix}}">
     <option value="">Tous</option>
-    <option value="true" {% if data.value is defined and data.value == "true" %} selected="selected" {% endif %}>Oui</option>
-    <option value="false" {% if data.value is defined and data.value == "false" %} selected="selected" {% endif %}>Non</option>
+    <option value="true" {% if  filtertype.isSelected(data,"true") %} selected="selected" {% endif %}>Oui</option>
+    <option value="false" {% if filtertype.isSelected(data,"false") %} selected="selected" {% endif %}>Non</option>
 </select>

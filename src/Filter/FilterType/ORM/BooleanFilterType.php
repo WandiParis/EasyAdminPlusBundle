@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BooleanFilterType extends AbstractORMFilterType
 {
+    private $default_value;
     /**
      * @param Request $request  The request
      * @param array   &$data    The data
@@ -21,13 +22,23 @@ class BooleanFilterType extends AbstractORMFilterType
     }
 
     /**
+     * @param string $columnName The column name
+     * @param string $alias      The alias
+     */
+    public function __construct($columnName, $config, $alias = 'b')
+    {
+        parent::__construct($columnName,$config, $alias);
+        $this->default_value = $config['default_value'] ?? null;
+    }
+    /**
      * @param array  $data     The data
      * @param string $uniqueId The unique identifier
      */
     public function apply(array $data, $uniqueId, $alias, $col)
     {
-        if (isset($data['value'])) {
-            switch ($data['value']) {
+        $value = $data['value'] ?? $this->default_value;
+        if (isset($value)) {
+            switch ($value) {
                 case 'true':
                     $this->queryBuilder->andWhere($this->queryBuilder->expr()->eq($alias . $col, 'true'));
                     break;
@@ -36,6 +47,15 @@ class BooleanFilterType extends AbstractORMFilterType
                     break;
             }
         }
+    }
+
+    public function isSelected($data,$value){
+        if(! isset($data['value'])){
+            return ($this->default_value == $value);
+        } else {
+            return ($data['value'] == $value);
+        }
+        return false;
     }
 
     /**
