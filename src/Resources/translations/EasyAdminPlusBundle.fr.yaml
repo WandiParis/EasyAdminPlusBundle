@@ -96,7 +96,25 @@ history:
     action:
         update: mis à jour par        
         delete: supprimé par
-        create: crée par
+        create: créé par
 Rechercher: Rechercher               
 Filtrer: Filtrer
 Effacer: Effacer
+label.batchActions.title: "Choisir une action massive"
+batch:
+    execute: Valider
+label.batchthispage: "Uniquement la page affichée"
+action.batchselectall: "Tout sélectionner"
+label.batchallselectactive: "Appliqué à tout"
+action.batchselectpage: "Sélectionner la page affichée"
+label.batchselectall: "Sélectionner tout"
+batch_modal:
+    title: "Voulez vous effectuer cette action massive ?"
+    action: "Valider"
+    content: ""
+
+action.cancel: Annuler
+wf_modal:
+    title: "Voulez vous effectuer ce changement d'état ?"
+    action: "Valider"
+    content: ""

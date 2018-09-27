@@ -100,3 +100,20 @@ history:
 Rechercher: Search
 Filtrer: Filter
 Effacer: Clear
+label.batchActions.title: "Choose"
+batch:
+    execute: Execute
+label.batchthispage: "This page"
+action.batchselectall: "Select all"
+label.batchallselectactive: "All items are selected"
+action.batchselectpage: "Select current page"
+label.batchselectall: "Select all"
+batch_modal:
+    title: "Confirm this action ?"
+    action: "Execute"
+    content: ""
+action.cancel: Cancel
+wf_modal:
+    title: "Confirm this action ?"
+    action: "Execute"
+    content: ""
