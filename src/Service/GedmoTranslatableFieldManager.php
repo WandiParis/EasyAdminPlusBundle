@@ -83,7 +83,7 @@ class GedmoTranslatableFieldManager
             ->useQueryCache(false)
             ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, self::GEDMO_TRANSLATION_WALKER)
             ->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $defaultLocale)
-            ->getSingleResult();
+            ->getOneOrNullResult();
 
         return $entityInDefaultLocale;
     }
@@ -96,8 +96,10 @@ class GedmoTranslatableFieldManager
         // 2/3 translations
         $translations = $this->getTranslations($entity, $fieldName);
         // 3/3 translations + default
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $translations[$defaultLocale] = $propertyAccessor->getValue($entityInDefaultLocale, $fieldName);
+        if ($entityInDefaultLocale) {
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+            $translations[$defaultLocale] = $propertyAccessor->getValue($entityInDefaultLocale, $fieldName);
+        }
         return $translations;
     }
     private function getPersonalTranslationClassName($entity)
