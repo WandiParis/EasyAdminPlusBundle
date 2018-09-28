@@ -332,7 +332,8 @@
 
                         <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
                             {%  if metadata.link is defined %}
-                                <a href="{{ path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id })) }}">
+                                {% set fragment = metadata.tab ?? null %}
+                                <a href="{{ path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id, '_fragment': fragment})) }}">
                             {%  endif %}
                             {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
                             {%  if metadata.link is defined %}</a>{% endif %}
