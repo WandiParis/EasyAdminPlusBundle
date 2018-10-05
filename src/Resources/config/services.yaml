@@ -154,11 +154,10 @@ services:
     lle.easy_admin_plus.filter_state:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Filter\FilterState'
-        arguments: ["@session"]
 
     lle.easy_admin_plus.filter_bag_subscriber:
         class:  'Lle\EasyAdminPlusBundle\EventSubscriber\FilterSubscriber'
-        arguments: ["@session"]
+        arguments: ["@session", "@lle.easy_admin_plus.filter_state", "@easyadmin.config.manager"]
         tags: [kernel.event_subscriber]
 
     lle.easy_admin_plus.query_builder:

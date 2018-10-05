@@ -10,24 +10,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class FilterState
 {
     /**
-     * @var AttributeBag
-     */
-    protected $bag;
-
-    /**
-     * @var Session
-     */
-    protected $session;
-
-    /**
-     * @param Session $session
-     */
-    public function __construct($session)
-    {
-       $this->session = $session;
-       $this->bag = $session->getBag('admin_filters');
-    }
-    /**
      * @return string
      */
     public function getName()
@@ -35,22 +17,19 @@ class FilterState
         return 'session';
     }
 
-    public function clear_bag($prefix)
-    {
-        $this->bag->clear($prefix);
-    }
 
-    public function bindRequest($request, $filters) {
+    public function bindRequest($request, $entity_conf) {
 
-        $prefix = $request->get('entity', null);
+        $entity = $request->get('entity', null);
         if ($request->request->has('reset') && $request->request->get('reset') === 'reset') {
             print_r($this->bag->get($prefix));
-            
         }
-/*
+        foreach($entity_conf['filter']['fields'] as $filter) {
+            print $filter['property'];
+        }
+        die('');
         // get filter has priority
         $has_get = false;
-        foreach($filters as $filter) {
             $new_get_value = $request->query->get($id, null);
             if ($new_get_value) {
                 if ( !$has_get ) {
@@ -59,7 +38,7 @@ class FilterState
                 }
                 $this->bag->set($prefix.'/'.$new_get_value); 
             }
-        }*/
+        
     }
     public function getValueSession($id)
     {
