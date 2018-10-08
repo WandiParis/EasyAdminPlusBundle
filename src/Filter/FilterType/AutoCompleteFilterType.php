@@ -38,15 +38,6 @@ class AutoCompleteFilterType extends AbstractFilterType
         }
     }
 
-
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/autoCompleteFilter.html.twig';
-    }
-
     public function getRoute(){
         return $this->route;
     }

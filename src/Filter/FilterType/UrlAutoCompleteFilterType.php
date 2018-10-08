@@ -39,14 +39,6 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/urlAutoCompleteFilter.html.twig';
-    }
-
     public function getUrl(){
         return $this->url;
     }

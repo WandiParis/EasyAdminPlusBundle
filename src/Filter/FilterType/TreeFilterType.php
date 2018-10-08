@@ -71,11 +71,4 @@ class TreeFilterType extends EntityFilterType
       return ($entity->getLvl() >= $this->startLevel);
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/treeFilter.html.twig';
-    }
 }

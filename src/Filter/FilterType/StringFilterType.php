@@ -81,13 +81,6 @@ class StringFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/stringFilter.html.twig';
-    }
 
     /**
      * @return string

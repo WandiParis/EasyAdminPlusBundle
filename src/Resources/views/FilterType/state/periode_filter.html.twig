@@ -1,0 +1,14 @@
+{% if data['value'] and ( data['value']['from'] or data['value']['to']) %}
+<span class="filter-state">
+    <small>{{ filtertype.filterLabel |trans }}</small>
+    <span class="badge">
+    {% if data['value']['from'] %}
+        du {{ data['value']['from'] }}
+    {% endif %}
+    {% if data['value']['to'] %}
+        au {{ data['value']['to'] }}
+    {% endif %}
+    </span>
+</span>
+{% endif %}
+

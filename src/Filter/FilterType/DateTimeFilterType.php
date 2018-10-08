@@ -53,11 +53,4 @@ class DateTimeFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/dateTimeFilter.html.twig';
-    }
 }

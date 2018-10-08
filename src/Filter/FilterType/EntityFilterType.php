@@ -40,17 +40,18 @@ class EntityFilterType extends AbstractFilterType
         }
     }
 
-
-
-    public function getEntities($data){
-        if($this->isHidden()){ //si le filtre est hidden pas de requet. héééé ouai
+    public function getEntities($data) 
+    {
+        if ($this->isHidden()) { //si le filtre est hidden pas de requet. héééé ouai
             $elements = array();
-            if(is_array($data['value'])){
-                foreach($data['value'] as $value) $elements[] = new HiddenEntity($value);
-            }else{
+            if (is_array($data['value'])) {
+                foreach ($data['value'] as $value) {
+                    $elements[] = new HiddenEntity($value);
+                }
+            } else {
                 $elements[] = new HiddenEntity($data['value']);
             }
-        }else{
+        } else {
             $m = $this->method;
             $args = $this->args;
             $repo = $this->em->getRepository($this->table);
@@ -64,21 +65,18 @@ class EntityFilterType extends AbstractFilterType
         }
         return $elements;
     }
+    public function getItemLabel($id) {
+        $repo = $this->em->getRepository($this->table);
+        $obj = $repo->find($id);
+        return (string) $obj;
+    }
 
-    public function isSelected($data,$entity){
+    public function isSelected($data, $entity) {
         if($this->getMultiple() and is_array($data['value'])){
             return in_array($entity->getId(),$data['value']);
         }else{
             return ($data && $data['value'] == $entity->getId());
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/entityFilter.html.twig';
     }
 
     public function getMultiple(){

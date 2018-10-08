@@ -53,14 +53,6 @@ class DateFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/dateFilter.html.twig';
-    }
-
     public function getDatePickerOptions(){
         $options = [];
         $options['changeMonth'] =  true;

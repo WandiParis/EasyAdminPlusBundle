@@ -52,13 +52,6 @@ class ChoiceFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/choiceFilter.html.twig';
-    }
 
     public function getMultiple(){
         return $this->multiple;

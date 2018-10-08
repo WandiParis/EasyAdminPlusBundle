@@ -88,3 +88,11 @@ img.country {
     }
 }
 /** /TRANSLATIONS **/
+
+.filter-state {
+    margin-left: 10px;
+    padding: 3px;
+    line-height: 30px;
+    border-radius: 5px;
+    background-color: #EEE;
+}

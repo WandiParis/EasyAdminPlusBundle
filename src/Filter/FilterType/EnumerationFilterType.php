@@ -41,11 +41,4 @@ class EnumerationFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/enumerationFilter.html.twig';
-    }
 }

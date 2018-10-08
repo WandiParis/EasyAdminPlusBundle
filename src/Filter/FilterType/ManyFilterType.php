@@ -45,14 +45,6 @@ class ManyFilterType extends EntityFilterType
         return $elements;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/manyFilter.html.twig';
-    }
-
     public function getMultiple(){
         return $this->multiple;
     }

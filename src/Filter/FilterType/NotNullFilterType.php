@@ -35,11 +35,4 @@ class NotNullFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/notnullFilter.html.twig';
-    }
 }

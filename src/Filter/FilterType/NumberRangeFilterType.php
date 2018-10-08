@@ -52,11 +52,4 @@ class NumberRangeFilterType extends AbstractFilterType
       
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/numberRangeFilter.html.twig';
-    }
 }

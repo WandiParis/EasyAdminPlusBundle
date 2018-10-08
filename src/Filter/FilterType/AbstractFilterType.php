@@ -139,9 +139,17 @@ abstract class AbstractFilterType implements FilterTypeInterface
         $class = substr(get_called_class(), strrpos(get_called_class(), '\\') + 1);
         $template = str_replace('Type','',$class);
         $template = $converter->normalize($template);
-        return '@LleEasyAdminPlus/FilterType/'.$template.'-state.html.twig';
+        return '@LleEasyAdminPlus/FilterType/state/'.$template.'.html.twig';
     }
 
+    public function getTemplate()
+    {
+        $converter = new CamelCaseToSnakeCaseNameConverter();
+        $class = substr(get_called_class(), strrpos(get_called_class(), '\\') + 1);
+        $template = str_replace('Type','',$class);
+        $template = $converter->normalize($template);
+        return '@LleEasyAdminPlus/FilterType/'.$template.'.html.twig';
+    }
     public function __sleep()
     {
         return array('columnName', 'alias', 'data');

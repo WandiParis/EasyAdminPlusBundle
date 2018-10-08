@@ -56,12 +56,4 @@ class WorkflowFilterType extends ChoiceFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/workflowFilter.html.twig';
-    }
-
 }

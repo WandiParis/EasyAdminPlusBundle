@@ -65,11 +65,4 @@ class NumberFilterType extends AbstractFilterType
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return '@LleEasyAdminPlus/FilterType/numberFilter.html.twig';
-    }
 }
