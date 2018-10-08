@@ -18,7 +18,6 @@ class EntityFilterType extends AbstractFilterType
 
     public function __construct($columnName, $label, $config, $alias = 'entity')
     {
-
         parent::__construct($columnName, $label, $config, $alias);
         $this->table = $config['table'];
         $this->method = (isset($config['method']))? $config['method']:'findAll';

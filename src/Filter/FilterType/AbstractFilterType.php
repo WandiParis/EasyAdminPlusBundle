@@ -2,10 +2,10 @@
 
 namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
-
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
 use Lle\EasyAdminPlusBundle\Lib\QueryHelper;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 /**
  * AbstractFilterType
@@ -41,7 +41,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
     public function __construct($columnName, $label= '', $config = array(),  $alias = 'entity')
     {
         $this->columnName = $columnName;
-        $this->uniqueId = $columnName;
+        $this->uniqueId = str_replace('.','_',$columnName);
 
         $this->alias = $alias;
         $this->label = $label ?? $columnName.".label";
@@ -60,18 +60,21 @@ abstract class AbstractFilterType implements FilterTypeInterface
         return $this->columnName;
     }
 
+    public function getUniqueId()
+    {
+        return $this->uniqueId;
+    }
+
     public function updateDataFromRequest($request)
     {
         foreach ($this->data_keys as $k) {
             $var = 'filter_'.$k.'_'.str_replace('.','_',$this->columnName);
             $val_get = $request->query->get($var, null);
-            if ($val_get) {
+            if (!is_null($val_get)) {
                 $this->data[$k] = $val_get;
             } else {
                 $val_post = $request->request->get($var, null);
-                if ($val_post) {
-                    $this->data[$k] = $val_post;
-                }
+                $this->data[$k] = $val_post;
             }
             if (!array_key_exists($k, $this->data)) {
                 $this->data[$k] = null;
@@ -128,6 +131,15 @@ abstract class AbstractFilterType implements FilterTypeInterface
     public function getData()
     {
         return $this->data;
+    }
+
+    public function getStateTemplate()
+    {
+        $converter = new CamelCaseToSnakeCaseNameConverter();
+        $class = substr(get_called_class(), strrpos(get_called_class(), '\\') + 1);
+        $template = str_replace('Type','',$class);
+        $template = $converter->normalize($template);
+        return '@LleEasyAdminPlus/FilterType/'.$template.'-state.html.twig';
     }
 
     public function __sleep()

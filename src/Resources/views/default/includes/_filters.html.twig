@@ -12,18 +12,27 @@
 <div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
     <form method="POST" action="{{ path('easyadmin', app.request.query|merge({ filter: "y" })) }}" class="form-horizontal ">
 
-    <div class="box box-info">
+    <div class="box box-info collapsed-box">
         <div class="box-header with-border">
             <h4 class="box-title">
                 <i class="icon fa fa-search"></i>
                 &nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}
+                {% for filter in filters %}
+                    {% set vars = {
+                        'data': filter.data, 
+                        'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId, 
+                        'filtertype':filter} 
+                    %}
+                    {% include filter.stateTemplate with vars %}
+
+                {% endfor %}
             </h4>
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             </div>
         </div><!-- /.box-header -->
 
-        <div class="box-body">
+        <div class="box-body" style="display:none">
           <div class="row">
 
           <!-- FILTER -->
@@ -37,7 +46,7 @@
                             <div class="col-sm-8">
                                 {% set vars = {
                                     'data': filter.data, 
-                                    'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.code|replace({'.':'_'}), 
+                                    'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId, 
                                     'filtertype':filter} 
                                 %}
                               {% include filter.template with vars %}

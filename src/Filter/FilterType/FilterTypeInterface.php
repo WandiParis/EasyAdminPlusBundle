@@ -22,6 +22,8 @@ interface FilterTypeInterface
      * @return string
      */
     public function getTemplate();
+    
+    public function getStateTemplate();
 
     public function updateDataFromRequest($request);
 
