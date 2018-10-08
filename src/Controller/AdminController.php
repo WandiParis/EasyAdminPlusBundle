@@ -10,13 +10,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
+use Lle\EasyAdminPlusBundle\Filter\FilterState;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends BaseAdminController
 {
+    
     /**
      * {@inheritdoc}
      */
@@ -24,19 +28,6 @@ class AdminController extends BaseAdminController
     {
         $homepageConfig = $this->config['homepage'];
 
-        // when Javier will merge #2151 (https://github.com/EasyCorp/EasyAdminBundle/pull/2151)
-        // it'll be ok and redirect on the correct action instead of raw "list"
-
-        // if the first entity have a higher role, take the first one which matchs
-        /*if (!$this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($this->config['entities'][$homepageConfig['params']['entity']], 'list')) {
-            foreach ($this->config['entities'] as $entityName => $entityInfo) {
-                if ($this->get('lle.easy_admin_plus.acl.security.admin_authorization_checker')->isEasyAdminGranted($entityInfo, 'list') &&
-                    !in_array('list', $entityInfo['disabled_actions'])) {
-                    $this->config['homepage']['params']['entity'] = $entityName;
-                    break;
-                }
-            }
-        }*/
 
         return parent::redirectToBackendHomepage();
     }
@@ -195,11 +186,12 @@ class AdminController extends BaseAdminController
                 ++$form_index;
             }
         }
-
+        $filterState= $this->get('lle.easy_admin_plus.filter_state');
         $parameters = array(
             'paginator' => $paginator,
             'batch_forms' => $batch_forms,
             'fields' => $fields,
+            'filters' => $filterState->getFilters($this->entity['name']),
             'delete_form_template' => $this->createDeleteForm($this->entity['name'], '__id__')->createView(),
         );
 
@@ -233,9 +225,6 @@ class AdminController extends BaseAdminController
             $queryBuilder->addOrderBy($queryBuilder->getRootAlias().'.lft');
         }
 
-        if (isset($entity['filter'])) {
-            $this->applyFilters($entity, $queryBuilder);
-        }
 
         $this->dispatch(EasyAdminEvents::POST_LIST_QUERY_BUILDER, array(
             'query_builder' => $queryBuilder,
@@ -246,22 +235,6 @@ class AdminController extends BaseAdminController
         return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
     }
 
-    protected function applyFilters($entity, $queryBuilder)
-    {
-        foreach ($entity['filter']['fields'] as $filterType) {
-                $ftype = $filterType['filtertype'];
-                $ftype->setQueryBuilder($queryBuilder);
-                $ftype->setRequest($this->request);
-                $ftype->setEm($this->em);
-
-                $data = [];
-                if ($ftype->bindRequest($data, str_replace('.', '_', $filterType['property']))) {
-                    $ftype->setData($data);
-                    $donnes = $ftype->init();
-                    $ftype->apply($data, str_replace('.', '_',$filterType['property']), $donnes['alias'], $donnes['column']);
-                }
-        }
-    }
 
     /**
      * Performs a database query to get all the records related to the given
@@ -279,11 +252,6 @@ class AdminController extends BaseAdminController
     {
 
         $queryBuilder = $this->executeDynamicMethod('create<EntityName>ListQueryBuilder', array($entityClass, $sortDirection, $sortField, $dqlFilter));
-
-        if (isset($entity['filter'])) {
-            $this->applyFilters($entity, $queryBuilder);
-        }
-
         $queryBuilder->select($queryBuilder->getRootAlias().'.id');
         $result =  $queryBuilder->getQuery()->getResult();
         $ids = array_column($result, "id");
@@ -456,7 +424,6 @@ class AdminController extends BaseAdminController
 
         // disable all filters for update cmd ( gedmo tree don't work if filter limit update sql)
         foreach($this->em->getFilters() as $filter) {
-            print $filter->getName();
             $this->em->getFilters()->disable($filter->getName());
         }
         $id = $this->request->query->get('id');

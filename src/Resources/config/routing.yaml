@@ -7,7 +7,7 @@ lle_easy_admin_plus_translations:
 lle_easy_admin_plus:
     path: /
     defaults:
-        _controller: LleEasyAdminPlusBundle:Admin:index
+        _controller: lle.easy_admin_plus.controller::index
         
 lle_easy_admin_plus_wf:
     path: /wf

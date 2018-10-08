@@ -4,6 +4,8 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManager;
+use Lle\EasyAdminPlusBundle\Lib\QueryHelper;
 
 /**
  * AbstractFilterType
@@ -17,26 +19,75 @@ abstract class AbstractFilterType implements FilterTypeInterface
      */
     protected $columnName = null;
 
+    protected $em = null;
+
     protected $hidden = false;
     /**
      * @var null|string
      */
     protected $alias = null;
+    protected $uniqueId = null;
+
+    protected $label = null;
 
     protected $request = null;
 
     protected $data = null;
-
+    protected $data_keys = [];
     /**
      * @param string $columnName The column name
      * @param string $alias The alias
      */
-    public function __construct($columnName, $config = array(), $alias = 'entity')
+    public function __construct($columnName, $label= '', $config = array(),  $alias = 'entity')
     {
         $this->columnName = $columnName;
+        $this->uniqueId = $columnName;
+
         $this->alias = $alias;
-        $this->hidden = (isset($config['hidden'])) ? $config['hidden'] : false;
+        $this->label = $label ?? $columnName.".label";
+        $this->hidden = $config['hidden'] ?? false;
         $this->data = [];
+        $this->data_keys = ['comparator', 'value'];
+    }
+
+    public function getFilterLabel()
+    {
+        return $this->label;
+    }
+    
+    public function getCode()
+    {
+        return $this->columnName;
+    }
+
+    public function updateDataFromRequest($request)
+    {
+        foreach ($this->data_keys as $k) {
+            $var = 'filter_'.$k.'_'.str_replace('.','_',$this->columnName);
+            $val_get = $request->query->get($var, null);
+            if ($val_get) {
+                $this->data[$k] = $val_get;
+            } else {
+                $val_post = $request->request->get($var, null);
+                if ($val_post) {
+                    $this->data[$k] = $val_post;
+                }
+            }
+            if (!array_key_exists($k, $this->data)) {
+                $this->data[$k] = null;
+            }
+        }
+    }
+
+    public function setEm(EntityManager $em){
+        $this->em = $em;
+    }
+
+    public function addJoin($queryBuilder) {
+        $queryHelper = new QueryHelper();
+        list($alias, $col) = $queryHelper->getPath($queryBuilder, $this->alias, $this->columnName);
+        $this->alias = $alias;
+        $this->columnName = $col;
     }
 
     /**
@@ -46,15 +97,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
      */
     protected function getAlias()
     {
-        if (empty($this->alias)) {
-            return '';
-        }
-
-        if (strpos($this->alias, '.') !== false) {
-            return $this->alias;
-        }
-
-        return $this->alias . '.';
+        return $this->alias;
     }
 
     public function isHidden()
@@ -75,31 +118,6 @@ abstract class AbstractFilterType implements FilterTypeInterface
     public function getRequest(): Request
     {
         return $this->request;
-    }
-
-    public function getValueSession($id)
-    {
-        $gid = $this->request->get('entity', null).$id;
-        $session = $this->request->getSession();
-        if ($this->request->request->has('reset') && $this->request->request->get('reset') === 'reset') {
-            $session->remove($gid);
-            return null;
-        }
-        $new_val_post = $this->request->request->get($id, null);
-        $new_val_get = $this->request->query->get($id, null);
-        $new_val = $new_val_post ?? $new_val_get;
-        if ($new_val) {
-            $session->set($gid, $new_val);
-            return $new_val;
-        } else {
-            if (!($this->request->request->has('filter') && $this->request->request->get('filter') === 'filter')) {
-                return $session->get($gid, null);
-            } else {
-                $session->remove($gid);
-                return null;
-            }
-        }
-
     }
 
     public function setData($data)

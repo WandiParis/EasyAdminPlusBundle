@@ -24,11 +24,6 @@ class FilterSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if ($event->isMasterRequest()) {
-            $bag = new NamespacedAttributeBag('_admin_filters');
-            $bag->setName('admin_filters');    
-            $this->session->registerBag($bag);
-        }
         $request = $event->getRequest();
         if (null === $entityName = $event->getRequest()->query->get('entity')) {
             return;
@@ -42,7 +37,7 @@ class FilterSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-           'kernel.request' => ['onKernelRequest', 3024],
+           'kernel.request' => ['onKernelRequest', 0],
         ];
     }
 }

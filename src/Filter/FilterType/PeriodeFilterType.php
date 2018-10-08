@@ -1,6 +1,6 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use DateTime;
 
@@ -9,27 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * DateFilterType
  */
-class PeriodeFilterType extends AbstractORMFilterType
+class PeriodeFilterType extends AbstractFilterType
 {
 
     private $choices;
     private $requestChoice;
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId)
-    {
-        $data['value']      = $this->getValueSession('filter_value_' . $uniqueId);
-        $data['choice']      = $this->getValueSession('filter_choice_' . $uniqueId);
-        $this->requestChoice = $data['choice'];
-        return ($data['value'] != '');
-    }
 
-    public function __construct($columnName, $config = array(), $alias = 'b')
+    public function __construct($columnName, $label, $config = array(), $alias = 'entity')
     {
-        parent::__construct($columnName, $config, $alias);
+        parent::__construct($columnName, $label, $config, $alias);
         $this->choices = (isset($config['choices']))? $config['choices']:null;
         $this->format = (isset($config['format']))? $config['format']:'d/m/Y';
     }
@@ -38,7 +26,7 @@ class PeriodeFilterType extends AbstractORMFilterType
      * @param array  $data     The data
      * @param string $uniqueId The unique identifier
      */
-    public function apply(array $data, $uniqueId,$alias,$col)
+    public function apply($queryBuilder)
     {
         if (isset($data['value'])) {
             $qb = $this->queryBuilder;

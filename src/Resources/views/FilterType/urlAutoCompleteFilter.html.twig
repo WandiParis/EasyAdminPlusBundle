@@ -1,6 +1,6 @@
 {% if data is defined and data.value is defined %}
-	{% set value = data.value.value %}
-	{% set label = data.value.label %}
+	{% set value = data.value %}
+	{% set label = data.value_label %}
 {% else %}
 	{% set value = null %}
 	{% set label = null %}

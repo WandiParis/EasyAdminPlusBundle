@@ -1,6 +1,6 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use DateTime;
 
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * DateTimeFilterType
  */
-class DateTimeFilterType extends AbstractORMFilterType
+class DateTimeFilterType extends AbstractFilterType
 {
     /**
      * @param Request $request  The request

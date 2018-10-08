@@ -6,62 +6,62 @@ use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Doctrine\ORM\EntityManagerInterface;
 
 class FilterState
 {
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'session';
-    }
 
+    protected $filters = [];
+
+ /**
+     * @var EntityManager
+     */
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
 
     public function bindRequest($request, $entity_conf) {
-
-        $entity = $request->get('entity', null);
-        if ($request->request->has('reset') && $request->request->get('reset') === 'reset') {
-            print_r($this->bag->get($prefix));
-        }
-        foreach($entity_conf['filter']['fields'] as $filter) {
-            print $filter['property'];
-        }
-        die('');
-        // get filter has priority
-        $has_get = false;
-            $new_get_value = $request->query->get($id, null);
-            if ($new_get_value) {
-                if ( !$has_get ) {
-                    $this->clear($prefix);
-                    $has_get = true;
-                }
-                $this->bag->set($prefix.'/'.$new_get_value); 
-            }
         
-    }
-    public function getValueSession($id)
-    {
-        $gid = $this->request->get('entity', null).$id;
-        $session = $this->request->getSession();
-        if ($this->request->request->has('reset') && $this->request->request->get('reset') === 'reset') {
-            $session->remove($gid);
-            return null;
-        }
-        $new_val_post = $this->request->request->get($id, null);
-        $new_val_get = $this->request->query->get($id, null);
-        $new_val = $new_val_post ?? $new_val_get;
-        if ($new_val) {
-            $session->set($gid, $new_val);
-            return $new_val;
+        $entity_name = $entity_conf['name'];
+        $reset = false;
+        if ($request->request->has('reset') && 'reset' === $request->request->get('reset')) {
+            $data[$entity_name] = [];
+            $reset = true;
         } else {
-            if (!($this->request->request->has('filter') && $this->request->request->get('filter') === 'filter')) {
-                return $session->get($gid, null);
-            } else {
-                $session->remove($gid);
-                return null;
-            }
+            $data = $request->getSession()->get('admin_filters');
         }
 
-    }    
+        foreach ($entity_conf['filter']['fields'] as $filter) {
+            $reflection_class = new \ReflectionClass($filter['filter_type']);
+            $filterObj = $reflection_class->newInstanceArgs([ 
+                $filter['property'], $filter['label'], $filter['config']
+            ]);
+            $filterObj->setEm($this->em);
+
+            $this->filters[$entity_name][$filter['property']] = $filterObj;
+
+            // set data from sesssion
+            $filterObj->setData($data[$entity_name][$filter['property']]??[]);
+            // set data from request
+            if (!$reset) $filterObj->updateDataFromRequest($request);
+            // save data to session
+            $data[$entity_name][$filter['property']] = $filterObj->getData();
+        }
+        $request->getSession()->set('admin_filters', $data);
+    }
+
+    public function getFilters($entity_name) {
+        return $this->filters[$entity_name];
+    }
+
+    public function applyFilters($queryBuilder, $entity_name) {
+        foreach($this->filters[$entity_name] as $filter) {
+            $filter->addJoin($queryBuilder);
+            $filter->apply($queryBuilder);
+        }
+    }
+
 }

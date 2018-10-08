@@ -1,13 +1,13 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * StringFilterType
  */
-class StringFilterType extends AbstractORMFilterType
+class StringFilterType extends AbstractFilterType
 {
     /**
      * @var string
@@ -28,9 +28,9 @@ class StringFilterType extends AbstractORMFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $config = array(), $alias = 'b')
+    public function __construct($columnName, $label, $config = array(), $alias = 'entity')
     {
-        parent::__construct($columnName, $config, $alias);
+        parent::__construct($columnName, $label, $config, $alias);
         $this->defaultValue = $config['defaultValue'] ?? "";
         $this->defaultComparator = $config['defaultComparator'] ?? "startswith";
         $this->additionalProperties = $config['additionalProperties'] ?? [];
@@ -41,33 +41,8 @@ class StringFilterType extends AbstractORMFilterType
         }
     }
 
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId)
-    {
-        $data['comparator'] = $this->defaultComparator;
-        if($this->getValueSession('filter_comparator_' . $uniqueId) == 'isnull') {
 
-            $data['comparator'] = $this->getValueSession('filter_comparator_' . $uniqueId);
-            return true;
-        }
-        if ($this->getValueSession('filter_value_' . $uniqueId)) {
-            $data['comparator'] = $this->getValueSession('filter_comparator_' . $uniqueId);
-            $data['value']      = $this->getValueSession('filter_value_' . $uniqueId);
-            return ($data['value'] != null);
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param array  $data     The data
-     * @param string $uniqueId The unique identifier
-     */
-    public function apply(array $data, $uniqueId, $alias, $col)
+    public function apply($queryBuilder)
     {
         if (!array_key_exists("value", $data) || !isset($data["value"]) ) {
             $data["value"] = $this->defaultValue;

@@ -12,56 +12,10 @@
 {{ parent() }}
 {% block content_list_header %}
 {% endblock %}
-{% if _entity_config.filter is defined %}
+{% block filters %}
+    {{ include('@LleEasyAdminPlus/default/includes/_filters.html.twig') }}
+{% endblock %}
 
-    {%  set hidden_filter = true  %}
-    {% for filter in _entity_config.filter.fields %}
-        {%  if not filter.filtertype.hidden  %}
-            {%  set hidden_filter = false  %}
-        {%  endif %}
-    {%  endfor  %}
-
-<div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
-    <form method="POST" action="{{ path('easyadmin', app.request.query|merge({ filter: "y" })) }}" class="form-horizontal ">
-
-    <div class="box box-info">
-        <div class="box-header with-border">
-            <h4 class="box-title"><i class="icon fa fa-search"></i>&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}</h4>
-            <div class="box-tools pull-right">
-              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            </div>
-        </div><!-- /.box-header -->
-
-        <div class="box-body">
-          <div class="row">
-
-          <!-- FILTER -->
-          {% for filter in _entity_config.filter.fields %}
-
-          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px; {%  if filter.filtertype.hidden %}display:none;{% endif %}">
-                        <div class="form-group">
-                            <label for="date" class="col-sm-4 control-label text-nowrap">
-                                {{ filter.label|trans() }}
-                            </label>
-                            <div class="col-sm-8">
-                              {% set vars = {'data': filter.filtertype.data, 'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.code|replace({'.':'_'}), 'filtertype':filter.filtertype} %}
-                              {% include filter.template with vars %}
-                            </div>
-                        </div> <!-- form group -->
-                    </div>
-          {% endfor %}
-          </div><!-- row -->
-        </div><!-- box-body -->
-
-        <div class="box-footer">
-            <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}</button>
-            <button class="btn btn-default" name="reset" value="reset" type="submit">{{'Effacer'|trans({}, 'EasyAdminPlusBundle') }}</button>
-        </div>
-    </div>
-
-    </form>
-</div>
-{% endif %}
 {% endblock %}
 
 

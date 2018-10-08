@@ -1,40 +1,28 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * BooleanFilterType
  */
-class BooleanFilterType extends AbstractORMFilterType
+class BooleanFilterType extends AbstractFilterType
 {
     private $default_value;
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId)
-    {
-        $data['value'] = $this->getValueSession('filter_value_' . $uniqueId);
-        return ($data['value'] != '');
-    }
 
     /**
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $config, $alias = 'b')
+    public function __construct($columnName, $label, $config, $alias = 'entity')
     {
-        parent::__construct($columnName,$config, $alias);
+        parent::__construct($columnName, $label, $config, $alias);
         $this->default_value = $config['default_value'] ?? null;
     }
-    /**
-     * @param array  $data     The data
-     * @param string $uniqueId The unique identifier
-     */
-    public function apply(array $data, $uniqueId, $alias, $col)
+
+
+    public function apply($queryBuilder)
     {
         $value = $data['value'] ?? $this->default_value;
         if (isset($value)) {

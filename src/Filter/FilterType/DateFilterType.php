@@ -1,6 +1,6 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use DateTime;
 
@@ -9,12 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * DateFilterType
  */
-class DateFilterType extends AbstractORMFilterType
+class DateFilterType extends AbstractFilterType
 {
 
-    public function __construct($columnName, $config = [], $alias = 'b')
+    public function __construct($columnName, $label, $config = [], $alias = 'entity')
     {
-        parent::__construct($columnName, $config, $alias);
+        parent::__construct($columnName, $label, $config, $alias);
         $this->yearRange = (isset($config['yearRange']))? $config['yearRange']:null;
     }
 

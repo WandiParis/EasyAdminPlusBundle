@@ -154,6 +154,7 @@ services:
     lle.easy_admin_plus.filter_state:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Filter\FilterState'
+        arguments: ["@doctrine.orm.entity_manager"]
 
     lle.easy_admin_plus.filter_bag_subscriber:
         class:  'Lle\EasyAdminPlusBundle\EventSubscriber\FilterSubscriber'
@@ -179,3 +180,10 @@ services:
         public: false
         tags: [controller.service_arguments]
 
+
+    lle.easy_admin_plus.controller:
+        class:  'Lle\EasyAdminPlusBundle\Controller\AdminController'
+        autoconfigure: true
+        autowire: true
+        public: false
+        tags: [controller.service_arguments]

@@ -1,12 +1,12 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
-use Lle\EasyAdminPlusBundle\Filter\FilterType\ORM\AbstractORMFilterType;
+use Lle\EasyAdminPlusBundle\Filter\FilterType\AbstractFilterType;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\HiddenEntity;
 
-class EntityFilterType extends AbstractORMFilterType
+class EntityFilterType extends AbstractFilterType
 {
 
     protected $table;
@@ -16,26 +16,10 @@ class EntityFilterType extends AbstractORMFilterType
     protected $group_by;
     protected $method_label;
 
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId)
-    {
-        $data['comparator'] = $this->getValueSession('filter_comparator_' . $uniqueId);
-        $data['value']      = $this->getValueSession('filter_value_' . $uniqueId);
-        return ($data['value'] != '');
-    }
-
-     /**
-     * @param string $columnName The column name
-     * @param string $alias      The alias
-     */
-    public function __construct($columnName, $config, $alias = 'b')
+    public function __construct($columnName, $label, $config, $alias = 'entity')
     {
 
-        parent::__construct($columnName, $config, $alias);
+        parent::__construct($columnName, $label, $config, $alias);
         $this->table = $config['table'];
         $this->method = (isset($config['method']))? $config['method']:'findAll';
         $this->method_label = (isset($config['method_label']))? $config['method_label']:'__toString';
@@ -44,22 +28,16 @@ class EntityFilterType extends AbstractORMFilterType
         $this->group_by = (isset($config['group_by']))? $config['group_by']:null;
     }
 
-
-    /**
-     * @param array  $data     The data
-     * @param string $uniqueId The unique identifier
-     */
-    public function apply(array $data, $uniqueId,$alias,$col)
+    public function apply($queryBuilder)
     {
-        if (isset($data['value'])) {
-            $qb = $this->queryBuilder;
-            if($this->getMultiple()){
-                $qb->andWhere($qb->expr()->in($alias . $col, ':var_' . $uniqueId));
-            }else{
-                $qb->andWhere($qb->expr()->eq($alias . $col, ':var_' . $uniqueId));
+        if (isset($this->data['value'])) {
+            if ($this->getMultiple()) {
+                $queryBuilder->andWhere($queryBuilder->expr()->in($this->alias .$this->columnName, ':var_' . $this->uniqueId));
+            } else {
+                $queryBuilder->andWhere($queryBuilder->expr()->eq($this->alias .$this->columnName, ':var_' . $this->uniqueId));
             }
 
-            $qb->setParameter('var_' . $uniqueId, $data['value']);
+            $queryBuilder->setParameter('var_' . $this->uniqueId, $this->data['value']);
         }
     }
 
@@ -76,7 +54,7 @@ class EntityFilterType extends AbstractORMFilterType
         }else{
             $m = $this->method;
             $args = $this->args;
-            $repo = $this->getRepository($this->table);
+            $repo = $this->em->getRepository($this->table);
             if($args){
                 $classRfx = new \ReflectionClass(get_class($repo));
                 $methodRfx = $classRfx->getMethod($m);

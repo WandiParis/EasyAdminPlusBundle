@@ -16,7 +16,8 @@ class QueryHelper{
     public static $iterationK = 0;
     protected $rootAlias;
 
-    public function getPath(&$qb,$a,$col){
+    public function getPath(&$qb, $a, $col) 
+    {
         $a = $a.'.';
         $this->rootAlias = $a;
         $baseA = \str_replace('.','',$this->rootAlias);
@@ -40,7 +41,7 @@ class QueryHelper{
             }
             self::$iterationK = $k;
         }
-        return array('alias'=>$a,'column'=>$col);
+        return array($a, $col);
     }
 
     protected function getAliasIfJoinExist($qb,$joiner){

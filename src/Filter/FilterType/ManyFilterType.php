@@ -1,9 +1,8 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
-use Lle\EasyAdminPlusBundle\Filter\FilterType\ORM\AbstractORMFilterType;
 
 /**
  * StringFilterType
@@ -18,7 +17,7 @@ class ManyFilterType extends EntityFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $config, $alias = 'b')
+    public function __construct($columnName, $config, $alias = 'entity')
     {
         parent::__construct($columnName, $config, $alias);
         $this->join = $config['join'];

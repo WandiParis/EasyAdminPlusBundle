@@ -1,13 +1,13 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * StringFilterType
  */
-class ExactStringFilterType extends AbstractORMFilterType
+class ExactStringFilterType extends AbstractFilterType
 {
     /**
      * @param Request $request  The request
@@ -75,7 +75,7 @@ class ExactStringFilterType extends AbstractORMFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $config = array(), $alias = 'b')
+    public function __construct($columnName, $config = array(), $alias = 'entity')
     {
         parent::__construct($columnName, $config, $alias);
         $this->defaultValue = (isset($config['defaultValue']))? $config['defaultValue']:"";

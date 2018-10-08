@@ -1,13 +1,13 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * EnumerationFilterType
  */
-class NumberRangeFilterType extends AbstractORMFilterType
+class NumberRangeFilterType extends AbstractFilterType
 {
     /**
      * @param Request $request  The request

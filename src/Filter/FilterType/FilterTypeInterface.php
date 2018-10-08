@@ -9,21 +9,20 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface FilterTypeInterface
 {
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId);
+
+    public function __construct($columnName, $label, $config, $alias = 'entity');
 
     /**
      * @param array  $data     Data
      * @param string $uniqueId The identifier
      */
-    public function apply(array $data, $uniqueId, $alias, $col);
+    public function apply($query_builder);
 
     /**
      * @return string
      */
     public function getTemplate();
+
+    public function updateDataFromRequest($request);
+
 }

@@ -1,9 +1,8 @@
 <?php
 
-namespace Lle\EasyAdminPlusBundle\Filter\FilterType\ORM;
+namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
-use Lle\EasyAdminPlusBundle\Filter\FilterType\ORM\AbstractORMFilterType;
 
 /**
  * StringFilterType
@@ -16,7 +15,7 @@ class TreeFilterType extends EntityFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName,$config,$alias = 'b')
+    public function __construct($columnName,$config,$alias = 'entity')
     {
         if(!isset($config['method'])) $config['method'] = 'getChildren';
         parent::__construct($columnName,$config,$alias);

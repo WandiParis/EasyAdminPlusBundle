@@ -26,11 +26,13 @@ class QueryBuilder
     private $doctrine;
     private $request;
     private $filterState;
+    private $entity;
 
     public function __construct(Registry $doctrine, RequestStack $requestStack, FilterState $filterState)
     {
         $this->doctrine = $doctrine;
         $this->request = $requestStack->getCurrentRequest();
+        $this->entity = $this->request->query->get('entity');
         $this->filterState = $filterState;
     }
 
@@ -49,9 +51,7 @@ class QueryBuilder
     {
         /* @var EntityManager */
         $em = $this->doctrine->getManagerForClass($entityConfig['class']);
-        if (isset($entityConfig['filter'])) {
-            $this->filterState->bindRequest($request, $entityConfig['filter']);
-        }
+
         $disabled_filters = $entityConfig['disabled_filters'] ?? [];
         foreach($disabled_filters as $filter) {
             if($em->getFilters()->isEnabled($filter)){
@@ -70,6 +70,11 @@ class QueryBuilder
             ;
         }
 
+        // apply filters
+        if (isset($entityConfig['filter'])) {
+            $this->filterState->applyFilters($queryBuilder, $this->entity);
+        }
+
         $isSortedByDoctrineAssociation = false !== strpos($sortField, '.');
         if ($isSortedByDoctrineAssociation) {
             $sortFieldParts = explode('.', $sortField);
@@ -83,24 +88,6 @@ class QueryBuilder
         if (null !== $sortField) {
             $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias().'.', $sortField), $sortDirection);
         }
-
-        /*if (isset($entityConfig['filter'])) {
-
-            foreach ($entityConfig['filter']['fields'] as $filterType) {
-                $ftype = $filterType['filtertype'];
-                $ftype->setQueryBuilder($queryBuilder);
-                $ftype->setRequest($this->request);
-                $ftype->setEm($em);
-
-                $data = [];
-                if ($ftype->bindRequest($data, str_replace('.', '_', $filterType['property']), $this->filterState)) {
-                    $ftype->setData($data);
-                    $donnes = $ftype->init();
-                    $ftype->apply($data, str_replace('.', '_',$filterType['property']), $donnes['alias'], $donnes['column']);
-                }
-            }
-        }*/
-
 
         return $queryBuilder;
     }

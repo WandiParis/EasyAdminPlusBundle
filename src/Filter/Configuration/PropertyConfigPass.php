@@ -54,15 +54,14 @@ class PropertyConfigPass implements ConfigPassInterface
                     }
 
                     if (strpos($class, '\\') === false) {
-                      $class= "Lle\\EasyAdminPlusBundle\\Filter\\FilterType\\ORM\\".$class;
+                      $class= "Lle\\EasyAdminPlusBundle\\Filter\\FilterType\\".$class;
                     }
-                    $columnName = $fieldConfig['property'];
+                    $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['filter_type'] = $class;
+                    
                     $config = $fieldConfig['config'] ?? [];
-                    $reflection_class = new \ReflectionClass($class);
-                    $filterObj = $reflection_class->newInstanceArgs([$columnName, $config, 'entity']);
-                    $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['code'] = $columnName;
-                    $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['filtertype'] = $filterObj;
-                    $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['template'] = $filterObj->getTemplate();
+
+                    $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['config'] = $config;
+
                 }
             }
         }
