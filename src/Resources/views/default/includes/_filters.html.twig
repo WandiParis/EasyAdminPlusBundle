@@ -10,11 +10,11 @@
     {%  endfor  %}
 
 <div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
-    <form method="POST" action="{{ path('easyadmin', app.request.query|merge({ filter: "y" })) }}" class="form-horizontal ">
+    <form method="POST" action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}" class="form-horizontal ">
 
     <div class="box box-info collapsed-box">
         <div class="box-header with-border" data-widget="collapse">
-            <h4 class="box-title">
+            <div class="box-title">
                 <i class="icon fa fa-search"></i>
                 <!--&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}-->
                 {% for filter in filters %}
@@ -26,7 +26,7 @@
                     {% include filter.stateTemplate with vars %}
 
                 {% endfor %}
-            </h4>
+            </div>
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
             </div>
