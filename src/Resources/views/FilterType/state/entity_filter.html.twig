@@ -1,4 +1,4 @@
-{% if  data['value'] is not empty %}
+{% if  data['value'] is defined and data['value'] is not empty %}
 <span class="filter-state">
 <small>{{ filtertype.filterLabel |trans }}</small>
 {% for val in data['value'] %}

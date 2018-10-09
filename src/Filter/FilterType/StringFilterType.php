@@ -44,40 +44,40 @@ class StringFilterType extends AbstractFilterType
 
     public function apply($queryBuilder)
     {
-        if (!array_key_exists("value", $data) || !isset($data["value"]) ) {
-            $data["value"] = $this->defaultValue;
+        if (!array_key_exists("value", $this->data) || !isset($this->data["value"]) ) {
+            $this->data["value"] = $this->defaultValue;
         }
 
-        $value = trim($data["value"]) ?? $this->defaultValue;
-        $comparator = $data["comparator"] ?? "startswith";
+        $value = trim($this->data["value"]) ?? $this->defaultValue;
+        $comparator = $this->data["comparator"] ?? "startswith";
 
         // MAKE QUERY
-        $query = $this->getPattern($comparator, $uniqueId, $alias, $col);
+        $query = $this->getPattern($comparator, $this->uniqueId, $this->alias, $this->columnName);
         foreach ($this->additionalProperties as $additionalCol) {
-            $pattern = $this->getPattern($comparator, $uniqueId, $alias, $additionalCol);
+            $pattern = $this->getPattern($comparator, $this->uniqueId, $this->alias, $additionalCol);
 
             if ($pattern) {
                 $query .= " OR " . $pattern; 
             }
         }
 
-        $this->queryBuilder->andWhere($query);
+        $queryBuilder->andWhere($query);
 
         // SET QUERY PARAMETERS
         switch ($comparator) {
             case 'contains':
             case 'doesnotcontain':
-                $this->queryBuilder->setParameter("val_" . $uniqueId, "%".$value."%");
+                $queryBuilder->setParameter("val_" . $this->uniqueId, "%".$value."%");
                 break;
             case 'startswith':
-                $this->queryBuilder->setParameter("val_" . $uniqueId, $value."%");
+                $queryBuilder->setParameter("val_" . $this->uniqueId, $value."%");
                 break;
             case 'endswith':
-                $this->queryBuilder->setParameter("val_" . $uniqueId, "%".$value);
+                $queryBuilder->setParameter("val_" . $this->uniqueId, "%".$value);
                 break;
             case 'equals':
             case 'notequals':
-                $this->queryBuilder->setParameter("val_" . $uniqueId, $value);
+                $queryBuilder->setParameter("val_" . $this->uniqueId, $value);
         }
     }
 

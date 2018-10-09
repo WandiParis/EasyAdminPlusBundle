@@ -24,14 +24,14 @@ class BooleanFilterType extends AbstractFilterType
 
     public function apply($queryBuilder)
     {
-        $value = $data['value'] ?? $this->default_value;
+        $value = $this->data['value'] ?? $this->default_value;
         if (isset($value)) {
             switch ($value) {
                 case 'true':
-                    $this->queryBuilder->andWhere($this->queryBuilder->expr()->eq($alias . $col, 'true'));
+                    $queryBuilder->andWhere($queryBuilder->expr()->eq($this->alias . $this->columnName, 'true'));
                     break;
                 case 'false':
-                    $this->queryBuilder->andWhere($this->queryBuilder->expr()->eq($alias . $col, 'false'));
+                    $queryBuilder->andWhere($queryBuilder->expr()->eq($this->alias . $this->columnName, 'false'));
                     break;
             }
         }
