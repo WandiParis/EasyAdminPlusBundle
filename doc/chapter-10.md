@@ -18,6 +18,7 @@ easy_admin:
                 title: title.echeance.list
                 batchs:
                     - { name: delete, icon: trash, label: label.delete, service: lle.service.delete_batch }
+                    - { name: clos, icon: check, label: label.valider, service: App\Service\Batch\ControleCloreBatch, role: 'ROLE_ADMIN' }
                 actions:
                     - { name: show, icon: search }
                     - { name: edit, icon: edit }
@@ -34,6 +35,20 @@ On the list, checkbox inputs are added toselect items and buttons are visible on
 ### Default behavior
 
 Button are enable only if items are selected
+
+----------
+
+### Role
+
+By default, batch action will be only accessible to users with role defined like this ROLE_[ENTITY_NAME]_BATCH_[BATCH_NAME]
+You can disable this with the param 
+```
+role: null
+```
+or define your role permission
+```
+role: ROLE_ADMIN
+```
 
 ----------
 

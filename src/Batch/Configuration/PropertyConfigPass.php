@@ -58,6 +58,10 @@ class PropertyConfigPass implements ConfigPassInterface
                 }
                 foreach ($backendConfig['entities'][$entityName][$view]['batchs'] as $actionName => $actionConfig) {
 
+                    if(! array_key_exists('role', $actionConfig) ) {
+                        $actionConfig['role'] = strtoupper( "ROLE_" . $entityName . "_BATCH_" . $actionConfig['name'] );
+                    }
+
                     $normalizedConfig = array_replace_recursive(
                         $this->defaultEntityActionConfig,
                         $actionConfig
