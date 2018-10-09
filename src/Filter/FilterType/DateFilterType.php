@@ -12,44 +12,35 @@ use Symfony\Component\HttpFoundation\Request;
 class DateFilterType extends AbstractFilterType
 {
 
-    public function __construct($columnName, $label, $config = [], $alias = 'entity')
+    public function __construct($columnName, $label, $config = [],$alias = 'entity')
     {
         parent::__construct($columnName, $label, $config, $alias);
         $this->yearRange = (isset($config['yearRange']))? $config['yearRange']:null;
+        $this->defaults['comparator'] = 'equal';
     }
 
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId)
-    {
-        $data['comparator'] = $this->getValueSession('filter_comparator_' . $uniqueId);
-        $data['value']      = $this->getValueSession('filter_value_' . $uniqueId);
-        return ($data['value'] != '');
-    }
+
 
     /**
      * @param array  $data     The data
-     * @param string $uniqueId The unique identifier
+     * @param string $this->uniqueId The unique identifier
      */
-    public function apply(array $data, $uniqueId,$alias,$col)
+    public function apply($queryBuilder)
     {
-        if (isset($data['value']) && isset($data['comparator'])) {
-            $date = DateTime::createFromFormat('d/m/Y', $data['value']);
-            switch ($data['comparator']) {
+        if (isset($this->data['value']) && isset($this->data['comparator'])) {
+            $date = DateTime::createFromFormat('d/m/Y', $this->data['value']);
+            switch ($this->data['comparator']) {
                 case 'equal':
-                    $this->queryBuilder->andWhere($this->queryBuilder->expr()->like($alias.$col, ':var_' . $uniqueId));
+                    $queryBuilder->andWhere($queryBuilder->expr()->like($this->alias.$this->columnName, ':var_' . $this->uniqueId));
                     break;
                 case 'before':
-                    $this->queryBuilder->andWhere($this->queryBuilder->expr()->lte($alias.$col, ':var_' . $uniqueId));
+                    $queryBuilder->andWhere($queryBuilder->expr()->lte($this->alias.$this->columnName, ':var_' . $this->uniqueId));
                     break;
                 case 'after':
-                    $this->queryBuilder->andWhere($this->queryBuilder->expr()->gt($alias.$col, ':var_' . $uniqueId));
+                    $queryBuilder->andWhere($queryBuilder->expr()->gt($this->alias.$this->columnName, ':var_' . $this->uniqueId));
                     break;
             }
-            $this->queryBuilder->setParameter('var_' . $uniqueId, $date->format('Y-m-d').'%');
+            $queryBuilder->setParameter('var_' . $this->uniqueId, $date->format('Y-m-d').'%');
         }
     }
 
