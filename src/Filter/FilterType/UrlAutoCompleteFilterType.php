@@ -32,7 +32,7 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
      */
     public function apply($queryBuilder)
     {
-        if ($this->data['value']) {
+        if (isset($this->data['value']) && $this->data['value']) {
             $value = $this->data['value'];
             $queryBuilder->andWhere($this->alias. $col .'= :var_' . $this->uniqueId);
             $queryBuilder->setParameter('var_' . $this->uniqueId, $value);

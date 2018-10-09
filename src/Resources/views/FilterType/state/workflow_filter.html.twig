@@ -1,7 +1,8 @@
 {% if  data['value'] is not empty %}
 <span class="filter-state">
+<small>{{ filtertype.filterLabel |trans }}</small>
 {% for val in data['value'] %}
-<small>Etat&nbsp;</small><span class="badge">{{ val }}</span>
+<span class="badge">{{ val }}</span>
 {% endfor %}
 </span>
 {% endif %}

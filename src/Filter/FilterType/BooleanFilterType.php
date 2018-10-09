@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BooleanFilterType extends AbstractFilterType
 {
-    private $default_value;
 
     /**
      * @param string $columnName The column name
@@ -18,13 +17,13 @@ class BooleanFilterType extends AbstractFilterType
     public function __construct($columnName, $label, $config, $alias = 'entity')
     {
         parent::__construct($columnName, $label, $config, $alias);
-        $this->default_value = $config['default_value'] ?? null;
+        $this->defaults['value'] = $config['default_value'] ?? null;
     }
 
 
     public function apply($queryBuilder)
     {
-        $value = $this->data['value'] ?? $this->default_value;
+        $value = $this->data['value'];
         if (isset($value)) {
             switch ($value) {
                 case 'true':

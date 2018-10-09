@@ -9,16 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NotNullFilterType extends AbstractFilterType
 {
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId)
-    {
-        $data['value'] = $this->getValueSession('filter_value_' . $uniqueId);
-        return ($data['value'] != '');
-    }
 
     /**
      * @param array  $data     The data
@@ -29,7 +19,7 @@ class NotNullFilterType extends AbstractFilterType
         if (isset($data['value'])) {
             if ($data['value'] == 'notnull') {
                 $this->queryBuilder->andWhere($alias . $col .'  IS NOT NULL');
-            }elseif($data['value'] == 'null'){
+            } elseif ($data['value'] == 'null') {
                 $this->queryBuilder->andWhere($alias . $col .'  IS NULL');
             }
         }

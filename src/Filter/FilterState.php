@@ -47,6 +47,8 @@ class FilterState
             $filterObj->setData($data[$entity_name][$filter['property']]??[]);
             // set data from request
             if (!$reset) $filterObj->updateDataFromRequest($request);
+            $filterObj->initDefault();
+            
             // save data to session
             $data[$entity_name][$filter['property']] = $filterObj->getData();
         }

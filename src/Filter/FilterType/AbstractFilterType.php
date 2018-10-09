@@ -77,6 +77,11 @@ abstract class AbstractFilterType implements FilterTypeInterface
                 $val_post = $request->request->get($var, null);
                 $this->data[$k] = $val_post;
             }
+        }
+    }
+    public function initDefault()
+    {
+        foreach ($this->data_keys as $k) {
             if (!array_key_exists($k, $this->data) || !$this->data[$k]) {
                 if (array_key_exists($k, $this->defaults)) {
                     $this->data[$k] = $this->defaults[$k];
