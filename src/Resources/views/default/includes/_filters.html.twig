@@ -13,8 +13,8 @@
     <form method="POST" action="{{ path('easyadmin', app.request.query|merge({ filter: "y" })) }}" class="form-horizontal ">
 
     <div class="box box-info collapsed-box">
-        <div class="box-header with-border">
-            <h4 class="box-title" data-widget="collapse">
+        <div class="box-header with-border" data-widget="collapse">
+            <h4 class="box-title">
                 <i class="icon fa fa-search"></i>
                 <!--&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}-->
                 {% for filter in filters %}

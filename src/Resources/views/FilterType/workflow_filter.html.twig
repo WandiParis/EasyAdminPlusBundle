@@ -1,6 +1,5 @@
 <select class="form-control" data-widget="select2" {% if filtertype.multiple %} multiple {% endif %}  name="{{nameprefix}}value{{namesuffix}}{% if filtertype.multiple %}[]{% endif %}">
     {% for k,v in filtertype.choices %}
         <option value="{{ v }}" {% if data['value'] is defined and filtertype.isSelected(data,v) %} selected {% endif %}>{{ ('wf.etat.' ~ v)|trans() }}</option>
-        
     {% endfor %}
 </select>

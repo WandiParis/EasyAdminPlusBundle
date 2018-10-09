@@ -34,6 +34,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
 
     protected $data = null;
     protected $data_keys = [];
+    protected $defaults = [];
     /**
      * @param string $columnName The column name
      * @param string $alias The alias
@@ -76,8 +77,12 @@ abstract class AbstractFilterType implements FilterTypeInterface
                 $val_post = $request->request->get($var, null);
                 $this->data[$k] = $val_post;
             }
-            if (!array_key_exists($k, $this->data)) {
-                $this->data[$k] = null;
+            if (!array_key_exists($k, $this->data) || !$this->data[$k]) {
+                if (array_key_exists($k, $this->defaults)) {
+                    $this->data[$k] = $this->defaults[$k];
+                } else {
+                    $this->data[$k] = null;
+                }
             }
         }
     }

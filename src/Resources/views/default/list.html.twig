@@ -151,10 +151,9 @@
         },
 
         filter_set_button: function(id, id_button, val) {
-
           $(id).val(val);
           $(id_button + ' .fa').hide();
-          $(id_button + ' .'+val).show();
+          if (val) $(id_button + ' .'+val).show();
           return false;
         }
     }

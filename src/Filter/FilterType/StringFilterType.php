@@ -31,8 +31,10 @@ class StringFilterType extends AbstractFilterType
     public function __construct($columnName, $label, $config = array(), $alias = 'entity')
     {
         parent::__construct($columnName, $label, $config, $alias);
-        $this->defaultValue = $config['defaultValue'] ?? "";
-        $this->defaultComparator = $config['defaultComparator'] ?? "startswith";
+        $this->defaults = [
+            'value' => $config['defaultValue'] ?? "",
+            'comparator' => $config['defaultComparator'] ?? "startswith"
+        ];
         $this->additionalProperties = $config['additionalProperties'] ?? [];
         
         // must be an array
@@ -44,12 +46,8 @@ class StringFilterType extends AbstractFilterType
 
     public function apply($queryBuilder)
     {
-        if (!array_key_exists("value", $this->data) || !isset($this->data["value"]) ) {
-            $this->data["value"] = $this->defaultValue;
-        }
-
-        $value = trim($this->data["value"]) ?? $this->defaultValue;
-        $comparator = $this->data["comparator"] ?? "startswith";
+        $value = trim($this->data["value"]);
+        $comparator = $this->data["comparator"];
 
         // MAKE QUERY
         $query = $this->getPattern($comparator, $this->uniqueId, $this->alias, $this->columnName);
