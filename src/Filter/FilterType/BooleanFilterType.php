@@ -38,7 +38,7 @@ class BooleanFilterType extends AbstractFilterType
 
     public function isSelected($data,$value){
         if(! isset($data['value'])){
-            return ($this->default_value == $value);
+            return ($this->defaults['value'] == $value);
         } else {
             return ($data['value'] == $value);
         }
