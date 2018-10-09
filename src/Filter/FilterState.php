@@ -48,7 +48,7 @@ class FilterState
             // set data from request
             if (!$reset) $filterObj->updateDataFromRequest($request);
             $filterObj->initDefault();
-            
+
             // save data to session
             $data[$entity_name][$filter['property']] = $filterObj->getData();
         }
@@ -56,7 +56,7 @@ class FilterState
     }
 
     public function getFilters($entity_name) {
-        return $this->filters[$entity_name];
+        return $this->filters[$entity_name] ?? [];
     }
 
     public function applyFilters($queryBuilder, $entity_name) {
