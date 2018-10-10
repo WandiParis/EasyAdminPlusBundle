@@ -19,10 +19,17 @@ class ChoiceFilterType extends AbstractFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function construct($columnName, $label, $config, $alias = 'entity')
     {
-        parent::__construct($columnName, $label, $config, $alias);
-        $this->choices = $config['choices'];
+        parent::construct($columnName, $label, $config, $alias);
+        $this->choices = [];
+        if(!$this->isAssoc($config['choices'])){
+            foreach($config['choices'] as $value){
+                $this->choices[$value] = $value;
+            }
+        }else{
+            $this->choices = $config['choices'];
+        }
         $this->multiple = (isset($config['multiple']))? $config['multiple']:true;
     }
 
@@ -55,5 +62,11 @@ class ChoiceFilterType extends AbstractFilterType
 
     public function getMultiple(){
         return $this->multiple;
+    }
+
+    public function isAssoc(array $arr)
+    {
+        if (array() === $arr) return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 }
