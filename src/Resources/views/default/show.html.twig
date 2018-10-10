@@ -79,8 +79,10 @@
                   </div></div></div>
               {% endif %}
               {% set div_ouvert = true %}
+              {% set label_css_class = metadata.label_css_class ?? 'col-sm-2' %}
+              {% set value_css_class = metadata.value_css_class ?? 'col-sm-10' %}
               <div class="field-group col-xs-12 {{ metadata.css_class|default('') }}">
-                <div class="box box-default">
+                <div class="{% if metadata.label|default(false) or metadata.icon|default(false) %} box box-default {%  endif %}">
 
                   {% if metadata.label|default(false) or metadata.icon|default(false) %}
                       <div class="box-header with-border">
@@ -98,10 +100,10 @@
                   {% if easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) != '' %}
                   
                   <div class="form-group field-{{ metadata.type|default('default')|lower }} {{ metadata.css_class|default('') }}">
-                      <label class="col-sm-2 control-label">
+                      <label class="{{ label_css_class|default('col-sm-2') }}  control-label">
                           {{ (metadata.label ?: field|humanize)|trans(_trans_parameters)|raw }}
                       </label>
-                      <div class="col-sm-10">
+                      <div class="{{ value_css_class|default('col-sm-10') }} ">
                           <div class="form-control">
                               {{ easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) }}
                           </div>
