@@ -13,14 +13,14 @@ class NumberFilterType extends AbstractFilterType
     {
         parent::__construct($columnName, $label, $config, $alias);
         $this->defaults = [
-            'value' => $config['defaultValue'] ?? "",
+            'value' => $config['defaultValue'] ?? null,
             'comparator' => $config['defaultComparator'] ?? "eq"
         ];
     }
 
     public function apply($queryBuilder)
     {
-        if (isset($this->data['value'])) {
+        if (isset($this->data['value']) && $this->data['value']) {
             switch ($this->data['comparator']) {
                 case 'eq':
                     $queryBuilder->andWhere($this->alias . $this->columnName .' = :var_' . $this->uniqueId);
