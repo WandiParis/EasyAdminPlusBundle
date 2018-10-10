@@ -31,11 +31,11 @@ class ChoiceFilterType extends AbstractFilterType
         if (isset($this->data['value'])) {
             $qb = $queryBuilder;
             if($this->getMultiple()){
-                $queryBuilder->andWhere($queryBuilder->expr()->in($alias.$col, ':var_' . $uniqueId));
+                $queryBuilder->andWhere($queryBuilder->expr()->in($this->alias.$this->columnName, ':var_' . $this->uniqueId));
             }else{
-                $queryBuilder->andWhere($queryBuilder->expr()->eq($alias.$col, ':var_' . $uniqueId));
+                $queryBuilder->andWhere($queryBuilder->expr()->eq($this->alias.$this->columnName, ':var_' . $this->uniqueId));
             }
-            $queryBuilder->setParameter('var_' . $uniqueId, $data['value']);
+            $queryBuilder->setParameter('var_' . $this->uniqueId, $this->data['value']);
         }
     }
 
