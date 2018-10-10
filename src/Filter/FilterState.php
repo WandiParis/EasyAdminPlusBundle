@@ -42,7 +42,7 @@ class FilterState
             $filterObj->setEm($this->em);
 
             $this->filters[$entity_name][$filter['property']] = $filterObj;
-
+        
             // set data from sesssion
             $filterObj->setData($data[$entity_name][$filter['property']]??[]);
             // set data from request

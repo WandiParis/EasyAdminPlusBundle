@@ -164,4 +164,24 @@ abstract class AbstractFilterType implements FilterTypeInterface
     {
         return array('columnName', 'alias', 'data');
     }
+
+    /**
+     * Get the value of defaults
+     */ 
+    public function getDefaults()
+    {
+        return $this->defaults;
+    }
+
+    /**
+     * Set the value of defaults
+     *
+     * @return  self
+     */ 
+    public function setDefaults($defaults)
+    {
+        $this->defaults = $defaults;
+
+        return $this;
+    }
 }
