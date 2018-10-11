@@ -52,7 +52,9 @@ class FilterState
             // save data to session
             $data[$entity_name][$filter['property']] = $filterObj->getData();
         }
+
         $request->getSession()->set('admin_filters', $data);
+
     }
 
     public function getFilters($entity_name) {
