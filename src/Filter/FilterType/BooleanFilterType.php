@@ -17,7 +17,7 @@ class BooleanFilterType extends AbstractFilterType
     public function __construct($columnName, $label, $config, $alias = 'entity')
     {
         parent::__construct($columnName, $label, $config, $alias);
-        $this->defaults['value'] = $config['default_value'] ?? null;
+        $this->defaults['value'] = $config['default_value'] ?? 'all';
     }
 
 

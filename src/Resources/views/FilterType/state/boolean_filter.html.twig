@@ -1,6 +1,10 @@
 {% if data['value'] is defined and data['value'] and data['value'] != filtertype.defaults['value'] %}
 <span class="filter-state">
     <small>{{ filtertype.filterLabel |trans }}</small>
-    <span class="badge">{{ data['value'] |trans }}</span>
+    <span class="badge">
+    {% if data['value']=='true' %}Oui{% endif %}
+    {% if data['value']=='false' %}Non{% endif %}
+    {% if data['value']=='all' %}Tous{% endif %}
+    </span>
 </span>
 {% endif %}

@@ -23,13 +23,22 @@ class FilterState
         $this->em = $em;
     }
 
+    public function isFilterLink($request) {
+        foreach($request->query->all() as $k => $val) {
+            if ( strrpos($k, 'filter_') === 0 ) return true;
+        }
+        return false;
+    }
+
+
     public function bindRequest($request, $entity_conf) {
         
         $entity_name = $entity_conf['name'];
         $reset = false;
-        if ($request->request->has('reset') && 'reset' === $request->request->get('reset')) {
+        $is_link = $this->isFilterLink($request);
+        if ( $is_link || ( $request->request->has('reset') && 'reset' === $request->request->get('reset')) ) {
             $data[$entity_name] = [];
-            $reset = true;
+            $reset = !$is_link;
         } else {
             $data = $request->getSession()->get('admin_filters');
         }
