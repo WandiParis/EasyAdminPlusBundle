@@ -5,6 +5,8 @@
         {% set action_href = path('easyadmin', request_parameters|merge({ action: action.name, id: item_id })) %}
     {% elseif 'route' == action.type %}
         {% set action_href = path(action.name, request_parameters|merge({ action: action.name, id: item_id })) %}
+    {%  elseif 'template' == action.type %}
+        {{ include('easy_admin/' ~ app.request.query.get('entity') ~'/' ~ action.template) }}
     {% endif %}
     {% if action.tab is defined %}
         {% set action_href = action_href ~ "#" ~ action.tab %}
