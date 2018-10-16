@@ -30,26 +30,28 @@
           item_id: _entity_id
       }) }}
   {% endif %}
-  <div class="small">
-    <ul class="inline">
-      {% if entity.createdAt is defined %}
-        <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y H:i')}}
-          {% if entity.createdBy %}
-            {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
-            {{ entity.createdBy }}
+  {% if not _entity_config.show.hide_log_info|default(false) %}
+      <div class="small">
+        <ul class="inline">
+          {% if entity.createdAt is defined %}
+            <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y H:i')}}
+              {% if entity.createdBy %}
+                {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+                {{ entity.createdBy }}
+              {% endif %}
+            </li>
           {% endif %}
-        </li>
-      {% endif %}
-      {% if entity.updatedAt is defined %}
-        <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y H:i')}}
-          {% if entity.updatedBy %}
-            {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
-            {{ entity.updatedBy }}
+          {% if entity.updatedAt is defined %}
+            <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y H:i')}}
+              {% if entity.updatedBy %}
+                {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+                {{ entity.updatedBy }}
+              {% endif %}
+            </li>
           {% endif %}
-        </li>
-      {% endif %}
-    </ul>
-  </div>
+        </ul>
+      </div>
+  {%  endif %}
 
 {% endblock %}
 
