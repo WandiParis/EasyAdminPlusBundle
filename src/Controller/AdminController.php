@@ -287,7 +287,20 @@ class AdminController extends BaseAdminController
         }
         if ($metadata['with_add'] ?? false) {
             if ($metadata['add_form'] ?? false) {
-                $add_form = $this->createForm($metadata['add_form'], null, [
+                $classmetadata = $this->em->getClassMetadata($this->entity['class']);
+                $instance = $classmetadata->newInstance();
+                $parent = $this->em->getRepository($this->master_entity['class'])->find($request->query->get('id'));
+                $associations = $classmetadata->getAssociationsByTargetClass($this->master_entity['class']);
+                if(\count($associations) === 1){
+                    $assoc = array_shift($associations);
+                    $fieldName = $assoc['fieldName'];
+                    if($classmetadata->isSingleValuedAssociation($fieldName)){
+                        $method = $classmetadata->getReflectionClass()->getMethod('set' . $fieldName);
+                        $method->invoke($instance, $parent);
+                        $data = $instance;
+                    }
+                }
+                $add_form = $this->createForm($metadata['add_form'], $data ?? null, [
                     'action' => $this->generateUrl($metadata['add_route'], ['id' => $request->query->get('id')]),
                     'method' => 'POST',
                     'attr' => ['class'=>'form-inline']
@@ -319,7 +332,8 @@ class AdminController extends BaseAdminController
             'fields'=>$fields,
             'items'=>$items,
             'entity'=>$entity,
-            'add_form'=>$add_form
+            'add_form'=>$add_form,
+            'template_form' => $metadata['template_form'] ?? '@LleEasyAdminPlus/default/includes/_sub_form.html.twig'
         ));
     }
 
