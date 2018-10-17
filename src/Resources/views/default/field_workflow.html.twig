@@ -14,7 +14,7 @@
   <ul class="dropdown-menu">
    {% for transition in workflow_transitions(item) %}
         {% if workflow_can(item, transition.name) %}
-            {% set path = path('lle_easy_admin_plus_wf', {'class': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) %}
+            {% set path = path('lle_easy_admin_plus_wf', {'class': entity_config.class, 'id': item.id, 'transition':transition.name } ) %}
             <li>
                 <a class="btn btn-xs btn-workflow"
                   {% if confirm %}
