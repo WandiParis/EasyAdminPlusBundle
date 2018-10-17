@@ -7,15 +7,14 @@
   {% set confirm = entity_config['wf_confirm'] %}
 {% endif %}
 
-
 <div class="btn-group workflow">
   <button type="button" class="btn btn-xs dropdown-toggle btn-workflow-current" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    {{ ("wf.etat."~item.etat)|trans}} <span class="caret"></span>
+    {{ ("wf.etat."~value)|trans}} <span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
    {% for transition in workflow_transitions(item) %}
         {% if workflow_can(item, transition.name) %}
-            {% set path = path('lle_easy_admin_plus_wf', {'entity': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) %}
+            {% set path = path('lle_easy_admin_plus_wf', {'class': 'App\\Entity\\'~app.request.get('entity'), 'id': item.id, 'transition':transition.name } ) %}
             <li>
                 <a class="btn btn-xs btn-workflow"
                   {% if confirm %}
@@ -57,7 +56,7 @@
 
 
 <script>
-    $('tr[data-id={{item.id}}]').addClass( "wf-{{item.etat}}" );
+    $('tr[data-id={{item.id}}]').addClass( "wf-{{value}}" );
     
     $('#confirm-wf').on('click', '.btn-ok', function(e) {
             var $modalDiv = $(e.delegateTarget);
