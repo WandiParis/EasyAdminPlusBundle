@@ -23,7 +23,7 @@ class WorkflowFilterType extends ChoiceFilterType
     {
         parent::__construct($columnName, $label, $config, $alias);
         $this->choices = $config['choices'];
-        $this->excludes = $config['excludes'];
+        $this->excludes = $config['excludes'] ?? [];
         $this->multiple = (isset($config['multiple']))? $config['multiple']:true;
     }
 
