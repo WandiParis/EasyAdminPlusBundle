@@ -199,3 +199,15 @@
     </script>
 {% endblock %}
 
+{% block head_stylesheets %}
+{{ parent() }}
+<style>
+@media print
+{ 
+    .nav-tabs, .button-action, .sf-display-none {
+    	display: none !important;
+    }
+}
+</style>
+{% endblock %}
+
