@@ -2,7 +2,7 @@
 <span class="filter-state">
 <small>{{ filtertype.filterLabel |trans }}</small>
 {% for val in data['value'] %}
-<span class="badge">{{ val }}</span>
+<span class="badge">{{ ('wf.etat.' ~ val)|trans }}</span>
 {% endfor %}
 </span>
 {% endif %}
