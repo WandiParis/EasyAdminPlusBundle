@@ -5,8 +5,12 @@
         {% set action_href = path('easyadmin', request_parameters|merge({ action: action.name, id: item_id })) %}
     {% elseif 'route' == action.type %}
         {% set action_href = path(action.name, request_parameters|merge({ action: action.name, id: item_id })) %}
-    {%  elseif 'template' == action.type %}
-        {{ include('easy_admin/' ~ app.request.query.get('entity') ~'/' ~ action.template) }}
+    {% elseif 'print' == action.type %}
+        {% set action_href = 'javascript:print();' %}
+        {% if 'list' != action.name %}
+            {% set css_class = {'css_class': 'btn btn-secondary ' ~ action.css_class} %}
+            {% set action = action|merge(css_class) %}
+        {% endif %}
     {% endif %}
     {% if action.tab is defined %}
         {% set action_href = action_href ~ "#" ~ action.tab %}
@@ -25,6 +29,8 @@
                 <i class="fa fa-edit"></i>
             {% elseif action.name == "delete" %}
                 <i class="fa fa-trash"></i>
+            {% elseif action.name == "print" %}
+                <i class="fa fa-print"></i>
             {% endif %}
         {% endif %}
 
