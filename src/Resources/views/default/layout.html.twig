@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('bundles/lleeasyadminplus/css/jquery.treetable.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/lleeasyadminplus/css/jquery.treetable.theme.default.css') }}">
 {% endblock %}
-
+{# do not work
 {% block wrapper %}
 {{ parent() }}
 <div id="confirm-modal" class="modal">
@@ -70,13 +70,13 @@
 			if ($(this).data('href')) {
 				href = $(this).data('href');
 			}
-			
+
 			$('.confirm-modal-message').html($(this).data('message'));
 			$('#lle-confirm-validate-button').attr('href', href);
 			$('#lle-confirm-validate-button').attr('data-id', $(this).attr('id'));
 			$('#confirm-modal').modal('show');
-		});  
-		
+		});
+
 		$(document).on('click', '#lle-confirm-validate-button', function (e) {
 			$(this).attr("disabled","disabled");
 			var field = $('#'+$(this).data('id'));
@@ -106,10 +106,11 @@
 					alert('Une erreur est survenue!')
 				}
 			});
-		});  	
+		});
     });
- 
+
 
 </script>
 
 {% endblock body_javascript %}
+#}
