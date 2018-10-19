@@ -14,13 +14,13 @@ class NotNullFilterType extends AbstractFilterType
      * @param array  $data     The data
      * @param string $uniqueId The unique identifier
      */
-    public function apply(array $data, $uniqueId, $alias, $col)
+    public function apply($queryBuilder)
     {
         if (isset($data['value'])) {
             if ($data['value'] == 'notnull') {
-                $this->queryBuilder->andWhere($alias . $col .'  IS NOT NULL');
+                $queryBuilder->andWhere($this->alias . $this->columnName .'  IS NOT NULL');
             } elseif ($data['value'] == 'null') {
-                $this->queryBuilder->andWhere($alias . $col .'  IS NULL');
+                $queryBuilder->andWhere($this->alias . $this->columnName .'  IS NULL');
             }
         }
     }

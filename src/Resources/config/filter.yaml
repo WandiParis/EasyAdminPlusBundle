@@ -1,0 +1,33 @@
+services:
+
+    _defaults:
+        autowire: true
+        public: false
+
+    _instanceof:
+        Lle\EasyAdminPlusBundle\Filter\FilterType\FilterTypeInterface:
+            tags: [lle.easy_admin_plus.filter]
+
+    Lle\EasyAdminPlusBundle\Filter\FilterType\:
+        resource: '../../Filter/FilterType/*'
+        exclude: '../../Filter/FilterType/{HiddenEntity.php}'
+        tags: [lle.easy_admin_plus.filter]
+        shared: false
+
+    Lle\EasyAdminPlusBundle\Filter\FilterType\WorkflowFilterType:
+        tags: [lle.easy_admin_plus.filter]
+        arguments: ["@doctrine.orm.entity_manager","@workflow.registry"]
+        shared: false
+
+    Lle\EasyAdminPlusBundle\Filter\FilterType\EntityFilterType:
+        tags: [lle.easy_admin_plus.filter]
+        arguments: ["@doctrine.orm.entity_manager"]
+        shared: false
+
+    lle.easy_admin_plus.filter_state:
+        public: true
+        class:  'Lle\EasyAdminPlusBundle\Filter\FilterState'
+        arguments: ["@doctrine.orm.entity_manager", '@Lle\EasyAdminPlusBundle\Filter\FilterChain']
+
+    Lle\EasyAdminPlusBundle\Filter\FilterChain:
+        arguments: [!tagged lle.easy_admin_plus.filter]

@@ -2,6 +2,7 @@
 
 namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
 use Lle\EasyAdminPlusBundle\Lib\QueryHelper;
@@ -19,8 +20,6 @@ abstract class AbstractFilterType implements FilterTypeInterface
      */
     protected $columnName = null;
 
-    protected $em = null;
-
     protected $hidden = false;
     /**
      * @var null|string
@@ -35,20 +34,24 @@ abstract class AbstractFilterType implements FilterTypeInterface
     protected $data = null;
     protected $data_keys = [];
     protected $defaults = [];
+
     /**
      * @param string $columnName The column name
      * @param string $alias The alias
      */
-    public function __construct($columnName, $label= '', $config = array(),  $alias = 'entity')
+    public function init($columnName, $label = null, $alias = 'entity')
     {
         $this->columnName = $columnName;
         $this->uniqueId = str_replace('.','_',$columnName);
-
         $this->alias = $alias;
-        $this->label = $label ?? $columnName.".label";
-        $this->hidden = $config['hidden'] ?? false;
+        $this->label = $label ?? "label.".$columnName;
         $this->data = [];
         $this->data_keys = ['comparator', 'value'];
+    }
+
+    public function configure(array $config = [])
+    {
+        $this->hidden = $config['hidden'] ?? false;
     }
 
     public function getFilterLabel()
@@ -92,10 +95,6 @@ abstract class AbstractFilterType implements FilterTypeInterface
                 }
             }
         }
-    }
-
-    public function setEm(EntityManager $em){
-        $this->em = $em;
     }
 
     public function addJoin($queryBuilder) {

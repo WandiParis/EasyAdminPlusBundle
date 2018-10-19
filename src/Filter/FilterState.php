@@ -1,6 +1,6 @@
 <?php
  
- namespace Lle\EasyAdminPlusBundle\Filter;
+namespace Lle\EasyAdminPlusBundle\Filter;
  
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
@@ -17,10 +17,12 @@ class FilterState
      * @var EntityManager
      */
     private $em;
+    private $filterChain;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, FilterChain $filterChain)
     {
         $this->em = $em;
+        $this->filterChain = $filterChain;
     }
 
     public function isFilterLink($request) {
@@ -30,10 +32,8 @@ class FilterState
         return false;
     }
 
-
-    public function bindRequest($request, $entity_conf) {
-        
-        $entity_name = $entity_conf['name'];
+    public function bindRequest($request, $entityConfig) {
+        $entity_name = $entityConfig['name'];
         $reset = false;
         $is_link = $this->isFilterLink($request);
         if ( $is_link || ( $request->request->has('reset') && 'reset' === $request->request->get('reset')) ) {
@@ -43,15 +43,20 @@ class FilterState
             $data = $request->getSession()->get('admin_filters');
         }
 
-        foreach ($entity_conf['filter']['fields'] as $filter) {
-            $reflection_class = new \ReflectionClass($filter['filter_type']);
-            $filterObj = $reflection_class->newInstanceArgs([ 
-                $filter['property'], $filter['label'], $filter['config']
-            ]);
-            $filterObj->setEm($this->em);
+        foreach ($entityConfig['filter']['fields'] as $filter) {
+            $type = $filter['type'] ?? $filter['filter_type'];
+            if($this->filterChain->has($type)){
+                $filter['config']['class'] = $filter['config']['class'] ?? $entityConfig['class'];
+                $filterObj = $this->filterChain->get($type, $filter, $entityConfig);
+            }else {
+                throw new \Exception($type." not found: Use filter like services tag lle.easy_admin_plus.filter then replace __construct by configure(array \$config = []) you can use:
+                \n_instanceof:\n
+                    \tLle\EasyAdminPlusBundle\Filter\FilterType\FilterTypeInterface:
+                    \t\ttags: [lle.easy_admin_plus.filter]");
+            }
+
 
             $this->filters[$entity_name][$filter['property']] = $filterObj;
-        
             // set data from sesssion
             $filterObj->setData($data[$entity_name][$filter['property']]??[]);
             // set data from request

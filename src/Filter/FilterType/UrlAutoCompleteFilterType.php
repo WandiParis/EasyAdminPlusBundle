@@ -14,13 +14,15 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
     protected $url;
     protected $value_filter;
 
-     /**
-     * @param string $columnName The column name
-     * @param string $alias      The alias
-     */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function init($columnName, $label = null, $alias = 'entity')
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::init($columnName, $label, $alias);
+        $this->data_keys = ['comparator', 'value', 'value_label'];
+    }
+
+    public function configure(array $config = [])
+    {
+        parent::configure($config);
         $this->data_keys = ['comparator', 'value', 'value_label'];
         $this->value_filter = $config['value_filter'];
         $this->url = $config['url'];

@@ -28,9 +28,9 @@ class StringFilterType extends AbstractFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $label, $config = array(), $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::configure($config);
         $this->defaults = [
             'value' => $config['defaultValue'] ?? "",
             'comparator' => $config['defaultComparator'] ?? "startswith"

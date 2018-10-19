@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 interface FilterTypeInterface
 {
 
-    public function __construct($columnName, $label, $config, $alias = 'entity');
+    public function init($columnName, $label , $alias = 'entity');
+    public function configure(array $config = []);
 
     /**
      * @param array  $data     Data

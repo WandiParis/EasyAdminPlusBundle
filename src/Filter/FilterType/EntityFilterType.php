@@ -2,6 +2,7 @@
 
 namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\AbstractFilterType;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\HiddenEntity;
@@ -15,16 +16,21 @@ class EntityFilterType extends AbstractFilterType
     protected $args;
     protected $group_by;
     protected $method_label;
+    protected $em;
 
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function __construct(EntityManagerInterface $em){
+        $this->em = $em;
+    }
+
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::configure($config);
         $this->table = $config['table'];
-        $this->method = (isset($config['method']))? $config['method']:'findAll';
-        $this->method_label = (isset($config['method_label']))? $config['method_label']:'__toString';
-        $this->args = (isset($config['arguments']))? $config['arguments']:null;
-        $this->multiple = (isset($config['multiple']))? $config['multiple']:true;
-        $this->group_by = (isset($config['group_by']))? $config['group_by']:null;
+        $this->method = $config['method'] ?? 'findAll';
+        $this->method_label = $config['method_label'] ?? '__toString';
+        $this->args = $config['arguments'] ?? null;
+        $this->multiple = $config['multiple'] ?? true;
+        $this->group_by = $config['group_by'] ?? null;
     }
 
     public function apply($queryBuilder)

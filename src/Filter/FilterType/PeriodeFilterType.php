@@ -15,11 +15,11 @@ class PeriodeFilterType extends AbstractFilterType
     private $choices;
     private $requestChoice;
 
-    public function __construct($columnName, $label, $config = array(), $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
-        $this->choices = (isset($config['choices']))? $config['choices']:null;
-        $this->format = (isset($config['format']))? $config['format']:'d/m/Y';
+        parent::configure($config);
+        $this->choices = $config['choices'] ?? null;
+        $this->format = $config['format'] ?? 'd/m/Y';
     }
 
     /**

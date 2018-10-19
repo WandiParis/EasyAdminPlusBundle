@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NumberFilterType extends AbstractFilterType
 {
-    public function __construct($columnName, $label, $config = array(), $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::configure($config);
         $this->defaults = [
             'value' => $config['defaultValue'] ?? null,
             'comparator' => $config['defaultComparator'] ?? "eq"

@@ -13,13 +13,9 @@ class AutoCompleteFilterType extends AbstractFilterType
 
     protected $route;
 
-     /**
-     * @param string $columnName The column name
-     * @param string $alias      The alias
-     */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName,$alias);
+        parent::configure($config);
         $this->route = $config['route'];
     }
 
@@ -28,13 +24,13 @@ class AutoCompleteFilterType extends AbstractFilterType
      * @param array  $data     The data
      * @param string $uniqueId The unique identifier
      */
-    public function apply(array $data, $uniqueId, $alias, $col)
+    public function apply($queryBuilder)
     {
         if (isset($data['value'])) {
             $value = $data['value']['value'];
-            $qb = $this->queryBuilder;
-            $qb->andWhere($alias. $col .'= :var_' . $uniqueId);
-            $qb->setParameter('var_' . $uniqueId, $value);
+            $qb = $queryBuilder;
+            $qb->andWhere($this->alias. $this->columnName .'= :var_' . $this->uniqueId);
+            $qb->setParameter('var_' . $this->uniqueId, $value);
         }
     }
 

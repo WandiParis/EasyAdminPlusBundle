@@ -15,12 +15,11 @@ class TreeFilterType extends EntityFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName,$config,$alias = 'entity')
+    public function configure(array $config = [])
     {
         if(!isset($config['method'])) $config['method'] = 'getChildren';
-        parent::__construct($columnName,$config,$alias);
-        if(!isset($config['start_level'])) $config['start_level'] = 1;
-        $this->startLevel = $config['start_level'];
+        parent::configure($config);
+        $this->startLevel = $config['start_level'] ?? 1;
     }
 
 
@@ -28,7 +27,7 @@ class TreeFilterType extends EntityFilterType
      * @param array  $data     The data
      * @param string $uniqueId The unique identifier
      */
-    public function apply(array $data, $uniqueId,$alias,$col)
+    public function apply($queryBuiler)
     {   
         if (isset($data['value'])) {
             if($this->getMultiple()){
@@ -48,11 +47,11 @@ class TreeFilterType extends EntityFilterType
                   $ids[] = $child->getId();
               }
             }
-            $this->queryBuilder->andWhere($this->queryBuilder->expr()->in($alias . $col, $ids));
+            $queryBuilder->andWhere($queryBuilder->expr()->in($alias . $col, $ids));
         }
     }
 
-    public function getEntities(){
+    public function getEntities($data){
         $em = $this->em; 
         $m = $this->method;
         $elements = $em->getRepository($this->table)->$m();

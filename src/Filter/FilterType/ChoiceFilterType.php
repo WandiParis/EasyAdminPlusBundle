@@ -19,9 +19,9 @@ class ChoiceFilterType extends AbstractFilterType
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::configure($config);
         $this->choices = [];
         if(!$this->isAssoc($config['choices'])){
             foreach($config['choices'] as $value){

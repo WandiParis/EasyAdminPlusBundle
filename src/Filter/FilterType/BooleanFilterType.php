@@ -10,13 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 class BooleanFilterType extends AbstractFilterType
 {
 
-    /**
-     * @param string $columnName The column name
-     * @param string $alias      The alias
-     */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::configure($config);
         $this->defaults['value'] = $config['default_value'] ?? 'all';
     }
 
