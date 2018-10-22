@@ -146,7 +146,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
 
     public function getStateTemplate()
     {
-        return '@LleEasyAdminPlus/filter/state/string.html.twig';
+        return '@LleEasyAdminPlus/filter/state/string_filter.html.twig';
     }
 
     public function __sleep()
