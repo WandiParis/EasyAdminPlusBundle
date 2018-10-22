@@ -582,7 +582,7 @@ class AdminController extends BaseAdminController
             ])
         );
 
-        return $this->render('@LleEasyAdminPlus/Admin/translations.html.twig', [
+        return $this->render('@LleEasyAdminPlus/admin/translations.html.twig', [
                 'domains' => $domains,
                 'domain' => $domain,
                 'dictionaries' => $dictionaries,

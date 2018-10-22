@@ -48,4 +48,12 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
     public function getValueFilter(){
         return $this->value_filter;
     }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/url_auto_complete_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/url_auto_complete_filter.html.twig';
+    }
 }

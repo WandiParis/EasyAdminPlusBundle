@@ -42,4 +42,12 @@ class DateTimeFilterType extends AbstractFilterType
         }
     }
 
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/date_time_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/date_time_filter.html.twig';
+    }
+
 }

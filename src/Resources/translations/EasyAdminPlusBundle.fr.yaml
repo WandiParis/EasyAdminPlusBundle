@@ -118,3 +118,7 @@ wf_modal:
     title: "Voulez vous effectuer ce changement d'état ?"
     action: "Valider"
     content: ""
+message.confirm-success: Votre action à été réalisé avec succès
+message.confirm: Voulez vous vraiment executé cette action ?
+action.close: Fermer
+action.validate: Valider

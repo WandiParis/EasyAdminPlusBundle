@@ -99,7 +99,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
 
     public function addJoin($queryBuilder) {
         $queryHelper = new QueryHelper();
-        list($alias, $col) = $queryHelper->getPath($queryBuilder, $this->alias, $this->columnName);
+        [$alias, $col] = $queryHelper->getPath($queryBuilder, $this->alias, $this->columnName);
         $this->alias = $alias;
         $this->columnName = $col;
     }
@@ -146,21 +146,9 @@ abstract class AbstractFilterType implements FilterTypeInterface
 
     public function getStateTemplate()
     {
-        $converter = new CamelCaseToSnakeCaseNameConverter();
-        $class = substr(get_called_class(), strrpos(get_called_class(), '\\') + 1);
-        $template = str_replace('Type','',$class);
-        $template = $converter->normalize($template);
-        return '@LleEasyAdminPlus/FilterType/state/'.$template.'.html.twig';
+        return '@LleEasyAdminPlus/filter/state/string.html.twig';
     }
 
-    public function getTemplate()
-    {
-        $converter = new CamelCaseToSnakeCaseNameConverter();
-        $class = substr(get_called_class(), strrpos(get_called_class(), '\\') + 1);
-        $template = str_replace('Type','',$class);
-        $template = $converter->normalize($template);
-        return '@LleEasyAdminPlus/FilterType/'.$template.'.html.twig';
-    }
     public function __sleep()
     {
         return array('columnName', 'alias', 'data');

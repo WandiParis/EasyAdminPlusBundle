@@ -46,7 +46,7 @@ class FilterState
         foreach ($entityConfig['filter']['fields'] as $filter) {
             $type = $filter['type'] ?? $filter['filter_type'];
             if($this->filterChain->has($type)){
-                $filter['config']['class'] = $filter['config']['class'] ?? $entityConfig['class'];
+                $filter['config']['data_class'] = $filter['config']['data_class'] ?? $entityConfig['class'];
                 $filterObj = $this->filterChain->get($type, $filter, $entityConfig);
             }else {
                 throw new \Exception($type." not found: Use filter like services tag lle.easy_admin_plus.filter then replace __construct by configure(array \$config = []) you can use:

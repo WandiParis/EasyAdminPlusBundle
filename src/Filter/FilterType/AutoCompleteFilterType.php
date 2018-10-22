@@ -37,4 +37,12 @@ class AutoCompleteFilterType extends AbstractFilterType
     public function getRoute(){
         return $this->route;
     }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/auto_complete_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/auto_complete_filter.html.twig';
+    }
 }

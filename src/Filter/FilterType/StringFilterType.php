@@ -114,4 +114,12 @@ class StringFilterType extends AbstractFilterType
 
         return $pattern ? "(".$pattern.")" : null;
     }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/string_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/string_filter.html.twig';
+    }
 }

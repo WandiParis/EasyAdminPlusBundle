@@ -85,4 +85,12 @@ class PeriodeFilterType extends AbstractFilterType
         }
     }
 
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/periode_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/periode_filter.html.twig';
+    }
+
 }

@@ -33,7 +33,7 @@ class WorkflowFilterType extends ChoiceFilterType
     public function configure(array $config = [])
     {
         $config['choices'] = $config['choices'] ?? $this->registry->get(
-                $this->em->getClassMetadata($config['class'])->newInstance(),
+                $this->em->getClassMetadata($config['class'] ?? $config['data_class'])->newInstance(),
                 $config['name'] ?? null)->getDefinition()->getPlaces();
         parent::configure($config);
 
@@ -68,6 +68,14 @@ class WorkflowFilterType extends ChoiceFilterType
         }else{
             return ($data['value'] == $value);
         }
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/workflow_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/workflow_filter.html.twig';
     }
 
 }

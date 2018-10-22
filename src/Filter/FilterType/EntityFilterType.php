@@ -5,7 +5,7 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\AbstractFilterType;
-use Lle\EasyAdminPlusBundle\Filter\FilterType\HiddenEntity;
+use Lle\EasyAdminPlusBundle\Filter\HiddenEntity;
 
 class EntityFilterType extends AbstractFilterType
 {
@@ -104,5 +104,13 @@ class EntityFilterType extends AbstractFilterType
     public function getLabel($entity) {
 
         return call_user_func(array($entity, $this->method_label));
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/entity_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/entity_filter.html.twig';
     }
 }

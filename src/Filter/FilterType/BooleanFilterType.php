@@ -41,4 +41,12 @@ class BooleanFilterType extends AbstractFilterType
         return false;
     }
 
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/boolean_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/boolean_filter.html.twig';
+    }
+
 }

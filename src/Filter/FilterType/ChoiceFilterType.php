@@ -69,4 +69,12 @@ class ChoiceFilterType extends AbstractFilterType
         if (array() === $arr) return false;
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/choice_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/choice_filter.html.twig';
+    }
 }
