@@ -130,7 +130,7 @@
             {% if metadata.type == 'tab' %}
               <div class="tab-pane" id="{{metadata.id}}">
                 {% set action = "" %}
-                {% if ":" in metadata.action %}
+                {% if ":" in metadata.action or "." in metadata.action %}
                   {% set action = metadata.action %}
                 {% else %}
                   {% set action = "Lle\\EasyAdminPlusBundle\\Controller\\AdminController:"~metadata.action %}
