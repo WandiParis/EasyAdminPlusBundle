@@ -49,10 +49,7 @@ class FilterState
                 $filter['config']['data_class'] = $filter['config']['data_class'] ?? $entityConfig['class'];
                 $filterObj = $this->filterChain->get($type, $filter, $entityConfig);
             }else {
-                throw new \Exception($type." not found: Use filter like services tag lle.easy_admin_plus.filter then replace __construct by configure(array \$config = []) you can use:
-                \n_instanceof:\n
-                    \tLle\EasyAdminPlusBundle\Filter\FilterType\FilterTypeInterface:
-                    \t\ttags: [lle.easy_admin_plus.filter]");
+                throw new \Exception($type." not found");
             }
 
 
