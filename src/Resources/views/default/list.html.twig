@@ -26,7 +26,11 @@
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
     {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, [], null) %}
     {% for action in _list_item_actions if (action.global is defined and action.global) %}
+    		{%  if action.route is defined %}
+            {% set action_href = path(action.route, action.parameters) %}
+            {% else %}
             {% set action_href = path(action.name, action.parameters) %}
+            {% endif %}
             {%  if action.confirm is defined %}
             <button 
             	class="btn btn-primary lle-confirm" 
