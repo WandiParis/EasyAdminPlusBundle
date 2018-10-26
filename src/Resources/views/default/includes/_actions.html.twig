@@ -6,6 +6,7 @@
     {% elseif 'route' == action.type %}
         {% set action_href = path(action.name, request_parameters|merge({ action: action.name, id: item_id })) %}
     {%  elseif 'template' == action.type %}
+        {% set action_href = null %}
         {{ include('easy_admin/' ~ app.request.query.get('entity') ~'/' ~ action.template) }}
     {% elseif 'print' == action.type %}
         {% set action_href = 'javascript:print();' %}
