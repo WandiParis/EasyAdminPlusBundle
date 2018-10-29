@@ -34,7 +34,7 @@ class QueryHelper{
                     $a = $aliasJoin.'.';
                 } else {
                     $k += self::$iterationK;
-                    $qb->innerJoin($a.$child,$baseA.$k);
+                    $qb->leftJoin($a.$child,$baseA.$k);
                     $a = $baseA.$k.'.';
                     $col = $child;
                 }
