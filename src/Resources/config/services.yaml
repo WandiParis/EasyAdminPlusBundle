@@ -176,10 +176,18 @@ services:
         public: false
         tags: [controller.service_arguments]
 
-
     lle.easy_admin_plus.controller:
         class:  'Lle\EasyAdminPlusBundle\Controller\AdminController'
         autoconfigure: true
         autowire: true
         public: false
         tags: [controller.service_arguments]
+                
+    Lle\EasyAdminPlusBundle\Form\DataTransformer\EntityToIdTransformer:
+        public: false
+        arguments: ["@doctrine.orm.entity_manager"]
+                
+    lle.easy_admin_plus.form_transformer_entity_to_id:
+        public: true
+        alias:  Lle\EasyAdminPlusBundle\Form\DataTransformer\EntityToIdTransformer
+    
