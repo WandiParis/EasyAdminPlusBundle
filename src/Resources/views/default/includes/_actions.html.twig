@@ -36,8 +36,7 @@
                 <i class="fa fa-print"></i>
             {% endif %}
         {% endif %}
-
-        {% if 'list' == app.request.query.get('action') %}        
+        {% if app.request.query.get('action') not in ['show', 'edit', 'new'] %}        
             {# Still allow to put labels, by specifying "title" #}
             {% if action.title is defined and not action.title is empty %}
                 {{ action.title|trans(arguments = trans_parameters|merge({ '%entity_id%': item_id }), domain = translation_domain) }}
