@@ -10,7 +10,7 @@
     {%  endfor  %}
 
 <div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
-    <form method="POST" action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}" class="form-horizontal ">
+    <form method="POST" action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}">
 
     <div class="box box-info collapsed-box">
         <div class="box-header with-border" data-widget="collapse">
@@ -38,21 +38,19 @@
           <!-- FILTER -->
           {% for filter in filters %}
 
-          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px; {%  if filter.hidden %}display:none;{% endif %}">
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px; {%  if filter.hidden %}display:none;{% endif %}">
                         <div class="form-group">
-                            <label for="date" class="col-sm-4 control-label text-nowrap">
+                            <label for="date" class="control-label text-nowrap">
                                 {{ filter.filterLabel|trans() }}
                             </label>
-                            <div class="col-sm-8">
                                 {% set vars = {
                                     'data': filter.data, 
                                     'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId, 
                                     'filtertype':filter} 
                                 %}
                               {% include filter.template with vars %}
-                            </div>
                         </div> <!-- form group -->
-                    </div>
+          </div>
           {% endfor %}
           </div><!-- row -->
         </div><!-- box-body -->

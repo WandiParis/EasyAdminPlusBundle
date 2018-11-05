@@ -118,7 +118,7 @@ class QueryBuilder
                 ->select('entity')
                 ->from($entityConfig['class'], 'entity')
             ;
-        }        
+        }
 
         $isSearchQueryNumeric = is_numeric($searchQuery);
         $isSearchQuerySmallInteger = (is_int($searchQuery) || ctype_digit($searchQuery)) && $searchQuery >= -32768 && $searchQuery <= 32767;

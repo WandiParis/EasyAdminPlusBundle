@@ -333,6 +333,7 @@ class AdminController extends BaseAdminController
             'items'=>$items,
             'entity'=>$entity,
             'add_form'=>$add_form,
+            'add_delete' => $metadata['with_delete'] ?? false,
             'template_form' => $metadata['template_form'] ?? '@LleEasyAdminPlus/default/includes/_sub_form.html.twig'
         ));
     }
