@@ -7,6 +7,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\DataCollectorTranslator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ExportManager
 {
@@ -21,7 +22,7 @@ class ExportManager
     public function __construct(
         ConfigManager $configManager,
         PropertyAccessor $propertyAccessor,
-        DataCollectorTranslator $translator,
+        TranslatorInterface $translator,
         iterable $exporters)
     {
         $this->configManager = $configManager;
