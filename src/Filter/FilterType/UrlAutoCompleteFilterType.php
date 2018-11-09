@@ -2,8 +2,8 @@
 
 namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
-use Symfony\Component\HttpFoundation\Request;
-use Lle\EasyAdminPlusBundle\Filter\FilterType\AbstractFilterType;
+
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * StringFilterType
@@ -13,6 +13,11 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
 
     protected $url;
     protected $value_filter;
+    protected $router;
+
+    public function __construct(RouterInterface $router){
+        $this->router = $router;
+    }
 
     public function init($columnName, $label = null, $alias = 'entity')
     {
@@ -25,7 +30,14 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
         parent::configure($config);
         $this->data_keys = ['comparator', 'value', 'value_label'];
         $this->value_filter = $config['value_filter'];
-        $this->url = $config['url'];
+        $this->url = $config['url'] ?? null;
+        $this->path = $config['path'] ?? null;
+        if($this->path){
+            $path = $this->path;
+            $path['params']['action'] = $path['params']['action'] ?? 'autocomplete';
+            $path['route'] = $path['route'] ?? 'easyadmin';
+            $this->url = $this->router->generate($path['route'], $path['params']);
+        }
     }
 
     /**
