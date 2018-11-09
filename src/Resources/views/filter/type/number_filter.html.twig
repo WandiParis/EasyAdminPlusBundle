@@ -1,4 +1,12 @@
 <div class="input-group">
+
+    <input type="hidden" class="form-control" id="{{nameprefix}}comparator{{namesuffix}}" name="{{nameprefix}}comparator{{namesuffix}}" {% if data.comparator is defined %}value="{{data.comparator}}"{% endif %}>
+
+    <input class="form-control"  type="text" name="{{nameprefix}}value{{namesuffix}}" id="{{nameprefix}}value{{namesuffix}}"
+            {% if data.value is defined %}
+                value="{{data.value}}"
+            {% endif %}
+    />
     <div class="input-group-btn">
         <button type="button" class="btn btn-default dropdown-toggle {{nameprefix}}button{{namesuffix}}" data-toggle="dropdown" aria-expanded="false">
             <i title="Est égal à" class="fa fa-text-width eq"></i>
@@ -6,7 +14,7 @@
             <i title="Plus petit que" class="fa fa-chevron-left lte"></i>
             <i title="Plus grand que" class="fa fa-chevron-right gte"></i>
         </button>
-        <ul class="dropdown-menu" role="menu">
+        <ul class="dropdown-menu pull-right" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','eq');">
                     <i class="fa fa-text-width"></i>Est égal à</a>
             </li>
@@ -33,13 +41,6 @@
         </select>
     </ul>-->
     </div>
-    <input type="hidden" class="form-control" id="{{nameprefix}}comparator{{namesuffix}}" name="{{nameprefix}}comparator{{namesuffix}}" {% if data.comparator is defined %}value="{{data.comparator}}"{% endif %}>
-
-    <input class="form-control"  type="text" name="{{nameprefix}}value{{namesuffix}}" id="{{nameprefix}}value{{namesuffix}}"
-            {% if data.value is defined %}
-                value="{{data.value}}"
-            {% endif %}
-    />
 </div>
 <script>
     $(document).ready(function() {
