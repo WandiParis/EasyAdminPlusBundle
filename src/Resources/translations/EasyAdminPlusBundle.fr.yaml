@@ -98,7 +98,7 @@ history:
         delete: supprimé par
         create: créé par
 Rechercher: Rechercher               
-Filtrer: Filtrer
+Filtrer: Filtrer les résultats
 Effacer: Effacer
 label.batchActions.title: "Choisir une action massive"
 batch:
