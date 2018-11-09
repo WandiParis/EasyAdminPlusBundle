@@ -61,7 +61,7 @@
 
 
 <script>
-    $('tr[data-id={{item.id}}]').addClass( "wf-{{value}}" );
+    $('tr[data-id={{item.id}}]').addClass( "wf-{{value|replace({' ': '-'})}}" );
     
     $('#confirm-wf-{{ field_id }}-{{item.id}}').on('click', '.btn-ok', function(e) {
             var $modalDiv = $(e.delegateTarget);
