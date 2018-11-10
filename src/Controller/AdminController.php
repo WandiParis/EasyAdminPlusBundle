@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
@@ -338,7 +339,28 @@ class AdminController extends BaseAdminController
         ));
     }
 
-    
+    /**
+     * The method that is executed when the user performs a 'delete' action to
+     * remove any entity.
+     *
+     * @return RedirectResponse
+     */
+    protected function embeddedDeleteAction()
+    {
+        $id = $this->request->query->get('id');
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+        try {
+            $this->executeDynamicMethod('remove<EntityName>Entity', array($entity));
+        } catch (ForeignKeyConstraintViolationException $e) {
+            throw new EntityRemoveException(array('entity_name' => $this->entity['name'], 'message' => $e->getMessage()));
+        }
+        if ($this->request->server->get('HTTP_REFERER')) {
+            return new RedirectResponse($this->request->server->get('HTTP_REFERER'));
+        } else {
+            return new RedirectResponse('/');
+        }
+    }    
 
 
     public function historyAction(Request $request, $item)
