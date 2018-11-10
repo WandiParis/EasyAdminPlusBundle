@@ -189,9 +189,13 @@
         if(window.location.hash) {
             $('#tab-'+window.location.hash.substr(1)).tab('show');
         }
+        {#% if app.request.query.get('_anchor') is defined %#}
+        $('#tab-{{app.request.query.get('_anchor')}}').tab('show');
+        {#% endif %#}
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             tab = $(e.target).attr('href');
+            insertParam('_anchor', tab.substring(1));
             window.location.hash = tab;
         })
 
