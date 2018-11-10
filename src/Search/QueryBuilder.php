@@ -17,6 +17,8 @@ use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
 use Lle\EasyAdminPlusBundle\Filter\FilterState;
+use Doctrine\Common\Collections\Criteria;
+
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
@@ -128,6 +130,8 @@ class QueryBuilder
 
         $queryParameters = array();
         $entitiesAlreadyJoined = array();
+        
+        $orModule = $queryBuilder->expr()->orX();
         foreach ($entityConfig['search']['fields'] as $fieldName => $metadata) {
             $entityName = 'entity';
             if (false !== strpos($fieldName, '.')) {
@@ -153,21 +157,35 @@ class QueryBuilder
                 $isIntegerField && $isSearchQueryInteger ||
                 $isNumericField && $isSearchQueryNumeric
             ) {
-                $queryBuilder->orWhere(sprintf('%s.%s = :numeric_query', $entityName, $fieldName));
+                $orModule->add(
+                    $queryBuilder->expr()->eq(
+                        sprintf('%s.%s', $entityName, $fieldName),
+                        ':numeric_query')
+                );
+
                 // adding '0' turns the string into a numeric value
                 $queryParameters['numeric_query'] = 0 + $searchQuery;
             } elseif ($isGuidField && $isSearchQueryUuid) {
-                $queryBuilder->orWhere(sprintf('%s.%s = :uuid_query', $entityName, $fieldName));
+                $orModule->add(
+                    $queryBuilder->expr()->eq(
+                        sprintf('%s.%s', $entityName, $fieldName),
+                        ':uuid_query')
+                );
                 $queryParameters['uuid_query'] = $searchQuery;
             } elseif ($isTextField) {
-                $queryBuilder->orWhere(sprintf('LOWER(%s.%s) LIKE :fuzzy_query', $entityName, $fieldName));
+
+                $orModule->add(
+                    $queryBuilder->expr()->like(
+                        sprintf('LOWER(%s.%s)', $entityName, $fieldName),
+                        ':fuzzy_query')
+                );
                 $queryParameters['fuzzy_query'] = '%'.$lowerSearchQuery.'%';
 
-                $queryBuilder->orWhere(sprintf('LOWER(%s.%s) IN (:words_query)', $entityName, $fieldName));
-                $queryParameters['words_query'] = explode(' ', $lowerSearchQuery);
             }
         }
 
+        $queryBuilder->andWhere($orModule);
+        
         if (0 !== count($queryParameters)) {
             $queryBuilder->setParameters($queryParameters);
         }
