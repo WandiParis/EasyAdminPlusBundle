@@ -381,20 +381,24 @@ class AdminController extends BaseAdminController
                     $type = $metaData->getTypeOfField($k);
                     $retour = $entry;
                     if($metaData->hasAssociation($k)){
-                        $type = $metaData->isSingleValuedAssociation($k)? 'single_assoc':'multi_assoc';
-                        $assoc = $metaData->getAssociationMapping($k);
-                        $obj = $this->em->getRepository($assoc['targetEntity'])->find($entry);
-                        if($obj) {
-                            $id = $this->em->getClassMetadata($assoc['targetEntity'])->getIdentifierValues($obj);
-                            $retour = (method_exists($obj, '__toString')) ? implode(',', $id) . ' ' . $obj->__toString() : implode(',', $id);
+                        if ($entry) {
+                            $type = $metaData->isSingleValuedAssociation($k)? 'single_assoc':'multi_assoc';
+                            $assoc = $metaData->getAssociationMapping($k);
+                            $obj = $this->em->getRepository($assoc['targetEntity'])->find($entry);
+                            if($obj) {
+                                $id = $this->em->getClassMetadata($assoc['targetEntity'])->getIdentifierValues($obj);
+                                $retour = (string) $obj; //(method_exists($obj, '__toString')) ? implode(',', $id) . ' ' . $obj->__toString() : $id;
+                            } else {
+                                $retour = "";
+                            }
                         }
-                    }else if($type === 'boolean'){
+                    } else if($type === 'boolean'){
                         $retour = ($entry)? 'label.true':'label.false';
-                    }else if($type === 'date'){
+                    } else if($type === 'date'){
                         $retour = ($entry)? $entry->format('d/m/Y'):'';
-                    }else if($type === 'datetime') {
+                    } else if($type === 'datetime') {
                         $retour = ($entry)? $entry->format('d/m/Y H:i'):'';
-                    }else if(is_array($entry)){
+                    } else if(is_array($entry)){
                         $retour = implode('-',$entry);
                     }
                     $data[$k] = ['value' => $retour, 'type' => $type, 'raw' => $entry];
