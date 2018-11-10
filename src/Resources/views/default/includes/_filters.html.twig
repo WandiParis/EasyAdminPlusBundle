@@ -15,8 +15,7 @@
     <div class="box box-info collapsed-box">
         <div class="box-header with-border" data-widget="collapse">
             <div class="box-title">
-                <i class="icon fa fa-search"></i>
-                <!--&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}-->
+                <i class="icon fa fa-search"></i><span class="box-header__title">{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}</span>
                 {% for filter in filters %}
                     {% set vars = {
                         'data': filter.data, 

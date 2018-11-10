@@ -24,6 +24,11 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         shared: false
 
+    Lle\EasyAdminPlusBundle\Filter\FilterType\UrlAutoCompleteFilterType:
+        tags: [lle.easy_admin_plus.filter]
+        arguments: ["@router"]
+        shared: false
+
     lle.easy_admin_plus.filter_state:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Filter\FilterState'

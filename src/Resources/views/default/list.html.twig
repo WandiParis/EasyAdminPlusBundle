@@ -193,14 +193,12 @@
 {% block main %}
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
 
-    {% if _entity_config.list.hasBatchActions %}
-        <form action="#" method="POST" name="bulkform">
-       
-    {% endif %}
 
     {{ include(_entity_config.templates.paginator) }}
 
     {% if _entity_config.list.hasBatchActions %}
+        <form action="#" method="POST" name="bulkform">
+            {{ include('@EasyAdmin/default/includes/_batchs.html.twig') }}
         <div class="clearfix">
             <input type="hidden" name="all-selection" value="0" id="all-selection">
             <div class="col-md-12 alert alert-info hidden js-all-selection-none">
@@ -359,6 +357,7 @@
     {% block batchActions %}
         {% if _entity_config.list.hasBatchActions %}
                 {{ include('@EasyAdmin/default/includes/_batchs.html.twig') }}
+                {{ include('@EasyAdmin/default/includes/_batchs_js.html.twig') }}
             </form>
         {% endif %}
 
