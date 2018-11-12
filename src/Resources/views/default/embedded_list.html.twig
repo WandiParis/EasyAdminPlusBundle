@@ -26,10 +26,7 @@
 {% block main %}
 <div class="embedded-list" for="{{ widget_identifier|e('html_attr') }}">
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
-    {# Prune forbidden actions AND delete action anyway (not handled with #delete-modal) #}
-    {% if not add_delete %}
-        {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, ['delete'], null) %}
-    {% endif %}
+    
     {% set _columns_count = fields|length + (_list_item_actions|length > 0 ? 1 : 0) %}
 
     <div class="table-responsive">
@@ -80,6 +77,8 @@
                         {% endfor %}
 
                         {% if _list_item_actions|length > 0 %}
+                            {% set action_delete = (not add_delete) ? ['delete'] : [] %}
+                            {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, action_delete, item) %}
                             {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
                             <td data-label="{{ _column_label }}" class="actions">
                             {% block item_actions %}

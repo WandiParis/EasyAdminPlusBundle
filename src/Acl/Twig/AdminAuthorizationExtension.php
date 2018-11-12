@@ -39,8 +39,13 @@ class AdminAuthorizationExtension extends AbstractExtension
 
     public function pruneItemsActions(array $itemActions, array $entity, array $forbiddenActions = [], $subject)
     {
-        return array_filter($itemActions, function ($action) use ($entity, $forbiddenActions, $subject) {
-            return !in_array($action, $forbiddenActions) && $this->isEasyAdminGranted($entity, $action, $subject);
-        }, ARRAY_FILTER_USE_KEY);
+        return array_filter($itemActions, function ($conf, $action) use ($entity, $forbiddenActions, $subject) {
+            $authorize = !in_array($action, $forbiddenActions) && $this->isEasyAdminGranted($entity, $action, $subject);
+            if(array_key_exists('if', $conf)) {
+
+                $authorize = ($authorize && $subject->{$conf['if']}());
+            }
+            return $authorize;
+        }, ARRAY_FILTER_USE_BOTH);
     }
 }
