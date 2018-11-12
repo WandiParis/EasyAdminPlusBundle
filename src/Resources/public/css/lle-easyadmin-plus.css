@@ -95,3 +95,9 @@ img.country {
     border-radius: 5px;
     background-color: #EEE;
 }
+
+.timeline>li>.timeline-item>.timeline-header>.time {
+    color:#999;
+    padding:10px;
+    font-size: 12px;
+}

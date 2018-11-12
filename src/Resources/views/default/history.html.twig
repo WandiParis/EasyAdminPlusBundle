@@ -10,12 +10,12 @@
                     <li>
                         <i class="fa fa-user "></i>
                         <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i>
-                          {{ log.loggedAt|date('d/m/Y H:i') }}
-                      </span>
                             <h3 class="timeline-header">
                                 {{ ("history.action."~log.action) | trans({},'EasyAdminPlusBundle') }}
                                 <b>{{ log.username }}</b>
+                              <span class="time"><i class="fa fa-clock-o"></i>
+                                  {{ log.loggedAt|date('d/m/Y H:i') }}
+                              </span>
                             </h3>
                             <div class="timeline-body">
                                 <table>
