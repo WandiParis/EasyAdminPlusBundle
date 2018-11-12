@@ -1,68 +1,77 @@
 
 {% if _entity_config.filter is defined %}
 
-    {%  set hidden_filter = true  %}
-    {% for filter in filters %}
-        {%  if not filter.hidden  %}
-            {%  set hidden_filter = false  %}
-            {#{ dump(filter.data) }#}
-        {%  endif %}
-    {%  endfor  %}
+{%  set hidden_filter = true  %}
+{% for filter in filters %}
+{%  if not filter.hidden  %}
+{%  set hidden_filter = false  %}
+{#{ dump(filter.data) }#}
+{%  endif %}
+{%  endfor  %}
+{%  set head = false %}
+<div class="adminlist-filter" {%  if hidden_filter %}
+	style="display: none;" {%  endif %}>
+	<form method="POST"
+		action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}"
+		class="form-horizontal ">
 
-<div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
-    <form method="POST" action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}" class="form-horizontal ">
-
-    <div class="box box-info collapsed-box">
-        <div class="box-header with-border" data-widget="collapse">
-            <div class="box-title">
-                <i class="icon fa fa-search"></i>
-                <!--&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}-->
-                {% for filter in filters %}
-                    {% set vars = {
+		<div class="box box-info collapsed-box">
+			<div class="box-header with-border" data-widget="collapse">
+				<div class="box-title">
+					<i class="icon fa fa-search"></i>
+					<!--&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}-->
+					{% for filter in filters %}
+					{% set vars = {
                         'data': filter.data, 
                         'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId, 
                         'filtertype':filter} 
                     %}
-                    {% include filter.stateTemplate with vars %}
+					{% include filter.stateTemplate with vars %}
+					{% if filter.head == true %}
+					{% set head = true %}
+					{%  endif %}
+					{% endfor %}
+				</div>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool"
+						data-widget="collapse">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+			</div>
+			{% if head %}
+			<div class="box-header">
+				{% for filter in filters if filter.head == true %}
+				{{ include('@LleEasyAdminPlus/default/includes/_filter.html.twig') }}
+				{% endfor %}
+			</div>
+			{% endif %}
+			<!-- /.box-header -->
 
-                {% endfor %}
-            </div>
-            <div class="box-tools pull-right">
-              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-            </div>
-        </div><!-- /.box-header -->
+			<div class="box-body" style="display: none">
+				<div class="row">
 
-        <div class="box-body" style="display:none">
-          <div class="row">
+					<!-- FILTER -->
+					{% for filter in filters if filter.head == false %}
+					{{ include('@LleEasyAdminPlus/default/includes/_filter.html.twig') }}
+					{% endfor %}
+				</div>
+				<!-- row -->
+			</div>
+			<!-- box-body -->
 
-          <!-- FILTER -->
-          {% for filter in filters %}
+			<div class="{% if head %}box-header{% else %}box-footer{% endif %}">
+				<button class="btn btn-primary apply_filter" name="filter"
+					value="filter" type="submit">
+					{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}
+				</button>
+				<button class="btn btn-default" name="reset" value="reset"
+					type="submit">
+					{{'Effacer'|trans({}, 'EasyAdminPlusBundle') }}
+				</button>
+			</div>
+		</div>
 
-          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 " style="min-height:50px; {%  if filter.hidden %}display:none;{% endif %}">
-                        <div class="form-group">
-                            <label for="date" class="col-sm-4 control-label text-nowrap">
-                                {{ filter.filterLabel|trans() }}
-                            </label>
-                            <div class="col-sm-8">
-                                {% set vars = {
-                                    'data': filter.data, 
-                                    'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId, 
-                                    'filtertype':filter} 
-                                %}
-                              {% include filter.template with vars %}
-                            </div>
-                        </div> <!-- form group -->
-                    </div>
-          {% endfor %}
-          </div><!-- row -->
-        </div><!-- box-body -->
-
-        <div class="box-footer">
-            <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}</button>
-            <button class="btn btn-default" name="reset" value="reset" type="submit">{{'Effacer'|trans({}, 'EasyAdminPlusBundle') }}</button>
-        </div>
-    </div>
-
-    </form>
+	</form>
 </div>
 {% endif %}
