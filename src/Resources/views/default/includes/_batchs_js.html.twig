@@ -1,0 +1,107 @@
+
+<script>
+    function doBulkAction(url) {
+        oneChecked = validateBulkCheckboxes();
+        if(oneChecked) {
+            document.bulkform.action = url;
+            document.bulkform.submit();
+        }
+
+        return false;
+    }
+
+
+    function validateBulkCheckboxes() {
+        var allChecked = true;
+        var oneChecked = false;
+
+        var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
+        for (var i=0; i<checkboxes.length; i++) {
+            var cb = checkboxes[i];
+            if (cb.checked == true) {
+                oneChecked = true;
+            } else {
+                allChecked = false;
+            }
+        }
+
+        $('#js-all-bulk-checkbox').prop('checked', allChecked);
+
+        if (oneChecked) {
+            $('.navbar-batch').removeClass('hidden');
+            $('.js-bulk-button').removeClass('disabled');
+        } else {
+            $('.navbar-batch').addClass('hidden');
+            $('.batch_form').addClass('hidden');
+            $('.js-bulk-button').addClass('disabled');
+        }
+        return oneChecked;
+    }
+
+    function showBatchForm(name) {
+        $('.batch_form').addClass('hidden');
+        if(name){
+                $('#batch_'+name).removeClass('hidden');
+        }
+
+    }
+
+    var allCheckbox = document.getElementById('js-all-bulk-checkbox');
+    allCheckbox.onchange = function() {
+        if (allCheckbox.checked == true) {
+            $('.js-bulk-checkbox').prop('checked', true);
+            $('.js-bulk-button').removeClass('disabled');
+            if($('#all-selection').val() == 0) {
+                $('.js-all-selection-none').removeClass('hidden');
+            } else {
+                $('.js-all-selection-active').removeClass('hidden');
+            }
+        } else {
+            $('.js-bulk-checkbox').prop('checked', false);
+            $('.js-bulk-button').addClass('disabled');
+            $('.js-all-selection-none').addClass('hidden');
+            $('.js-all-selection-active').addClass('hidden');
+        }
+        
+        validateBulkCheckboxes();
+    };
+
+    $( ".js-all-selection" ).click(function() {
+        if($('#all-selection').val() == 1) {
+            $('#all-selection').val(0);
+            $('.js-all-selection-none').removeClass('hidden');
+            $('.js-all-selection-active').addClass('hidden');
+        } else {
+            $('#all-selection').val(1);
+            $('.js-all-selection-none').addClass('hidden');
+            $('.js-all-selection-active').removeClass('hidden');
+        }
+        
+    });
+
+    var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
+    for (var key in checkboxes) {
+        checkboxes[key].onchange = validateBulkCheckboxes;
+    }
+    
+    $('#confirm-batch').on('click', '.btn-ok', function(e) {
+            var $modalDiv = $(e.delegateTarget);
+            var href = $(this).data('href');
+            doBulkAction(href);
+            $modalDiv.addClass('loading');
+            setTimeout(function() {
+                $modalDiv.modal('hide').removeClass('loading');
+            }, 1000)
+        });
+    $('#confirm-batch').on('show.bs.modal', function(e) {
+            var data = $(e.relatedTarget).data();
+            $('.btn-ok', this).data('href', data.href);
+        });
+
+    $('.js-bulk-button').on('click', function(e){
+      e.preventDefault();
+    });
+
+    validateBulkCheckboxes();
+   
+</script>

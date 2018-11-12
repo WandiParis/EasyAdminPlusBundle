@@ -7,6 +7,11 @@
   {% set confirm = entity_config['wf_confirm'] %}
 {% endif %}
 {%  set transitions =  workflow_transitions(item) %}
+{% if field_options['id'] is defined %}
+    {% set field_id = field_options['id'] %}
+{% else %}
+    {% set field_id = field_options['property'] %}  
+{% endif %}
 <div class="btn-group workflow">
   <button type="button" class="btn btn-xs dropdown-toggle btn-workflow-current" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     {{ ("wf.etat."~value)|trans}} {%  if transitions|length %}<span class="caret"></span>{%  endif %}
@@ -18,7 +23,7 @@
             <li>
                 <a class="btn btn-xs btn-workflow"
                   {% if confirm %}
-                    data-toggle="modal" data-target="#confirm-wf" data-href="{{path }}" 
+                    data-toggle="modal" data-target="#confirm-wf-{{ field_id }}-{{item.id}}" data-href="{{path }}" 
                   {% else %}
                     href="{{ path }}"
                   {% endif %}
@@ -35,7 +40,7 @@
 </div>
 
 
-<div id="confirm-wf" class="modal fade">
+<div id="confirm-wf-{{ field_id }}-{{item.id}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -56,9 +61,9 @@
 
 
 <script>
-    $('tr[data-id={{item.id}}]').addClass( "wf-{{value}}" );
+    $('tr[data-id={{item.id}}]').addClass( "wf-{{value|replace({' ': '-'})}}" );
     
-    $('#confirm-wf').on('click', '.btn-ok', function(e) {
+    $('#confirm-wf-{{ field_id }}-{{item.id}}').on('click', '.btn-ok', function(e) {
             var $modalDiv = $(e.delegateTarget);
             var href = $(this).data('href');
             document.location.href= href;
@@ -68,7 +73,7 @@
             }, 1000)
         });
 
-    $('#confirm-wf').on('show.bs.modal', function(e) {
+    $('#confirm-wf-{{ field_id }}-{{item.id}}').on('show.bs.modal', function(e) {
             var data = $(e.relatedTarget).data();
             $('.btn-ok', this).data('href', data.href);
         });
