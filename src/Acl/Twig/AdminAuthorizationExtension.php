@@ -41,9 +41,9 @@ class AdminAuthorizationExtension extends AbstractExtension
     {
         return array_filter($itemActions, function ($conf, $action) use ($entity, $forbiddenActions, $subject) {
             $authorize = !in_array($action, $forbiddenActions) && $this->isEasyAdminGranted($entity, $action, $subject);
-            if(array_key_exists('if', $conf)) {
+            if(array_key_exists('if', $conf) && !is_null($subject)) {
 
-                $authorize = ($authorize && $subject && $subject->{$conf['if']}());
+                $authorize = ($authorize  && $subject->{$conf['if']}());
             }
             return $authorize;
         }, ARRAY_FILTER_USE_BOTH);
