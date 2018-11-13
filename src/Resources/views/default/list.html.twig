@@ -32,11 +32,11 @@
             {% set action_href = path(action.name, action.parameters) %}
             {% endif %}
             {%  if action.confirm is defined %}
-            <button 
-            	class="btn btn-primary lle-confirm" 
-            	style="margin-right:5px;" 
-            	id="action_{{action.name}}" 
-            	data-href="{{ action_href }}" 
+            <button
+            	class="btn btn-primary lle-confirm"
+            	style="margin-right:5px;"
+            	id="action_{{action.name}}"
+            	data-href="{{ action_href }}"
             	{% if action.confirm.message is defined %}
             	data-message="{{ action.confirm.message|trans }}"
         		{% endif %}
@@ -44,15 +44,15 @@
     			data-xhr="1"
         		{% if action.confirm.xhr.message %}
         		data-xhr-message = '{{ action.confirm.xhr.message|trans }}'
-        		{% endif %}	
+        		{% endif %}
         		{% if action.confirm.xhr.method %}
         		data-xhr-method = '{{ action.confirm.xhr.method }}'
-        		{% endif %}	
+        		{% endif %}
         		{% endif %}
                 <i class="fa fa-{{ action.icon }}"></i>
                 {{ action.label|trans }}
             </button>
-            
+
             {% else %}
             <a class="btn btn-primary" style="margin-right:5px;" id="action_{{action.name}}" href="{{ action_href }}">
                 <i class="fa fa-{{ action.icon }}"></i>
@@ -198,16 +198,9 @@
 
     {% if _entity_config.list.hasBatchActions %}
         <form action="#" method="POST" name="bulkform">
+
             {{ include('@EasyAdmin/default/includes/_batchs.html.twig') }}
-        <div class="clearfix">
-            <input type="hidden" name="all-selection" value="0" id="all-selection">
-            <div class="col-md-12 alert alert-info hidden js-all-selection-none">
-                {{ 'label.batchthispage' | trans({}, 'EasyAdminPlusBundle') }} | <a class="js-all-selection">{{ 'action.batchselectall' | trans({}, 'EasyAdminPlusBundle') }}</a>
-            </div>
-            <div class="col-md-12 alert alert-info hidden js-all-selection-active">
-                {{ 'label.batchallselectactive' | trans({}, 'EasyAdminPlusBundle') }} | <a class="js-all-selection">{{ 'action.batchselectpage' | trans({}, 'EasyAdminPlusBundle') }}</a>
-            </div>
-        </div>
+
     {% endif %}
 
     <div class="table-responsive">
@@ -221,7 +214,7 @@
                         <input type="checkbox" id="js-all-bulk-checkbox" title="{{'label.batchselectall'|trans({}, 'EasyAdminPlusBundle')}}">
                     </td>
                 {% endif %}
-                
+
                 {% for field, metadata in fields %}
                     {% set isSortingField = metadata.property == app.request.get('sortField')|split('.')|first %}
                     {% set nextSortDirection = isSortingField ? (app.request.get('sortDirection') == 'DESC' ? 'ASC' : 'DESC') : 'DESC' %}
@@ -254,7 +247,7 @@
         {% block table_body %}
 
             {# Initialize #}
-            
+
             {% if _entity_config.tree is defined and _entity_config.tree %}
                 {% set levelShift = (paginator.currentPageResults|first).level %}
                 {% set tree_parents = [] %}
@@ -293,9 +286,9 @@
                         {% endif %}
                     {% endif %}
                 {% endif %}
-                
+
                 {# ROW #}
-                <tr data-id="{{ _item_id }}" 
+                <tr data-id="{{ _item_id }}"
                     {% if root_item is defined and root_item %}data-root-id="{{root_item}}" {%endif%}
                     {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}
                     >
@@ -337,7 +330,7 @@
                     {% endif %}
                 </tr>
                 {# END ROW #}
-                
+
                 {% set previous_item = item %}
 
             {# NO RESULTS #}
@@ -383,10 +376,8 @@
             _entity_config: _entity_config,
         }, with_context = false) }}
     {% endblock delete_form %}
-    
+
 {% block content_list_footer %}
 {% endblock %}
 
 {% endblock %}
-
-

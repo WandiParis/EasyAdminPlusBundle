@@ -1,114 +1,87 @@
 
 {% if _entity_config.filter is defined %}
 
-{%  set hidden_filter = true  %}
-{% for filter in filters %}
-{%  if not filter.hidden  %}
-{%  set hidden_filter = false  %}
-{#{ dump(filter.data) }#}
-{%  endif %}
-{%  endfor  %}
-{% set head = false %}
+    {%  set hidden_filter = true  %}
+    {% for filter in filters %}
+        {%  if not filter.hidden  %}
+            {%  set hidden_filter = false  %}
+            {#{ dump(filter.data) }#}
+        {%  endif %}
+    {%  endfor  %}
 
-<div class="adminlist-filter" {%  if hidden_filter %}
-	style="display: none;" {%  endif %}>
-	<form method="POST"
-		action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}">
+<div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
+    <form method="POST" action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}">
 
-		<div class="box box-info">
-			<div class="box-header with-border" data-widget="collapse">
-				<div class="box-title">
-					<i class="icon fa fa-search"></i> <span class="box-header__title">{{'Filtrer les résultats'|trans({}, 'EasyAdminPlusBundle') }}</span>
-					<!--&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}-->
-					{% for filter in filters %}
-					{% set vars = {
+    <div class="box box-info">
+        <div class="box-header with-border" data-widget="collapse">
+            <div class="box-title">
+                <i class="icon fa fa-search"></i>
+                <span class="box-header__title">{{'Filtrer les résultats'|trans({}, 'EasyAdminPlusBundle') }}</span>
+                <!--&nbsp;{{'Rechercher'|trans({}, 'EasyAdminPlusBundle') }}-->
+                {% for filter in filters %}
+                    {% set vars = {
                         'data': filter.data,
                         'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId,
                         'filtertype':filter}
                     %}
-					{% include filter.stateTemplate with vars %}
-					{% if filter.head == true %}
-					{% set head = true %}
-					{% endif %}
-					{% endfor %}
-				</div>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool"
-						data-widget="collapse">
-						<i class="fa fa-minus"></i>
-					</button>
-				</div>
-			</div>
-			<!-- /.box-header -->
+                    {% include filter.stateTemplate with vars %}
 
-			<div class="box-body">
-				<div class="row">
+                {% endfor %}
+            </div>
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div><!-- /.box-header -->
 
-					{% for filter in filters if filter.head == true %}
-					{{ include('@LleEasyAdminPlus/default/includes/_filter.html.twig') }}
-					{% endfor %}
+        <div class="box-body">
+          <div class="row">
 
+          <!-- FILTER -->
+          {% for filter in filters %}
+            {% if loop.index == 5 %}
+            <div class="col-xs-12">
+               <a class="toggle-secondary-filters" href="#secondary-filters" aria-expanded="false" aria-controls="secondary-filters" data-toggle="collapse"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span>{{'Plus de filtres'|trans({}, 'EasyAdminPlusBundle') }}</span></a>
+            </div>
 
-					{% if head %}
-					<div class="col-xs-12">
-						<a class="toggle-secondary-filters" href="#secondary-filters"
-							aria-expanded="false" aria-controls="secondary-filters"
-							data-toggle="collapse"><i class="fa fa-plus-circle"
-							aria-hidden="true"></i> <span>{{'Plus de filtres'|trans({}, 'EasyAdminPlusBundle') }}</span></a>
-					</div>
+            <div id="secondary-filters" class="collapse" style="width: 100%">
+               {% endif %}
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 " style="min-height:50px; {%  if filter.hidden %}display:none;{% endif %}">
 
-					<div id="secondary-filters" class="collapse" style="width: 100%">
-					{% endif %}
-					<!-- FILTER -->
-					{% for filter in filters if filter.head == false %}
-					{{ include('@LleEasyAdminPlus/default/includes/_filter.html.twig') }}
-					{% endfor %}
-					{% if head %}
-					</div>
-					{% endif %}
-					<script>
-						$('#secondary-filters')
-								.on(
-										'shown.bs.collapse',
-										function() {
-											$('.toggle-secondary-filters')
-													.find('i')
-													.toggleClass(
-															'fa-plus-circle fa-minus-circle');
-											$('.toggle-secondary-filters')
-													.find('span').text(
-															'Moins de filtres');
-										});
-						$('#secondary-filters')
-								.on(
-										'hidden.bs.collapse',
-										function() {
-											$('.toggle-secondary-filters')
-													.find('i')
-													.toggleClass(
-															'fa-plus-circle fa-minus-circle');
-											$('.toggle-secondary-filters')
-													.find('span').text(
-															'Plus de filtres');
-										})
-					</script>
-				</div>
-				<!-- row -->
-			</div>
-			<!-- box-body -->
+            <div class="form-group">
+                <label for="date" class="control-label text-nowrap">
+                    {{ filter.filterLabel|trans() }}
+                </label>
+                    {% set vars = {
+                        'data': filter.data,
+                        'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId,
+                        'filtertype':filter}
+                    %}
+                  {% include filter.template with vars %}
+            </div> <!-- form group -->
 
-			<div class="box-footer">
-				<button class="btn btn-primary apply_filter" name="filter"
-					value="filter" type="submit">
-					{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}
-				</button>
-				<button class="btn btn-default" name="reset" value="reset"
-					type="submit">
-					{{'Réinitialiser'|trans({}, 'EasyAdminPlusBundle') }}
-				</button>
-			</div>
-		</div>
+          </div>
+          {% if loop.last and loop.length >= 5 %}</div>{% endif %}
+          {% endfor %}
+          <script>
 
-	</form>
+             $('#secondary-filters').on('shown.bs.collapse', function () {
+              $('.toggle-secondary-filters').find('i').toggleClass('fa-plus-circle fa-minus-circle');
+              $('.toggle-secondary-filters').find('span').text('Moins de filtres');
+           });
+           $('#secondary-filters').on('hidden.bs.collapse', function () {
+             $('.toggle-secondary-filters').find('i').toggleClass('fa-plus-circle fa-minus-circle');
+             $('.toggle-secondary-filters').find('span').text('Plus de filtres');
+           })
+          </script>
+          </div><!-- row -->
+        </div><!-- box-body -->
+
+        <div class="box-footer">
+            <button class="btn btn-primary apply_filter" name="filter" value="filter" type="submit">{{'Filtrer'|trans({}, 'EasyAdminPlusBundle') }}</button>
+            <button class="btn btn-default" name="reset" value="reset" type="submit">{{'Réinitialiser'|trans({}, 'EasyAdminPlusBundle') }}</button>
+        </div>
+    </div>
+
+    </form>
 </div>
 {% endif %}

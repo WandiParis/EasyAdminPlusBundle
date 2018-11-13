@@ -28,10 +28,10 @@
         $('#js-all-bulk-checkbox').prop('checked', allChecked);
 
         if (oneChecked) {
-            $('.navbar-batch').removeClass('hidden');
+            $('.batch-actions').removeClass('hidden');
             $('.js-bulk-button').removeClass('disabled');
         } else {
-            $('.navbar-batch').addClass('hidden');
+            $('.batch-actions').addClass('hidden');
             $('.batch_form').addClass('hidden');
             $('.js-bulk-button').addClass('disabled');
         }
@@ -41,7 +41,7 @@
     function showBatchForm(name) {
         $('.batch_form').addClass('hidden');
         if(name){
-                $('#batch_'+name).removeClass('hidden');
+                $('.batch_'+name).removeClass('hidden');
         }
 
     }
@@ -62,7 +62,7 @@
             $('.js-all-selection-none').addClass('hidden');
             $('.js-all-selection-active').addClass('hidden');
         }
-        
+
         validateBulkCheckboxes();
     };
 
@@ -76,14 +76,14 @@
             $('.js-all-selection-none').addClass('hidden');
             $('.js-all-selection-active').removeClass('hidden');
         }
-        
+
     });
 
     var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
     for (var key in checkboxes) {
         checkboxes[key].onchange = validateBulkCheckboxes;
     }
-    
+
     $('#confirm-batch').on('click', '.btn-ok', function(e) {
             var $modalDiv = $(e.delegateTarget);
             var href = $(this).data('href');
@@ -103,5 +103,5 @@
     });
 
     validateBulkCheckboxes();
-   
+
 </script>

@@ -1,66 +1,81 @@
 
-<nav class="navbar navbar-default navbar-batch hidden">
-  <div class="container-fluid">
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-            <a class="dropdown-toggle" id="dropdownBatchActionButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btn-batch">
-            {{ 'label.batchActions.title'|trans({}, 'EasyAdminPlusBundle') }}
-            <span class="caret"></span>
-            </a>
-              
-            <ul class="dropdown-menu" aria-labelledby="dropdownBatchActionButton" id="dropdown-batch">
-                {% for action, actiondata in _entity_config.list.batchs %}
-                    {% if actiondata.role is null or is_granted(actiondata.role) %}
-                            <li><a href="javascript:void(0)"
-                                    onclick="showBatchForm('{{actiondata.name}}')" 
-                                >
-                                {% if actiondata.icon is not null %}
-                                    <i class="fa fa-{{ actiondata.icon }} }}"></i> {{ (actiondata.label)|trans }}
-                                {% else %}
-                                    {{ (actiondata.label)|trans }}
-                                {% endif %}
-                                {# {% if batch_forms[actiondata.name] is defined %} #}
-                                    &nbsp;<span class="pull-right fa fa-angle-right"></span>
-                                {# {% endif %} #}
-                            </a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </li>
-      </ul>
-      <div class="navbar-form navbar-left navbar-batch">
-        {% for action, actiondata in _entity_config.list.batchs %}
-            {% if (actiondata.role is null or is_granted(actiondata.role)) %}
-                <div  id="batch_{{actiondata.name}}" class="batch_form hidden">
-                
-                     {% if actiondata.icon is not null %}
-                        <i class="fa fa-{{ actiondata.icon }} }}"></i> {{ (actiondata.label)|trans }}
-                    {% else %}
-                        {{ (actiondata.label)|trans }}
-                    {% endif %}
-                   
-                {% if  batch_forms[actiondata.name] is defined %}
-                    <div class="batchForms form-group form-inline">
-                        {{ form_widget(batch_forms[actiondata.name]) }}
-                    </div>
-                {% endif %}
-                {% set href = path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) %}
-                <button class="btn btn-default js-bulk-button disabled"  
-                    {% if actiondata.confirm %} 
-                        data-toggle="modal" data-target="#confirm-batch" data-href="{{ href }}" 
-                    {% else %}
-                        onclick="return doBulkAction('{{ href }}')"
-                    {% endif %}
-                    >{{'batch.execute'|trans({}, 'EasyAdminPlusBundle')}}</button>
-            </div>
-            {% endif %}
-        {% endfor %}
+<div class="batch-actions box hidden">
+   <div class="box-header">
+      <h4><span class="box-header__title">{{ 'Actions massives'|trans({}, 'EasyAdminPlusBundle') }}</span></h4>
+      <div class="clearfix">
+          <input type="hidden" name="all-selection" value="0" id="all-selection">
+          <div class="hidden js-all-selection-none">
+              {{ 'Selection active :' | trans({}, 'EasyAdminPlusBundle') }} {{ 'label.batchthispage' | trans({}, 'EasyAdminPlusBundle') }} | <a class="js-all-selection">{{ 'action.batchselectall' | trans({}, 'EasyAdminPlusBundle') }}</a>
+          </div>
+          <div class="hidden js-all-selection-active">
+              {{ 'Selection active :' | trans({}, 'EasyAdminPlusBundle') }} {{ 'label.batchallselectactive' | trans({}, 'EasyAdminPlusBundle') }} | <a class="js-all-selection">{{ 'action.batchselectpage' | trans({}, 'EasyAdminPlusBundle') }}</a>
+          </div>
       </div>
-    </div><!-- /.navbar-collapse -->
-  </div>
-</nav>
+   </div>
+   <div class="box-body">
+      <div class="row">
+         <div class="col col-shrink">
+            <div class="dropdown">
+               <a class="dropdown-toggle btn btn-default" id="dropdownBatchActionButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btn-batch">
+               {{ 'label.batchActions.title'|trans({}, 'EasyAdminPlusBundle') }}
+               <span class="caret"></span>
+               </a>
+               <ul class="dropdown-menu" aria-labelledby="dropdownBatchActionButton" id="dropdown-batch">
+                   {% for action, actiondata in _entity_config.list.batchs %}
+                       {% if actiondata.role is null or is_granted(actiondata.role) %}
+                               <li><a href="javascript:void(0)"
+                                       onclick="showBatchForm('{{actiondata.name}}')">
+                                   {% if actiondata.icon is not null %}
+                                       <i class="fa fa-{{ actiondata.icon }}"></i> {{ (actiondata.label)|trans }}
+                                   {% else %}
+                                       {{ (actiondata.label)|trans }}
+                                   {% endif %}
+                                   {# {% if batch_forms[actiondata.name] is defined %} #}
+                                       &nbsp;<span class="pull-right fa fa-angle-right"></span>
+                                   {# {% endif %} #}
+                               </a></li>
+                       {% endif %}
+                   {% endfor %}
+               </ul>
+            </div>
+         </div>
+         <div class="col col-grow">
+            {% for action, actiondata in _entity_config.list.batchs %}
+                {% if (actiondata.role is null or is_granted(actiondata.role)) %}
+                    <div class="batch_form batch_{{actiondata.name}} hidden form-inline">
+                        <div class="form-group">
+                           <div class="input-group">
+                              <div class="input-group-addon">
+                                 {% if actiondata.icon is not null %}
+                                   <i class="fa fa-{{ actiondata.icon }}"></i>
+                                 {% endif %}
+                                 {{ (actiondata.label)|trans }}
+                              </div>
+                              {% if  batch_forms[actiondata.name] is defined %}
+                                  <div class="batchForms form-control">
+                                      {{ form_widget(batch_forms[actiondata.name]) }}
+                                  </div>
+                              {% endif %}
+                              <div class="input-group-addon">
+                                 {% set href = path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) %}
+                                 <button class="btn btn-primary btn-sm js-bulk-button disabled"
+                                     {% if actiondata.confirm %}
+                                         data-toggle="modal" data-target="#confirm-batch" data-href="{{ href }}"
+                                     {% else %}
+                                         onclick="return doBulkAction('{{ href }}')"
+                                     {% endif %}
+                                     >{{'batch.execute'|trans({}, 'EasyAdminPlusBundle')}}</button>
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                {% endif %}
+            {% endfor %}
+         </div>
+      </div>
+   </div>
+</div>
 
 <div id="confirm-batch" class="modal fade">
     <div class="modal-dialog">
