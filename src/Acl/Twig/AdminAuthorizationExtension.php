@@ -43,7 +43,7 @@ class AdminAuthorizationExtension extends AbstractExtension
             $authorize = !in_array($action, $forbiddenActions) && $this->isEasyAdminGranted($entity, $action, $subject);
             if(array_key_exists('if', $conf)) {
 
-                $authorize = ($authorize && $subject->{$conf['if']}());
+                $authorize = ($authorize && $subject && $subject->{$conf['if']}());
             }
             return $authorize;
         }, ARRAY_FILTER_USE_BOTH);
