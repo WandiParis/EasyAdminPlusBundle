@@ -8,6 +8,11 @@
             {#{ dump(filter.data) }#}
         {%  endif %}
     {%  endfor  %}
+{% if _entity_config.filter.nbMainFilters is defined %}
+	{% set nbMainFilters = _entity_config.filter.nbMainFilters + 1 %}
+{% else %}
+	{% set nbMainFilters = 5 %}
+{% endif %}
 
 <div class="adminlist-filter" {%  if hidden_filter %}style="display:none;"{%  endif %}>
     <form method="POST" action="{{ path('easyadmin', { 'menuIndex':app.request.query.get('menuIndex'), 'submenuIndex':app.request.query.get('menuIndex'), 'entity':app.request.query.get('entity'), 'action':'list' }) }}">
@@ -38,7 +43,7 @@
 
           <!-- FILTER -->
           {% for filter in filters %}
-            {% if loop.index == 5 %}
+            {% if loop.index == nbMainFilters %}
             <div class="col-xs-12">
                <a class="toggle-secondary-filters" href="#secondary-filters" aria-expanded="false" aria-controls="secondary-filters" data-toggle="collapse"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span>{{'Plus de filtres'|trans({}, 'EasyAdminPlusBundle') }}</span></a>
             </div>
@@ -60,7 +65,7 @@
             </div> <!-- form group -->
 
           </div>
-          {% if loop.last and loop.length >= 5 %}</div>{% endif %}
+          {% if loop.last and loop.length >= nbMainFilters %}</div>{% endif %}
           {% endfor %}
           <script>
 
