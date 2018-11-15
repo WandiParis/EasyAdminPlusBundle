@@ -42,8 +42,10 @@
         $('.batch_form').addClass('hidden');
         if(name){
                 $('.batch_'+name).removeClass('hidden');
+                if( $('#batch_form_view_'+name).length ){
+                    $(document).scrollTop( $('#batch_form_view_'+name).offset().top );
+                }
         }
-
     }
 
     var allCheckbox = document.getElementById('js-all-bulk-checkbox');

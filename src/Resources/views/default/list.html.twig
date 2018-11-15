@@ -198,9 +198,7 @@
 
     {% if _entity_config.list.hasBatchActions %}
         <form action="#" method="POST" name="bulkform">
-
-            {{ include('@EasyAdmin/default/includes/_batchs.html.twig') }}
-
+            {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position' : 'top'}) }}
     {% endif %}
 
     <div class="table-responsive">
@@ -349,7 +347,7 @@
 
     {% block batchActions %}
         {% if _entity_config.list.hasBatchActions %}
-                {{ include('@EasyAdmin/default/includes/_batchs.html.twig') }}
+                {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position': 'bottom'})  }}
                 {{ include('@EasyAdmin/default/includes/_batchs_js.html.twig') }}
             </form>
         {% endif %}
