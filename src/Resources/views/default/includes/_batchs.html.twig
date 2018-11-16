@@ -47,27 +47,31 @@
                     <div class="batch_form batch_{{actiondata.name}} hidden form-inline">
                         <div class="form-group">
                            <div class="input-group">
-                              <div class="input-group-addon">
-                                 {% if actiondata.icon is not null %}
-                                   <i class="fa fa-{{ actiondata.icon }}"></i>
-                                 {% endif %}
-                                 {{ (actiondata.label)|trans }}
-                              </div>
+                              {% if  batch_forms[actiondata.name] is not defined or position == 'bottom' %}
+                                <div class="input-group-addon">
+                                   {% if actiondata.icon is not null %}
+                                     <i class="fa fa-{{ actiondata.icon }}"></i>
+                                   {% endif %}
+                                   {{ (actiondata.label)|trans }}
+                                </div>
+                              {% endif %}
                               {% if  batch_forms[actiondata.name] is defined and position == 'bottom' %}
                                   <div class="batchForms form-control" id="batch_form_view_{{actiondata.name}}" >
                                     {{ form_widget(batch_forms[actiondata.name]) }}
                                   </div>
                               {% endif %}
-                              <div class="input-group-addon">
-                                 {% set href = path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) %}
-                                 <button class="btn btn-primary btn-sm js-bulk-button disabled"
-                                     {% if actiondata.confirm %}
-                                         data-toggle="modal" data-target="#confirm-batch" data-href="{{ href }}"
-                                     {% else %}
-                                         onclick="return doBulkAction('{{ href }}')"
-                                     {% endif %}
-                                     >{{'batch.execute'|trans({}, 'EasyAdminPlusBundle')}}</button>
-                              </div>
+                              {% if  batch_forms[actiondata.name] is not defined %}
+                                <div class="input-group-addon">
+                                   {% set href = path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) %}
+                                   <button class="btn btn-primary btn-sm js-bulk-button disabled"
+                                       {% if actiondata.confirm %}
+                                           data-toggle="modal" data-target="#confirm-batch" data-href="{{ href }}"
+                                       {% else %}
+                                           onclick="return doBulkAction('{{ href }}')"
+                                       {% endif %}
+                                       >{{'batch.execute'|trans({}, 'EasyAdminPlusBundle')}}</button>
+                                </div>
+                              {% endif %}
                            </div>
                         </div>
 
