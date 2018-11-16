@@ -280,6 +280,8 @@ class AdminController extends BaseAdminController
     {
         $this->initialize($request);
         $this->master_entity = $this->entity;
+        $vars = explode('\\',$this->master_entity['class']);
+        $master_entity_class =  end($vars);
 
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
@@ -312,7 +314,7 @@ class AdminController extends BaseAdminController
                 $add_form = $this->createFormBuilder(null, array(
                     'action' => $this->generateUrl('lle_easy_admin_plus_add_sublist', [
                         'parent_id'=> $request->query->get('id') ,
-                        'parent_entity'=> $this->master_entity['class'],
+                        'parent_entity'=> $master_entity_class,
                         'entity'=> "App\\Entity\\$entity" ]),
                     'method' => 'POST',
                 ))
@@ -330,11 +332,15 @@ class AdminController extends BaseAdminController
         } else {
             $add_form = null;
         }
+        $referer = $this->generateUrl('easyadmin',
+                                [ 'action' => 'show', 'entity'=> $master_entity_class, 'id' =>$request->query->get('id') ]
+                            );
         return $this->render('@LleEasyAdminPlus/default/embedded_list.html.twig', array(
             'fields'=>$fields,
             'items'=>$items,
             'entity'=>$entity,
             'add_form'=>$add_form,
+            'referer'=>$referer,
             'add_delete' => $metadata['with_delete'] ?? false,
             'template_form' => $metadata['template_form'] ?? '@LleEasyAdminPlus/default/includes/_sub_form.html.twig'
         ));
