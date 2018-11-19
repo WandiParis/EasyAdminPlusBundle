@@ -1,4 +1,24 @@
 
+<div id="confirm-batch" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>{{ 'batch_modal.title'|trans({}, 'EasyAdminPlusBundle') }}</h4>
+                <p>{{ 'batch_modal.content'|trans({}, 'EasyAdminPlusBundle') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn">
+                    {{ 'action.cancel'|trans({}, 'EasyAdminPlusBundle') }}
+                </button>
+                <button type="button" data-dismiss="modal" class="btn btn-danger btn-ok" id="modal-delete-button" >
+                    {{ 'batch_modal.action'|trans({}, 'EasyAdminPlusBundle') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     function doBulkAction(url) {
         oneChecked = validateBulkCheckboxes();

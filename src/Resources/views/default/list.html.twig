@@ -188,6 +188,11 @@
     </script>
 
     {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
+
+      {% if _entity_config.list.hasBatchActions %}
+                {{ include('@EasyAdmin/default/includes/_batchs_js.html.twig') }}
+      {% endif %}
+
 {% endblock %}
 
 {% block main %}
@@ -348,7 +353,6 @@
     {% block batchActions %}
         {% if _entity_config.list.hasBatchActions %}
                 {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position': 'bottom'})  }}
-                {{ include('@EasyAdmin/default/includes/_batchs_js.html.twig') }}
             </form>
         {% endif %}
 

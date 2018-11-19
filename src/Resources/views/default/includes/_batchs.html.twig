@@ -7,17 +7,17 @@
       <div class="clearfix">
           <input type="hidden" name="all-selection" value="0" id="all-selection">
           <div class="hidden js-all-selection-none">
-              <span>{{ 'Selection active :' | trans()}}</span>
+              <span>{{ 'label.selectionActive' | trans({}, 'EasyAdminPlusBundle')}} :</span>
              <ul>
-                <li><span>{{ 'label.batchthispage' | trans() }}</span></li>
-                <li><a class="js-all-selection">{{ 'action.batchselectall' | trans({}) }}</a></li>
+                <li><span>{{ 'label.batchthispage' | trans({}, 'EasyAdminPlusBundle') }}</span></li>
+                <li><a class="js-all-selection">{{ 'action.batchselectall' |trans({}, 'EasyAdminPlusBundle') }}</a></li>
              </ul>
           </div>
           <div class="hidden js-all-selection-active">
-              <span>{{ 'Selection active :' | trans() }}</span>
+              <span>{{ 'label.selectionActive' | trans({}, 'EasyAdminPlusBundle') }} :</span>
              <ul>
-                <li><a class="js-all-selection">{{ 'action.batchselectpage' | trans() }}</a></li>
-                <li><span>{{ 'label.batchallselectactive' | trans() }}</span></li>
+                <li><a class="js-all-selection">{{ 'action.batchselectpage' | trans({}, 'EasyAdminPlusBundle') }}</a></li>
+                <li><span>{{ 'label.batchallselectactive' | trans({}, 'EasyAdminPlusBundle') }}</span></li>
              </ul>
           </div>
       </div>
@@ -89,23 +89,4 @@
          </div>
       </div>
    </div>
-</div>
-
-<div id="confirm-batch" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h4>{{ 'batch_modal.title'|trans({}, 'EasyAdminPlusBundle') }}</h4>
-                <p>{{ 'batch_modal.content'|trans({}, 'EasyAdminPlusBundle') }}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn">
-                    {{ 'action.cancel'|trans({}, 'EasyAdminPlusBundle') }}
-                </button>
-                <button type="button" data-dismiss="modal" class="btn btn-danger btn-ok" id="modal-delete-button" >
-                    {{ 'batch_modal.action'|trans({}, 'EasyAdminPlusBundle') }}
-                </button>
-            </div>
-        </div>
-    </div>
 </div>

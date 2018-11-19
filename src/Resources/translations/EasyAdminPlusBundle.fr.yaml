@@ -108,6 +108,7 @@ action.batchselectall: "Tout sélectionner"
 label.batchallselectactive: "Appliqué à tout"
 action.batchselectpage: "Sélectionner la page affichée"
 label.batchselectall: "Sélectionner tout"
+label.selectionActive: "Sélection active"
 batch_modal:
     title: "Voulez vous effectuer cette action massive ?"
     action: "Valider"
