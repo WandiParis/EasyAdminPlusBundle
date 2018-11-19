@@ -68,7 +68,7 @@
                                     {{ form_widget(batch_forms[actiondata.name]) }}
                                   </div>
                               {% endif %}
-                              {% if  batch_forms[actiondata.name] is not defined %}
+                              {% if  batch_forms[actiondata.name] is not defined or position == 'bottom' %}
                                 <div class="input-group-addon">
                                    {% set href = path('easyadmin', app.request.query|merge({ action: 'batch', name: action })|merge(actiondata.params)) %}
                                    <button class="btn btn-primary btn-sm js-bulk-button disabled"
