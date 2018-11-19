@@ -12,7 +12,7 @@ services:
 
     Lle\EasyAdminPlusBundle\Form\Type\UrlAutocompleteType:
         tags: [form.type]
-        arguments: ['@router', '@easyadmin.config.manager']
+        arguments: ['@router', '@easyadmin.config.manager', "@doctrine.orm.entity_manager"]
 
     Lle.form.gedmo_translatable:
         class: Lle\EasyAdminPlusBundle\Form\Type\GedmoTranslatableType

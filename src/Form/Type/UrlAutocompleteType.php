@@ -11,16 +11,21 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Routing\Router;
 use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Lle\EasyAdminPlusBundle\Form\DataTransformer\EntityToIdTransformer;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class UrlAutocompleteType extends AbstractType
 {
 
     private $router;
     private $configManager;
+    private $em;
 
-    public function __construct(Router $router, ConfigManager $configManager){
+    public function __construct(Router $router, ConfigManager $configManager, EntityManagerInterface $em){
         $this->router = $router;
         $this->configManager = $configManager;
+        $this->em = $em;
     }
 
     public function getParent()
@@ -57,5 +62,14 @@ class UrlAutocompleteType extends AbstractType
         }
 
         $view->vars['value_filter'] = $options['value_filter'];
-    }    
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        if( $options['class'] && $options['path'] ) {
+            $transformer = new EntityToIdTransformer($this->em);
+            $transformer->setClass($options['class']);
+            $builder->addModelTransformer($transformer);
+        }
+    }
 }
