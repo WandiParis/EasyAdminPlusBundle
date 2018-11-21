@@ -65,6 +65,11 @@
 {%  endblock %}
 
 {% block url_autocomplete_widget %}
+<div class="autocomplet-url"
+{% for key, value in attr %}
+	{{ key }} = "{{ value }}"
+{%  endfor %}
+>
 <select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name|lower}}-autocomplete-url-lle='{{ url }}'>
     <option value="{{value}}" selected="selected">{{ value_filter ? include(template_from_string( "{{ value |" ~ value_filter ~ "}}")) : value }}</option>
 </select>
@@ -104,12 +109,14 @@
                         };
                     }
                 },
-                placeholder: 'Sélectionnez une valeur',
+                placeholder: '{{placeholder|trans}}',
+                width: 'resolve',
                 allowClear: true
             });
         });
     })
 </script>
+</div>
 {% endblock %}
 
 
