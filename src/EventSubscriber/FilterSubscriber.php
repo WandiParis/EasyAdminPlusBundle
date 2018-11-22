@@ -25,6 +25,9 @@ class FilterSubscriber implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        if ($request->attributes->get('_controller') != "Lle\EasyAdminPlusBundle\Controller\AdminController::indexAction") {
+            return;
+        }
         if (null === $entityName = $event->getRequest()->query->get('entity')) {
             return;
         }

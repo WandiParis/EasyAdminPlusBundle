@@ -314,12 +314,12 @@ class AdminController extends BaseAdminController
                 $add_form = $this->createFormBuilder(null, array(
                     'action' => $this->generateUrl('lle_easy_admin_plus_add_sublist', [
                         'parent_id'=> $request->query->get('id') ,
-                        'parent_entity'=> $master_entity_class,
-                        'entity'=> "App\\Entity\\$entity" ]),
+                        'parent_entity'=> $this->master_entity['class'],
+                        'entity'=>  $this->entity['class'] ]),
                     'method' => 'POST',
                 ))
                     ->add('item_id', EasyAdminAutocompleteType::class, array(
-                        'class' => "App\\Entity\\$entity",
+                        'class' => $this->entity['class'],
                         'label' => false,
                         'attr' => [
                             'data-easyadmin-autocomplete-url'  => $this->generateUrl('easyadmin',
