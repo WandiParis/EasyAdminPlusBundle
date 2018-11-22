@@ -353,6 +353,7 @@
     {% block batchActions %}
         {% if _entity_config.list.hasBatchActions %}
                 {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position': 'bottom'})  }}
+            <input type="hidden" name="all-selection" value="0" id="all-selection" class="all-selection">
             </form>
         {% endif %}
 
