@@ -338,10 +338,12 @@ class AdminController extends BaseAdminController
         return $this->render('@LleEasyAdminPlus/default/embedded_list.html.twig', array(
             'fields'=>$fields,
             'items'=>$items,
+            'main_id'=>$request->query->get('id'),
             'entity'=>$entity,
             'add_form'=>$add_form,
             'referer'=>$referer,
             'add_delete' => $metadata['with_delete'] ?? false,
+            'delete_route' => $metadata['delete_route'] ?? false,
             'template_form' => $metadata['template_form'] ?? '@LleEasyAdminPlus/default/includes/_sub_form.html.twig'
         ));
     }

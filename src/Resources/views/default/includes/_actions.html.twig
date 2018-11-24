@@ -4,7 +4,11 @@
     {% elseif 'method' == action.type %}
         {% set action_href = path('easyadmin', request_parameters|merge({ action: action.name, id: item_id })) %}
     {% elseif 'route' == action.type %}
-        {% set action_href = path(action.name, request_parameters|merge({ action: action.name, id: item_id })) %}
+        {% set route_params =  request_parameters|merge({ action: action.name, id: item_id }) %}
+        {% if action.route_params is defined %}
+            {% set route_params = route_params|merge(action.route_params) %} 
+        {% endif %}
+        {% set action_href = path(action.name, route_params) %}
     {%  elseif 'template' == action.type %}
         {% set action_href = null %}
         {{ include('easy_admin/' ~ app.request.query.get('entity') ~'/' ~ action.template) }}

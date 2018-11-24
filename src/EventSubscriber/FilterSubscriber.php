@@ -11,13 +11,13 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class FilterSubscriber implements EventSubscriberInterface
 {
     private $session;
-    private $easyadmin_config_manager;
+    private $eaConfigManager;
     private $filterState;
 
-    public function __construct( Session $session, FilterState $filterState, $easyadmin_config_manager )
+    public function __construct( Session $session, FilterState $filterState, $eaConfigManager )
     {
         $this->session = $session;
-        $this->easyadmin_config_manager = $easyadmin_config_manager;
+        $this->eaConfigManager = $eaConfigManager;
         $this->filterState = $filterState;
 
     }
@@ -32,7 +32,7 @@ class FilterSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $entity = $this->easyadmin_config_manager->getEntityConfiguration($entityName);
+        $entity = $this->eaConfigManager->getEntityConfiguration($entityName);
         if (isset($entity['filter'])) {
             $this->filterState->bindRequest($request, $entity);
         }
