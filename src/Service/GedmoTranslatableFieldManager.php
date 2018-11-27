@@ -139,7 +139,5 @@ class GedmoTranslatableFieldManager
                 }
             }
         }
-        $this->em->persist($entity);
-        $this->em->flush();
     }
 }
