@@ -26,12 +26,39 @@
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
     {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, [], null) %}
     {% for action in _list_item_actions if (action.global is defined and action.global) %}
+    		{%  if action.route is defined %}
+            {% set action_href = path(action.route, action.parameters) %}
+            {% else %}
             {% set action_href = path(action.name, action.parameters) %}
+            {% endif %}
+            {%  if action.confirm is defined %}
+            <button
+            	class="btn btn-primary lle-confirm"
+            	style="margin-right:5px;"
+            	id="action_{{action.name}}"
+            	data-href="{{ action_href }}"
+            	{% if action.confirm.message is defined %}
+            	data-message="{{ action.confirm.message|trans }}"
+        		{% endif %}
+        		{% if action.confirm.xhr is defined %}
+    			data-xhr="1"
+        		{% if action.confirm.xhr.message %}
+        		data-xhr-message = '{{ action.confirm.xhr.message|trans }}'
+        		{% endif %}
+        		{% if action.confirm.xhr.method %}
+        		data-xhr-method = '{{ action.confirm.xhr.method }}'
+        		{% endif %}
+        		{% endif %}
+                <i class="fa fa-{{ action.icon }}"></i>
+                {{ action.label|trans }}
+            </button>
+
+            {% else %}
             <a class="btn btn-primary" style="margin-right:5px;" id="action_{{action.name}}" href="{{ action_href }}">
                 <i class="fa fa-{{ action.icon }}"></i>
                 {{ action.label|trans }}
             </a>
-
+            {% endif %}
     {% endfor %}
 
     {# EXPORT #}
@@ -161,28 +188,22 @@
     </script>
 
     {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
+
+      {% if _entity_config.list.hasBatchActions %}
+                {{ include('@EasyAdmin/default/includes/_batchs_js.html.twig') }}
+      {% endif %}
+
 {% endblock %}
 
 {% block main %}
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
 
-    {% if _entity_config.list.hasBatchActions %}
-        <form action="#" method="POST" name="bulkform">
-       
-    {% endif %}
 
     {{ include(_entity_config.templates.paginator) }}
 
     {% if _entity_config.list.hasBatchActions %}
-        <div class="clearfix">
-            <input type="hidden" name="all-selection" value="0" id="all-selection">
-            <div class="col-md-12 alert alert-info hidden js-all-selection-none">
-                {{ 'label.batchthispage' | trans({}, 'EasyAdminPlusBundle') }} | <a class="js-all-selection">{{ 'action.batchselectall' | trans({}, 'EasyAdminPlusBundle') }}</a>
-            </div>
-            <div class="col-md-12 alert alert-info hidden js-all-selection-active">
-                {{ 'label.batchallselectactive' | trans({}, 'EasyAdminPlusBundle') }} | <a class="js-all-selection">{{ 'action.batchselectpage' | trans({}, 'EasyAdminPlusBundle') }}</a>
-            </div>
-        </div>
+        <form action="#" method="POST" name="bulkform">
+            {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position' : 'top'}) }}
     {% endif %}
 
     <div class="table-responsive">
@@ -196,7 +217,7 @@
                         <input type="checkbox" id="js-all-bulk-checkbox" title="{{'label.batchselectall'|trans({}, 'EasyAdminPlusBundle')}}">
                     </td>
                 {% endif %}
-                
+
                 {% for field, metadata in fields %}
                     {% set isSortingField = metadata.property == app.request.get('sortField')|split('.')|first %}
                     {% set nextSortDirection = isSortingField ? (app.request.get('sortDirection') == 'DESC' ? 'ASC' : 'DESC') : 'DESC' %}
@@ -229,7 +250,7 @@
         {% block table_body %}
 
             {# Initialize #}
-            
+
             {% if _entity_config.tree is defined and _entity_config.tree %}
                 {% set levelShift = (paginator.currentPageResults|first).level %}
                 {% set tree_parents = [] %}
@@ -268,9 +289,9 @@
                         {% endif %}
                     {% endif %}
                 {% endif %}
-                
+
                 {# ROW #}
-                <tr data-id="{{ _item_id }}" 
+                <tr data-id="{{ _item_id }}"
                     {% if root_item is defined and root_item %}data-root-id="{{root_item}}" {%endif%}
                     {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}
                     >
@@ -304,14 +325,15 @@
                                 request_parameters: _request_parameters,
                                 translation_domain: _entity_config.translation_domain,
                                 trans_parameters: _trans_parameters,
-                                item_id: _item_id
+                                item_id: _item_id,
+                                item: item
                             }, with_context = false) }}
                         {% endblock item_actions %}
                         </td>
                     {% endif %}
                 </tr>
                 {# END ROW #}
-                
+
                 {% set previous_item = item %}
 
             {# NO RESULTS #}
@@ -330,7 +352,8 @@
 
     {% block batchActions %}
         {% if _entity_config.list.hasBatchActions %}
-                {{ include('@EasyAdmin/default/includes/_batchs.html.twig') }}
+                {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position': 'bottom'})  }}
+            <input type="hidden" name="all-selection" value="0" id="all-selection" class="all-selection">
             </form>
         {% endif %}
 
@@ -356,10 +379,8 @@
             _entity_config: _entity_config,
         }, with_context = false) }}
     {% endblock delete_form %}
-    
+
 {% block content_list_footer %}
 {% endblock %}
 
 {% endblock %}
-
-

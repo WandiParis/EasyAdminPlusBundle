@@ -48,15 +48,19 @@ class PropertyConfigPass implements ConfigPassInterface
                 }
                 foreach ($entityConfig[$view]['fields'] as $fieldName => $fieldConfig) {
                     if (isset($fieldConfig['filter_type'])) {
-                      $class = $fieldConfig['filter_type'];
+                        @trigger_error('filter_type is deprecated use type.', E_USER_DEPRECATED);
+                        $class = $fieldConfig['filter_type'];
+                    }elseif (isset($fieldConfig['type'])) {
+                        $class = $fieldConfig['type'];
                     } else {
-                      $class = 'StringFilterType';
+                        $class = 'StringFilterType';
                     }
 
                     if (strpos($class, '\\') === false) {
                       $class= "Lle\\EasyAdminPlusBundle\\Filter\\FilterType\\".$class;
                     }
                     $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['filter_type'] = $class;
+                    $backendConfig['entities'][$entityName][$view]['fields'][$fieldName]['type'] = $class;
                     
                     $config = $fieldConfig['config'] ?? [];
 

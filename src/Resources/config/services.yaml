@@ -146,15 +146,16 @@ services:
         class:  '%lle.service.delete_batch.class%'
         arguments: ["@doctrine"]
             
+    lle.easy_admin_plus.finder:
+        public: true
+        class:  'Lle\EasyAdminPlusBundle\Search\Finder'
+        arguments: ["@lle.easy_admin_plus.query_builder", "@easyadmin.paginator"]
+
     lle.easy_admin_plus.autocomplete:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Search\Autocomplete'
-        arguments: ["@easyadmin.config.manager", "@easyadmin.finder", "@property_accessor"]
+        arguments: ["@easyadmin.config.manager", "@lle.easy_admin_plus.finder", "@property_accessor"]
 
-    lle.easy_admin_plus.filter_state:
-        public: true
-        class:  'Lle\EasyAdminPlusBundle\Filter\FilterState'
-        arguments: ["@doctrine.orm.entity_manager"]
 
     lle.easy_admin_plus.filter_bag_subscriber:
         class:  'Lle\EasyAdminPlusBundle\EventSubscriber\FilterSubscriber'
@@ -180,10 +181,18 @@ services:
         public: false
         tags: [controller.service_arguments]
 
-
     lle.easy_admin_plus.controller:
         class:  'Lle\EasyAdminPlusBundle\Controller\AdminController'
         autoconfigure: true
         autowire: true
         public: false
         tags: [controller.service_arguments]
+                
+    Lle\EasyAdminPlusBundle\Form\DataTransformer\EntityToIdTransformer:
+        public: false
+        arguments: ["@doctrine.orm.entity_manager"]
+                
+    lle.easy_admin_plus.form_transformer_entity_to_id:
+        public: true
+        alias:  Lle\EasyAdminPlusBundle\Form\DataTransformer\EntityToIdTransformer
+    

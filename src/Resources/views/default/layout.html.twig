@@ -20,3 +20,89 @@
     <link rel="stylesheet" href="{{ asset('bundles/lleeasyadminplus/css/jquery.treetable.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/lleeasyadminplus/css/jquery.treetable.theme.default.css') }}">
 {% endblock %}
+
+{% block wrapper %}
+{{ parent() }}
+<div id="confirm-modal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="confirm-modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn">
+                    {{ 'action.cancel'|trans({}, 'EasyAdminPlusBundle') }}
+                </button>
+                <a class="btn btn-primary" style="margin-right:5px;" id="lle-confirm-validate-button" href="" data-id="">
+                    {{ 'action.validate'|trans({}, 'EasyAdminPlusBundle') }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="confirm-modal-success" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="confirm-modal-success-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn">
+                    {{ 'action.close'|trans({}, 'EasyAdminPlusBundle') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock wrapper %}
+
+{% block body_javascript %}
+{{ parent() }}
+<script>
+    $(function () {
+		$(document).on('click', '.lle-confirm', function (e) {
+			e.preventDefault();
+			var message = '{{ 'message.confirm'|trans({}, 'EasyAdminPlusBundle') }}';
+			if ($(this).data('message')) {
+				message = $(this).data('message');
+			}
+			var href = "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}"
+			if ($(this).data('href')) {
+				href = $(this).data('href');
+			}
+
+			$('.confirm-modal-message').html($(this).data('message'));
+			$('#lle-confirm-validate-button').attr('href', href);
+			$('#lle-confirm-validate-button').attr('data-id', $(this).attr('id'));
+			$('#confirm-modal').modal('show');
+		});
+
+		$(document).on('click', '#lle-confirm-validate-button', function (e) {
+			$(this).attr("disabled","disabled");
+			var field = $('#'+$(this).data('id'));
+			e.preventDefault();
+
+			var method = "GET"
+			if (field.data('xhr-method')) {
+				method = field.data('xhr-method');
+			}
+			var message = '{{ 'message.confirm-success'|trans({}, 'EasyAdminPlusBundle') }}';
+			if (field.data('xhr-message')) {
+				message = field.data('xhr-message');
+			}
+			$.ajax({
+				url: field.data('href'),
+				method: method,
+				success: function () {
+					$('#confirm-modal-success').modal('show');
+					$('.confirm-modal-success-message').html(message);
+					$('#confirm-modal').modal('hide');
+				}
+			});
+		});
+    });
+
+
+</script>
+
+{% endblock body_javascript %}

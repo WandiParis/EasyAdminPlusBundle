@@ -27,12 +27,19 @@ class MenuHelper
     {
         foreach ($menuConfig as $key => $entry) {
             if (
-                'entity' == $entry['type']
-                && isset($entry['entity'])
-                && !$this->adminAuthorizationChecker->isEasyAdminGranted(
-                    $entitiesConfig[$entry['entity']],
-                    isset($entry['params']) && isset($entry['params']['action']) ? $entry['params']['action'] : 'list',
-                    null
+                (
+                    'entity' == $entry['type']
+                    && isset($entry['entity'])
+                    && !$this->adminAuthorizationChecker->isEasyAdminGranted(
+                        $entitiesConfig[$entry['entity']],
+                        isset($entry['params']) && isset($entry['params']['action']) ? $entry['params']['action'] : 'list',
+                        null
+                    )
+                )
+                ||
+                (
+                    isset($entry['role'])
+                    && !$this->adminAuthorizationChecker->hasRole($entry['role'])
                 )
             ) {
                 unset($menuConfig[$key]);

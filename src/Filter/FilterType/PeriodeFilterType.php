@@ -14,12 +14,13 @@ class PeriodeFilterType extends AbstractFilterType
 
     private $choices;
     private $requestChoice;
-
-    public function __construct($columnName, $label, $config = array(), $alias = 'entity')
+    private $format;
+    
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
-        $this->choices = (isset($config['choices']))? $config['choices']:null;
-        $this->format = (isset($config['format']))? $config['format']:'d/m/Y';
+        parent::configure($config);
+        $this->choices = $config['choices'] ?? null;
+        $this->format = $config['format'] ?? 'd/m/Y';
     }
 
     /**
@@ -31,16 +32,18 @@ class PeriodeFilterType extends AbstractFilterType
         if (isset($this->data['value'])) {
             $qb = $queryBuilder;
             $from = $to = null;
-            if(isset($this->data['value']['from']) && $this->data['value']['from']) $from = DateTime::createFromFormat($this->format, $this->data['value']['from'])->format('Y-m-d');
-            if(isset($this->data['value']['to']) && $this->data['value']['to']) $to = DateTime::createFromFormat($this->format, $this->data['value']['to'])->format('Y-m-d');
             $c = $this->alias . $this->columnName;
-            if(isset($this->data['value']['to']) and $this->data['value']['to']){
-                $qb->andWhere($c.' <= :var_to_'.$this->uniqueId);
-                $queryBuilder->setParameter('var_to_' . $this->uniqueId, $to);
-            }
-            if(isset($this->data['value']['from']) and $this->data['value']['from']){
+            if(isset($this->data['value']['from']) && $this->data['value']['from']) {
+                $from = DateTime::createFromFormat($this->format, $this->data['value']['from'])->format('Y-m-d');
                 $qb->andWhere($c. ' >= :var_from_' . $this->uniqueId);
                 $queryBuilder->setParameter('var_from_' . $this->uniqueId, $from);
+            }
+            if(isset($this->data['value']['to']) && $this->data['value']['to']) {
+                $to = DateTime::createFromFormat($this->format, $this->data['value']['to']);
+                $to->modify('+1 day');
+                $to = $to->format('Y-m-d');
+                $qb->andWhere($c.' < :var_to_'.$this->uniqueId);
+                $queryBuilder->setParameter('var_to_' . $this->uniqueId, $to);
             }
         }
     }
@@ -83,6 +86,14 @@ class PeriodeFilterType extends AbstractFilterType
         }else{
             return false;
         }
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/periode_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/periode_filter.html.twig';
     }
 
 }

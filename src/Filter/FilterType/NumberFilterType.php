@@ -9,13 +9,21 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NumberFilterType extends AbstractFilterType
 {
+    public function configure(array $config = [])
+    {
+        parent::configure($config);
+        $this->defaults = [
+            'value' => $config['defaultValue'] ?? null,
+            'comparator' => $config['defaultComparator'] ?? "eq"
+        ];
+    }
 
     public function apply($queryBuilder)
     {
-        if (isset($this->data['value'])) {
+        if (isset($this->data['value']) && $this->data['value']) {
             switch ($this->data['comparator']) {
                 case 'eq':
-                    $queryBuilder->andWhere($alias . $this->columnName .' = :var_' . $this->uniqueId);
+                    $queryBuilder->andWhere($this->alias . $this->columnName .' = :var_' . $this->uniqueId);
                     $queryBuilder->setParameter('var_' . $this->uniqueId, $this->data['value']);
                     break;
                 case 'neq':
@@ -28,11 +36,11 @@ class NumberFilterType extends AbstractFilterType
                     $queryBuilder->andWhere($queryBuilder->expr()->lte($alias . $this->columnName, ':var_' . $this->uniqueId));
                     break;
                 case 'gt':
-                    $queryBuilder->andWhere($alias . $this->columnName .' > :var_' . $this->uniqueId);
+                    $queryBuilder->andWhere($this->alias . $this->columnName .' > :var_' . $this->uniqueId);
                     $queryBuilder->setParameter('var_' . $this->uniqueId, '%' . $this->data['value'] . '%');
                     break;
                 case 'gte':
-                    $queryBuilder->andWhere($alias . $this->columnName .' >= :var_' . $this->uniqueId);
+                    $queryBuilder->andWhere($this->alias . $this->columnName .' >= :var_' . $this->uniqueId);
                     $queryBuilder->setParameter('var_' . $this->uniqueId, '%' . $this->data['value'] . '%');
                     break;
  
@@ -48,6 +56,14 @@ class NumberFilterType extends AbstractFilterType
             }
             $queryBuilder->setParameter('var_' . $this->uniqueId, $this->data['value']);
         }
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/number_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/number_filter.html.twig';
     }
 
 }

@@ -9,47 +9,24 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NumberRangeFilterType extends AbstractFilterType
 {
-    /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    /*public function bindRequest(Request $request, array &$data, $uniqueId)
-    {
-        $data['comparator'] = $request->query->get('filter_comparator_' . $uniqueId);
-        $data['value'][0]      = $request->query->get('filter_value_' . $uniqueId .'0');
-        $data['value'][1]      = $request->query->get('filter_value_' . $uniqueId .'1');
-    }*/
-  
-   /**
-     * @param Request $request  The request
-     * @param array   &$data    The data
-     * @param string  $uniqueId The unique identifier
-     */
-    public function bindRequest(array &$data, $uniqueId)
-    {
-        $data['comparator'] = $this->getValueSession('filter_comparator_' . $uniqueId);
-        $data['value']      = $this->getValueSession('filter_value_' . $uniqueId);
-        return ($data['value'] != null);
-    }
 
-    /**
-     * @param array  $data     The data
-     * @param string $uniqueId The unique identifier
-     */
-    public function apply(array $data, $uniqueId,$alias,$col)
+    public function apply($queryBuilder)
     {
       if (isset($data['value'][0]) or isset($data['value'][1])) {
         if($data['value'][0]){
-          $this->queryBuilder->andWhere($alias . $col .' >= :min_'.$uniqueId);
-          $this->queryBuilder->setParameter('min_'.$uniqueId, $data['value'][0]);
+          $queryBuilder->andWhere($this->alias . $this->columnName .' >= :min_'.$this->uniqueId);
+          $queryBuilder->setParameter('min_'.$this->uniqueId, $data['value'][0]);
         }
         if($data['value'][1]) {
-          $this->queryBuilder->andWhere($alias . $col .' <= :max_'.$uniqueId);
-          $this->queryBuilder->setParameter('max_'.$uniqueId, $data['value'][1]);
+          $queryBuilder->andWhere($this->alias . $this->columnName .' <= :max_'.$this->uniqueId);
+          $queryBuilder->setParameter('max_'.$this->uniqueId, $data['value'][1]);
         }
       }
       
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/number_range_filter.html.twig';
     }
 
 }

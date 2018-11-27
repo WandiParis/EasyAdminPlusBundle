@@ -2,8 +2,8 @@
 
 namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
-use Symfony\Component\HttpFoundation\Request;
-use Lle\EasyAdminPlusBundle\Filter\FilterType\AbstractFilterType;
+
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * StringFilterType
@@ -13,17 +13,31 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
 
     protected $url;
     protected $value_filter;
+    protected $router;
 
-     /**
-     * @param string $columnName The column name
-     * @param string $alias      The alias
-     */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function __construct(RouterInterface $router){
+        $this->router = $router;
+    }
+
+    public function init($columnName, $label = null, $alias = 'entity')
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::init($columnName, $label, $alias);
+        $this->data_keys = ['comparator', 'value', 'value_label'];
+    }
+
+    public function configure(array $config = [])
+    {
+        parent::configure($config);
         $this->data_keys = ['comparator', 'value', 'value_label'];
         $this->value_filter = $config['value_filter'];
-        $this->url = $config['url'];
+        $this->url = $config['url'] ?? null;
+        $this->path = $config['path'] ?? null;
+        if($this->path){
+            $path = $this->path;
+            $path['params']['action'] = $path['params']['action'] ?? 'autocomplete';
+            $path['route'] = $path['route'] ?? 'easyadmin';
+            $this->url = $this->router->generate($path['route'], $path['params']);
+        }
     }
 
     /**
@@ -34,7 +48,7 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
     {
         if (isset($this->data['value']) && $this->data['value']) {
             $value = $this->data['value'];
-            $queryBuilder->andWhere($this->alias. $col .'= :var_' . $this->uniqueId);
+            $queryBuilder->andWhere($this->alias. $this->columnName .'= :var_' . $this->uniqueId);
             $queryBuilder->setParameter('var_' . $this->uniqueId, $value);
         }
     }
@@ -45,5 +59,13 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
 
     public function getValueFilter(){
         return $this->value_filter;
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/url_auto_complete_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/url_auto_complete_filter.html.twig';
     }
 }

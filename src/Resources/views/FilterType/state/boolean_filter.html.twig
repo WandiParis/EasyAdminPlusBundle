@@ -1,6 +1,0 @@
-{% if data['value'] is defined and data['value'] and data['value'] != filtertype.defaults['value'] %}
-<span class="filter-state">{{ filtertype.defaults['value'] }}
-    <small>{{ filtertype.filterLabel |trans }}</small>
-    <span class="badge">{{ data['value'] }}</span>
-</span>
-{% endif %}

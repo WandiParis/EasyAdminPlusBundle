@@ -1,0 +1,48 @@
+   <div class="input-group">
+
+
+<input type="hidden" class="form-control" id="{{nameprefix}}comparator{{namesuffix}}" name="{{nameprefix}}comparator{{namesuffix}}" {% if data.comparator is defined %}value="{{data.comparator}}"{% endif %}>
+
+
+<input type="text"  class="form-control"  aria-label="..." name="{{nameprefix}}value{{namesuffix}}"
+      {% if data.value is defined %}
+        value="{{data.value}}"
+      {% endif %}
+        />
+        <div class="input-group-btn">
+         <button type="button" class="btn btn-default dropdown-toggle {{nameprefix}}button{{namesuffix}}" data-toggle="dropdown" aria-expanded="false">
+
+           <i title="Contient" style="display:none;" class="fa fa-text-width contains"></i>
+           <i title="Commence par" style="display:none;" class="fa fa-caret-square-o-right startswith"></i>
+           <i title="Termine par" style="display:none;" class="fa fa-caret-square-o-left endswith"></i>
+           <i title="Est vide" style="display:none;" class="fa fa-square-o isnull"></i>
+           <i title="Est non vide" style="display:none;" class="fa fa-square-o isnotnull"></i>
+
+         </button>
+         <ul class="dropdown-menu pull-right" role="menu">
+           <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','contains');">
+             <i class="fa fa-text-width"></i>Contient</a>
+           </li>
+           <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','startswith');">
+             <i class="fa fa-caret-square-o-right"></i>Commence par</a>
+           </li>
+           <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','endswith');">
+             <i class="fa fa-caret-square-o-left"></i>Termine par</a>
+           </li>
+           <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','isnull');">
+             <i class="fa fa-square-o "></i>Est vide</a>
+           </li>
+           <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','isnotnull');">
+             <i class="fa fa-square-o "></i>Est non vide</a>
+           </li>
+         </ul>
+
+       </div><!-- /btn-group -->
+    </div><!-- /input-group -->
+
+
+<script>
+$(document).ready(function() {
+  lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','{% if data.comparator is defined %}{{data.comparator}}{% elseif filtertype.defaultComparator is defined %}{{filtertype.defaultComparator}}{% else %}startswith{% endif %}');
+});
+</script>

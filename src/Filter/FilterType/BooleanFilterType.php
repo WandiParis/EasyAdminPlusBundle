@@ -10,21 +10,17 @@ use Symfony\Component\HttpFoundation\Request;
 class BooleanFilterType extends AbstractFilterType
 {
 
-    /**
-     * @param string $columnName The column name
-     * @param string $alias      The alias
-     */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
-        $this->defaults['value'] = $config['default_value'] ?? null;
+        parent::configure($config);
+        $this->defaults['value'] = $config['default_value'] ?? 'all';
     }
 
 
     public function apply($queryBuilder)
     {
         $value = $this->data['value'];
-        if (isset($value)) {
+        if (isset($value) && $value != 'all') {
             switch ($value) {
                 case 'true':
                     $queryBuilder->andWhere($queryBuilder->expr()->eq($this->alias . $this->columnName, 'true'));
@@ -43,6 +39,14 @@ class BooleanFilterType extends AbstractFilterType
             return ($data['value'] == $value);
         }
         return false;
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/boolean_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/boolean_filter.html.twig';
     }
 
 }

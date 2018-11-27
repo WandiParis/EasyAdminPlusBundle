@@ -27,7 +27,6 @@ form .row .w-100{
     margin-bottom: -10px;
 }
 .control-label {
-    word-break: break-all;
     display: inline-block;
     vertical-align: middle;
     margin: 0;
@@ -95,4 +94,40 @@ img.country {
     line-height: 30px;
     border-radius: 5px;
     background-color: #EEE;
+}
+
+.timeline>li>.timeline-item>.timeline-header>.time {
+    color:#999;
+    padding:10px;
+    font-size: 12px;
+}
+
+
+/* Actions massives tableau */
+.batch-actions .col-grow {
+   flex-grow: 1;
+}
+.batch-actions .col-shrink {
+   flex-shrink: 1;
+   flex-grow: 0!important;
+}
+
+.batch_form.form-inline .form-group {
+   margin-bottom: 0;
+}
+
+.batch_form .input-group .input-group-addon,
+.batch_form .form-control,
+.batch_form .form-inline .form-control {
+   border: 0 none;
+}
+
+.batch_form input {
+   border: 0 none;
+   padding: 7px 5px;
+   border-bottom: 1px solid #ddd;
+}
+
+#dropdownBatchActionButton {
+   border: 1px solid #ddd;
 }

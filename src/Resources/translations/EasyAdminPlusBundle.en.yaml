@@ -117,3 +117,8 @@ wf_modal:
     title: "Confirm this action ?"
     action: "Execute"
     content: ""
+Plus de filtres: More filters
+Réinitialiser: Reset
+Actions massives: Batch actions
+Filtrer les résultats: Filter results
+form.url_auto_complet.placeholder: Choose a value

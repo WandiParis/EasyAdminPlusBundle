@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Lle\EasyAdminPlusBundle\Exporter\Event\EasyAdminPlusExporterEvents;
 use Lle\EasyAdminPlusBundle\Translator\Event\EasyAdminPlusTranslatorEvents;
@@ -17,10 +18,11 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Workflow\Registry;
 
 class AdminController extends BaseAdminController
 {
-    
+
     /**
      * {@inheritdoc}
      */
@@ -278,6 +280,8 @@ class AdminController extends BaseAdminController
     {
         $this->initialize($request);
         $this->master_entity = $this->entity;
+        $vars = explode('\\',$this->master_entity['class']);
+        $master_entity_class =  end($vars);
 
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
@@ -287,43 +291,85 @@ class AdminController extends BaseAdminController
         }
         if ($metadata['with_add'] ?? false) {
             if ($metadata['add_form'] ?? false) {
-                $add_form = $this->createForm($metadata['add_form'], null, [
+                $classmetadata = $this->em->getClassMetadata($this->entity['class']);
+                $instance = $classmetadata->newInstance();
+                $parent = $this->em->getRepository($this->master_entity['class'])->find($request->query->get('id'));
+                $associations = $classmetadata->getAssociationsByTargetClass($this->master_entity['class']);
+                if(\count($associations) === 1){
+                    $assoc = array_shift($associations);
+                    $fieldName = $assoc['fieldName'];
+                    if($classmetadata->isSingleValuedAssociation($fieldName)){
+                        $method = $classmetadata->getReflectionClass()->getMethod('set' . $fieldName);
+                        $method->invoke($instance, $parent);
+                        $data = $instance;
+                    }
+                }
+                $add_form = $this->createForm($metadata['add_form'], $data ?? null, [
                     'action' => $this->generateUrl($metadata['add_route'], ['id' => $request->query->get('id')]),
                     'method' => 'POST',
                     'attr' => ['class'=>'form-inline']
                 ])
-                ->createView();
+                    ->createView();
             } else {
                 $add_form = $this->createFormBuilder(null, array(
                     'action' => $this->generateUrl('lle_easy_admin_plus_add_sublist', [
                         'parent_id'=> $request->query->get('id') ,
                         'parent_entity'=> $this->master_entity['class'],
-                        'entity'=> "App\\Entity\\$entity" ]),
+                        'entity'=>  $this->entity['class'] ]),
                     'method' => 'POST',
                 ))
-                ->add('item_id', EasyAdminAutocompleteType::class, array(
-                    'class' => "App\\Entity\\$entity",
-                    'label' => false,
-                    'attr' => [
-                        'data-easyadmin-autocomplete-url'  => $this->generateUrl('easyadmin', 
-                            [ 'action' => 'autocomplete', 'entity'=> $entity ]
-                        )
-                    ]
-                ))
-                ->getForm()->createView();
+                    ->add('item_id', EasyAdminAutocompleteType::class, array(
+                        'class' => $this->entity['class'],
+                        'label' => false,
+                        'attr' => [
+                            'data-easyadmin-autocomplete-url'  => $this->generateUrl('easyadmin',
+                                [ 'action' => 'autocomplete', 'entity'=> $entity ]
+                            )
+                        ]
+                    ))
+                    ->getForm()->createView();
             }
         } else {
             $add_form = null;
         }
+        $referer = $this->generateUrl('easyadmin',
+                                [ 'action' => 'show', 'entity'=> $master_entity_class, 'id' =>$request->query->get('id') ]
+                            );
         return $this->render('@LleEasyAdminPlus/default/embedded_list.html.twig', array(
             'fields'=>$fields,
             'items'=>$items,
+            'main_id'=>$request->query->get('id'),
             'entity'=>$entity,
-            'add_form'=>$add_form
+            'add_form'=>$add_form,
+            'referer'=>$referer,
+            'add_delete' => $metadata['with_delete'] ?? false,
+            'delete_route' => $metadata['delete_route'] ?? false,
+            'template_form' => $metadata['template_form'] ?? '@LleEasyAdminPlus/default/includes/_sub_form.html.twig'
         ));
     }
 
-    
+    /**
+     * The method that is executed when the user performs a 'delete' action to
+     * remove any entity.
+     *
+     * @return RedirectResponse
+     */
+    protected function embeddedDeleteAction()
+    {
+        $id = $this->request->query->get('id');
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+        try {
+            $this->executeDynamicMethod('remove<EntityName>Entity', array($entity));
+        } catch (ForeignKeyConstraintViolationException $e) {
+            throw new EntityRemoveException(array('entity_name' => $this->entity['name'], 'message' => $e->getMessage()));
+        }
+        if ($this->request->server->get('HTTP_REFERER')) {
+            return new RedirectResponse($this->request->server->get('HTTP_REFERER'));
+        } else {
+            return new RedirectResponse('/');
+        }
+    }    
 
 
     public function historyAction(Request $request, $item)
@@ -338,17 +384,32 @@ class AdminController extends BaseAdminController
         foreach ($logs as $log) {
             $data = array();
             if ($log->getData()) {
+                $metaData = $this->em->getClassMetadata(get_class($item));
                 foreach($log->getData() as $k => $entry){
-                    if($entry instanceof \DateTime){
-                        $retour = $entry->format('d/m/Y H:m');
-                    }else if(is_object($entry)){
-                        $retour = (method_exists($entry,'__toString'))? $entry->toString():$entry->getId();
-                    }else if(is_array($entry)){
+                    $type = $metaData->getTypeOfField($k);
+                    $retour = $entry;
+                    if($metaData->hasAssociation($k)){
+                        if ($entry) {
+                            $type = $metaData->isSingleValuedAssociation($k)? 'single_assoc':'multi_assoc';
+                            $assoc = $metaData->getAssociationMapping($k);
+                            $obj = $this->em->getRepository($assoc['targetEntity'])->find($entry);
+                            if($obj) {
+                                $id = $this->em->getClassMetadata($assoc['targetEntity'])->getIdentifierValues($obj);
+                                $retour = (string) $obj; //(method_exists($obj, '__toString')) ? implode(',', $id) . ' ' . $obj->__toString() : $id;
+                            } else {
+                                $retour = "";
+                            }
+                        }
+                    } else if($type === 'boolean'){
+                        $retour = ($entry)? 'label.true':'label.false';
+                    } else if($type === 'date'){
+                        $retour = ($entry)? $entry->format('d/m/Y'):'';
+                    } else if($type === 'datetime') {
+                        $retour = ($entry)? $entry->format('d/m/Y H:i'):'';
+                    } else if(is_array($entry)){
                         $retour = implode('-',$entry);
-                    }else{
-                        $retour = $entry;
                     }
-                    $data[$k] = $retour;
+                    $data[$k] = ['value' => $retour, 'type' => $type, 'raw' => $entry];
                 }
             }
             $result[] = array('log'=>$log,'data'=>$data);
@@ -368,7 +429,7 @@ class AdminController extends BaseAdminController
     {
         $this->dispatch(EasyAdminEvents::PRE_NEW);
 
-        
+
         $entity = $this->executeDynamicMethod('createNew<EntityName>Entity');
 
         $easyadmin = $this->request->attributes->get('easyadmin');
@@ -568,7 +629,7 @@ class AdminController extends BaseAdminController
             ])
         );
 
-        return $this->render('@LleEasyAdminPlus/Admin/translations.html.twig', [
+        return $this->render('@LleEasyAdminPlus/admin/translations.html.twig', [
                 'domains' => $domains,
                 'domain' => $domain,
                 'dictionaries' => $dictionaries,
@@ -595,7 +656,7 @@ class AdminController extends BaseAdminController
         if($allSelection) {
 
             $ids = $this->findSelection($this->entity, $this->entity['class'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
-            
+
 
         }
         $batchs = $this->entity['list']['batchs'];
@@ -606,14 +667,14 @@ class AdminController extends BaseAdminController
             if($batchs[$name]['form']){
                 $form = $this->createForm($batchs[$name]['form']);
                 $form->handleRequest($this->request);
-    
+
                 if ($form->isSubmitted() && $form->isValid()) {
                     // data is an array with "name", "email", and "message" keys
                     $data = $form->getData();
                 }
             }
             $ret = $service->execute($this->request, $this->entity, $ids, $data);
-            
+
         }
         if($ret) {
             return $ret;
@@ -637,5 +698,5 @@ class AdminController extends BaseAdminController
         );
 
         return new JsonResponse($results);
-    }    
+    }
 }

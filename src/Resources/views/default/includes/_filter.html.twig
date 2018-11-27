@@ -1,0 +1,14 @@
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 "
+	style="min-height:50px; {%  if filter.hidden %}display:none;{% endif %}">
+	<div class="form-group">
+		<label for="date" class="control-label text-nowrap"> {{ filter.filterLabel|trans() }}
+		</label>
+		{% set vars = {
+                                    'data': filter.data, 
+                                    'nameprefix': 'filter_', 'namesuffix':'_' ~ filter.uniqueId, 
+                                    'filtertype':filter} 
+                                %}
+		{% include filter.template with vars %}
+	</div>
+	<!-- form group -->
+</div>

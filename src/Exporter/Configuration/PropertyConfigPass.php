@@ -16,6 +16,8 @@ class PropertyConfigPass implements ConfigPassInterface
     private $defaultEntityFieldConfig = array(
         // CSS class or classes applied to form field or list/show property
         'css_class' => '',
+        'value_css_class' => '',
+        'label_css_class' => '',
         // date/time/datetime/number format applied to form field value
         'format' => null,
         // form field help message

@@ -98,7 +98,7 @@ history:
         delete: supprimé par
         create: créé par
 Rechercher: Rechercher               
-Filtrer: Filtrer
+Filtrer: Filtrer les résultats
 Effacer: Effacer
 label.batchActions.title: "Choisir une action massive"
 batch:
@@ -108,6 +108,7 @@ action.batchselectall: "Tout sélectionner"
 label.batchallselectactive: "Appliqué à tout"
 action.batchselectpage: "Sélectionner la page affichée"
 label.batchselectall: "Sélectionner tout"
+label.selectionActive: "Sélection active"
 batch_modal:
     title: "Voulez vous effectuer cette action massive ?"
     action: "Valider"
@@ -118,3 +119,12 @@ wf_modal:
     title: "Voulez vous effectuer ce changement d'état ?"
     action: "Valider"
     content: ""
+message.confirm-success: Votre action à été réalisé avec succès
+message.confirm: Voulez vous vraiment executé cette action ?
+action.close: Fermer
+action.validate: Valider
+Plus de filtres: Plus de filtres
+Réinitialiser: Réinitialiser
+Actions massives: Actions massives
+Filtrer les résultats: Filtrer les résultats
+form.url_auto_complet.placeholder: Choisir une valeur

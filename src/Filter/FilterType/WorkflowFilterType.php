@@ -2,7 +2,10 @@
 
 namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
+use App\Entity\Examen;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Workflow\Registry;
 
 /**
  * StringFilterType
@@ -13,18 +16,29 @@ class WorkflowFilterType extends ChoiceFilterType
     private $choices;
     private $excludes;
     private $multiple;
+    private $registry;
+    private $em;
 
 
-     /**
+    public function __construct(EntityManagerInterface $em, Registry $registry)
+    {
+        $this->em = $em;
+        $this->registry = $registry;
+    }
+
+    /**
      * @param string $columnName The column name
      * @param string $alias      The alias
      */
-    public function __construct($columnName, $label, $config, $alias = 'entity')
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
-        $this->choices = $config['choices'];
-        $this->excludes = $config['excludes'];
-        $this->multiple = (isset($config['multiple']))? $config['multiple']:true;
+        $config['choices'] = $config['choices'] ?? $this->registry->get(
+                $this->em->getClassMetadata($config['class'] ?? $config['data_class'])->newInstance(),
+                $config['name'] ?? null)->getDefinition()->getPlaces();
+        parent::configure($config);
+
+        $this->excludes = $config['excludes'] ?? [];
+        $this->multiple = $config['multiple'] ?? true;
     }
 
 
@@ -54,6 +68,14 @@ class WorkflowFilterType extends ChoiceFilterType
         }else{
             return ($data['value'] == $value);
         }
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/workflow_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/workflow_filter.html.twig';
     }
 
 }

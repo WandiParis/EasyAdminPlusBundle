@@ -13,7 +13,6 @@ namespace Lle\EasyAdminPlusBundle\Search;
 
 use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigManager;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-use EasyCorp\Bundle\EasyAdminBundle\Search\Finder;
 
 /**
  * It looks for the values of entity which match the given query. It's used for

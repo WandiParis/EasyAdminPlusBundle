@@ -1,0 +1,9 @@
+{% if  data['value'] is defined and data['value'] is not empty %}
+    <span class="filter-state">
+        <small>{{ filtertype.filterLabel |trans }}</small>
+        {% for val in data['value'] %}
+            {% set label = filtertype.getItemLabel(val) %}
+            <span class="badge">{{ label }}</span>
+        {% endfor %}
+    </span>
+{% endif %}

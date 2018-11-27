@@ -7,12 +7,12 @@
 
 {% block content_header %}
 {% set _trans_parameters = _trans_parameters|merge({ '%entity_toString%': entity }) %}
+          {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
+          {% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
+          {% set _show_actions = _show_actions|prune_item_actions(_entity_config, [], entity) %}
 
    <div class=" pull-right btn-group ">
       {% block show_actions %}
-          {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
-          {% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
-
           {{ include('@LleEasyAdminPlus/default/includes/_actions.html.twig', {
               actions: _show_actions,
               request_parameters: _request_parameters,
@@ -30,26 +30,28 @@
           item_id: _entity_id
       }) }}
   {% endif %}
-  <div class="small">
-    <ul class="inline">
-      {% if entity.createdAt is defined %}
-        <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y H:i')}}
-          {% if entity.createdBy %}
-            {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
-            {{ entity.createdBy }}
+  {% if not _entity_config.show.hide_log_info|default(false) %}
+      <div class="small">
+        <ul class="inline">
+          {% if entity.createdAt is defined %}
+            <li>{{'blame.created_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.createdAt|date('d/m/Y H:i')}}
+              {% if entity.createdBy %}
+                {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+                {{ entity.createdBy }}
+              {% endif %}
+            </li>
           {% endif %}
-        </li>
-      {% endif %}
-      {% if entity.updatedAt is defined %}
-        <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y H:i')}}
-          {% if entity.updatedBy %}
-            {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
-            {{ entity.updatedBy }}
+          {% if entity.updatedAt is defined %}
+            <li>{{'blame.updated_at'|trans({},'EasyAdminPlusBundle') }}&nbsp;{{entity.updatedAt|date('d/m/Y H:i')}}
+              {% if entity.updatedBy %}
+                {{'blame.by'|trans({},'EasyAdminPlusBundle') }}
+                {{ entity.updatedBy }}
+              {% endif %}
+            </li>
           {% endif %}
-        </li>
-      {% endif %}
-    </ul>
-  </div>
+        </ul>
+      </div>
+  {%  endif %}
 
 {% endblock %}
 
@@ -79,8 +81,10 @@
                   </div></div></div>
               {% endif %}
               {% set div_ouvert = true %}
+              {% set label_css_class = metadata.label_css_class ?? 'col-sm-2' %}
+              {% set value_css_class = metadata.value_css_class ?? 'col-sm-10' %}
               <div class="field-group col-xs-12 {{ metadata.css_class|default('') }}">
-                <div class="box box-default">
+                <div class="{% if metadata.label|default(false) or metadata.icon|default(false) %} box box-default {%  endif %}">
 
                   {% if metadata.label|default(false) or metadata.icon|default(false) %}
                       <div class="box-header with-border">
@@ -98,10 +102,10 @@
                   {% if easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) != '' %}
                   
                   <div class="form-group field-{{ metadata.type|default('default')|lower }} {{ metadata.css_class|default('') }}">
-                      <label class="col-sm-2 control-label">
+                      <label class="{{ label_css_class|default('col-sm-2') }}  control-label">
                           {{ (metadata.label ?: field|humanize)|trans(_trans_parameters)|raw }}
                       </label>
-                      <div class="col-sm-10">
+                      <div class="{{ value_css_class|default('col-sm-10') }} ">
                           <div class="form-control">
                               {{ easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) }}
                           </div>
@@ -126,7 +130,7 @@
             {% if metadata.type == 'tab' %}
               <div class="tab-pane" id="{{metadata.id}}">
                 {% set action = "" %}
-                {% if ":" in metadata.action %}
+                {% if ":" in metadata.action or "." in metadata.action %}
                   {% set action = metadata.action %}
                 {% else %}
                   {% set action = "Lle\\EasyAdminPlusBundle\\Controller\\AdminController:"~metadata.action %}
@@ -155,7 +159,8 @@
       {% block item_actions %}
           {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
           {% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
-
+          {% set _show_actions = _show_actions|prune_item_actions(_entity_config, [], entity) %}
+            
           {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
               actions: _show_actions,
               request_parameters: _request_parameters,
@@ -185,13 +190,29 @@
         if(window.location.hash) {
             $('#tab-'+window.location.hash.substr(1)).tab('show');
         }
+        {#% if app.request.query.get('_anchor') is defined %#}
+        $('#tab-{{app.request.query.get('_anchor')}}').tab('show');
+        {#% endif %#}
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             tab = $(e.target).attr('href');
+            insertParam('_anchor', tab.substring(1));
             window.location.hash = tab;
         })
 
     });
     </script>
+{% endblock %}
+
+{% block head_stylesheets %}
+{{ parent() }}
+<style>
+@media print
+{ 
+    .nav-tabs, .button-action, .sf-display-none {
+    	display: none !important;
+    }
+}
+</style>
 {% endblock %}
 

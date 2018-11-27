@@ -21,7 +21,7 @@ final class WorkflowAction
     public function __invoke(Request $request)
     {
         $id = $request->query->get('id');
-        $entity = $request->query->get('entity');
+        $entity = $request->query->get('class');
         $transition = $request->query->get('transition');
         $object = $this->em->getRepository($entity)->find($id);
 

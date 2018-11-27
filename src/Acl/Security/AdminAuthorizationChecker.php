@@ -34,6 +34,11 @@ class AdminAuthorizationChecker
         }
     }
 
+    public function hasRole($role)
+    {
+        return $this->authorizationChecker->isGranted($role);
+    }
+
     public function isEasyAdminGranted(array $entity, string $actionName, $subject)
     {
         try {

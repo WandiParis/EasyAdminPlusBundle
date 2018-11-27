@@ -12,9 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 class DateFilterType extends AbstractFilterType
 {
 
-    public function __construct($columnName, $label, $config = [],$alias = 'entity')
+    protected $yearRange;
+
+    public function configure(array $config = [])
     {
-        parent::__construct($columnName, $label, $config, $alias);
+        parent::configure($config);
         $this->yearRange = (isset($config['yearRange']))? $config['yearRange']:null;
         $this->defaults['comparator'] = 'equal';
     }
@@ -52,5 +54,13 @@ class DateFilterType extends AbstractFilterType
         if($this->yearRange) $options['yearRange'] = $this->yearRange;
         return $options;
 
+    }
+
+    public function getStateTemplate(){
+        return '@LleEasyAdminPlus/filter/state/date_filter.html.twig';
+    }
+
+    public function getTemplate(){
+        return '@LleEasyAdminPlus/filter/type/date_filter.html.twig';
     }
 }

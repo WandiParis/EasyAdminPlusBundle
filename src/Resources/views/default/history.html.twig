@@ -1,41 +1,54 @@
 <div class="row">
- <div class="col-sm-12 col-md-6">
-{% if logs|length %}
- <!-- The timeline -->
-                <ul class="timeline timeline-inverse">
-                  {% for entry in logs %}
+    <div class="col-sm-12 col-md-12">
+        {% if logs|length %}
+            <!-- The timeline -->
+            <ul class="timeline timeline-inverse">
+                {% for entry in logs %}
 
                     {% set log = entry.log %}
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-user "></i>
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 
-                        {{ log.loggedAt|date('d/m/Y H:i')}}
-                      </span>
-                      <h3 class="timeline-header">
-                        {{ ("history.action."~log.action) | trans({},'EasyAdminPlusBundle')}}
-                        <b>{{ log.username }}</b>
-                      </h3>
-                      <div class="timeline-body">
-                      <table>
-                      {% for key,value in entry.data %}
-                          <tr>
-                                <td>{{ ('field.'~key) | trans() }}</td>
-                                <td><i class="fa fa-arrow-right"></i></td>
-                                <td>{{value}}</td>
-                          </tr> 
-                      {% endfor %}
-                      </table>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  {% endfor %}                 
-                  <li>
+                    <!-- timeline item -->
+                    <li>
+                        <i class="fa fa-user "></i>
+                        <div class="timeline-item">
+                            <h3 class="timeline-header">
+                                {{ ("history.action."~log.action) | trans({},'EasyAdminPlusBundle') }}
+                                <b>{{ log.username }}</b>
+                              <span class="time"><i class="fa fa-clock-o"></i>
+                                  {{ log.loggedAt|date('d/m/Y H:i') }}
+                              </span>
+                            </h3>
+                            <div class="timeline-body">
+                                <table>
+                                    {% for key,value in entry.data %}
+                                        <tr>
+                                            <td>{{ ('field.'~key) | trans() }}</td>
+                                            <td>&nbsp;<i class="fa fa-arrow-right"></i>&nbsp;</td>
+                                            <td>
+                                                {% if value.type == 'boolean' %}
+                                                    <span class="badge {% if not value.raw %}label-danger{% endif %}">
+                                            {{ value.value|trans({}, 'EasyAdminBundle' ) }}
+                                        </span>
+                                                {% elseif value.type == 'single_assoc' %}
+                                                    <span class="badge label-primary">
+                                            {{ value.value }}
+                                        </span>
+                                                {% else %}
+                                                    {{ value.value }}
+                                                {% endif %}
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END timeline item -->
+                {% endfor %}
+                <li>
                     <i class="fa fa-clock-o bg-gray"></i>
-                  </li>
-                </ul>
-{% endif %}
-</div>
+                </li>
+            </ul>
+        {% endif %}
+    </div>
 </div>

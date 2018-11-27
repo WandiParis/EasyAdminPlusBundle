@@ -1,6 +1,6 @@
 <?php
  
- namespace Lle\EasyAdminPlusBundle\Filter;
+namespace Lle\EasyAdminPlusBundle\Filter;
  
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
@@ -17,32 +17,43 @@ class FilterState
      * @var EntityManager
      */
     private $em;
+    private $filterChain;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, FilterChain $filterChain)
     {
         $this->em = $em;
+        $this->filterChain = $filterChain;
     }
 
-    public function bindRequest($request, $entity_conf) {
-        
-        $entity_name = $entity_conf['name'];
+    public function isFilterLink($request) {
+        foreach($request->query->all() as $k => $val) {
+            if ( strrpos($k, 'filter_') === 0 ) return true;
+        }
+        return false;
+    }
+
+    public function bindRequest($request, $entityConfig) {
+        $entity_name = $entityConfig['name'];
         $reset = false;
-        if ($request->request->has('reset') && 'reset' === $request->request->get('reset')) {
+        $is_link = $this->isFilterLink($request);
+        if ( $is_link || ( $request->request->has('reset') && 'reset' === $request->request->get('reset')) ) {
             $data[$entity_name] = [];
-            $reset = true;
+            $reset = !$is_link;
         } else {
             $data = $request->getSession()->get('admin_filters');
         }
 
-        foreach ($entity_conf['filter']['fields'] as $filter) {
-            $reflection_class = new \ReflectionClass($filter['filter_type']);
-            $filterObj = $reflection_class->newInstanceArgs([ 
-                $filter['property'], $filter['label'], $filter['config']
-            ]);
-            $filterObj->setEm($this->em);
+        foreach ($entityConfig['filter']['fields'] as $filter) {
+            $type = $filter['type'] ?? $filter['filter_type'];
+            if($this->filterChain->has($type)){
+                $filter['config']['data_class'] = $filter['config']['data_class'] ?? $entityConfig['class'];
+                $filterObj = $this->filterChain->get($type, $filter, $entityConfig);
+            }else {
+                throw new \Exception($type." not found");
+            }
+
 
             $this->filters[$entity_name][$filter['property']] = $filterObj;
-        
             // set data from sesssion
             $filterObj->setData($data[$entity_name][$filter['property']]??[]);
             // set data from request
@@ -52,7 +63,9 @@ class FilterState
             // save data to session
             $data[$entity_name][$filter['property']] = $filterObj->getData();
         }
+
         $request->getSession()->set('admin_filters', $data);
+
     }
 
     public function getFilters($entity_name) {
