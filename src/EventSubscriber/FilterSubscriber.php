@@ -29,7 +29,7 @@ class FilterSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $controller = $request->attributes->get('_controller');
         $class = strstr($controller, '::', true);
-        if (! is_subclass_of($class, AdminController::class)) {
+        if ($class != AdminController::class && !is_subclass_of($class, AdminController::class)) {
             return;
         }
         if (null === $entityName = $event->getRequest()->query->get('entity')) {
