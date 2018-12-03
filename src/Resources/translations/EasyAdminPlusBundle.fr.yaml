@@ -100,7 +100,9 @@ history:
 Rechercher: Rechercher               
 Filtrer: Filtrer les résultats
 Effacer: Effacer
-label.batchActions.title: "Choisir une action massive"
+label.batchActions:
+    title: "Choisir une action massive"
+    help: "Cocher des éléments dans le tableau pour accéder aux actions massives"
 batch:
     execute: Valider
 label.batchthispage: "Uniquement la page affichée"

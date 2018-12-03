@@ -50,10 +50,12 @@
         if (oneChecked) {
             $('.batch-actions').removeClass('hidden');
             $('.js-bulk-button').removeClass('disabled');
+            $('.batch-actions-infos').addClass('hidden');
         } else {
             $('.batch-actions').addClass('hidden');
             $('.batch_form').addClass('hidden');
             $('.js-bulk-button').addClass('disabled');
+            $('.batch-actions-infos').removeClass('hidden');
         }
         return oneChecked;
     }

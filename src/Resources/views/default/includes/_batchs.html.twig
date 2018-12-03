@@ -1,11 +1,19 @@
 
 
 {% set class_drop = (position is defined and position=='bottom') ? 'dropup' : 'dropdown'%}
+
+<div class="batch-actions-infos box">
+   <div class="box-header">
+      <h4><span class="box-header__title"><i class="fa {% if class_drop == 'dropup' %}fa-arrow-up{% else %}fa-arrow-down{% endif %}" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'Actions massives'|trans({}, 'EasyAdminPlusBundle') }} : <span class="text-lowercase">{{ 'label.batchActions.help'|trans({}, 'EasyAdminPlusBundle') }}</span></span></h4>
+   </div>
+
+</div>
+
 <div class="batch-actions box hidden">
    <div class="box-header">
       <h4><span class="box-header__title">{{ 'Actions massives'|trans({}, 'EasyAdminPlusBundle') }}</span></h4>
       <div class="clearfix">
-          
+
           <div class="hidden js-all-selection-none">
               <span>{{ 'label.selectionActive' | trans({}, 'EasyAdminPlusBundle')}} :</span>
              <ul>

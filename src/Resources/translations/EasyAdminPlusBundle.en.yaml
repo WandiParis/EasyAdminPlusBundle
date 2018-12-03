@@ -100,7 +100,9 @@ history:
 Rechercher: Search
 Filtrer: Filter
 Effacer: Clear
-label.batchActions.title: "Choose"
+label.batchActions:
+    title: "Choose"
+    help: "Select items"
 batch:
     execute: Execute
 label.batchthispage: "This page"
