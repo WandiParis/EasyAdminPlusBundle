@@ -9,17 +9,17 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NotNullFilterType extends AbstractFilterType
 {
-
+    
     /**
      * @param array  $data     The data
      * @param string $uniqueId The unique identifier
      */
     public function apply($queryBuilder)
     {
-        if (isset($data['value'])) {
-            if ($data['value'] == 'notnull') {
+        if (isset($this->data['value'])) {
+            if ($this->data['value'] == 'notnull') {
                 $queryBuilder->andWhere($this->alias . $this->columnName .'  IS NOT NULL');
-            } elseif ($data['value'] == 'null') {
+            } elseif ($this->data['value'] == 'null') {
                 $queryBuilder->andWhere($this->alias . $this->columnName .'  IS NULL');
             }
         }
