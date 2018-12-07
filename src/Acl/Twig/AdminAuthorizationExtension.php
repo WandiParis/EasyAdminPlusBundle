@@ -29,6 +29,7 @@ class AdminAuthorizationExtension extends AbstractExtension
     {
         return array(
             new TwigFilter('prune_item_actions', array($this, 'pruneItemsActions')),
+            new TwigFilter('prune_item_fields', array($this, 'pruneItemsFields')),
         );
     }
 
@@ -46,6 +47,22 @@ class AdminAuthorizationExtension extends AbstractExtension
                 $authorize = ($authorize  && $subject->{$conf['if']}());
             }
             return $authorize;
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    public function pruneItemsFields(array $itemFields, array $entity, array $forbiddenActions = [], $subject)
+    {
+        return array_filter($itemFields, function ($conf, $field) use ($entity, $forbiddenActions, $subject) {
+            if(array_key_exists('type', $conf) and ($conf['type'] == 'tab' or $conf['type'] == 'sublist')) {
+                        $name = $conf['type']."_".$conf['id'];
+                        $authorize = !in_array($name, $forbiddenActions) && $this->isEasyAdminGranted($entity, $name, $subject);
+                        if(array_key_exists('if', $conf) && !is_null($subject)) {
+            
+                            $authorize = ($subject->{$conf['if']}());
+                        }
+                        return $authorize;
+            }
+            return true;
         }, ARRAY_FILTER_USE_BOTH);
     }
 }
