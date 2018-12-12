@@ -19,3 +19,8 @@ services:
         arguments: ['fr', '%easy_admin_plus.translator.locales%', '@lle.service.gedmo_translatable_field_manager', '@translator']
         tags:
            - { name: form.type, alias: lego_gedmo_translatable }
+
+
+    Lle\EasyAdminPlusBundle\Form\Type\EntityHiddenType:
+        tags: [form.type]
+        arguments: ["@doctrine.orm.entity_manager"]
