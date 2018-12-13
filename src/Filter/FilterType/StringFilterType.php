@@ -53,13 +53,18 @@ class StringFilterType extends AbstractFilterType
             // MAKE QUERY
             $query = $this->getPattern($comparator, $this->uniqueId, $this->alias, $this->columnName);
             foreach ($this->additionalProperties as $additionalCol) {
-                $pattern = $this->getPattern($comparator, $this->uniqueId, $this->alias, $additionalCol);
+                if (strpos($additionalCol,'.')!==FALSE) {
+                    $alias = '';
+                } else {
+                    $alias = $this->alias;
+                }
+
+                $pattern = $this->getPattern($comparator, $this->uniqueId, $alias, $additionalCol);
 
                 if ($pattern) {
                     $query .= " OR " . $pattern; 
                 }
             }
-
             $queryBuilder->andWhere($query);
 
             // SET QUERY PARAMETERS
