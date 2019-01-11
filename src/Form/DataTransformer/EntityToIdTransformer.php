@@ -21,9 +21,10 @@ class EntityToIdTransformer implements DataTransformerInterface
      */
     private $class;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, string $class = null)
     {
         $this->entityManager = $entityManager;
+        $this->class = $class;
     }
     
     /**
