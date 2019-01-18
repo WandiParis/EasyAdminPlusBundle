@@ -11,7 +11,7 @@
         {% set action_href = path(action.name, route_params) %}
     {%  elseif 'template' == action.type %}
         {% set action_href = null %}
-        {{ include('easy_admin/' ~ app.request.query.get('entity') ~'/' ~ action.template) }}
+        {{ include('easy_admin/' ~ app.request.query.get('entity', app.request.attributes.get('entity')) ~'/' ~ action.template) }}
     {% elseif 'print' == action.type %}
         {% set action_href = 'javascript:print();' %}
         {% if 'list' != action.name %}
