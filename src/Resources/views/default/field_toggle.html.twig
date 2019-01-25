@@ -1,5 +1,5 @@
 {% trans_default_domain 'EasyAdminBundle' %}
-{% if view == 'show' or ('edit' in backend_config.disabled_actions) or not is_granted(entity_config.role_prefix~'_EDIT') %}
+{% if view == 'show' or ('edit' in backend_config.disabled_actions) or ( entity_config.role_prefix is defined and not is_granted(entity_config.role_prefix~'_EDIT')) %}
     {% if value == true %}
         <span class="label label-success">{{ 'label.true'|trans }}</span>
     {% else %}
