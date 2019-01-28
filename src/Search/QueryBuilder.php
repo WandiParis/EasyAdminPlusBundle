@@ -128,7 +128,11 @@ class QueryBuilder
         $isSearchQueryUuid = 1 === preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $searchQuery);
         $lowerSearchQuery = mb_strtolower($searchQuery);
 
-        $queryParameters = array();
+        $queryParameters = [];
+        foreach($queryBuilder->getParameters() as $parameter) {
+            $queryParameters[$parameter->getName()] = $parameter->getValue();
+        }
+        
         $entitiesAlreadyJoined = array();
         
         $orModule = $queryBuilder->expr()->orX();
