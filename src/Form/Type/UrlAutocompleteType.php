@@ -70,7 +70,7 @@ class UrlAutocompleteType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if( $options['class'] && $options['path'] ) {
+        if( $options['class']) {
             $transformer = new EntityToIdTransformer($this->em);
             $transformer->setClass($options['class']);
             $builder->addModelTransformer($transformer);

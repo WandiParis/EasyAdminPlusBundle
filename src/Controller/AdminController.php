@@ -281,7 +281,7 @@ class AdminController extends BaseAdminController
         $this->initialize($request);
         $this->master_entity = $this->entity;
         $vars = explode('\\',$this->master_entity['class']);
-        $master_entity_class =  end($vars);
+        $master_entity_class =  ucfirst(strtolower(end($vars)));
 
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 

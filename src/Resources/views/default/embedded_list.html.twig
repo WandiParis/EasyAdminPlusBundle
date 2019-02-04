@@ -75,10 +75,10 @@
                                 {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
                             </td>
                         {% endfor %}
-
                         {% if _list_item_actions|length > 0 %}
                             {% set action_delete = (not add_delete) ? ['delete'] : [] %}
-                                
+                            {% set _list_item_actions = _list_item_actions|merge({'delete':_list_item_actions['delete']|merge({'css_class':'text-danger action-sub-delete'})}) %}
+                            {%  dump(_list_item_actions) %}
                             {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, action_delete, item) %}
                             {% if delete_route %}
                                 {% set _list_item_actions = _list_item_actions|merge([{name:delete_route ,type:'route', label:'action.delete',target:'','icon':'trash',route_params: {'main_id':main_id}}]) %}

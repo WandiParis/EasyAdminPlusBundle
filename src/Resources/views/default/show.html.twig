@@ -181,11 +181,32 @@
             _trans_parameters: _trans_parameters,
             _entity_config: _entity_config,
         }, with_context = false) }}
+        {{ include('@EasyAdmin/default/includes/_delete_sub_form.html.twig', {
+            view: 'show',
+            referer: app.request.query.get('referer', ''),
+            delete_form: delete_form,
+            _translation_domain: _entity_config.translation_domain,
+            _trans_parameters: _trans_parameters,
+            _entity_config: _entity_config,
+        }, with_context = false) }}
     {% endblock delete_form %}
 {% endblock %}
 
 {% block body_javascript %}
     {{ parent() }}
+    <script type="text/javascript">
+        $(function() {
+            $('a.action-sub-delete').on('click', function(e) {
+                e.preventDefault();
+                $('#delete-sub-form').attr('action', $(this).attr('href'));
+                $('#modal-sub-delete').modal({ backdrop: true, keyboard: true })
+                    .off('click', '#modal-sub-delete-button')
+                    .on('click', '#modal-sub-delete-button', function () {
+                        $('#delete-form').trigger('submit');
+                    });
+            });
+        });
+    </script>
     <script type="text/javascript">
     $(document).ready(function() {
         if(window.location.hash) {
@@ -216,4 +237,5 @@
 }
 </style>
 {% endblock %}
+
 
