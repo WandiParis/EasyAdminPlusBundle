@@ -13,7 +13,9 @@
    <div class="box-header">
       <h4><span class="box-header__title">{{ 'Actions massives'|trans({}, 'EasyAdminPlusBundle') }}</span></h4>
       <div class="clearfix">
-
+          {%  if position is not defined or position  == 'bottom' %}
+              <input type="hidden" name="all-selection" value="0" id="all-selection" class="all-selection">
+          {%  endif %}
           <div class="hidden js-all-selection-none">
               <span>{{ 'label.selectionActive' | trans({}, 'EasyAdminPlusBundle')}} :</span>
              <ul>
