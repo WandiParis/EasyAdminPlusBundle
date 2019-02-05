@@ -356,11 +356,17 @@ class AdminController extends BaseAdminController
      */
     protected function embeddedDeleteAction()
     {
+        $this->dispatch(EasyAdminEvents::PRE_DELETE);
+        /*if ('DELETE' !== $this->request->getMethod()) {
+            return $this->redirect($this->generateUrl('easyadmin', array('action' => 'list', 'entity' => $this->entity['name'])));
+        }*/
         $id = $this->request->query->get('id');
         $easyadmin = $this->request->attributes->get('easyadmin');
         $entity = $easyadmin['item'];
         try {
+            $this->dispatch(EasyAdminEvents::PRE_REMOVE, array('entity' => $entity));
             $this->executeDynamicMethod('remove<EntityName>Entity', array($entity));
+            $this->dispatch(EasyAdminEvents::POST_REMOVE, array('entity' => $entity));
         } catch (ForeignKeyConstraintViolationException $e) {
             throw new EntityRemoveException(array('entity_name' => $this->entity['name'], 'message' => $e->getMessage()));
         }

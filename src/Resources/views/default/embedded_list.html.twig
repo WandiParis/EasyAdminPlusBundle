@@ -77,8 +77,8 @@
                         {% endfor %}
                         {% if _list_item_actions|length > 0 %}
                             {% set action_delete = (not add_delete) ? ['delete'] : [] %}
-                            {%  if 'delete' in _list_item_actions %}
-                                {% set _list_item_actions = _list_item_actions|merge({'delete':_list_item_actions['delete']|merge({'css_class':'text-danger action-sub-delete'})}) %}
+                            {%  if _list_item_actions.delete is defined %}
+                                {% set _list_item_actions = _list_item_actions|merge({'delete':_list_item_actions['delete']|merge({'name': 'embeddedDelete','css_class':'text-danger action-sub-delete'})}) %}
                             {%  endif %}
                             {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, action_delete, item) %}
                             {% if delete_route %}
