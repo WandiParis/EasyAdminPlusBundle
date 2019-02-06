@@ -42,6 +42,25 @@
     </script>
 {% endblock %}
 
+{% block signature_widget %}
+    <style>.kbw-signature { width: 200px; height: 100px; }</style>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="hidden" name="{{full_name}}" id="{{id}}" value="{{ value|raw }}"/>
+            <div class="canvas-signature" id="s{{id}}"></div>
+            <div class="clearer button"><span>Effacer</span></div>
+            <script>
+                $("#s{{id}}").signature({syncField: "#{{id}}"});
+                {% if value %}$('#s{{id}}').signature('draw',{{value|raw}});{%  endif %}
+
+                $(".clearer").click(function() {
+                    $("#s{{id}}").signature("clear");
+                });
+            </script>
+        </div>
+    </div>
+{% endblock %}
+
 {% block json_choice_widget %}
     {{- block('choice_widget') -}}
     {%  if json_field %}
