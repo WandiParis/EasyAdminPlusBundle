@@ -182,7 +182,7 @@ lle_easy_admin_plus:
   
  ### Generate the configuration file for one or more specific entities
   ```shell
-  php bin/console lle:easy-admin-plus:generation:entity entity_1 entity_2 ...
+  php bin/console lle:easy-admin-plus:generator:entity entity_1 entity_2 ...
   ```
   If the entities passed as parameters are linked to other entities, we will propose to regenerate their configuration file.
   <p align="center">
