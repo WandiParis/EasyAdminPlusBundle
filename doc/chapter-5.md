@@ -287,4 +287,4 @@ class EasyAdminPlusSubscriber implements EventSubscriberInterface
 
 ----------
 
-[Back to main readme](../README.md)
+Next chapter: [Chapter 6 - Additional Templates](chapter-6.md)
