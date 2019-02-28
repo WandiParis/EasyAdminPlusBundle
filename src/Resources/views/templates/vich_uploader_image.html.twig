@@ -1,0 +1,14 @@
+{% if value is not null %}
+    {% set uid = random(99999) ~ 'now'|date('U') ~ random(99999) %} {# crappy #}
+    {% set imageUri = vich_uploader_asset(item, field_options.propertyFile) %}
+
+    <a href="#" class="easyadmin-thumbnail" data-featherlight="#easyadmin-lightbox-{{ uid }}" data-featherlight-close-on-click="anywhere">
+        <img src="{{ (field_options.liipFilter is defined) ? imageUri|imagine_filter(field_options.liipFilter) : imageUri }}">
+    </a>
+
+    <div id="easyadmin-lightbox-{{ uid }}" class="easyadmin-lightbox">
+        <img src="{{ imageUri }}">
+    </div>
+{% else %}
+    <span class="label">{{ 'label.null'|trans(domain = 'EasyAdminBundle') }}</span>
+{% endif %}

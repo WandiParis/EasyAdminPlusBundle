@@ -15,6 +15,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 - [x] Add an action to manage translations files.
 - [x] ACL to restrict access based on `entity/action role permissions`
 - [x] Add an action to export entities in CSV.
+- [ ] Add some useful new templates for `Show` and `List` actions
 
 ### Requirements
 
@@ -47,3 +48,4 @@ easy_admin_bundle:
 3. [Translation Action](doc/chapter-3.md)
 4. [ACL](doc/chapter-4.md)
 5. [Export Action](doc/chapter-5.md)
+6. [Additional Templates](doc/chapter-6.md)
