@@ -48,7 +48,7 @@ Just call our template `@WandiEasyAdminPlus/templates/vich_uploader_image.html.t
 - { property: image, label: 'Picture', template: '@WandiEasyAdminPlus/templates/vich_uploader_image.html.twig', propertyFile: 'logoFile' }
 ```
 
-Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or `Form` action, the type `vich_image` is working well.
+Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or `Form` actions, the type `vich_image` is working well.
 
 ### Template for file
 
@@ -76,7 +76,9 @@ Just call our template `@WandiEasyAdminPlus/templates/vich_uploader_file.html.tw
 - { property: pdf, label: 'PDF File', template: '@WandiEasyAdminPlus/templates/vich_uploader_file.html.twig', propertyFile: 'pdfFile' }
 ```
 
-Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or `Form` action, the type `vich_file` is working well.
+Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or `Form` actions, the type `vich_file` is working well.
+
+-------
 
 ## [VichUploaderbundle](https://github.com/dustin10/VichUploaderBundle) + [LiipImagineBundle](https://github.com/liip/LiipImagineBundle)
 
@@ -107,5 +109,59 @@ Just call the previous template by also specifying the correct `liipFilter` prop
 ```
 
 Note: the `Liip` filter will be only used to display the base image, the real image source is preserved if you click on the image to zoom (which opens a popin).
+
+-------
+
+## [Enums](https://github.com/greg0ire/enum)
+
+If you're using the great greg0ire's bundle and you want to display real constant values in the `List` and `Show` actions, please follow this guide.
+
+Let's imagine you have an `Entity` with `EnumAssert` that check several constants defined below:
+
+```php
+/**
+ * @var string
+ * @ORM\Column(type="string", length=64, nullable=true)
+ * @Assert\Length(max=64)
+ * @EnumAssert(class="App\Enum\CompanyOwnerType")
+ */
+private $ownerType;
+```
+
+Your enum type with all the associated constants:
+
+```php
+# src/Enum/CompanyOwnerType.php
+
+namespace App\Enum;
+
+use Greg0ire\Enum\AbstractEnum;
+
+final class CompanyOwnerType extends AbstractEnum
+{
+    const PUBLIC = 'public';
+    const PRIVATE = 'private';
+}
+```
+
+And the dictionnary associated:
+
+```yaml
+# translations/enum.en.yaml
+app_enum_company_owner_type_public: 'Public'
+app_enum_company_owner_type_private: 'Private'
+```
+
+Just call our template `@WandiEasyAdminPlus/templates/enum.html.twig` by specifying the related EnumType on the `class` property and the related domain on the `domain` property:
+
+```yaml
+- { property: ownerType, label: 'Owner Type', template: '@WandiEasyAdminPlus/templates/enum.html.twig', class: 'App\Enum\CompanyOwnerType', domain: 'enum' }
+```
+
+Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or `Form` actions, you can directly use his `FormType` with his FQN.
+
+```yaml
+- { property: ownerType, label: 'Owner Type', type: 'Greg0ire\Enum\Bridge\Symfony\Form\Type\EnumType', type_options: { class: 'App\Enum\CompanyOwnerType', prefix_label_with_class: true, translation_domain: 'enum' } }
+```
 
 [Back to main readme](../README.md)
