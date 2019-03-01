@@ -10,7 +10,6 @@ To enable it, you've to add a new action node (`filter`) in `EasyAdmin` configur
 
 Here's a list of all filters:<br/>
     - AbstractORMFilterType<br/>
-    - AutocompleteFilterType<br/>
     - BooleanFilterType<br/>
     - ChoiceFilterType<br/>
     - DateFilterType<br/>
@@ -44,6 +43,7 @@ easy_admin:
                     - { label: 'Date',  filter_type: 'DateFilterType', property: 'date' }
                     - { label: 'Statut',  filter_type: 'StringFilterType', property: 'status' }
                     - { label: 'Code Client',  filter_type: 'StringFilterType', property: 'codeClient' }
+                    - { label: 'Client', filter_type: 'UrlAutoCompleteFilterType', property: client, config: {'entity':'Client'} }
 
 ```
 
