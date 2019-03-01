@@ -29,10 +29,16 @@ class UrlAutoCompleteFilterType extends AbstractFilterType
     {
         parent::configure($config);
         $this->data_keys = ['comparator', 'value', 'value_label'];
-        $this->value_filter = $config['value_filter'];
+        $this->value_filter = $config['value_filter'] ?? null;
         $this->url = $config['url'] ?? null;
         $this->path = $config['path'] ?? null;
-        if($this->path){
+        $this->entity = $config['entity'] ?? null;
+        if($this->entity){
+            $path = $this->path;
+            $path['route'] = 'easyadmin';
+            $path['params'] = ['action' => 'autocomplete', 'entity' => $config['entity']];
+            $this->url = $this->router->generate($path['route'], $path['params']);
+        }else if($this->path){
             $path = $this->path;
             $path['params']['action'] = $path['params']['action'] ?? 'autocomplete';
             $path['route'] = $path['route'] ?? 'easyadmin';
