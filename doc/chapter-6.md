@@ -43,7 +43,7 @@ easy_admin:
                     - { label: 'Date',  filter_type: 'DateFilterType', property: 'date' }
                     - { label: 'Statut',  filter_type: 'StringFilterType', property: 'status' }
                     - { label: 'Code Client',  filter_type: 'StringFilterType', property: 'codeClient' }
-                    - { label: 'Client', filter_type: 'UrlAutoCompleteFilterType', property: client, config: {'entity':'Client'} }
+                    - { label: 'Client', filter_type: 'AutoCompleteFilterType', property: client, config: {'entity':'Client'} }
 
 ```
 
