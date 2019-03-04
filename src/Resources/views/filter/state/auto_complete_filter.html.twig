@@ -2,7 +2,7 @@
     <span class="filter-state">
         <small>{{ filtertype.filterLabel |trans }}</small>
         {% if data is defined and data.value is defined %}
-            <span>{{ data.value_label }}</span>
+            <span class="badge">{{ data.value_label ?? "" }}</span>
         {% endif %}
     </span>
 {% endif %}

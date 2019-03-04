@@ -29,6 +29,11 @@ services:
         arguments: ["@router"]
         shared: false
 
+    Lle\EasyAdminPlusBundle\Filter\FilterType\AutoCompleteFilterType:
+        tags: [lle.easy_admin_plus.filter]
+        arguments: ["@router"]
+        shared: false
+
     lle.easy_admin_plus.filter_state:
         public: true
         class:  'Lle\EasyAdminPlusBundle\Filter\FilterState'

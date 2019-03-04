@@ -1,20 +1,60 @@
 {% if data is defined and data.value is defined %}
-	{% set value = data.value.value %}
-	{% set label = data.value.label %}
+    {% set value = data.value %}
+    {% set label = data.value_label %}
 {% else %}
-	{% set value = null %}
-	{% set label = null %}
+    {% set value = null %}
+    {% set label = null %}
 {% endif %}
-<input class="form-control" id="{{nameprefix}}id_label{{namesuffix}}" type="text" value="{{ label }}" name="{{nameprefix}}value{{namesuffix}}_label"/>
-<input id="{{nameprefix}}id{{namesuffix}}" type="hidden" value="{{ value }}" name="{{nameprefix}}value{{namesuffix}}"/>
+
+<input class="form-control" id="{{nameprefix}}id_label{{namesuffix}}" type="hidden" value="{{ label }}" name="{{nameprefix}}value_label{{namesuffix}}"/>
+
+<select id="{{nameprefix}}id{{namesuffix}}" name="{{nameprefix}}value{{namesuffix}}" class="form-control" data-{{namesuffix|lower}}-autocomplete-url-lle='{{ filtertype.url  }}'>
+    <option value="{{value}}" selected="selected">{{ label }}</option>
+</select>
+
 <script>
-	$( "#{{nameprefix}}id_label{{namesuffix}}" ).autocomplete({
-      source: "{{ path(filtertype.route) }}",
-      minLength: 2,
-      select: function( event, item ) {
-        $('#{{nameprefix}}id_label{{namesuffix}}').val(item.item.label);
-        $('#{{nameprefix}}id{{namesuffix}}').val(item.item.value);
-        event.preventDefault();
-      }
-    });
+    $(document).ready(function() {
+        var lleAutocompleteFields = $('[data-{{namesuffix|lower}}-autocomplete-url-lle]');
+
+        lleAutocompleteFields.on('select2:select', function (e) {
+            var data = e.params.data;
+            $('#{{nameprefix}}id_label{{namesuffix}}').val(data.text);
+        });
+
+        lleAutocompleteFields.each(function() {
+            var $this = $(this);
+            var url = $this.data('{{namesuffix|lower}}-autocomplete-url-lle');
+
+            // select2 config for easyadmin
+            $this.select2({
+                theme: 'bootstrap',
+                ajax: {
+                    url: url,
+                    dataType: 'json',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    delay: 250,
+
+                    // paramètres GET
+                    data: function (params) {
+                        // the _ is here to force easyadmin return results even if query is empty
+                        return { 'query': $.trim(params.term) || "_", 'page': params.page };
+                    },
+
+                    // analyse json reçu
+                    processResults: function (data, params) {
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: data.has_next_page
+                            }
+                        };
+                    }
+                },
+                placeholder: 'Sélectionnez une valeur',
+                allowClear: true
+            });
+        });
+    })
 </script>

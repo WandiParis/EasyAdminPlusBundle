@@ -4,19 +4,41 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use Symfony\Component\HttpFoundation\Request;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\AbstractFilterType;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
- * StringFilterType
+ * AutoCompleteFilterType
  */
 class AutoCompleteFilterType extends AbstractFilterType
 {
 
-    protected $route;
+    protected $url;
+    protected $value_filter;
+    protected $router;
+
+    public function __construct(RouterInterface $router){
+        $this->router = $router;
+    }
+
+    public function init($columnName, $label = null, $alias = 'entity')
+    {
+        parent::init($columnName, $label, $alias);
+        $this->data_keys = ['comparator', 'value', 'value_label'];
+    }
 
     public function configure(array $config = [])
     {
         parent::configure($config);
-        $this->route = $config['route'];
+        $this->data_keys = ['comparator', 'value', 'value_label'];
+        $this->entity = $config['entity'] ?? null;
+        $this->path = $config['path'] ?? null;
+
+        if($this->entity) {
+            $path = $this->path;
+            $path['route'] = 'easyadmin';
+            $path['params'] = ['action' => 'autocomplete', 'entity' => $config['entity']];
+            $this->url = $this->router->generate($path['route'], $path['params']);
+        }
     }
 
 
@@ -26,8 +48,8 @@ class AutoCompleteFilterType extends AbstractFilterType
      */
     public function apply($queryBuilder)
     {
-        if (isset($data['value'])) {
-            $value = $data['value']['value'];
+        if (isset($this->data['value'])) {
+            $value = $this->data['value'];
             $qb = $queryBuilder;
             $qb->andWhere($this->alias. $this->columnName .'= :var_' . $this->uniqueId);
             $qb->setParameter('var_' . $this->uniqueId, $value);
@@ -38,6 +60,9 @@ class AutoCompleteFilterType extends AbstractFilterType
         return $this->route;
     }
 
+    public function getUrl(){
+        return $this->url;
+    }
     public function getStateTemplate(){
         return '@LleEasyAdminPlus/filter/state/auto_complete_filter.html.twig';
     }
