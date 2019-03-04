@@ -63,7 +63,8 @@ class AutoCompleteFilterType extends AbstractFilterType
     public function getUrl(){
         return $this->url;
     }
-    public function getStateTemplate(){
+
+    public function getStateTemplate() {
         return '@LleEasyAdminPlus/filter/state/auto_complete_filter.html.twig';
     }
 
