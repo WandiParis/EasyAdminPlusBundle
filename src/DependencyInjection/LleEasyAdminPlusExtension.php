@@ -3,6 +3,8 @@
 namespace Lle\EasyAdminPlusBundle\DependencyInjection;
 
 use Lle\EasyAdminPlusBundle\Filter\FilterType\FilterTypeInterface;
+use Lle\EasyAdminPlusBundle\Service\Batch\BatchInterface;
+use Lle\EasyAdminPlusBundle\Service\Exporter\ExporterInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -37,6 +39,8 @@ class LleEasyAdminPlusExtension extends Extension
         $container->setParameter('easy_admin_plus', $config);
         $container->setParameter('easy_admin_plus.translator.locales', $config['translator']['locales']);
         $container->registerForAutoconfiguration(FilterTypeInterface::class)->addTag('lle.easy_admin_plus.filter');
+        $container->registerForAutoconfiguration(BatchInterface::class)->addTag('lle.easy_admin_plus.batch');
+        $container->registerForAutoconfiguration(ExporterInterface::class)->addTag('lle.exporter');
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
         $loader->load('form.yaml');

@@ -668,7 +668,7 @@ class AdminController extends BaseAdminController
         $batchs = $this->entity['list']['batchs'];
         $ret = null;
         if(array_key_exists($name, $batchs) && $ids) {
-            $service = $this->get($batchs[$name]['service']);
+            $service = $this->get('lle.service.batch_manager')->getBatch($batchs[$name]['service']);
             $data = [];
             if($batchs[$name]['form']){
                 $form = $this->createForm($batchs[$name]['form']);
