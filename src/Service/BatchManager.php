@@ -3,12 +3,6 @@
 namespace Lle\EasyAdminPlusBundle\Service;
 
 use Lle\EasyAdminPlusBundle\Service\Batch\BatchInterface;
-use Lle\EasyAdminPlusBundle\Service\Exporter\ExporterInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
-use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigManager;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\DataCollectorTranslator;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class BatchManager
 {
@@ -25,7 +19,7 @@ class BatchManager
         }
     }
 
-    public function getBatch($classname): BatchInterface{
+    public function getBatch(string $classname): BatchInterface{
         if(array_key_exists($classname, $this->batchs)){
             return $this->batchs[$classname];
         }else{
