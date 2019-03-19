@@ -338,6 +338,7 @@ class AdminController extends BaseAdminController
         return $this->render('@LleEasyAdminPlus/default/embedded_list.html.twig', array(
             'fields'=>$fields,
             'items'=>$items,
+            'parent' => $this->em->getRepository($this->master_entity['class'])->find($request->query->get('id')),
             'main_id'=>$request->query->get('id'),
             'entity'=>$entity,
             'add_form'=>$add_form,
