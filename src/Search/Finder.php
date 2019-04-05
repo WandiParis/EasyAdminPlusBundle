@@ -37,7 +37,7 @@ class Finder
     public function findByAllProperties(array $entityConfig, $searchQuery, $page = 1, $maxResults = self::MAX_RESULTS, $sortField = null, $sortDirection = null)
     {
         $queryBuilder = $this->queryBuilder->createSearchQueryBuilder($entityConfig, $searchQuery, $sortField, $sortDirection);
-
+        //dd($queryBuilder->getDQL(), $queryBuilder->getParameters());
         return $this->paginator->createOrmPaginator($queryBuilder, $page, $maxResults);
     }
 }

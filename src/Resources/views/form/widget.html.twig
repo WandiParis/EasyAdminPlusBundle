@@ -90,7 +90,7 @@
 {%  endfor %}
 >
 <select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name|lower}}-autocomplete-url-lle='{{ url }}'>
-    <option value="{{value}}" selected="selected">{{ value_filter ? include(template_from_string( "{{ value |" ~ value_filter ~ "}}")) : value }}</option>
+    <option value="{{value}}" selected="selected">{{ value_filter ? include(template_from_string( "{{ value |" ~ value_filter ~ "}}")) : value_label }}</option>
 </select>
 
 <script>

@@ -72,7 +72,7 @@ class EntityToIdTransformer implements DataTransformerInterface
             // causes a validation error
             // this message is not shown to the user
             // see the invalid_message option
-            throw new TransformationFailedException(sprintf('A medecin with id "%s" does not exist!', $entityId));
+            throw new TransformationFailedException(sprintf('A '.$this->class.' with id "%s" does not exist!', $entityId));
         }
 
         return $entity;

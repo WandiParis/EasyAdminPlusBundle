@@ -123,7 +123,7 @@ abstract class AbstractFilterType implements FilterTypeInterface
         [
             $alias,
             $col
-        ] = $queryHelper->getPath($queryBuilder, $this->alias, $this->columnName);
+        ] = $queryHelper->getPath($queryBuilder, $queryBuilder->getRootAlias(), $this->columnName);
         $this->alias = $alias;
         $this->columnName = $col;
     }

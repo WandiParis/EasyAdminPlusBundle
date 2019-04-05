@@ -26,7 +26,7 @@
 {% block main %}
 <div class="embedded-list" for="{{ widget_identifier|e('html_attr') }}" id="{{ _entity_config.name }}">
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
-    
+
     {% set _columns_count = fields|length + (_list_item_actions|length > 0 ? 1 : 0) %}
 
     <div class="table-responsive">
@@ -113,7 +113,7 @@
     {% if add_form %}
         {{ include(template_form, {'add_form': add_form}) }}
     {% endif %}
-    
+
     {#% block paginator %}{{ include(_entity_config.templates.paginator) }}{% endblock paginator %#}
 
 </div>
@@ -147,7 +147,7 @@
                     toggle.bootstrapToggle('disable');
                 });
             });
-        });    
+        });
     </script>
 
     {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}

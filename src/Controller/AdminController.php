@@ -193,11 +193,15 @@ class AdminController extends BaseAdminController
             'paginator' => $paginator,
             'batch_forms' => $batch_forms,
             'fields' => $fields,
-            'filters' => $filterState->getFilters($this->entity['name']),
+            'filters' => $this->filters($filterState->getFilters($this->entity['name'])),
             'delete_form_template' => $this->createDeleteForm($this->entity['name'], '__id__')->createView(),
         );
 
         return $this->executeDynamicMethod('render<EntityName>Template', array('list', $this->entity['templates']['list'], $parameters));
+    }
+
+    protected function filters($filters){
+        return $filters;
     }
 
     /**
@@ -289,6 +293,7 @@ class AdminController extends BaseAdminController
         foreach($metadata['ignore_fields']??[] as $field_to_del) {
             unset($fields[$field_to_del]);
         }
+
         if ($metadata['with_add'] ?? false) {
             if ($metadata['add_form'] ?? false) {
                 $classmetadata = $this->em->getClassMetadata($this->entity['class']);
@@ -304,11 +309,21 @@ class AdminController extends BaseAdminController
                         $data = $instance;
                     }
                 }
-                $add_form = $this->createForm($metadata['add_form'], $data ?? null, [
+                $options = [
                     'action' => $this->generateUrl($metadata['add_route'], ['id' => $request->query->get('id')]),
                     'method' => 'POST',
                     'attr' => ['class'=>'form-inline']
-                ])
+                ];
+
+                if(isset($metadata['add_form_options'])){
+                    foreach($metadata['add_form_options'] as $k => $v){
+                        if($v === '{parent}'){
+                            $metadata['add_form_options'][$k] = $parent;
+                        }
+                    }
+                    $options = array_merge($options, $metadata['add_form_options']);
+                }
+                $add_form = $this->createForm($metadata['add_form'], $data ?? null, $options)
                     ->createView();
             } else {
                 $add_form = $this->createFormBuilder(null, array(
@@ -444,7 +459,6 @@ class AdminController extends BaseAdminController
         $this->request->attributes->set('easyadmin', $easyadmin);
 
         $fields = $this->entity['new']['fields'];
-
         $newForm = $this->executeDynamicMethod('create<EntityName>NewForm', array($entity, $fields));
 
         $newForm->handleRequest($this->request);

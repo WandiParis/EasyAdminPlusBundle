@@ -36,7 +36,7 @@ Configure the show entity like this
 
             - { type: 'sublist', id: 'echeances', label: 'tab.echeances', entity: 'Controle', property: 'Controles'}
             - { type: 'sublist', id: 'options', label: 'tab.options', entity: 'Ressource', property: 'Options'}
-            
+            - { type: 'sublist', id: 'paniers', label: 'tab.panier', property: 'paniers', entity: 'Panier',template_form: 'easy_admin/Helper/_sub_form.html.twig', add_form: 'App\Form\PanierType',add_route: 'app_admin_eleve_addpanier', with_add: true , 'with_delete': true, add_form_options: {'parent':'{parent}'}}
             - { type: 'tab', id: 'historique', label: 'Historique', action: 'historyAction' }
 ```
 

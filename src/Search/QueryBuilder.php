@@ -115,11 +115,13 @@ class QueryBuilder
         $qb_method = ($entityConfig['qb_method'] ?? null);
         if ($qb_method) {
             $queryBuilder = $em->getRepository($entityConfig['class'])->$qb_method();
+            $entityName = $queryBuilder->getRootAlias();
         } else {
             $queryBuilder = $em->createQueryBuilder()
                 ->select('entity')
                 ->from($entityConfig['class'], 'entity')
             ;
+            $entityName = 'entity';
         }
 
         $isSearchQueryNumeric = is_numeric($searchQuery);
@@ -137,11 +139,10 @@ class QueryBuilder
         
         $orModule = $queryBuilder->expr()->orX();
         foreach ($entityConfig['search']['fields'] as $fieldName => $metadata) {
-            $entityName = 'entity';
             if (false !== strpos($fieldName, '.')) {
                 list($associatedEntityName, $associatedFieldName) = explode('.', $fieldName);
                 if (!in_array($associatedEntityName, $entitiesAlreadyJoined)) {
-                    $queryBuilder->leftJoin('entity.'.$associatedEntityName, $associatedEntityName);
+                    $queryBuilder->leftJoin($entityName.'.'.$associatedEntityName, $associatedEntityName);
                     $entitiesAlreadyJoined[] = $associatedEntityName;
                 }
 
@@ -202,13 +203,13 @@ class QueryBuilder
         if ($isSortedByDoctrineAssociation) {
             list($associatedEntityName, $associatedFieldName) = explode('.', $sortField);
             if (!in_array($associatedEntityName, $entitiesAlreadyJoined)) {
-                $queryBuilder->leftJoin('entity.'.$associatedEntityName, $associatedEntityName);
+                $queryBuilder->leftJoin($entityName.'.'.$associatedEntityName, $associatedEntityName);
                 $entitiesAlreadyJoined[] = $associatedEntityName;
             }
         }
 
         if (null !== $sortField) {
-            $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : 'entity.', $sortField), $sortDirection ?: 'DESC');
+            $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $entityName.'.', $sortField), $sortDirection ?: 'DESC');
         }
 
         return $queryBuilder;

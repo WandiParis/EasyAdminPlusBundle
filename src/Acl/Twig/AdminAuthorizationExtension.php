@@ -15,6 +15,7 @@ class AdminAuthorizationExtension extends AbstractExtension
 
     public function __construct($adminAuthorizationChecker)
     {
+        /* @var \Lle\EasyAdminPlusBundle\Acl\Security\AdminAuthorizationChecker $adminAuthorizationChecker */
         $this->adminAuthorizationChecker = $adminAuthorizationChecker;
     }
 
@@ -43,7 +44,6 @@ class AdminAuthorizationExtension extends AbstractExtension
         return array_filter($itemActions, function ($conf, $action) use ($entity, $forbiddenActions, $subject) {
             $authorize = !in_array($action, $forbiddenActions) && $this->isEasyAdminGranted($entity, $action, $subject);
             if(array_key_exists('if', $conf) && !is_null($subject)) {
-
                 $authorize = ($authorize  && $subject->{$conf['if']}());
             }
             return $authorize;

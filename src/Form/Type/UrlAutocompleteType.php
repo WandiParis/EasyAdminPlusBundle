@@ -52,6 +52,7 @@ class UrlAutocompleteType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options){
         $view->vars['url'] = $options['url'];
+        $view->vars['value_label'] = $view->vars['value'];
         if ($options['placeholder']) {
             $view->vars['placeholder'] = $options['placeholder'];
         }
@@ -63,6 +64,9 @@ class UrlAutocompleteType extends AbstractType
         }elseif($options['class']){
             $config = $this->configManager->getEntityConfigByClass($options['class']);
             $view->vars['url'] = $this->router->generate('easyadmin', ['action'=>'autocomplete', 'entity'=>$config['name']]);
+            if($options['value_filter'] === null and $view->vars['value']) {
+                $view->vars['value_label'] = $this->em->getRepository($options['class'])->find($view->vars['value']) ?? $view->vars['value'];
+            }
         }
 
         $view->vars['value_filter'] = $options['value_filter'];

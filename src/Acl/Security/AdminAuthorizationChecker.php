@@ -57,7 +57,6 @@ class AdminAuthorizationChecker
         } elseif (isset($entity['role_prefix'])) {
             return $entity['role_prefix'].'_'.strtoupper($actionName);
         }
-
         return $entity['role'] ?? null;
     }
 }

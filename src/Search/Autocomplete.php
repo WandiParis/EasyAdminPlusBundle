@@ -62,7 +62,6 @@ class Autocomplete
         $sort_direction = $backendConfig['entities'][$entity]['list']['sort']['direction'] ?? null;
         
         $paginator = $this->finder->findByAllProperties($backendConfig['entities'][$entity], $query, $page, $backendConfig['show']['max_results'], $sort_field, $sort_direction);
-
         return array(
             'results' => $this->processResults($paginator->getCurrentPageResults(), $backendConfig['entities'][$entity]),
             'has_next_page' => $paginator->hasNextPage(),
