@@ -5,26 +5,25 @@ form(delete_form, {
     attr: { id: 'delete-sub-form', style: 'display: none' }
 })
 }}
-
-<div id="modal-sub-delete" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h4>{{ 'delete_modal.title'|trans(_trans_parameters, 'EasyAdminBundle') }}</h4>
-                <p>{{ 'delete_modal.content'|trans(_trans_parameters, 'EasyAdminBundle') }}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn">
-                    {{ 'action.cancel'|trans(_trans_parameters, _translation_domain) }}
-                </button>
-
-
-                {% set _delete_action = easyadmin_get_action(view, 'delete', _entity_config.name) %}
-                <button type="button" data-dismiss="modal" class="btn btn-danger" id="modal-sub-delete-button" formtarget="{{ _delete_action.target }}">
-                    {% if _delete_action.icon %}<i class="fa fa-{{ _delete_action.icon }}"></i>{% endif %}
-                    {{ 'delete_modal.action'|trans(_trans_parameters, 'EasyAdminBundle') }}
-                </button>
+{% set _delete_action = easyadmin_get_action(view, 'delete', _entity_config.name) %}
+{% if _delete_action %}
+    <div id="modal-sub-delete" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4>{{ 'delete_modal.title'|trans(_trans_parameters, 'EasyAdminBundle') }}</h4>
+                    <p>{{ 'delete_modal.content'|trans(_trans_parameters, 'EasyAdminBundle') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn">
+                        {{ 'action.cancel'|trans(_trans_parameters, _translation_domain) }}
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn btn-danger" id="modal-sub-delete-button" formtarget="{{ _delete_action.target }}">
+                        {% if _delete_action.icon %}<i class="fa fa-{{ _delete_action.icon }}"></i>{% endif %}
+                        {{ 'delete_modal.action'|trans(_trans_parameters, 'EasyAdminBundle') }}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{% endif %}
