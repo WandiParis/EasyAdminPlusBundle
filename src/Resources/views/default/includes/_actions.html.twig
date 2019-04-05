@@ -23,6 +23,7 @@
         {% set action_href = action_href ~ "#" ~ action.tab %}
     {% endif %}
     
+    {%  if 'template' != action.type %}
     <a class="{{ action.css_class|default('') }}" title="{{ action.label|trans(arguments = trans_parameters|merge({ '%entity_id%': item_id }), domain = translation_domain) }}" href="{{ action_href }}" target="{{ action.target }}">
         
         {% if action.icon %}
@@ -49,5 +50,7 @@
             {{ action.label|trans(arguments = trans_parameters|merge({ '%entity_id%': item_id }), domain = translation_domain) }}
         {% endif %}
     </a>
+    {% endif %}
+    
 {% endfor %}
 

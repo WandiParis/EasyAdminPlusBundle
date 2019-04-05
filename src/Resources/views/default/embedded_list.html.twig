@@ -80,15 +80,15 @@
                             {%  if _list_item_actions.delete is defined %}
                                 {% set _list_item_actions = _list_item_actions|merge({'delete':_list_item_actions['delete']|merge({'name': 'embeddedDelete','css_class':'text-danger action-sub-delete'})}) %}
                             {%  endif %}
-                            {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, action_delete, item) %}
+                            {% set _list_item_actions_current = _list_item_actions|prune_item_actions(_entity_config, action_delete, item) %}
                             {% if delete_route %}
-                                {% set _list_item_actions = _list_item_actions|merge([{name:delete_route ,type:'route', label:'action.delete',target:'','icon':'trash',route_params: {'main_id':main_id}}]) %}
+                                {% set _list_item_actions_current = _list_item_actions_current|merge([{name:delete_route ,type:'route', label:'action.delete',target:'','icon':'trash',route_params: {'main_id':main_id}}]) %}
                             {% endif %}
                             {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
                             <td data-label="{{ _column_label }}" class="actions">
                             {% block item_actions %}
                                 {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
-                                    actions: _list_item_actions,
+                                    actions: _list_item_actions_current,
                                     request_parameters: _request_parameters,
                                     translation_domain: _entity_config.translation_domain,
                                     trans_parameters: _trans_parameters,
