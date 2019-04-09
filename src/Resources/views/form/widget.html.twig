@@ -43,7 +43,7 @@
 {% endblock %}
 
 {% block lle_date_widget %}
-    <input {% if placeholder %} placeholder="{{ placeholder }}" {% endif %} class="form-control" type="text" value="{{ value }}" id="{{id_date_picker}}" {{ block('widget_attributes') }}/>
+    <input class="form-control" type="text" value="{{ value }}" id="{{id_date_picker}}" {{ block('widget_attributes') }}/>
     <script>
         $(function(){
             $('#{{id_date_picker}}').datepicker({

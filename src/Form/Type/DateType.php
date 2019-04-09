@@ -15,6 +15,10 @@ use Lle\EasyAdminPlusBundle\Form\DataTransformer\DateTransformer;
 
 class DateType extends AbstractType
 {
+    /**
+     * no-day is usefull to disable some days of the week (e.g : 0 = sunday, 1 = monday, 2 = tuesday, etc)
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -23,13 +27,10 @@ class DateType extends AbstractType
             'js_date_format'   => 'dd/mm/yy',
             'min_day'       => null,
             'max_day'       => null,
-            'no-day'        => array(),
+            'no_day'        => array(),
             'edit_year'     => true,
             'edit_month'    => true,
-            'show_diff'     => false,
-            'js'            => true,
-            'placeholder'   => null,
-            'is_birthday'   => null,
+            'is_birthday'   => false,
         ));
     }
 
@@ -42,14 +43,11 @@ class DateType extends AbstractType
     {
         $view->vars['id_date_picker'] = $view->vars['id'];
         $view->vars['date_format'] = $options['js_date_format'];
-        $view->vars['placeholder'] = (is_array($options['placeholder']) && isset($options['placeholder']['year']))? $options['placeholder']['year']:null;
         $view->vars['min'] = (is_string($options['min_day']))? '"'.$options['min_day'].'"':null;
         $view->vars['max'] = (is_string($options['max_day']))? '"'.$options['max_day'].'"':null;
-        $view->vars['noday'] = json_encode($options['no-day']);
+        $view->vars['noday'] = json_encode($options['no_day']);
         $view->vars['edit_year'] = $options['edit_year'];
         $view->vars['edit_month'] = $options['edit_month'];
-        $view->vars['show_diff'] = $options['show_diff'];
-        $view->vars['js'] = $options['js'];
         $view->vars['is_birthday'] = $options['is_birthday'];
     }
 
