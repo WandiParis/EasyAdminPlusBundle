@@ -27,43 +27,43 @@
             {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, [], null) %}
             {% for action in _list_item_actions if (action.global is defined and action.global) %}
                     {%  if action.confirm is defined %}
-                    {%  if action.route is defined %}
-                    {% set action_href = path(action.route, action.parameters) %}
-                    {% else %}
-                    {% set action_href = path(action.name, action.parameters) %}
-                    {% endif %}
-                    <button
-                        class="btn btn-primary lle-confirm"
-                        style="margin-right:5px;"
-                        id="action_{{action.name}}"
-                        data-href="{{ action_href }}"
-                        {% if action.confirm.message is defined %}
-                        data-message="{{ action.confirm.message|trans }}"
+                        {%  if action.route is defined %}
+                            {% set action_href = path(action.route, action.parameters) %}
+                        {% else %}
+                            {% set action_href = path(action.name, action.parameters) %}
                         {% endif %}
-                        {% if action.confirm.xhr is defined %}
-                        data-xhr="1"
-                        {% if action.confirm.xhr.message %}
-                        data-xhr-message = '{{ action.confirm.xhr.message|trans }}'
-                        {% endif %}
-                        {% if action.confirm.xhr.method %}
-                        data-xhr-method = '{{ action.confirm.xhr.method }}'
-                        {% endif %}
-                        {% endif %}
-                        <i class="fa fa-{{ action.icon }}"></i>
-                        {{ action.label|trans }}
-                    </button>
+                        <button
+                            class="btn btn-primary lle-confirm"
+                            style="margin-right:5px;"
+                            id="action_{{action.name}}"
+                            data-href="{{ action_href }}"
+                            {% if action.confirm.message is defined %}
+                            data-message="{{ action.confirm.message|trans }}"
+                            {% endif %}
+                            {% if action.confirm.xhr is defined %}
+                            data-xhr="1"
+                            {% if action.confirm.xhr.message %}
+                            data-xhr-message = '{{ action.confirm.xhr.message|trans }}'
+                            {% endif %}
+                            {% if action.confirm.xhr.method %}
+                            data-xhr-method = '{{ action.confirm.xhr.method }}'
+                            {% endif %}
+                            {% endif %}
+                            <i class="fa fa-{{ action.icon }}"></i>
+                            {{ action.label|trans }}
+                        </button>
                     {% elseif action.template is defined %}
                         {{ include('easy_admin/' ~ app.request.query.get('entity') ~'/' ~ action.template) }}
                     {% else %}
-                    {%  if action.route is defined %}
-                    {% set action_href = path(action.route, action.parameters) %}
-                    {% else %}
-                    {% set action_href = path(action.name, action.parameters) %}
-                    {% endif %}
-                    <a class="btn btn-primary" style="margin-right:5px;" id="action_{{action.name}}" href="{{ action_href }}">
-                        <i class="fa fa-{{ action.icon }}"></i>
-                        {{ action.label|trans }}
-                    </a>
+                        {%  if action.route is defined %}
+                            {% set action_href = path(action.route, action.parameters) %}
+                        {% else %}
+                            {% set action_href = path(action.name, action.parameters) %}
+                        {% endif %}
+                        <a class="btn btn-primary" style="margin-right:5px;" id="action_{{action.name}}" href="{{ action_href }}">
+                            <i class="fa fa-{{ action.icon }}"></i>
+                            {{ action.label|trans }}
+                        </a>
                     {% endif %}
             {% endfor %}
 

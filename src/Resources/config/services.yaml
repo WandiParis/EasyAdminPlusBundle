@@ -136,10 +136,15 @@ services:
         tags: [lle.exporter]
 
 
+    Lle\EasyAdminPlusBundle\Service\Exporter\CsvExporter: '@lle.service.csv_exporter'
+    Lle\EasyAdminPlusBundle\Service\Exporter\XlsxExporter: '@lle.service.xlsx_exporter'
+
     lle.service.export_manager:
         public: true
         class:  '%lle.service.export_manager.class%'
         arguments: ["@easyadmin.config.manager","@property_accessor","@translator", !tagged lle.exporter]
+
+    Lle\EasyAdminPlusBundle\Service\ExportManager: '@lle.service.export_manager'
 
     lle.service.batch_manager:
         public: true

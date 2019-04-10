@@ -34,6 +34,7 @@ class ExportManager
                     throw new \Exception('The exporter format ' . $exporter->getFormat() . ' already exist');
                 }
                 $this->exporters[$exporter->getFormat()] = $exporter;
+                $this->exporters[get_class($exporter)] = $exporter;
             }
         }
     }
