@@ -12,7 +12,7 @@ class XlsxExporter implements ExporterInterface
 
 
 
-    public function generateResponse(array $data, string $filename): Response
+    public function generateResponse(array $data, string $filename = 'export'): Response
     {
         return $this->arrayToExcelResponse($data, $filename.'.'. $this->getFormat());
     }

@@ -8,7 +8,7 @@ class CsvExporter implements ExporterInterface
 {
 
 
-    public function generateResponse(array $data, string $filename): Response
+    public function generateResponse(array $data, string $filename = 'export'): Response
     {
         return $this->arrayToCsvResponse($data, $filename. '.' . $this->getFormat());
     }
