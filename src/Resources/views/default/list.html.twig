@@ -82,10 +82,14 @@
                 {% set _action = easyadmin_get_action_for_list_view('new', _entity_config.name) %}
                 {% block new_action %}
                     {% if is_easyadmin_granted(_entity_config, 'new', null) %}
-                        <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ 'action': 'new' })) }}" target="{{ _action.target }}">
-                            {% if _action.icon %}<i class="fa fa-{{ _action.icon }}"></i>{% endif %}
-                            {{ _action.label is defined and not _action.label is empty ? _action.label|trans(_trans_parameters) }}
-                        </a>
+                        {% if _action.template is defined %}
+                            {{ include('easy_admin/' ~ app.request.query.get('entity') ~'/' ~ _action.template) }}
+                        {%  else %}
+                            <a class="{{ _action.css_class|default('') }}" href="{{ path('easyadmin', _request_parameters|merge({ 'action': 'new' })) }}" target="{{ _action.target }}">
+                                {% if _action.icon %}<i class="fa fa-{{ _action.icon }}"></i>{% endif %}
+                                {{ _action.label is defined and not _action.label is empty ? _action.label|trans(_trans_parameters) }}
+                            </a>
+                        {%  endif %}
                     {% endif %}
                 {% endblock new_action %}
             {% endif %}
