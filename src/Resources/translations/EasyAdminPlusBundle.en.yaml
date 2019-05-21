@@ -113,7 +113,7 @@ label.batchselectall: "Select all"
 batch_modal:
     title: "Confirm this action ?"
     action: "Execute"
-    content: ""
+    content: "Number of items selected : "
 action.cancel: Cancel
 wf_modal:
     title: "Confirm this action ?"

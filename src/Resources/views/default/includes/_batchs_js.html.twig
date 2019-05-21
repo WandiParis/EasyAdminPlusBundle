@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h4>{{ 'batch_modal.title'|trans({}, 'EasyAdminPlusBundle') }}</h4>
-                <p>{{ 'batch_modal.content'|trans({}, 'EasyAdminPlusBundle') }}</p>
+                <p >{{ 'batch_modal.content'|trans({}, 'EasyAdminPlusBundle') }} <span id="batch_modal_nb_items" class="badge"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn">
@@ -20,6 +20,8 @@
 
 
 <script>
+    var nbItemsTotal = "{{  paginator.nbResults }}";
+    var nbItemsSel = 0;
     function doBulkAction(url) {
         oneChecked = validateBulkCheckboxes();
         if(oneChecked) {
@@ -36,9 +38,11 @@
         var oneChecked = false;
 
         var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
+        nbItemsSel = 0;
         for (var i=0; i<checkboxes.length; i++) {
             var cb = checkboxes[i];
             if (cb.checked == true) {
+                nbItemsSel++;
                 oneChecked = true;
             } else {
                 allChecked = false;
@@ -57,13 +61,24 @@
             $('.js-bulk-button').addClass('disabled');
             $('.batch-actions-infos').removeClass('hidden');
         }
+        afficheSelection();
         return oneChecked;
+    }
+
+    function afficheSelection() {
+
+        if($('#all-selection').val() == 0) {
+            $('#batch_modal_nb_items').html(nbItemsSel);
+        } else {
+            $('#batch_modal_nb_items').html(nbItemsTotal);
+        }
     }
 
     function showBatchForm(name) {
         $('.batch_form').addClass('hidden');
         if(name){
                 $('.batch_'+name).removeClass('hidden');
+
                 if( $('#batch_form_view_'+name).length ){
                     $(document).scrollTop( $('#batch_form_view_'+name).offset().top );
                 }
@@ -86,7 +101,6 @@
             $('.js-all-selection-none').addClass('hidden');
             $('.js-all-selection-active').addClass('hidden');
         }
-
         validateBulkCheckboxes();
     };
 
@@ -100,6 +114,8 @@
             $('.js-all-selection-none').addClass('hidden');
             $('.js-all-selection-active').removeClass('hidden');
         }
+
+        afficheSelection();
 
     });
 

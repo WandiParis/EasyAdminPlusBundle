@@ -114,7 +114,7 @@ label.selectionActive: "Sélection active"
 batch_modal:
     title: "Voulez vous effectuer cette action massive ?"
     action: "Valider"
-    content: ""
+    content: "Nombre d'éléments impactés : "
 
 action.cancel: Annuler
 wf_modal:
