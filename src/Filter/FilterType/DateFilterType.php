@@ -21,6 +21,15 @@ class DateFilterType extends AbstractFilterType
         $this->defaults['comparator'] = 'equal';
     }
 
+    public function setDefaults($default){
+        parent::setDefaults($default);
+        switch($this->defaults['value']){
+            case 'now': $return = date('d/m/Y'); break;
+            default: $return = $default;
+        }
+        $this->defaults['value'] = $return;
+    }
+
 
 
     /**
@@ -29,7 +38,7 @@ class DateFilterType extends AbstractFilterType
      */
     public function apply($queryBuilder)
     {
-        if (isset($this->data['value']) && isset($this->data['comparator'])) {
+        if (isset($this->data['value']) && $this->data['value'] && isset($this->data['comparator'])) {
             $date = DateTime::createFromFormat('d/m/Y', $this->data['value']);
             switch ($this->data['comparator']) {
                 case 'equal':

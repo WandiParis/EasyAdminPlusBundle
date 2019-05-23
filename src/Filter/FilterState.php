@@ -36,13 +36,12 @@ class FilterState
         $entity_name = $entityConfig['name'];
         $reset = false;
         $is_link = $this->isFilterLink($request);
-        if ( $is_link || ( $request->request->has('reset') && 'reset' === $request->request->get('reset')) ) {
+        if ( $is_link || ( $request->request->has('reset') && 'reset' === $request->request->get('reset')) || ( $request->query->has('reset') && 'reset' === $request->query->get('reset')) ) {
             $data[$entity_name] = [];
             $reset = !$is_link;
         } else {
             $data = $request->getSession()->get('admin_filters');
         }
-
         foreach ($entityConfig['filter']['fields'] as $filter) {
             $type = $filter['type'] ?? $filter['filter_type'];
             if($this->filterChain->has($type)){
@@ -52,9 +51,14 @@ class FilterState
                 throw new \Exception($type." not found");
             }
 
+            if(isset($filter['default'])){
+                $filterObj->setDefaults($filter['default']);
+            }
+
 
             $this->filters[$entity_name][$filter['property']] = $filterObj;
             // set data from sesssion
+
             $filterObj->setData($data[$entity_name][$filter['property']]??[]);
             // set data from request
             if (!$reset) $filterObj->updateDataFromRequest($request);

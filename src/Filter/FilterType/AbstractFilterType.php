@@ -104,10 +104,11 @@ abstract class AbstractFilterType implements FilterTypeInterface
         }
     }
 
+
     public function initDefault()
     {
         foreach ($this->data_keys as $k) {
-            if (! array_key_exists($k, $this->data) || ! $this->data[$k]) {
+            if (! array_key_exists($k, $this->data) || $this->data[$k] === null) {
                 if (array_key_exists($k, $this->defaults)) {
                     $this->data[$k] = $this->defaults[$k];
                 } else {
@@ -215,7 +216,10 @@ abstract class AbstractFilterType implements FilterTypeInterface
      */
     public function setDefaults($defaults)
     {
-        $this->defaults = $defaults;
+        if(!is_array($defaults)){
+            $defaults = ['value'=>$defaults];
+        }
+        $this->defaults = array_merge($this->defaults,$defaults);
 
         return $this;
     }

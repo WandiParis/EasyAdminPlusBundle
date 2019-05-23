@@ -38,9 +38,9 @@ easy_admin:
 
             filter:
                 fields:
-                    - { label: 'Source',  filter_type: 'StringFilterType', property: 'source' }
+                    - { label: 'Source',  filter_type: 'StringFilterType', property: 'source', default: {comparator:'equal', value:'def' }}
                     - { label: 'Type',  filter_type: 'ChoiceFilterType', property: 'type', config: {choices: ['DI', 'CONTACT', 'INSTALLATION']} }
-                    - { label: 'Date',  filter_type: 'DateFilterType', property: 'date' }
+                    - { label: 'Date',  filter_type: 'DateFilterType', property: 'date' , default: 'now'}
                     - { label: 'Statut',  filter_type: 'StringFilterType', property: 'status' }
                     - { label: 'Code Client',  filter_type: 'StringFilterType', property: 'codeClient' }
                     - { label: 'Client', filter_type: 'AutoCompleteFilterType', property: client, config: {'entity':'Client'} }
