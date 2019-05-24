@@ -118,6 +118,7 @@ services:
 
     lle.easy_admin_plus.twig.extension:
         class: Lle\EasyAdminPlusBundle\Twig\LleEasyAdminPlusTwigExtension
+        arguments: ['@property_accessor', '@lle.easy_admin_plus_edit_in_place.factory']
         tags:
             - { name: twig.extension }
 
@@ -207,4 +208,7 @@ services:
     lle.easy_admin_plus.form_transformer_entity_to_id:
         public: true
         alias:  Lle\EasyAdminPlusBundle\Form\DataTransformer\EntityToIdTransformer
-    
+
+    lle.easy_admin_plus_edit_in_place.factory:
+        public: true
+        class: 'Lle\EasyAdminPlusBundle\Service\EditInPlaceFactory'

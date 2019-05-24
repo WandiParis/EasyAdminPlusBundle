@@ -1,0 +1,5 @@
+{% if '\n' in valueRaw %}
+    <textarea  class=" form-control col-md-12" id="input-{{ id }}">{{ valueRaw }}</textarea>
+{% else %}
+    <input  class="eap-edit-in-place-input" id="input-{{ id }}" type="text" value="{{ valueRaw }}"/>
+{% endif %}

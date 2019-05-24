@@ -1,0 +1,8 @@
+<input class="eap-edit-in-place-input form-control col-md-12" id="input-{{ id }}" type="text" value="{{ valueRaw| date('d/m/Y') }}"/>
+<script>
+    $(function(){
+        $('#input-{{ id }}').datepicker({
+            'dateFormat':'dd/mm/yy',
+        });
+    });
+</script>

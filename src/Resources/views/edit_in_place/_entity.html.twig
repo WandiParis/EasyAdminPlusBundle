@@ -1,0 +1,36 @@
+<select  id="input-{{ id }}" type="text" value="{{ valueRaw }}" class="form-control">
+</select>
+<span id="eip-loader-{{ id }}" class="fa fa-spinner fa-pulse"></span>
+<script>
+    {%  set path = component.getPath('editinplaceentitychoice') %}
+        var {{ loader }}_ok = false;
+        function {{ loader }}(){
+            if({{ loader }}_ok === false) {
+                {{ loader }}_ok = true;
+                $('#eip-loader-{{ id }}').show();
+                $('#input-{{ id }}').hide();
+                $.ajax({
+                    method: "POST",
+                    url: '{{ path(path.route,path.params) }}',
+                    data: {
+                        'entity_target': '{{ configurator.getAssociationClass(field.name)|replace({'\\':'/'}) }}',
+                        'fieldname': '{{ field.name }}',
+                        'entity_source': '{{ get_class(item)|replace({'\\':'/'}) }}',
+                        'entity_source_id': {{ item.id }} },
+                    dataType: "json",
+                }).success(function (data) {
+                    {%  if value %}
+                    let id = {{ value.id }};
+                    {%  else %}
+                    let id = null;
+                    {%  endif %}
+                    for (var v in data) {
+                        $('#input-{{ id }}').append(new Option(data[v],v, null, (id == v)));
+                    }
+                    $('#eip-loader-{{ id }}').hide();
+                    $('#input-{{ id }}').select2({'width':'100%'});
+                    $('#input-{{ id }}').show();
+                });
+            }
+        }
+</script>

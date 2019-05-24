@@ -82,3 +82,83 @@ function createAutoCompleteFields() {
         });
     });
 }
+
+$(function() {
+    $('body').on('click', '.eap-edit-in-place', function () {
+        $(this).hide();
+        $('#' + $(this).attr('data-span-in-id')).show();
+        $('#' + $(this).attr('data-input-id')).focus();
+        if ($(this).attr('data-callback') && window[$(this).attr('data-callback')]) {
+            window[$(this).attr('data-callback')]();
+        }
+        $("select.select2").select2();
+    });
+
+    $('body').on('keypress', '.eap-edit-in-place-input', function(evt){
+        if(evt.keyCode == 13){
+            $(this).parent().find('.eap-edit-in-place-ok').click();
+        }
+    });
+
+    $('body').on('click','.eap-edit-in-place-close',function(){
+        var span = $('#' + $(this).attr('data-span-id'));
+        var span_in = $('#'+$(this).attr('data-span-in-id'));
+        span.show();
+        span_in.hide();
+    });
+
+    $('body').on('click','.eap-edit-in-place-eraser',function(){
+        $('#'+$(this).attr('data-input-id')).val(null);
+        $(this).siblings('.eap-edit-in-place-ok').click();
+    });
+
+    $('body').on('click','.eap-edit-in-place-ok',function(){
+        var elm = $(this);
+        elm.html('<i class="fa fa-spinner"></i>');
+        var id = $(this).attr('data-item-id');
+        var callback = $(this).attr('data-callback');
+        var fieldName = $(this).attr('data-field-name');
+        var cls = $(this).attr('data-class');
+        var reload = ($(this).attr('data-reload'))? $(this).attr('data-reload'):'value';
+        var line = ($(this).attr('data-line'))? $(this).attr('data-line'):null;
+        var type = ($(this).attr('data-type'))? $(this).attr('data-type'):'string';
+        var field= ($(this).attr('data-line'))? $(this).attr('data-field'):null;
+        var input = $('#'+ $(this).attr('data-input-id'));
+        var val = 0;
+        if(input.attr('type') == 'checkbox'){
+            val = input.is(':checked')
+        }else{
+            val = input.val();
+        }
+        var span = $('#'+ $(this).attr('data-span-id'));
+        var span_in = $('#'+ $(this).attr('data-span-in-id'));
+        console.log($(this).attr('data-target'));
+        $.ajax({
+            method: "POST",
+            url: $(this).attr('data-target'),
+            data: { id: id, fieldName: fieldName,value: val,cls: cls,reload: reload, type: type},
+            dataType: 'json',
+        }).done(function( retour ) {
+            if(retour.code == 'NOK'){
+                elm.html('<i style="color:red" class="fa fa-check-circle"></i> ('+retour.err+')');
+                input.val(retour.val);
+            }else{
+                if(reload == 'entity' && line) {
+                    $('#' + line).replaceWith(retour.val);
+                }else if(reload == 'field' && field){
+                    $('#' + field).replaceWith(retour.val);
+                }else{
+                    elm.html('<i style="color:#00a65a;" class="jsa-click fa fa-save"></i>');
+                    input.val(retour.val);
+                    span_in.hide();
+                    if(retour.val) span.html(retour.val); else span.html('<em>&nbsp;</em>');
+                    span.show();
+                }
+            }
+            if(callback) window[callback](retour,elm);
+        }).fail(function( error ){
+            elm.html('<i style="color:red" class="fa fa-check-circle"></i> (Error '+error.status+')');
+        });
+    });
+
+});

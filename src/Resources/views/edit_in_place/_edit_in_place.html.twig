@@ -1,0 +1,55 @@
+{% set loaderCallback = 'callback_' ~ id %}
+
+{% set eipType = easyadmin_get_eip_type(metadata, valueRaw) %}
+{% if eipType.withoutEipLayout %}
+    {#{% include eipType.template with {'loader':loaderCallback} %}#}
+{% else %}
+    <span class="eap-edit-in-place" id="span-{{ id }}"
+          data-input-id="input-{{ id}}"
+          data-span-in-id="span-in-{{ id }}"
+          data-field-name="{{ field }}"
+          {% if eipType.hasCallback %}data-callback="{{ loaderCallback }}"{% endif %}
+          data-item-id="{{ item.id }}">
+        {% if valueRaw is not null and valueRaw != "" %}
+            {{ value|raw }}
+        {% else %}
+            <em style="pointer:cursor;" class="fa fa-pencil"></em>
+        {% endif %}
+    </span>
+    <span id="span-in-{{ id }}" style="display:none;">
+        {% include eipType.template with {'loader':loaderCallback} %}
+        {%  set pathEip = '' %}
+        <span
+                {#  Attention: appeler avec siblings de edit-in-place-input #}
+                data-target="{{ path('easyadmin', {'action':'eip', 'entity': _entity_config.name, 'id': item.id}) }}"
+                data-item-id="{{ item.id }}"
+                data-field-name="{{ field }}"
+                data-span-id="span-{{ id }}"
+                data-input-id="input-{{ id }}"
+                data-span-in-id="span-in-{{ id }}"
+                data-type="{{ metadata.dataType }}"
+                {# data-class="{{ configurator.getAssociationClass(field.name) }}" #}
+                data-class="{{ _entity_config.class }}"
+                data-line="line-{{ item.id }}"
+                data-field="field-{{ id }}"
+                data-reload="line"
+                class="eap-edit-in-place-ok">
+                <i style="color:#00a65a; cursor:pointer;" class="fa fa-save" title="{{ 'lego.action.save' | trans }}"></i>
+        </span>
+        <span data-item-id="{{ item.id }}" data-field-name="{{ field }}"
+              data-span-id="span-{{ id }}"
+              data-span-in-id="span-in-{{ id }}"
+              class="eap-edit-in-place-close">
+            <i style="color:#dd4b39; cursor:pointer;" class="fa fa-close" title="Annuler"></i>
+        </span>
+        {% if eipType.canToErase %}
+            <span data-item-id="{{ item.id }}"
+                  data-input-id="input-{{ id }}"
+                  data-field-name="{{ field }}" class="eap-edit-in-place-eraser">
+                    <i style="cursor:pointer;" class="fa fa-eraser" title="Supprimer"></i>
+            </span>
+        {% endif %}
+    </span>
+
+    {% if link %} <a href="{{ link }}"><i class="fa fa-link"></i></a>{% endif %}
+{% endif %}

@@ -1,0 +1,8 @@
+<input  class="eap-edit-in-place-input" id="input-{{ id }}" type="text" value="{{ value| date('H:i') }}"/>
+<script>
+    $(function(){
+        $('#input-{{ id }}').timepicker({
+            'timeFormat':'HH:mm',
+        });
+    });
+</script>

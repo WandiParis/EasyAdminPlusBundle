@@ -720,4 +720,17 @@ class AdminController extends BaseAdminController
 
         return new JsonResponse($results);
     }
+
+    protected function eipAction(){
+        /* @var \Lle\EasyAdminPlusBundle\Service\EditInPlaceFactory $eipFactory */
+        $eipFactory = $this->get('lle.easy_admin_plus_edit_in_place.factory');
+        $entity = $this->em->getRepository($this->entity['class'])->findOneById($this->request->request->get('id'));
+        $method = 'set'.$this->request->request->get('fieldName');
+        $eipType = $eipFactory->getEditInPlaceType($this->request->request->get('type'));
+        $value = $eipType->getValueFromRequest($this->request);
+        $entity->$method($value);
+        $this->em->persist($entity);
+        $this->em->flush();
+        return new JsonResponse(['code'=>'OK', 'val' => $this->request->request->get('value')]);
+    }
 }
