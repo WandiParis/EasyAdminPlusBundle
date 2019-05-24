@@ -727,30 +727,39 @@ class AdminController extends BaseAdminController
         $entity = $this->em->getRepository($this->entity['class'])->findOneById($this->request->request->get('id'));
         $field = $this->request->request->get('fieldName');
         $view = $this->request->request->get('view');
-        $method = 'set'.$field;
-        $eipType = $eipFactory->getEditInPlaceType($this->request->request->get('type'));
-        $value = $eipType->getValueFromRequest($this->request);
-        $entity->$method($value);
-        $this->em->persist($entity);
-        $this->em->flush();
-        $template = $this->get('twig')->createTemplate('{{ easyadmin_render_field_for_list_view(name,item,metadata) }}');
-        $html = $template->render(['item'=>$entity,'metadata'=>$this->entity[$view]['fields'][$field], 'name'=> $this->entity['name']]);
-        return new JsonResponse(['code'=>'OK', 'html' => (string)html_entity_decode($html), 'val' => $eipType->formatValue($value)]);
+        if($this->entity[$view]['fields'][$field]['edit_in_place'] ?? false) {
+            $method = 'set' . $field;
+            $eipType = $eipFactory->getEditInPlaceType($this->request->request->get('type'));
+            $value = $eipType->getValueFromRequest($this->request);
+            $entity->$method($value);
+            $this->em->persist($entity);
+            $this->em->flush();
+            $template = $this->get('twig')->createTemplate('{{ easyadmin_render_field_for_list_view(name,item,metadata) }}');
+            $html = $template->render(['item' => $entity, 'metadata' => $this->entity[$view]['fields'][$field], 'name' => $this->entity['name']]);
+            return new JsonResponse(['code' => 'OK', 'html' => (string)html_entity_decode($html), 'val' => $eipType->formatValue($value)]);
+        }
+        return new JsonResponse(['code'=>'NOK', 'err'=> 'access denied']);
     }
 
     protected function eipEntityChoiceAction(){
         $request = $this->request;
-        $entitySource =  str_replace('/', '\\', $request->get('entity_source'));
-        $entitySourceId = $request->get('entity_source_id');
-        $entityTarget =  str_replace('/', '\\', $request->get('entity_target'));
-        $item = $this->em->getRepository($entitySource)->find($entitySourceId);
-        $list = $this->em->getRepository($entityTarget)->findAll();
-        $return = array();
-        if ($list) {
-            foreach ($list as $entity) {
-                $return[$entity->getId()] = (string)$entity;
+        $field = $this->request->request->get('fieldName');
+        $view = $this->request->request->get('view');
+        if($this->entity[$view]['fields'][$field]['edit_in_place'] ?? false) {
+            $entitySource = str_replace('/', '\\', $request->get('entity_source'));
+            $entitySourceId = $request->get('entity_source_id');
+            $entityTarget = str_replace('/', '\\', $request->get('entity_target'));
+            $item = $this->em->getRepository($entitySource)->find($entitySourceId);
+            $list = $this->em->getRepository($entityTarget)->findAll();
+            $return = array();
+            if ($list) {
+                foreach ($list as $entity) {
+                    $return[$entity->getId()] = (string)$entity;
+                }
             }
+            return new JsonResponse($return);
+        }else{
+            return new JsonResponse([]);
         }
-        return new JsonResponse($return);
     }
 }

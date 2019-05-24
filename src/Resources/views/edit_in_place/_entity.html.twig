@@ -13,7 +13,8 @@
                 url: '{{ path('easyadmin', {'action':'eipEntityChoice', 'entity': _entity_config.name, 'id': item.id})|raw }}',
                 data: {
                     'entity_target': '{{ metadata.targetEntity|replace({'\\':'/'}) }}',
-                    'fieldname': '{{ metadata.property }}',
+                    'fieldName': '{{ metadata.property }}',
+                    'view': '{{ view }}',
                     'entity_source': '{{ metadata.sourceEntity|replace({'\\':'/'})  }}',
                     'entity_source_id': {{ item.id }} },
                 dataType: "json",
