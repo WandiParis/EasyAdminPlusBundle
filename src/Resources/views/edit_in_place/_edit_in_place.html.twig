@@ -27,7 +27,7 @@
                 data-input-id="input-{{ id }}"
                 data-view="{{ view }}"
                 data-span-in-id="span-in-{{ id }}"
-                data-type="{{ metadata.type }}"
+                data-type="{{ eipType.type }}"
                 {%  if metadata.targetEntity is defined and metadata.targetEntity %}
                 data-class="{{ metadata.targetEntity|replace({'\\':'/'}) }}"
                 {%  endif %}

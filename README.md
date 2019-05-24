@@ -55,3 +55,4 @@ easy_admin_bundle:
 9. [Batch Action](doc/chapter-10.md)
 10. [Query Builder Method](doc/chapter-11.md)
 11. [Workflow handling](doc/chapter-workflow.md)
+12. [EditInPlace](doc/eip.md)

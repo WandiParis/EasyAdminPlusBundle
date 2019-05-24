@@ -64,7 +64,7 @@ lle_easy_admin_plus:
         methods:
             - list
         properties:
-            - { name: 'position', order: 'ASC' }
+            - { name: 'position', order: 'ASC' , edit_in_place: true}
             - { name: 'id', order: 'DESC' }
     # list og web assets to load in the backend pages
     assets:
@@ -201,6 +201,7 @@ lle_easy_admin_plus:
 
 * VichUploaderBundle
 * StofDoctrineExtensionsBundle
+
 
 ----------
 
