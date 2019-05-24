@@ -37,3 +37,10 @@ The type is calculated but if you want to use your own type use edit_in_place.ty
 ```yaml
 - { property: title, label: title, edit_in_place: {'type': 'string'} }
 ```
+
+This module comes from prestigeJo / lego but without 
+- the deep edit in place
+- reload of the line or the list (In easyadminplus you just can reload the field)
+- the customization of the list of choice of the entity type. 
+
+These features will come later
