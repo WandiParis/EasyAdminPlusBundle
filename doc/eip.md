@@ -26,11 +26,7 @@ class StringEipType extends AbstractEipType{
 
 Create your template
 ```twig
-{% if '\n' in valueRaw %}
-    <textarea  class=" form-control col-md-12" id="input-{{ id }}">{{ valueRaw }}</textarea>
-{% else %}
     <input  class="eap-edit-in-place-input" id="input-{{ id }}" type="text" value="{{ valueRaw }}"/>
-{% endif %}
 ```
 
 The type is calculated but if you want to use your own type use edit_in_place.type
