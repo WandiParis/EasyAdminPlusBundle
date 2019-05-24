@@ -13,6 +13,7 @@ namespace Lle\EasyAdminPlusBundle\Service;
 
 use Lle\EasyAdminPlusBundle\EditInPlaceType\DateEipType;
 use Lle\EasyAdminPlusBundle\EditInPlaceType\DateTimeEipType;
+use Lle\EasyAdminPlusBundle\EditInPlaceType\EipTypeInterface;
 use Lle\EasyAdminPlusBundle\EditInPlaceType\EntityEipType;
 use Lle\EasyAdminPlusBundle\EditInPlaceType\StringEipType;
 use Lle\EasyAdminPlusBundle\EditInPlaceType\TimeEipType;
@@ -22,23 +23,24 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 class EditInPlaceFactory
 {
 
-    public function __construct() {
+    private $types = [];
+
+    public function __construct(iterable $eipTypes)
+    {
+        foreach($eipTypes as $eipType){
+            if($eipType instanceof EipTypeInterface) {
+                if (array_key_exists($eipType->getType(), $this->types)) {
+                    throw new \Exception('The type edit in place ' . $eipType->getType() . ' already exist');
+                }
+                $this->types[$eipType->getType()] = $eipType;
+                $this->types[get_class($eipType)] = $eipType;
+            }
+        }
     }
 
-    public function getEditInPlaceType(?string $type){
-        $class = new StringEipType();
-        if($type == 'datetime'){
-            $class = new DateTimeEipType();
-        }else if($type == 'date') {
-            $class = new DateEipType();
-        }else if($type == 'time') {
-            $class =  new TimeEipType();
-        } elseif($type != null) {
-            $class=  new StringEipType();
-        } elseif($type == 'entity') {
-            $class = new EntityEipType();
-        }
-        return $class;
+    public function getEditInPlaceType(?string $type)
+    {
+        return $this->types[$type] ?? $this->types['string']  ?? new StringEipType();
     }
 
 

@@ -15,15 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 class TimeEipType extends AbstractEipType{
 
 
-    public function __construct(){
-
-    }
-
-    public function getTemplate(){
+    public function getTemplate(): string{
         return '@EasyAdmin/edit_in_place/_time.html.twig';
     }
 
-    public function formatValue($value){
+    public function formatValue($value):string{
         return $value->format('H:i');
     }
 
@@ -36,5 +32,9 @@ class TimeEipType extends AbstractEipType{
             $value = null;
         }
         return $value;
+    }
+
+    public function getType(): string{
+        return 'time';
     }
 }

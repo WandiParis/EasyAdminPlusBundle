@@ -1,0 +1,21 @@
+{% if valueRaw %}
+    {% set icon =  'check-square-o' %}
+    {% set value = 1 %}
+{% else %}
+    {% set icon =  'square-o' %}
+    {% set value = 0 %}
+{% endif %}
+<i class="fa fa-{{ icon }} eap-edit-in-place-bool"
+   data-target="{{ path('easyadmin', {'action':'eip', 'entity': _entity_config.name, 'id': item.id}) }}"
+   data-item-id="{{ item.id }}"
+   data-field-name="{{ field }}"
+   data-span-id="span-{{ id }}"
+   data-input-id="input-{{ id }}"
+   data-view="{{ view }}"
+   data-span-in-id="span-in-{{ id }}"
+   data-type="boolean"
+   data-class="{{ _entity_config.class }}"
+   data-line="line-{{ item.id }}"
+   data-field="field-{{ id }}"
+   data-reload="line"
+   data-value="{{ value }}"></i>

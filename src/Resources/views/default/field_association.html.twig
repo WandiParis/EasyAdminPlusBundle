@@ -1,4 +1,5 @@
 {% set no_link = field_options.no_link ?? false %}
+{% set eip = field_options.edit_in_place ?? false %}
 {% if value is iterable %}
     {% if 'show' == view %}
         {% if value|length > 0 %}
@@ -33,6 +34,8 @@
         {% endif %}
     {% endif %}
 {# a simple *-to-one value associated with an entity managed by this backend #}
+{% elseif eip and not no_link and link_parameters is defined %}
+    {{ value|easyadmin_truncate }} <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}"><i class="fa fa-link"></i></a>
 {% elseif not no_link and link_parameters is defined %}
     <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value|easyadmin_truncate }}</a>
 {% else %}

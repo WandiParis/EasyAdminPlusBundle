@@ -15,28 +15,23 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractEipType implements EipTypeInterface {
 
-
-    public function __construct(){
-
-    }
-
     public function getValueFromRequest(Request $request){
         return $request->request->get('value');
     }
 
-    public function getWithoutEipLayout(){
+    public function getWithoutEipLayout():bool {
         return false;
     }
 
-    public function formatValue($value){
+    public function formatValue($value):string{
         return nl2br((string)$value);
     }
 
-    public function canToErase(){
+    public function canToErase():bool {
         return false;
     }
 
-    public function hasCallback(){
+    public function hasCallback(): bool {
         return false;
     }
 }

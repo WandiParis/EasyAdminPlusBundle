@@ -1,0 +1,24 @@
+{% set editInPlace = metadata.edit_in_place ?? false %}
+{% if metadata.link is defined %}
+    {% set fragment = metadata.tab ?? null %}
+    {% set link = path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id, '_fragment': fragment})) %}
+{% else %}
+    {% set link = null %}
+{% endif %}
+{% if editInPlace %}
+    {{ include('@EasyAdmin/edit_in_place/_edit_in_place.html.twig',{
+        link: link,
+        id: _item_id ~ "_" ~ field,
+        metadata: metadata,
+        field: field,
+        value: value,
+        _entity_config: _entity_config,
+        valueRaw: easyadmin_render_raw_value(item, field),
+        item: item,
+        view: view
+    }) }}
+{% else %}
+    {% if link %}<a href="{{ link }}">{% endif %}
+    {{ value|raw }}
+    {% if link %}</a>{% endif %}
+{% endif %}

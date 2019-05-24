@@ -10,33 +10,49 @@
 
 namespace Lle\EasyAdminPlusBundle\EditInPlaceType;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Idk\LegoBundle\Action\EditInPlaceAction;
 use Symfony\Component\HttpFoundation\Request;
 
 class EntityEipType extends AbstractEipType{
 
 
-    public function __construct(){
+    private $em;
 
+    public function __construct(EntityManagerInterface $em){
+        $this->em = $em;
     }
 
-    public function getTemplate(){
+    public function getTemplate():string {
         return '@EasyAdmin/edit_in_place/_entity.html.twig';
     }
 
-    public function canToErase()
+    public function canToErase():bool 
     {
         return true;
     }
 
-    public function hasCallback()
+    public function formatValue($value):string{
+        if(method_exists($value, '__toString')){
+            return (string) $value;
+        }elseif(method_exists($value, 'getId')){
+            return $value->getId();
+        }else{
+            return '-';
+        }
+    }
+
+    public function hasCallback():bool 
     {
         return true;
     }
 
     public function getValueFromRequest(Request $request)
     {
-        return null;
-        //return $action->getEntityManager()->getRepository($request->request->get('cls'))->find($request->request->get('value'));
+        return $this->em->getRepository(str_replace('/', '\\', $request->request->get('cls')))->find($request->request->get('value'));
+    }
+    
+    public function getType(): string{
+        return 'association';
     }
 }

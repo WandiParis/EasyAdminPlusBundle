@@ -72,7 +72,15 @@
                             {% set _column_label =  (metadata.label ?: field|humanize)|trans(_trans_parameters)  %}
 
                             <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}">
-                                {{ easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) }}
+                                {{ include('@EasyAdmin/default/_field.html.twig',{
+                                    _item_id: _item_id,
+                                    metadata: metadata,
+                                    field: field,
+                                    _entity_config: _entity_config,
+                                    item: item,
+                                    value: easyadmin_render_field_for_list_view(_entity_config.name, item, metadata),
+                                    view: 'list'
+                                }) }}
                             </td>
                         {% endfor %}
                         {% if _list_item_actions|length > 0 %}

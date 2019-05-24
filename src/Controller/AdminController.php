@@ -725,12 +725,32 @@ class AdminController extends BaseAdminController
         /* @var \Lle\EasyAdminPlusBundle\Service\EditInPlaceFactory $eipFactory */
         $eipFactory = $this->get('lle.easy_admin_plus_edit_in_place.factory');
         $entity = $this->em->getRepository($this->entity['class'])->findOneById($this->request->request->get('id'));
-        $method = 'set'.$this->request->request->get('fieldName');
+        $field = $this->request->request->get('fieldName');
+        $view = $this->request->request->get('view');
+        $method = 'set'.$field;
         $eipType = $eipFactory->getEditInPlaceType($this->request->request->get('type'));
         $value = $eipType->getValueFromRequest($this->request);
         $entity->$method($value);
         $this->em->persist($entity);
         $this->em->flush();
-        return new JsonResponse(['code'=>'OK', 'val' => $this->request->request->get('value')]);
+        $template = $this->get('twig')->createTemplate('{{ easyadmin_render_field_for_list_view(name,item,metadata) }}');
+        $html = $template->render(['item'=>$entity,'metadata'=>$this->entity[$view]['fields'][$field], 'name'=> $this->entity['name']]);
+        return new JsonResponse(['code'=>'OK', 'html' => (string)html_entity_decode($html), 'val' => $eipType->formatValue($value)]);
+    }
+
+    protected function eipEntityChoiceAction(){
+        $request = $this->request;
+        $entitySource =  str_replace('/', '\\', $request->get('entity_source'));
+        $entitySourceId = $request->get('entity_source_id');
+        $entityTarget =  str_replace('/', '\\', $request->get('entity_target'));
+        $item = $this->em->getRepository($entitySource)->find($entitySourceId);
+        $list = $this->em->getRepository($entityTarget)->findAll();
+        $return = array();
+        if ($list) {
+            foreach ($list as $entity) {
+                $return[$entity->getId()] = (string)$entity;
+            }
+        }
+        return new JsonResponse($return);
     }
 }

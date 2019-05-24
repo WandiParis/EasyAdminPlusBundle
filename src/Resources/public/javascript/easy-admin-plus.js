@@ -112,6 +112,42 @@ $(function() {
         $(this).siblings('.eap-edit-in-place-ok').click();
     });
 
+    $('body').on('click','.eap-edit-in-place-bool',function(){
+        var elm = $(this);
+        var id = elm.attr('data-item-id');
+        var fieldName = elm.attr('data-field-name');
+        var val = (parseInt(elm.attr('data-value')) > 0)? 0:1;
+        var reload = ($(this).attr('data-reload'))? $(this).attr('data-reload'):'value';
+        var line = ($(this).attr('data-line'))? $(this).attr('data-line'):null
+        var field= ($(this).attr('data-line'))? $(this).attr('data-field'):null;
+        var type = ($(this).attr('data-type'))? $(this).attr('data-type'):'string';
+        var view= ($(this).attr('data-view'))? $(this).attr('data-view'):'list';
+        $.ajax({
+            method: "POST",
+            url: $(this).attr('data-target'),
+            data: { id: id, fieldName: fieldName,value: val,cls: '',reload: reload, type: type, view:view },
+            dataType: "json",
+        }).done(function( retour ) {
+            if(retour.code == 'NOK'){
+                alert('Une erreur est survenue ('+retour.err+')');
+            }else{
+                console.log(retour);
+                if(retour.val == 1 || retour.val == "1" || retour.val == "oui" || retour.val == 'true'){
+                    elm.removeClass('fa-square-o');
+                    elm.addClass('fa-check-square-o');
+                    elm.attr('data-value',1);
+                }else{
+                    elm.removeClass('fa-check-square-o');
+                    elm.addClass('fa-square-o');
+                    elm.attr('data-value',0);
+                }
+
+            }
+        }).fail(function( error ){
+            elm.html('<i style="color:red" class="fa fa-warning"></i>');
+        });
+    });
+
     $('body').on('click','.eap-edit-in-place-ok',function(){
         var elm = $(this);
         elm.html('<i class="fa fa-spinner"></i>');
@@ -122,7 +158,8 @@ $(function() {
         var reload = ($(this).attr('data-reload'))? $(this).attr('data-reload'):'value';
         var line = ($(this).attr('data-line'))? $(this).attr('data-line'):null;
         var type = ($(this).attr('data-type'))? $(this).attr('data-type'):'string';
-        var field= ($(this).attr('data-line'))? $(this).attr('data-field'):null;
+        var field= ($(this).attr('data-field'))? $(this).attr('data-field'):null;
+        var view= ($(this).attr('data-view'))? $(this).attr('data-view'):'list';
         var input = $('#'+ $(this).attr('data-input-id'));
         var val = 0;
         if(input.attr('type') == 'checkbox'){
@@ -136,24 +173,17 @@ $(function() {
         $.ajax({
             method: "POST",
             url: $(this).attr('data-target'),
-            data: { id: id, fieldName: fieldName,value: val,cls: cls,reload: reload, type: type},
+            data: { id: id, fieldName: fieldName,value: val,cls: cls,reload: reload, type: type, view:view},
             dataType: 'json',
         }).done(function( retour ) {
             if(retour.code == 'NOK'){
                 elm.html('<i style="color:red" class="fa fa-check-circle"></i> ('+retour.err+')');
                 input.val(retour.val);
             }else{
-                if(reload == 'entity' && line) {
-                    $('#' + line).replaceWith(retour.val);
-                }else if(reload == 'field' && field){
-                    $('#' + field).replaceWith(retour.val);
-                }else{
-                    elm.html('<i style="color:#00a65a;" class="jsa-click fa fa-save"></i>');
-                    input.val(retour.val);
-                    span_in.hide();
-                    if(retour.val) span.html(retour.val); else span.html('<em>&nbsp;</em>');
-                    span.show();
-                }
+                elm.html('<i style="color:#00a65a; curosr:pointer;" class="fa fa-save"></i>');
+                span_in.hide();
+                if(retour.val) span.html(retour.html); else span.html('<em>&nbsp;</em>');
+                span.show();
             }
             if(callback) window[callback](retour,elm);
         }).fail(function( error ){

@@ -12,13 +12,24 @@ namespace Lle\EasyAdminPlusBundle\EditInPlaceType;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class StringEipType extends AbstractEipType{
-    
+class BooleanEipType extends AbstractEipType{
+
+
     public function getTemplate(): string{
-        return '@EasyAdmin/edit_in_place/_string.html.twig';
+        return '@EasyAdmin/edit_in_place/_boolean.html.twig';
     }
 
-    public function getType(): string{
-        return 'string';
+    public function getWithoutEipLayout():bool
+    {
+        return true;
+    }
+
+    public function getValueFromRequest(Request $request)
+    {
+        return ($request->request->get('value') === '1');
+    }
+
+    public function getType():string{
+        return 'boolean';
     }
 }

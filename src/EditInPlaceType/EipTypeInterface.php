@@ -16,10 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 interface EipTypeInterface{
 
 
-    public function getTemplate();
+    public function getTemplate():string;
     public function getValueFromRequest(Request $request);
-    public function getWithoutEipLayout();
-    public function formatValue($value);
-    public function canToErase();
-    public function hasCallback();
+    public function getWithoutEipLayout():bool;
+    public function formatValue($value):string;
+    public function canToErase():bool;
+    public function hasCallback():bool;
+    public function getType():string;
 }

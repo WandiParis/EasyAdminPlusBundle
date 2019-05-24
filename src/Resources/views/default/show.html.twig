@@ -110,7 +110,15 @@
                       </label>
                       <div class="{{ value_css_class|default('col-sm-10') }} ">
                           <div class="form-control">
-                              {{ easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) }}
+                              {{ include('@EasyAdmin/default/_field.html.twig',{
+                                  _item_id: entity.id,
+                                  metadata: metadata,
+                                  field: field,
+                                  _entity_config: _entity_config,
+                                  item: entity,
+                                  value: easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata),
+                                  view: 'show'
+                              }) }}
                           </div>
 
                           {% if metadata.help|default('') != '' %}

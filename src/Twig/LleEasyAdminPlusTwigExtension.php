@@ -43,7 +43,7 @@ class LleEasyAdminPlusTwigExtension extends AbstractExtension
     }
     
     public function getEipType($fieldMetadata, $value){
-        return $this->eipFactory->getEditInPlaceType($fieldMetadata['dataType']);
+        return $this->eipFactory->getEditInPlaceType($fieldMetadata['type']);
     }
 
     public function getName()

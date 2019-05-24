@@ -19,11 +19,11 @@ class DateTimeEipType extends AbstractEipType{
 
     }
 
-    public function getTemplate(){
+    public function getTemplate():string{
         return '@EasyAdmin/edit_in_place/_datetime.html.twig';
     }
 
-    public function formatValue($value){
+    public function formatValue($value):string{
         return $value->format('d/m/Y H:i');
     }
 
@@ -36,5 +36,9 @@ class DateTimeEipType extends AbstractEipType{
             $value = null;
         }
         return $value;
+    }
+
+    public function getType(): string{
+        return 'datetime';
     }
 }

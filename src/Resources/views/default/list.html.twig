@@ -317,32 +317,16 @@
                         {% for field, metadata in fields %}
                             {% set isSortingField = metadata.property == app.request.get('sortField') %}
                             {% set _column_label =  (metadata.label ?: field|humanize)|trans(_trans_parameters)  %}
-                            {% set editInPlace = metadata.edit_in_place ?? false %}
-                            {% set value = easyadmin_render_field_for_list_view(_entity_config.name, item, metadata) %}
-
-
                             <td data-label="{{ _column_label }}" class="{{ isSortingField ? 'sorted' }} {{ metadata.dataType|lower }} {{ metadata.css_class }}" {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
-                                {%  if metadata.link is defined %}
-                                    {% set fragment = metadata.tab ?? null %}
-                                    {% set link = path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id, '_fragment': fragment})) %}
-                                {%  else %}
-                                    {% set link = null %}
-                                {%  endif %}
-                                {% if editInPlace %}
-                                    {{ include('@EasyAdmin/edit_in_place/_edit_in_place.html.twig',{
-                                        link: link,
-                                        id: _item_id ~ "-" ~ field,
-                                        metadata: metadata,
-                                        field: field,
-                                        value: value,
-                                        valueRaw: easyadmin_render_raw_value(item, field),
-                                        item: item
-                                    }) }}
-                                {%  else %}
-                                    {% if link %}<a href="{{ link }}">{%  endif %}
-                                    {{ value|raw }}
-                                    {% if link %}</a>{% endif %}
-                                {%  endif %}
+                                {{ include('@EasyAdmin/default/_field.html.twig',{
+                                    _item_id: _item_id,
+                                    metadata: metadata,
+                                    field: field,
+                                    _entity_config: _entity_config,
+                                    item: item,
+                                    value: easyadmin_render_field_for_list_view(_entity_config.name, item, metadata),
+                                    view: 'list'
+                                }) }}
                             </td>
                         {% endfor %}
 

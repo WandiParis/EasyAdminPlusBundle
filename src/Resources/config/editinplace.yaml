@@ -1,0 +1,33 @@
+services:
+
+  _defaults:
+    autowire: true
+    public: false
+
+  _instanceof:
+    Lle\EasyAdminPlusBundle\EditInPlaceType\EipTypeInterface:
+      tags: [lle.easy_admin_plus.edit_in_place]
+
+  Lle\EasyAdminPlusBundle\EditInPlaceType\DateEipType:
+      tags: [lle.easy_admin_plus.edit_in_place]
+
+  Lle\EasyAdminPlusBundle\EditInPlaceType\BooleanEipType:
+    tags: [lle.easy_admin_plus.edit_in_place]
+
+  Lle\EasyAdminPlusBundle\EditInPlaceType\DateTimeEipType:
+    tags: [lle.easy_admin_plus.edit_in_place]
+
+  Lle\EasyAdminPlusBundle\EditInPlaceType\TimeEipType:
+    tags: [lle.easy_admin_plus.edit_in_place]
+
+  Lle\EasyAdminPlusBundle\EditInPlaceType\StringEipType:
+    tags: [lle.easy_admin_plus.edit_in_place]
+
+  Lle\EasyAdminPlusBundle\EditInPlaceType\EntityEipType:
+    tags: [lle.easy_admin_plus.edit_in_place]
+    arguments: ["@doctrine.orm.entity_manager"]
+
+  lle.easy_admin_plus_edit_in_place.factory:
+    public: true
+    class: 'Lle\EasyAdminPlusBundle\Service\EditInPlaceFactory'
+    arguments: [!tagged lle.easy_admin_plus.edit_in_place]

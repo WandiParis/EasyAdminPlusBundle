@@ -2,6 +2,7 @@
 
 namespace Lle\EasyAdminPlusBundle\DependencyInjection;
 
+use Lle\EasyAdminPlusBundle\EditInPlaceType\EipTypeInterface;
 use Lle\EasyAdminPlusBundle\Filter\FilterType\FilterTypeInterface;
 use Lle\EasyAdminPlusBundle\Service\Batch\BatchInterface;
 use Lle\EasyAdminPlusBundle\Service\Exporter\ExporterInterface;
@@ -39,12 +40,14 @@ class LleEasyAdminPlusExtension extends Extension
         $container->setParameter('easy_admin_plus', $config);
         $container->setParameter('easy_admin_plus.translator.locales', $config['translator']['locales']);
         $container->registerForAutoconfiguration(FilterTypeInterface::class)->addTag('lle.easy_admin_plus.filter');
+        $container->registerForAutoconfiguration(EipTypeInterface::class)->addTag('lle.easy_admin_plus.edit_in_place');
         $container->registerForAutoconfiguration(BatchInterface::class)->addTag('lle.easy_admin_plus.batch');
         $container->registerForAutoconfiguration(ExporterInterface::class)->addTag('lle.exporter');
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
         $loader->load('form.yaml');
         $loader->load('filter.yaml');
+        $loader->load('editinplace.yaml');
     }
 
     private function processConfigTranslator(array $config, ContainerBuilder $container): array
