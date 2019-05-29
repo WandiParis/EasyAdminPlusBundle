@@ -148,6 +148,18 @@ $(function() {
         });
     });
 
+    $('body').on('mouseover', '.eap-edit-in-place', function(){
+        if($(this).attr('data-hover-icon')){
+            $('#' + $(this).attr('data-hover-icon')).show();
+        }
+    });
+
+    $('body').on('mouseout', '.eap-edit-in-place', function(){
+        if($(this).attr('data-hover-icon')){
+            $('#' + $(this).attr('data-hover-icon')).hide();
+        }
+    });
+
     $('body').on('click','.eap-edit-in-place-ok',function(){
         var elm = $(this);
         elm.html('<i class="fa fa-spinner"></i>');

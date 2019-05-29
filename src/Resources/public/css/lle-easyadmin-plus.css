@@ -131,3 +131,7 @@ img.country {
 #dropdownBatchActionButton {
    border: 1px solid #ddd;
 }
+
+.eap-edit-in-place{
+    cursor:pointer;
+}

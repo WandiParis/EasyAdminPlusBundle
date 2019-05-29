@@ -7,10 +7,11 @@
           data-input-id="input-{{ id}}"
           data-span-in-id="span-in-{{ id }}"
           data-field-name="{{ field }}"
+          data-hover-icon="icon-{{ id }}"
           {% if eipType.hasCallback %}data-callback="{{ loaderCallback }}"{% endif %}
           data-item-id="{{ item.id }}">
         {% if valueRaw is not null and valueRaw != "" %}
-            {{ value|raw }}
+            {{ value|raw }} <em style="pointer:cursor; display:none;" id="icon-{{ id }}" class="fa fa-pencil"></em>
         {% else %}
             <em style="pointer:cursor;" class="fa fa-pencil"></em>
         {% endif %}
@@ -36,7 +37,7 @@
                 data-field="field-{{ id }}"
                 data-reload="line"
                 class="eap-edit-in-place-ok">
-                <i style="color:#00a65a; cursor:pointer;" class="fa fa-save" title="{{ 'lego.action.save' | trans }}"></i>
+                <i style="color:#00a65a; cursor:pointer;" class="fa fa-save" title="{{ 'action.validate' | trans }}"></i>
         </span>
         <span data-item-id="{{ item.id }}" data-field-name="{{ field }}"
               data-span-id="span-{{ id }}"
@@ -48,7 +49,7 @@
             <span data-item-id="{{ item.id }}"
                   data-input-id="input-{{ id }}"
                   data-field-name="{{ field }}" class="eap-edit-in-place-eraser">
-                    <i style="cursor:pointer;" class="fa fa-eraser" title="Supprimer"></i>
+                    <i style="cursor:pointer;" class="fa fa-eraser" title="{{ 'action.close' | trans }}"></i>
             </span>
         {% endif %}
     </span>
