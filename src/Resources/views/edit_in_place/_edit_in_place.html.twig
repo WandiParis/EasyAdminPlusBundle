@@ -37,19 +37,19 @@
                 data-field="field-{{ id }}"
                 data-reload="line"
                 class="eap-edit-in-place-ok">
-                <i style="color:#00a65a; cursor:pointer;" class="fa fa-save" title="{{ 'action.validate' | trans }}"></i>
+                <i style="color:#00a65a; cursor:pointer;" class="fa fa-save" title="{{ 'action.validate' | trans({}, 'EasyAdminPlusBundle') }}"></i>
         </span>
         <span data-item-id="{{ item.id }}" data-field-name="{{ field }}"
               data-span-id="span-{{ id }}"
               data-span-in-id="span-in-{{ id }}"
               class="eap-edit-in-place-close">
-            <i style="color:#dd4b39; cursor:pointer;" class="fa fa-close" title="Annuler"></i>
+            <i style="color:#dd4b39; cursor:pointer;" class="fa fa-close" title="{{ 'action.close' | trans({}, 'EasyAdminPlusBundle') }}"></i>
         </span>
         {% if eipType.canToErase %}
             <span data-item-id="{{ item.id }}"
                   data-input-id="input-{{ id }}"
                   data-field-name="{{ field }}" class="eap-edit-in-place-eraser">
-                    <i style="cursor:pointer;" class="fa fa-eraser" title="{{ 'action.close' | trans }}"></i>
+                    <i style="cursor:pointer;" class="fa fa-eraser" title="{{ 'Effacer' | trans({}, 'EasyAdminPlusBundle') }}"></i>
             </span>
         {% endif %}
     </span>
