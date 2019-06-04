@@ -4,6 +4,7 @@ namespace Lle\EasyAdminPlusBundle\Controller;
 
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
+use Pagerfanta\Exception\OutOfRangeCurrentPageException;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -238,7 +239,11 @@ class AdminController extends BaseAdminController
             'sort_direction' => $sortDirection,
         ));
         $page = ($this->request->request->has('filter'))? 1:$page;
-        return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
+        try {
+            return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, $page, $maxPerPage);
+        }catch(OutOfRangeCurrentPageException $e){
+            return $this->get('easyadmin.paginator')->createOrmPaginator($queryBuilder, 1, $maxPerPage);
+        }
     }
 
 
