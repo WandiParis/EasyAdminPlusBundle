@@ -1,0 +1,9 @@
+{% extends '@BaseEasyAdmin/default/edit.html.twig' %}
+
+{% block content_title %}
+{% spaceless %}
+    {% set _trans_parameters = _trans_parameters|merge({ '%entity_toString%': entity }) %}
+    {% set _default_title = 'edit.page_title'|trans(_trans_parameters, 'EasyAdminBundle') %}
+    {{ _entity_config.edit.title is defined ? _entity_config.edit.title|trans(_trans_parameters) : _default_title }}
+{% endspaceless %}
+{% endblock %}
