@@ -146,8 +146,7 @@
                 {% else %}
                   {% set action = "Lle\\EasyAdminPlusBundle\\Controller\\AdminController:"~metadata.action %}
                 {% endif %}
-
-                {{ render(controller(action ,{'request':app.request, 'item':entity })) }}
+                {{ render(controller(action ,{'request':app.request, 'item':entity, 'options':metadata.options })) }}
               </div>
               <!-- /.tab-pane -->
             {% elseif metadata.type == 'sublist' %}
