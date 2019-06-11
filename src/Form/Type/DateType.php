@@ -43,12 +43,27 @@ class DateType extends AbstractType
     {
         $view->vars['id_date_picker'] = $view->vars['id'];
         $view->vars['date_format'] = $options['js_date_format'];
-        $view->vars['min'] = (is_string($options['min_day']))? '"'.$options['min_day'].'"':null;
-        $view->vars['max'] = (is_string($options['max_day']))? '"'.$options['max_day'].'"':null;
+        $view->vars['min'] = $this->treatMinMax($options['min_day']);
+        $view->vars['max'] = $this->treatMinMax($options['max_day']);
         $view->vars['noday'] = json_encode($options['no_day']);
         $view->vars['edit_year'] = $options['edit_year'];
         $view->vars['edit_month'] = $options['edit_month'];
         $view->vars['is_birthday'] = $options['is_birthday'];
+    }
+
+    private function treatMinMax($strDate){
+        if(substr($strDate,0,1) === '+' or substr($strDate,0,1) === '-'){
+            $now = new \DateTime();
+            $interval = new \DateInterval('P'. substr($strDate, 1, strlen($strDate)));
+            if(substr($strDate,0,1) === '+'){
+                $now->add($interval);
+            }else{
+                $now->sub($interval);
+            }
+            return '"'.$now->format('d/m/Y').'"';
+        }else{
+            return (is_string($strDate))? '"'.$strDate.'"':null;
+        }
     }
 
     public function getParent()
