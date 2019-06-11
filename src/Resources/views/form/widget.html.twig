@@ -42,6 +42,27 @@
     </script>
 {% endblock %}
 
+{% block lle_date_widget %}
+    <input class="form-control" type="text" value="{{ value }}" id="{{id_date_picker}}" {{ block('widget_attributes') }}/>
+    <script>
+        $(function(){
+            $('#{{id_date_picker}}').datepicker({
+                defaultDate: '{{ value }}',
+                dateFormat: '{{ date_format }}',
+                {% if edit_month %} changeMonth: {{ edit_month }}, {% endif %}
+                {% if edit_year %} changeYear: {{ edit_year }},{% endif %}
+                beforeShowDay: function(date) {
+                    var day = date.getDay();
+                    return [(JSON.parse('{{ noday }}').indexOf(day) < 0), ''];
+                },
+                {% if min is not null %} minDate: {{ min|raw }}, {% endif %}
+                {% if max is not null %} maxDate: {{ max|raw }}, {% endif %}
+                {% if is_birthday %} yearRange : 'c-100:c+1', {% endif %}
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block signature_widget %}
     <style>.kbw-signature { width: 200px; height: 100px; }</style>
     <div class="row">
