@@ -1,0 +1,15 @@
+{% if app.session is not null and app.session.started %}
+    <div id="flash-messages">
+        {% for label, messages in app.session.flashbag.all %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {% if  label|slice(-2)  == 'nt'%}
+                        {{ message|striptags }}
+                    {%  else %}
+                        {{ message|trans|striptags }}
+                    {%  endif %}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
