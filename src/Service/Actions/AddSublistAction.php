@@ -22,16 +22,18 @@ final class AddSublistAction
         $parent_entity = $request->query->get('parent_entity');
         $entity = $request->query->get('entity');
         $parent = $this->em->getRepository($parent_entity)->find($parent_id);
+        $form = $request->request->get('form');
+        if(isset($form['item_id']) && isset($form['item_id']['autocomplete'])) {
+            $child_id = $request->request->get('form')['item_id']['autocomplete'];
+            $child = $this->em->getRepository($entity)->find($child_id);
 
-        $child_id = $request->request->get('form')['item_id']['autocomplete'];
-        $child = $this->em->getRepository($entity)->find($child_id);
-        
-        $namespace = explode('\\', $entity);
-        $addMethod = 'add'.array_pop($namespace);
-        $parent->$addMethod($child);
-        
-        $this->em->persist($parent);
-        $this->em->flush();
+            $namespace = explode('\\', $entity);
+            $addMethod = 'add' . array_pop($namespace);
+            $parent->$addMethod($child);
+
+            $this->em->persist($parent);
+            $this->em->flush();
+        }
         if ($request->server->get('HTTP_REFERER')) {
             return new RedirectResponse($request->server->get('HTTP_REFERER'));
         } else {
