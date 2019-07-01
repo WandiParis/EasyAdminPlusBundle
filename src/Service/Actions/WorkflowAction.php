@@ -31,7 +31,7 @@ final class WorkflowAction
             $workflow->apply($object, $transition);
             $this->em->flush();
         } catch (LogicException $exception) {
-
+            $request->getSession()->getFlashBag()->add('error', $exception->getMessage());
         }
         if ($request->server->get('HTTP_REFERER')) {
             return new RedirectResponse($request->server->get('HTTP_REFERER'));
