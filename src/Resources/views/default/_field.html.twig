@@ -1,7 +1,11 @@
 {% set editInPlace = metadata.edit_in_place ?? false %}
 {% if metadata.link is defined %}
-    {% set fragment = metadata.tab ?? null %}
-    {% set link = path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id, '_fragment': fragment})) %}
+    {% if main_id is defined %}
+        {% set link = path('easyadmin', {'entity': entity, 'action': 'show', 'id': item.id}) %}
+    {% else %}
+        {% set fragment = metadata.tab ?? null %}
+        {% set link = path('easyadmin', app.request.query|merge({ action: metadata.link,id: item.id, '_fragment': fragment})) %}
+    {% endif %}
 {% else %}
     {% set link = null %}
 {% endif %}
