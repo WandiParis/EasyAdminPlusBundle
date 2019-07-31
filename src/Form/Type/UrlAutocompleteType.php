@@ -56,11 +56,15 @@ class UrlAutocompleteType extends AbstractType
         if ($options['placeholder']) {
             $view->vars['placeholder'] = $options['placeholder'];
         }
+
         if($options['path']){
             $path = $options['path'];
             $path['params']['action'] = $path['params']['action'] ?? 'autocomplete';
             $path['route'] = $path['route'] ?? 'easyadmin';
             $view->vars['url'] = $this->router->generate($path['route'], $path['params']);
+            if($options['value_filter'] === null and $view->vars['value'] and isset($options['class'])) {
+                $view->vars['value_label'] = $this->em->getRepository($options['class'])->find($view->vars['value']) ?? $view->vars['value'];
+            }
         }elseif($options['class']){
             $config = $this->configManager->getEntityConfigByClass($options['class']);
             $view->vars['url'] = $this->router->generate('easyadmin', ['action'=>'autocomplete', 'entity'=>$config['name']]);

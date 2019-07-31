@@ -737,8 +737,10 @@ class AdminController extends BaseAdminController
             $eipType = $eipFactory->getEditInPlaceType($this->request->request->get('type'));
             $value = $eipType->getValueFromRequest($this->request);
             $entity->$method($value);
+            $this->dispatch(EasyAdminEvents::PRE_UPDATE, array('entity' => $entity));
             $this->em->persist($entity);
             $this->em->flush();
+            $this->dispatch(EasyAdminEvents::POST_UPDATE, array('entity' => $entity));
             $template = $this->get('twig')->createTemplate('{{ easyadmin_render_field_for_list_view(name,item,metadata) }}');
             $html = $template->render(['item' => $entity, 'metadata' => $this->entity[$view]['fields'][$field], 'name' => $this->entity['name']]);
             return new JsonResponse(['code' => 'OK', 'html' => (string)html_entity_decode($html), 'val' => $eipType->formatValue($value)]);
