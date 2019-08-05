@@ -1,5 +1,5 @@
 {% extends '@BaseEasyAdmin/default/list.html.twig' %}
-
+{%  set items = paginator.currentPageResults %}
 {# Do not display SEARCH form if not granted #}
 {% block search_action %}
     {% if _entity_config.search is defined and is_easyadmin_granted(_entity_config, 'search', null) %}
@@ -105,10 +105,12 @@
 {% block body_javascript %}
     {{ parent() }}
     <script type="text/javascript">
+        {% if _entity_config.tree is defined and _entity_config.tree %}
         $(document).ready(function(){
 
             $("body.list .table-responsive table.table").treetable({ expandable: true, nodeIdAttr: 'id', parentIdAttr: 'parentId' });
         });
+        {%  endif %}
 
         var lle = {
             dialog: function(title,msg){
@@ -203,7 +205,7 @@
 
     {{ include('@EasyAdmin/default/includes/_select2_widget.html.twig') }}
 
-    {% if _entity_config.list.hasBatchActions %}
+    {% if _entity_config.list.hasBatchActions and items|length > 0 %}
         {{ include('@EasyAdmin/default/includes/_batchs_js.html.twig') }}
     {% endif %}
 
@@ -215,8 +217,7 @@
 
     {{ include(_entity_config.templates.paginator) }}
 
-    {% if _entity_config.list.hasBatchActions %}
-        <form action="#" method="POST" name="bulkform">
+    {% if _entity_config.list.hasBatchActions and items|length > 0  %}
         {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position' : 'top'}) }}
     {% endif %}
 
@@ -226,10 +227,10 @@
             {% block table_head %}
                 <tr>
 
-                    {% if _entity_config.list.hasBatchActions %}
-                        <td data-priority="0" style="width: 30px;">
-                            <input type="checkbox" id="js-all-bulk-checkbox" title="{{'label.batchselectall'|trans({}, 'EasyAdminPlusBundle')}}">
-                        </td>
+                    {% if _entity_config.list.hasBatchActions  and items|length > 0 %}
+                        <th data-priority="0" class="batch-checkbox" style="width: 30px;">
+                            <span><input type="checkbox" id="js-all-bulk-checkbox" title="{{'label.batchselectall'|trans({}, 'EasyAdminPlusBundle')}}"></span>
+                        </th>
                     {% endif %}
 
                     {% for field, metadata in fields %}
@@ -273,7 +274,7 @@
                     {% set parent_id = null %}
                 {% endif %}
 
-                {% for item in paginator.currentPageResults %}
+                {% for item in items %}
                     {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
                     {% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
 
@@ -310,7 +311,9 @@
                             {% if parent_id is defined and parent_id %}data-parent-id="{{parent_id}}" {% endif %}
                     >
                         {% if _entity_config.list.hasBatchActions %}
-                            <th><input type="checkbox" name="ids[]" value="{{ _item_id }}" class="js-bulk-checkbox"></th>
+                            <td class="batch-checkbox">
+                                <span><input type="checkbox" name="ids[]" value="{{ _item_id }}" class="js-bulk-checkbox"></span>
+                            </td>
                         {% endif %}
 
                         {# FIELDS #}
@@ -367,9 +370,9 @@
     </div>
 
     {% block batchActions %}
-        {% if _entity_config.list.hasBatchActions %}
+        {% if _entity_config.list.hasBatchActions and items|length > 0 %}
+            <input type="hidden" name="all-selection" value="0" id="all-selection" class="all-selection">
             {{ include('@EasyAdmin/default/includes/_batchs.html.twig', {'position': 'bottom'})  }}
-            </form>
         {% endif %}
 
     {% endblock batchActions %}

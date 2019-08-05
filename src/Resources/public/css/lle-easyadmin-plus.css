@@ -128,10 +128,29 @@ img.country {
    border-bottom: 1px solid #ddd;
 }
 
+td.batch-checkbox, th.batch-checkbox{
+    width:30px;
+    text-align:center;
+}
+
+th.batch-checkbox span{
+    padding: 10px 6px;
+    white-space: nowrap;
+    display: block;
+}
+
 #dropdownBatchActionButton {
    border: 1px solid #ddd;
 }
 
 .eap-edit-in-place{
     cursor:pointer;
+}
+
+.batchForms .select2-selection{
+    min-width:200px;
+}
+
+.batch-nb-item{
+    font-weight: bolder;
 }

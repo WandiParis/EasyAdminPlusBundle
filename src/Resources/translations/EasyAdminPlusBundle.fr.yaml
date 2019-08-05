@@ -105,7 +105,8 @@ label.batchActions:
     help: "Cocher des éléments dans le tableau pour accéder aux actions massives"
 batch:
     execute: Valider
-label.batchthispage: "Uniquement la page affichée"
+label.batchthispage: "Uniquement sur la page courante"
+label.batchallpage: "Sur toutes les pages"
 action.batchselectall: "Tout sélectionner"
 label.batchallselectactive: "Appliqué à tout"
 action.batchselectpage: "Sélectionner la page affichée"
@@ -114,6 +115,7 @@ label.selectionActive: "Sélection active"
 batch_modal:
     title: "Voulez vous effectuer cette action massive ?"
     action: "Valider"
+    actionname: "Action : "
     content: "Nombre d'éléments impactés : "
 
 action.cancel: Annuler
@@ -123,6 +125,7 @@ wf_modal:
     content: ""
 message.confirm-success: Votre action à été réalisé avec succès
 message.confirm: Voulez vous vraiment executé cette action ?
+flash.batch_success: '{1} Action "%action%" réussie sur %nb% élément|{0} Action "%action%" réussie sur aucun élément|]-Inf,Inf[ Action "%action%" réussie sur les %nb% éléments'
 action.close: Fermer
 action.validate: Valider
 Plus de filtres: Plus de filtres
