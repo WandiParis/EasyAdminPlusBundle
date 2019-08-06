@@ -678,12 +678,8 @@ class AdminController extends BaseAdminController
         $name = $this->request->request->get('name') ?? $this->request->query->get('name');
         $ids = $this->request->request->get('ids') ?? $this->request->query->get('ids');
         $allSelection = $this->request->request->get('all-selection');
-
         if($allSelection) {
-
             $ids = $this->findSelection($this->entity, $this->entity['class'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
-
-
         }
         $batchs = $this->entity['list']['batchs'];
         $ret = null;
@@ -693,13 +689,14 @@ class AdminController extends BaseAdminController
             if($batchs[$name]['form']){
                 $form = $this->createForm($batchs[$name]['form']);
                 $form->handleRequest($this->request);
-
                 if ($form->isSubmitted() && $form->isValid()) {
                     // data is an array with "name", "email", and "message" keys
                     $data = $form->getData();
                 }
             }
             $ret = $service->execute($this->request, $this->entity, $ids, $data);
+            $nb = \count($ids);
+            $this->addFlash('success nt', $this->get('translator')->transChoice('flash.batch_success', $nb, ['%action%' => $this->get('translator')->trans($batchs[$name]['label'] ?? $batchs[$name]['name']), '%nb%' => $nb], 'EasyAdminPlusBundle'));
 
         }
         if($ret) {

@@ -4,13 +4,14 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h4>{{ 'batch_modal.title'|trans({}, 'EasyAdminPlusBundle') }}</h4>
-                <p >{{ 'batch_modal.content'|trans({}, 'EasyAdminPlusBundle') }} <span id="batch_modal_nb_items" class="badge"></span></p>
+                <p>{{ 'batch_modal.actionname'|trans({}, 'EasyAdminPlusBundle') }} <strong><span class="batch-action-name"></span></strong></p>
+                <p >{{ 'batch_modal.content'|trans({}, 'EasyAdminPlusBundle') }} <span  class="badge batch-nb-item"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn">
                     {{ 'action.cancel'|trans({}, 'EasyAdminPlusBundle') }}
                 </button>
-                <button type="button" data-dismiss="modal" class="btn btn-danger btn-ok" id="modal-delete-button" >
+                <button type="button" data-dismiss="modal" class="btn btn-danger btn-ok" >
                     {{ 'batch_modal.action'|trans({}, 'EasyAdminPlusBundle') }}
                 </button>
             </div>
@@ -22,11 +23,21 @@
 <script>
     var nbItemsTotal = "{{  paginator.nbResults }}";
     var nbItemsSel = 0;
-    function doBulkAction(url) {
+    function doBulkAction(url, formname) {
         oneChecked = validateBulkCheckboxes();
         if(oneChecked) {
-            document.bulkform.action = url;
-            document.bulkform.submit();
+            var form = $('form[name="'+formname+'"]')
+            form.attr('action',url);
+            var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
+            $('.js-bulk-checkbox-mv').remove()
+            $('.js-bulk-checkbox').each(function(e){
+                let elm = $(this).clone()
+                elm.addClass('hidden js-bulk-checkbox-mv')
+                elm.removeClass('.js-bulk-checkbox')
+                form.append(elm)
+            })
+            form.append($('#all-selection'));
+            form.submit();
         }
 
         return false;
@@ -37,18 +48,30 @@
         var allChecked = true;
         var oneChecked = false;
 
-        var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
         nbItemsSel = 0;
-        for (var i=0; i<checkboxes.length; i++) {
-            var cb = checkboxes[i];
-            if (cb.checked == true) {
+        $('.js-bulk-checkbox').each(function(e){
+            var cb = $(this);
+            if (cb.is(':checked') == true) {
                 nbItemsSel++;
                 oneChecked = true;
+
             } else {
                 allChecked = false;
             }
+        });
+        if(allChecked){
+            $('.js-bulk-button').removeClass('disabled');
+            if($('#all-selection').val() == 0) {
+                $('.js-all-selection-none').removeClass('hidden');
+            } else {
+                $('.js-all-selection-active').removeClass('hidden');
+            }
+        }else{
+            $('.js-bulk-button').addClass('disabled');
+            $('.js-all-selection-none').addClass('hidden');
+            $('.js-all-selection-active').addClass('hidden');
+            $('#all-selection').val(0)
         }
-
         $('#js-all-bulk-checkbox').prop('checked', allChecked);
 
         if (oneChecked) {
@@ -60,6 +83,7 @@
             $('.batch_form').addClass('hidden');
             $('.js-bulk-button').addClass('disabled');
             $('.batch-actions-infos').removeClass('hidden');
+            $('.batch-list').html('{{ 'label.batchActions.title'|trans({}, 'EasyAdminPlusBundle') }}&nbsp;<span class="caret"></span>')
         }
         afficheSelection();
         return oneChecked;
@@ -68,20 +92,22 @@
     function afficheSelection() {
 
         if($('#all-selection').val() == 0) {
-            $('#batch_modal_nb_items').html(nbItemsSel);
+            $('.batch-nb-item').html(nbItemsSel);
         } else {
-            $('#batch_modal_nb_items').html(nbItemsTotal);
+            $('.batch-nb-item').html(nbItemsTotal);
         }
     }
 
-    function showBatchForm(name) {
+    function showBatchForm(name, icon, label) {
         $('.batch_form').addClass('hidden');
         if(name){
                 $('.batch_'+name).removeClass('hidden');
-
+                $('.batch-list').html('<i class="fa fa-' + icon + '"></i>&nbsp;' + label + '&nbsp;(<span class="batch-nb-item"></span>)&nbsp;<span class="caret"></span>')
+                $('.batch-action-name').html(label);
                 if( $('#batch_form_view_'+name).length ){
                     $(document).scrollTop( $('#batch_form_view_'+name).offset().top );
                 }
+            afficheSelection();
         }
     }
 
@@ -103,6 +129,7 @@
         }
         validateBulkCheckboxes();
     };
+
 
     $( ".js-all-selection" ).click(function() {
         if($('#all-selection').val() == 1) {
@@ -127,7 +154,8 @@
     $('#confirm-batch').on('click', '.btn-ok', function(e) {
             var $modalDiv = $(e.delegateTarget);
             var href = $(this).data('href');
-            doBulkAction(href);
+            var formname = $(this).data('formname');
+            doBulkAction(href, formname);
             $modalDiv.addClass('loading');
             setTimeout(function() {
                 $modalDiv.modal('hide').removeClass('loading');
@@ -136,6 +164,7 @@
     $('#confirm-batch').on('show.bs.modal', function(e) {
             var data = $(e.relatedTarget).data();
             $('.btn-ok', this).data('href', data.href);
+            $('.btn-ok', this).data('formname', data.form);
         });
 
     $('.js-bulk-button').on('click', function(e){
