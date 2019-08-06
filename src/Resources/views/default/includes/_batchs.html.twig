@@ -62,6 +62,7 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     {% set isForm = batch_forms[actiondata.name] is defined and position == 'bottom' %}
+                                    {% set hasBtn = batch_forms[actiondata.name] is not defined or position == 'bottom' %}
                                     <div {% if isForm %}class="batchForms form-inline"
                                          id="batch_form_view_{{ actiondata.name }}"{% endif %} >
                                         {% if isForm %}
@@ -70,7 +71,7 @@
                                                     <div class="form-group">
                                                         <div class="input-group">
                                                             <div class="input-group-addon">
-                                                                <label>{% if field.vars.label %}{{ field.vars.label }}{% elseif(loop.first) %}{{ (actiondata.label)|trans }}</label>{% endif %}
+                                                                <label>{% if field.vars.label %}{{ field.vars.label|trans }}{% elseif(loop.first) %}{{ (actiondata.label)|trans }}</label>{% endif %}
                                                             </div>
                                                             {{ form_widget(field) }}
                                                         </div>
@@ -80,14 +81,16 @@
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
-                                        <button class="btn btn-primary js-bulk-button disabled"
-                                                {% if actiondata.confirm %}
-                                            data-toggle="modal" data-target="#confirm-batch" data-href="{{ href }}" data-form="{{ formname }}"
-                                        {% else %}
-                                            onclick="return doBulkAction('{{ href }}', '{{ formname }}')"
-                                                {% endif %}>{{ 'batch.execute'|trans({}, 'EasyAdminPlusBundle') }}
-                                            {% if not isForm %}"<span class="batch-action-name"></span>"{% endif %}
-                                        </button>
+                                        {% if hasBtn%}
+                                            <button class="btn btn-primary js-bulk-button disabled"
+                                                    {% if actiondata.confirm %}
+                                                         data-toggle="modal" data-target="#confirm-batch" data-href="{{ href }}" data-form="{{ formname }}"
+                                                    {% else %}
+                                                        onclick="return doBulkAction('{{ href }}', '{{ formname }}')"
+                                                    {% endif %}>{{ 'batch.execute'|trans({}, 'EasyAdminPlusBundle') }}
+                                                {% if not isForm %}"<span class="batch-action-name"></span>"{% endif %}
+                                            </button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
