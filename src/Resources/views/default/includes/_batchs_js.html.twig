@@ -29,9 +29,11 @@
             var form = $('form[name="'+formname+'"]')
             form.attr('action',url);
             var checkboxes = document.querySelectorAll('.js-bulk-checkbox');
+            $('.js-bulk-checkbox-mv').remove()
             $('.js-bulk-checkbox').each(function(e){
                 let elm = $(this).clone()
-                elm.addClass('hidden')
+                elm.addClass('hidden js-bulk-checkbox-mv')
+                elm.removeClass('.js-bulk-checkbox')
                 form.append(elm)
             })
             form.append($('#all-selection'));
@@ -81,7 +83,7 @@
             $('.batch_form').addClass('hidden');
             $('.js-bulk-button').addClass('disabled');
             $('.batch-actions-infos').removeClass('hidden');
-            $('.batch-list').html('{{ 'label.batchActions.title'|trans({}, 'EasyAdminPlusBundle') }}<span class="caret"></span>')
+            $('.batch-list').html('{{ 'label.batchActions.title'|trans({}, 'EasyAdminPlusBundle') }}&nbsp;<span class="caret"></span>')
         }
         afficheSelection();
         return oneChecked;
