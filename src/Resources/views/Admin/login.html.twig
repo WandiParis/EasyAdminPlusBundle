@@ -4,46 +4,61 @@
     {{ 'login.title'|trans({}, 'EasyAdminPlusBundle') }}
 {% endblock %}
 
-{% block body %}
-    <body>
+{% block body_class 'page-login' %}
 
-    <div class="login-container">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4">
-                    <h1 class="page-title">{{ config.site_name|raw }}</h1>
-                    <div class="well">
-                        {% if error %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ error.messageKey|trans(error.messageData, 'security') }}
-                            </div>
-                        {% endif %}
+{% block wrapper_wrapper %}
+    {% set _username_label = username_label is defined ? username_label|trans : 'login.username'|trans({}, 'EasyAdminBundle') %}
+    {% set _password_label = password_label is defined ? password_label|trans : 'login.password'|trans({}, 'EasyAdminBundle') %}
+    {% set _sign_in_label = sign_in_label is defined ? sign_in_label|trans : 'login.sign_in'|trans({}, 'EasyAdminBundle') %}
 
-                        <form action="{{ path("wandi_easy_admin_plus_login") }}" method="post">
-                            <div class="form-group">
-                                <label for="username">{{ 'login.username'|trans({}, 'EasyAdminPlusBundle') }}</label>
-                                <input type="text" id="username" class="form-control" name="_username" value="{{ lastUsername }}" required="required"/>
-                            </div>
+    <div class="login-wrapper">
+        <header class="main-header mb-4">
+            <div id="header-logo">
+                {% block header_logo %}
+                    <a class="logo {{ easyadmin_config('site_name')|length > 14 ? 'logo-long' }}" title="{{ easyadmin_config('site_name')|striptags }}" href="{{ path('easyadmin') }}">
+                        {{ easyadmin_config('site_name')|raw }}
+                    </a>
+                {% endblock header_logo %}
+            </div>
+        </header>
 
-                            <div class="form-group">
-                                <label for="password">{{ 'login.password'|trans({}, 'EasyAdminPlusBundle') }}</label>
-                                <input type="password" id="password" class="form-control" name="_password" required="required"/>
-                            </div>
+        {% if error|default(false) %}
+            <div class="w-100 alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-                            <div class="checkbox">
-                                <label for="remember_me">
-                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
-                                    {{ 'login.remember_me'|trans({}, 'EasyAdminPlusBundle') }}
-                                </label>
-                            </div>
+        <section class="content">
+            <form action="{{ path("wandi_easy_admin_plus_login") }}" method="post">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                            <input type="submit" id="_submit" class="btn btn-primary btn-block btn-lg" name="_submit" value="{{ 'login.submit'|trans({}, 'EasyAdminPlusBundle') }}"/>
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                        </form>
+                <div class="form-group field">
+                    <label for="username" class="sr-only form-control-label required">{{ _username_label }}</label>
+                    <div class="form-widget form-widget-with-icon">
+                        <i class="fa fa-fw fa-user"></i>
+                        <input type="text" id="username" name="{{ username_parameter|default('_username') }}" class="form-control" placeholder="{{ _username_label }}" value="{{ last_username|default('') }}" required autofocus>
                     </div>
                 </div>
-            </div>
-        </div>
+
+                <div class="form-group field-password">
+                    <label for="password" class="sr-only form-control-label required">{{ _password_label }}</label>
+                    <div class="form-widget form-widget-with-icon">
+                        <i class="fa fa-fw fa-lock"></i>
+                        <input type="password" id="password" name="{{ password_parameter|default('_password') }}" class="form-control" placeholder="{{ _password_label }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group field-checkbox">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="remember_me">
+                        <label class="custom-control-label" for="remember_me">{{ 'login.remember_me'|trans({}, 'EasyAdminPlusBundle') }}</label>
+                    </div>
+                </div>
+
+                <div class="form-group field-button">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="this.form.submit(); this.disabled=true;">{{ _sign_in_label }}</button>
+                </div>
+            </form>
+        </section>
     </div>
-    </body>
 {% endblock %}
