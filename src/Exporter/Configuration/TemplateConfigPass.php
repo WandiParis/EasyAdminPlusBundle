@@ -43,8 +43,8 @@ class TemplateConfigPass implements ConfigPassInterface
 
                     // needed to add support for immutable datetime/date/time fields
                     // (which are rendered using the same templates as their non immutable counterparts)
-                    if ('_immutable' === substr($fieldMetadata['dataType'], -10)) {
-                        $fieldTemplateName = 'field_'.substr($fieldMetadata['dataType'], 0, -10);
+                    if ('_immutable' === mb_substr($fieldMetadata['dataType'], -10)) {
+                        $fieldTemplateName = 'field_'.mb_substr($fieldMetadata['dataType'], 0, -10);
                     } else {
                         $fieldTemplateName = 'field_'.$fieldMetadata['dataType'];
                     }

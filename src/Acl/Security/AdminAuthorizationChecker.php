@@ -48,12 +48,12 @@ class AdminAuthorizationChecker
 
     protected function getRequiredRole(array $entity, string $actionName)
     {
-        if (isset($entity[$actionName]) && isset($entity[$actionName]['role'])) {
-            return $entity[$actionName]['role'];
-        } elseif (isset($entity['role_prefix'])) {
-            return $entity['role_prefix'].'_'.strtoupper($actionName);
+        if (isset($entity[$actionName]) && isset($entity[$actionName]['permission'])) {
+            return $entity[$actionName]['permission'];
+        } elseif (isset($entity['permission_prefix'])) {
+            return $entity['permission_prefix'].'_'.strtoupper($actionName);
         }
 
-        return $entity['role'] ?? null;
+        return $entity['permission'] ?? null;
     }
 }

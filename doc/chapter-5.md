@@ -143,9 +143,9 @@ In this example, we:
 
 ### ACL
 
-Thanks to [ACL](chapter-4.md) feature, you can restrict `Export` action to a specific `role`.
+You can restrict `Export` action to a specific `permission`.
 
-Simply add the minimum role required to get the feature enabled:
+Simply add the minimum permission required to get the feature enabled:
 
 ```yaml
 # config/packages/easy_admin.yaml
@@ -166,7 +166,7 @@ easy_admin:
             delete:
                 # ...
             export:
-                role: ROLE_EASY_ADMIN_SUPER
+                permission: ROLE_EASY_ADMIN_SUPER
                 fields:
                     # ...
 ```
