@@ -1,10 +1,6 @@
-### :exclamation: Warning :exclamation:
-
-**If you want to use `EasyAdminBundle 1.x`, browse [EasyAdminPlusBundle 1.x](https://github.com/WandiParis/EasyAdminPlusBundle/tree/1.x)**
-
-----------
-
 # EasyAdminPlusBundle
+
+**:exclamation: If you want to use `EasyAdminBundle 1.x`, browse [EasyAdminPlusBundle 1.x](https://github.com/WandiParis/EasyAdminPlusBundle/tree/1.x)**
 
 ### About
 
