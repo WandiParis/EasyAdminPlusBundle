@@ -108,6 +108,8 @@ easy_admin:
 
 **If you used the vertical `form_theme`, simply remove it, you can still use flex grid with the `columns` attribute (see above)**
 
+### Before
+
 ```yaml
 # config/packages/easy_admin/design.yaml
 easy_admin:
@@ -118,3 +120,17 @@ easy_admin:
     # ...
 ```
 
+### After
+
+```yaml
+# config/packages/easy_admin/design.yaml
+easy_admin:
+    # ...
+    design:
+        form_theme:
+            #- 'vertical'
+            # other form_themes...
+    # ...
+```
+
+And that's it!
