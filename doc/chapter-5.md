@@ -58,11 +58,11 @@ We recover the current `Paginator` (and the `query` from the `Search` if used) t
 
 We use the twig Extension to render each field based on `EasyAdmin` type guessing.
 
-So, all your [format settings](https://symfony.com/doc/master/bundles/EasyAdminBundle/book/list-search-show-configuration.html#formatting-dates-and-numbers) like date, numbers, [...] will be applied to your CSV export.
+So, all your [format settings](https://symfony.com/doc/1.x/bundles/EasyAdminBundle/book/list-search-show-configuration.html) like date, numbers, [...] will be applied to your CSV export.
 
 It means that Doctrine allows us to render correctly all the native types like `string` (`varchar`, `text`), `numbers` (`*int`, `float`), `date` (`date`, `datetime`, `timestamp`, [...]) and `associations` (thanks to `__toString`).
 
-To see the complete list, check all the files named `field_{*}.html.twig` in `EasyAdmin` [default views](https://github.com/EasyCorp/EasyAdminBundle/tree/master/src/Resources/views/default):
+To see the complete list, check all the files named `field_{*}.html.twig` in `EasyAdmin` [default views](https://github.com/EasyCorp/EasyAdminBundle/tree/1.x/src/Resources/views/default):
 > vendor/easycorp/easyadmin-bundle/Resources/views/default
 
 `WandiEasyAdminPlus` simply overrides the following fields to strip some extra infos and html tags for proper text plain formatting:
@@ -97,8 +97,8 @@ In this node, you can:
 * put a human readable label for each field (legend for each column on the first line)
 * choose fields order
 * restrict fields you want to be present on the export 
-* use [custom type](https://symfony.com/doc/master/bundles/EasyAdminBundle/book/list-search-show-configuration.html#property-types-defined-by-easyadmin) supported by `EasyAdmin`
-* override a field with a [custom template](https://symfony.com/doc/master/bundles/EasyAdminBundle/book/list-search-show-configuration.html#rendering-entity-properties-with-custom-templates)
+* use [custom type](https://symfony.com/doc/1.x/bundles/EasyAdminBundle/book/list-search-show-configuration.html#property-types-defined-by-easyadmin) supported by `EasyAdmin`
+* override a field with a [custom template](https://symfony.com/doc/1.x/bundles/EasyAdminBundle/book/list-search-show-configuration.html#rendering-entity-properties-with-custom-templates)
 
 ```yaml
 # config/packages/easy_admin.yaml
@@ -129,7 +129,7 @@ easy_admin:
                     - { property: 'createdAt', label: 'Date de création', type: 'datetime' }
 ```
 
-We perform the same configuration passes than `EasyAdmin`, so you can write the `properties` the [way you want](https://symfony.com/doc/master/bundles/EasyAdminBundle/book/list-search-show-configuration.html#customize-the-properties-displayed).
+We perform the same configuration passes than `EasyAdmin`, so you can write the `properties` the [way you want](https://symfony.com/doc/1.x/bundles/EasyAdminBundle/book/list-search-show-configuration.html#customize-the-properties-displayed).
 
 In this example, we:
 * choose a custom fields order
