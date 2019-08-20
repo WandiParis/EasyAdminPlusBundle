@@ -32,7 +32,7 @@ easy_admin:
                 # action is enabled for Product Entity!
 ```
 
-A new button is visible on top of `List` action, beside `New` action.
+A new button is visible on top of `List` action, beside `Search` action.
 
 <p align="center">
     <img src="images/export-button.png" align="center" alt="Export Button" />
