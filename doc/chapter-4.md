@@ -7,7 +7,7 @@ See the related feature to implement `entity/action role permissions`:
 * [#2810](https://github.com/EasyCorp/EasyAdminBundle/pull/2810)
 * [#2829](https://github.com/EasyCorp/EasyAdminBundle/pull/2829)
 
-The `ACL` feature have been removed from `EasyAdminPlusBundle`.
+The `ACL` feature have been removed from `EasyAdminPlusBundle` except for the `Export` action (see below).
 
 ----------
 
