@@ -25,22 +25,8 @@ class AdminAuthorizationExtension extends AbstractExtension
         );
     }
 
-    public function getFilters()
-    {
-        return array(
-            new TwigFilter('prune_item_actions', array($this, 'pruneItemsActions')),
-        );
-    }
-
     public function isEasyAdminGranted(array $entity, string $actionName = 'list')
     {
         return $this->adminAuthorizationChecker->isEasyAdminGranted($entity, $actionName);
-    }
-
-    public function pruneItemsActions(array $itemActions, array $entity, array $forbiddenActions = [])
-    {
-        return array_filter($itemActions, function ($action) use ($entity, $forbiddenActions) {
-            return !in_array($action, $forbiddenActions) && $this->isEasyAdminGranted($entity, $action);
-        }, ARRAY_FILTER_USE_KEY);
     }
 }

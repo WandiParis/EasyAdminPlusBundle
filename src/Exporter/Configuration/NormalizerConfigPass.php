@@ -52,19 +52,19 @@ class NormalizerConfigPass implements ConfigPassInterface
                 if (!array_key_exists($view, $backendConfig['entities'][$entityName])){
                     continue;
                 }
-                $fields = array();
+                $fields = [];
                 foreach ($entityConfig[$view]['fields'] as $i => $field) {
-                    if (!is_string($field) && !is_array($field)) {
+                    if (!\is_string($field) && !\is_array($field)) {
                         throw new \RuntimeException(sprintf('The values of the "fields" option for the "%s" view of the "%s" entity can only be strings or arrays.', $view, $entityConfig['class']));
                     }
 
-                    if (is_string($field)) {
+                    if (\is_string($field)) {
                         // Config format #1: field is just a string representing the entity property
-                        $fieldConfig = array('property' => $field);
+                        $fieldConfig = ['property' => $field];
                     } else {
                         // Config format #1: field is an array that defines one or more
                         // options. Check that either 'property' or 'type' option is set
-                        if (!array_key_exists('property', $field) && !array_key_exists('type', $field)) {
+                        if (!\array_key_exists('property', $field) && !\array_key_exists('type', $field)) {
                             throw new \RuntimeException(sprintf('One of the values of the "fields" option for the "%s" view of the "%s" entity does not define neither of the mandatory options ("property" or "type").', $view, $entityConfig['class']));
                         }
 
@@ -88,7 +88,7 @@ class NormalizerConfigPass implements ConfigPassInterface
                     }
 
                     // fields that don't define the 'property' name are special form design elements
-                    $fieldName = isset($fieldConfig['property']) ? $fieldConfig['property'] : '_easyadmin_form_design_element_'.$designElementIndex;
+                    $fieldName = $fieldConfig['property'] ?? '_easyadmin_form_design_element_'.$designElementIndex;
                     $fields[$fieldName] = $fieldConfig;
                     ++$designElementIndex;
                 }

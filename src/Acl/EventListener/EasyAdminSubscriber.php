@@ -26,12 +26,21 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     {
         // return the subscribed events, their methods and priorities
         return array(
+            /**
+             * Removed in WandiEasyAdminPlus 1.0, roles are now part of EasyAdmin!
+             *
+             * See:
+             * - https://github.com/EasyCorp/EasyAdminBundle/pull/2806
+             * - https://github.com/EasyCorp/EasyAdminBundle/pull/2810
+             * - https://github.com/EasyCorp/EasyAdminBundle/pull/2829
+            /*
             EasyAdminEvents::PRE_NEW => 'checkUserRights',
             EasyAdminEvents::PRE_LIST => 'checkUserRights',
             EasyAdminEvents::PRE_SEARCH => 'checkUserRights',
             EasyAdminEvents::PRE_EDIT => 'checkUserRights',
             EasyAdminEvents::PRE_SHOW => 'checkUserRights',
             EasyAdminEvents::PRE_DELETE => 'checkUserRights',
+            */
             EasyAdminPlusExporterEvents::PRE_EXPORT => 'checkUserRights',
         );
     }
