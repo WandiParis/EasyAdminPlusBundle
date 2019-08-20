@@ -184,8 +184,8 @@ easy_admin:
 {% extends '@BaseEasyAdmin/default/list.html.twig' %}
 
 {% block global_actions %}
-    {# Do not display EXPORT button if not defined and not granted #}
-    {% dump(_entity_config.export) %}
+
+    {# Do not display EXPORT button if not defined and not granted #}    
     {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
         {% set _action = easyadmin_get_action_for_list_view('new', _entity_config.name) %}
         <div class="button-action">
