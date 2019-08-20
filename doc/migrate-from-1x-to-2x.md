@@ -70,13 +70,13 @@ easy_admin:
             class: App\Entity\Article
             list:
                 fields: 
-                    - { type: 'group', columns: 6, label: 'Infos', icon: 'info-circle' }
-                    - { property: title, columns: 6, label: 'Title' }
-                    - { property: slug, columns: 6, label: 'Slug' }
+                    - { type: 'group', css_class: 'col-sm-6', label: 'Infos', icon: 'info-circle' }
+                    - { property: title, css_class: 'col-sm-6', label: 'Title' }
+                    - { property: slug, css_class: 'col-sm-6', label: 'Slug' }
                     - { type: 'group', label: 'NB', icon: 'bar-chart' }
-                    - { property: nbLikes, columns: 4, label: 'NB Likes', type_options: { disabled: true } }
-                    - { property: nbComments, columns: 4, label: 'NB Comments', type_options: { disabled: true } }
-                    - { property: nbShares, columns: 4, label: 'NB Shares', type_options: { disabled: true } }
+                    - { property: nbLikes, css_class: 'col-sm-4', label: 'NB Likes', type_options: { disabled: true } }
+                    - { property: nbComments, css_class: 'col-sm-4', label: 'NB Comments', type_options: { disabled: true } }
+                    - { property: nbShares, css_class: 'col-sm-4', label: 'NB Shares', type_options: { disabled: true } }
                     # ...
 ```
 
