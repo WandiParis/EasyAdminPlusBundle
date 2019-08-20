@@ -21,20 +21,9 @@ If you've installed `EasyAdminPlus` v1.x and you want to upgrade to 2.x, follow 
 
 ## EasyAdmin Configuration Update - ACL
 
-`EasyAdminBundle` introduced `entity/action role permissions` in version 2.x thanks to the `item_permission` attribute.
+### Before
 
-```yaml
-# config/packages/entities/{entity}.yaml
-easy_admin:
-    entities:
-        Product:
-            class: App\Entity\Product
-            list:
-                item_permission: ['ROLE_EASY_ADMIN_SUPER']
-                # ...
-```
-
-Sadly in `EasyAdminPlusBundle` 1.x, we implemented this feature thanks to the `role` attribute.
+`EasyAdminPlusBundle` 1.x implementeded `entity/action role permissions` thanks to the `role` attribute.
 
 ```yaml
 # config/packages/entities/{entity}.yaml
@@ -47,7 +36,21 @@ easy_admin:
                 # ...
 ```
 
-** Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin` directory) for `role:` occurrences and just replace them by `item_permission`**
+### After
+
+Sadly `EasyAdminBundle` introduced this feature with to the `item_permission` attribute.
+
+```yaml
+# config/packages/entities/{entity}.yaml
+easy_admin:
+    entities:
+        Product:
+            class: App\Entity\Product
+            list:
+                item_permission: ['ROLE_EASY_ADMIN_SUPER']
+                # ...
+```
+**Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin` directory) for `role:` occurrences and just replace them by `item_permission`**
 
 <p align="center">
     <img src="images/upgrade-1-to-2-acl.png" align="center" alt="PhpStorm Replace" />
@@ -97,7 +100,7 @@ easy_admin:
                     # ...
 ```
 
-** Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin` directory) for `css_class: 'col-sm-(\d?)'` occurrences and just replace them by `columns: $1`**
+**Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin` directory) for `css_class: 'col-sm-(\d?)'` occurrences and just replace them by `columns: $1`**
 
 <p align="center">
     <img src="images/upgrade-1-to-2-bootstrap.png" align="center" alt="PhpStorm Replace" />
