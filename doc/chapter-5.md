@@ -181,23 +181,22 @@ easy_admin:
 ```twig
 {# vendor/wandi/easyadmin-plus-bundle/resources/views/default/list.html.twig #}
 
-{# ... #} 
+{% extends '@BaseEasyAdmin/default/list.html.twig' %}
 
-{% block new_action %}
-    {# Do not display EXPORT button if not defined or not granted #}
+{% block global_actions %}
+    {# Do not display EXPORT button if not defined and not granted #}
+    {% dump(_entity_config.export) %}
     {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
-      {% set referer = app.request.server.get('http-referer')|default('/') %}
-      <div class="button-action">
-        <a class="btn btn-primary" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
-          <i class="fa fa-download"></i>
-            {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
-        </a>
-      </div>
-  {% endif %}
-  {# Do not display NEW button if not granted #}
-  {% if is_easyadmin_granted(_entity_config, 'new') %}
+        {% set _action = easyadmin_get_action_for_list_view('new', _entity_config.name) %}
+        <div class="button-action">
+            <a class="btn btn-primary" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
+                <i class="fa fa-download"></i>
+                {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
+            </a>
+        </div>
+    {% endif %}
+
     {{ parent() }}
-  {% endif %}
 {% endblock %}
 ```
 
