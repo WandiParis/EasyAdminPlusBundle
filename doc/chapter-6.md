@@ -1,11 +1,3 @@
-### :exclamation: Warning :exclamation:
-
-**You're browsing the documentation of `EasyAdminPlusBundle 1.x` for [EasyAdminBundle 1.x](https://github.com/EasyCorp/EasyAdminBundle/tree/1.x).**
-
-**If you want to use the latest version of `EasyAdminBundle (2.x)`, browse [EasyAdminPlusBundle master branch](https://github.com/WandiParis/EasyAdminPlusBundle/tree/master)**
-
-----------
-
 # Additional Templates
 
 `EasyAdminPlus` is packaged with some additional templates for the actions `List` and `Show`.
