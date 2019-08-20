@@ -1,12 +1,16 @@
 # EasyAdminPlusBundle
 
-### :exclamation: Disclaimer :exclamation: 
+### :exclamation: Warning :exclamation:
 
-**EXPERIMENTAL-BETA VERSION** > not recommended for production use
+**You're browsing the documentation of `EasyAdminPlusBundle 1.x` for [EasyAdminBundle 1.x](https://github.com/EasyCorp/EasyAdminBundle/tree/1.x).**
+
+**If you want to use the latest version of `EasyAdminBundle (2.x)`, browse [EasyAdminPlusBundle master branch](https://github.com/WandiParis/EasyAdminPlusBundle/tree/master)**
+
+----------
 
 ### About
 
-EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle) which includes some extra features. 
+EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle/tree/1.x) which includes some extra features. 
 
 ### Features
 
@@ -15,7 +19,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 - [x] Add an action to manage translations files.
 - [x] ACL to restrict access based on `entity/action role permissions`
 - [x] Add an action to export entities in CSV.
-- [ ] Add some useful new templates for `Show` and `List` actions
+- [x] Add some useful new templates for `Show` and `List` actions
 
 ### Requirements
 
@@ -26,7 +30,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 ### Install
 
 ```shell
-$ composer require wandi/easyadmin-plus-bundle
+$ composer require wandi/easyadmin-plus-bundle "^1.0"
 ```
 
 ### Replace EasyAdmin controller
