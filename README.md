@@ -1,8 +1,14 @@
+### :exclamation: Warning :exclamation:
+
+**If you want to use `EasyAdminBundle 1.x`, browse [EasyAdminPlusBundle 1.x](https://github.com/WandiParis/EasyAdminPlusBundle/tree/1.x)**
+
+----------
+
 # EasyAdminPlusBundle
 
 ### About
 
-EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle) which includes some extra features. 
+EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle/tree/master) which includes some extra features. 
 
 ### Features
 
@@ -17,7 +23,7 @@ EasyAdminPlusBundle is a Symfony 4 wrapper for the amazing [EasyCorp/EasyAdminBu
 
 * PHP >= 7.1
 * Symfony 4
-* EasyAdminBundle ^1.17
+* EasyAdminBundle ^2.0
 
 ### Install
 

@@ -1,6 +1,6 @@
 # ACL
 
-`ACL` are now an integral part of [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle)
+`ACL` are now an integral part of [EasyCorp/EasyAdminBundle](https://github.com/EasyCorp/EasyAdminBundle/tree/master)
 
 See the related feature to implement `entity/action role permissions`:
 * [#2806](https://github.com/EasyCorp/EasyAdminBundle/pull/2806)
