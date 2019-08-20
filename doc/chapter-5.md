@@ -59,9 +59,16 @@ To see the complete list, check all the files named `field_{*}.html.twig` in `Ea
 
 `WandiEasyAdminPlus` simply overrides the following fields to strip some extra infos and html tags for proper text plain formatting:
 * field_association.html.twig (strip `html` and put `comas` between related entities if iterable)
+* field_boolean.html.twig (strip `html` and just display 0 or 1)
+* field_date.html.twig (strip `html`)
+* field_datetime.html.twig (strip `html`)
+* field_datetimetz.html.twig (strip `html`)
+* field_email.html.twig (strip `html`)
 * field_file.html.twig (strip `html` and put `absolute url` to file)
 * field_image.html.twig (strip `html` and put `absolute url` to image)
 * field_tel.html.twig (strip `html` and `tel:` prefix)
+* field_time.html.twig (strip `html`)
+* field_toggle.html.twig (strip `html` and just display 0 or 1)
 * field_url.html.twig (strip `html`)
 * label_null.html.twig (strip `label`, simple empty string)
 
