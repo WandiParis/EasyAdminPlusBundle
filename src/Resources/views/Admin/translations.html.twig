@@ -8,24 +8,24 @@
 
     <div class="content">
 
-        <section class="content-header ">
+        <section class="content-header translations">
             <div class="d-flex flex-row justify-content-between align-content-center w-100">
                 <div class="content-header-title">
                     <div class="row justify-content-between">
-                        <div class="col-6">
+                        <div class="col-sm-6">
                             <h1 class="title">{% block content_title %}<i class="fa fa-fw fa-globe"></i>{{ 'translator.title'|trans({}, 'EasyAdminPlusBundle') }}{% endblock %}</h1>
                         </div>
-                        <div class="col-6">
+                        <div class="col-sm-6">
                             <form class="form-vertical edit-form" method="GET" action="">
-                                <div class="row">
-                                    <div class="col-6 col-xs-12 col-sm-1">
+                                <div class="row filters">
+                                    <div class="col-sm-6">
                                         <select class="form-control custom-select" name="domain" id="domain" data-widget="select2">
                                             {% for curDomain in domains %}
                                                 <option value="{{ curDomain }}"{{ (curDomain == domain ? ' selected="selected"') }}>{{ curDomain }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="col-xs-12 col-sm-1">
+                                    <div class="col-sm-6">
                                         <button class="btn btn-primary action-switch" type="submit">{{ 'translator.switch'|trans({}, 'EasyAdminPlusBundle') }}</button>
                                     </div>
                                 </div>

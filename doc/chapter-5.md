@@ -143,7 +143,7 @@ In this example, we:
 
 ### ACL
 
-You can restrict `Export` action to a specific `permission`.
+You can restrict `Export` action to a specific `item_permission`.
 
 Simply add the minimum permission required to get the feature enabled:
 
@@ -166,7 +166,7 @@ easy_admin:
             delete:
                 # ...
             export:
-                permission: ROLE_EASY_ADMIN_SUPER
+                item_permission: ROLE_EASY_ADMIN_SUPER
                 fields:
                     # ...
 ```
