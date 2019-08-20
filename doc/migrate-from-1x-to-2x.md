@@ -106,7 +106,7 @@ easy_admin:
     <img src="images/upgrade-1-to-2-bootstrap.png" align="center" alt="PhpStorm Replace" />
 </p>
 
-** If you used the vertical `form_theme`, think to remove it **
+**If you used the vertical `form_theme`, simply remove it, you can still use flex grid with the `columns` attribute (see above)**
 
 ```yaml
 # config/packages/easy_admin/design.yaml
