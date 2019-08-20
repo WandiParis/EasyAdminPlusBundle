@@ -50,7 +50,7 @@ easy_admin:
                 item_permission: ['ROLE_EASY_ADMIN_SUPER']
                 # ...
 ```
-**Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin` directory) for `role:` occurrences and just replace them by `item_permission:`**
+**Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin/` directory) for `role:` occurrences and just replace them by `item_permission:`**
 
 <p align="center">
     <img src="images/upgrade-1-to-2-acl.png" align="center" alt="PhpStorm Replace" />
@@ -100,7 +100,7 @@ easy_admin:
                     # ...
 ```
 
-**Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin` directory) for `css_class: 'col-sm-(\d?)'` occurrences and just replace them by `columns: $1`**
+**Search in all your `EasyAdmin` configuration files (`config/packages/easy_admin/` directory) for `css_class: 'col-sm-(\d?)'` occurrences and just replace them by `columns: $1`**
 
 <p align="center">
     <img src="images/upgrade-1-to-2-bootstrap.png" align="center" alt="PhpStorm Replace" />
