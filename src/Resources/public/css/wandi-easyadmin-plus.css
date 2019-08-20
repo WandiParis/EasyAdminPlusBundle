@@ -4,9 +4,16 @@ form .row {
     flex-wrap: wrap;
 }
 form .row.filters {
-    justify-content: right;
-    margin-right: 1.5rem;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
 }
+@media (min-width: 576px) {
+    form .row.filters {
+        justify-content: right;
+        margin: 0 1.5rem 0 0;
+    }
+}
+
 form .row.filters button {
     margin-left: 0.5rem;
 }
