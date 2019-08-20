@@ -135,4 +135,10 @@ easy_admin:
     # ...
 ```
 
+----------
+
 And that's it!
+
+----------
+
+Next chapter: [Chapter 1 - Authentication](chapter-1.md)
