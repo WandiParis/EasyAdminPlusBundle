@@ -1,26 +1,21 @@
-/** AUTH **/
-.login-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-}
-
-.login-container .page-title {
-    text-align: center;
-    overflow:hidden;
-}
-
-.login-container .page-title *{
-    max-width: 100%;
-}
-/** /AUTH **/
-
 /** TRANSLATIONS **/
 form .row {
     display: flex;
     flex-wrap: wrap;
+}
+form .row.filters {
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+}
+@media (min-width: 576px) {
+    form .row.filters {
+        justify-content: right;
+        margin: 0 1.5rem 0 0;
+    }
+}
+
+form .row.filters button {
+    margin-left: 0.5rem;
 }
 form .row .col {
     position: relative;

@@ -50,16 +50,6 @@ services:
             - '@wandi.easy_admin_plus.acl.security.admin_authorization_checker'
         tags:
             - { name: kernel.event_subscriber }
-    wandi.easy_admin_plus.acl.helper.menu_helper:
-        class: Wandi\EasyAdminPlusBundle\Acl\Helper\MenuHelper
-        arguments:
-            - '@wandi.easy_admin_plus.acl.security.admin_authorization_checker'
-    wandi.easy_admin_plus.acl.twig.menu_extension:
-        class: Wandi\EasyAdminPlusBundle\Acl\Twig\MenuExtension
-        arguments:
-            - '@wandi.easy_admin_plus.acl.helper.menu_helper'
-        tags:
-            - { name: twig.extension }
     wandi.easy_admin_plus.acl.twig.admin_authorization_extension:
         class: Wandi\EasyAdminPlusBundle\Acl\Twig\AdminAuthorizationExtension
         arguments:

@@ -1,36 +1,17 @@
 {% extends '@BaseEasyAdmin/default/list.html.twig' %}
 
 {% block global_actions %}
-    {# Do not display SEARCH form if not granted #}
-    {% if easyadmin_action_is_enabled_for_list_view('search', _entity_config.name) and is_easyadmin_granted(_entity_config, 'search') %}
-        {% set _action = easyadmin_get_action_for_list_view('search', _entity_config.name) %}
-        {% block search_action %}
-            {{ parent() }}
-        {% endblock %}
+
+    {# Do not display EXPORT button if not defined and not granted #}
+    {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
+        {% set _action = easyadmin_get_action_for_list_view('new', _entity_config.name) %}
+        <div class="button-action">
+            <a class="btn btn-primary" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
+                <i class="fa fa-download"></i>
+                {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
+            </a>
+        </div>
     {% endif %}
 
-    {% block new_action %}
-        {# Do not display EXPORT button if not defined and not granted #}
-        {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
-            {% set _action = easyadmin_get_action_for_list_view('new', _entity_config.name) %}
-            <div class="button-action">
-                <a class="btn btn-primary" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
-                    <i class="fa fa-download"></i>
-                    {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
-                </a>
-            </div>
-        {% endif %}
-        {# Do not display NEW button if not granted #}
-        {% if easyadmin_action_is_enabled_for_list_view('new', _entity_config.name) and is_easyadmin_granted(_entity_config, 'new') %}
-            {% set _action = easyadmin_get_action_for_list_view('new', _entity_config.name) %}
-            {{ parent() }}
-        {% endif %}
-    {% endblock %}
-{% endblock %}
-
-{# Do not display list action items if not granted #}
-{% block item_actions %}
-    {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config) %}
-    
     {{ parent() }}
 {% endblock %}

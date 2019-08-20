@@ -43,8 +43,8 @@ class TemplateConfigPass implements ConfigPassInterface
 
                     // needed to add support for immutable datetime/date/time fields
                     // (which are rendered using the same templates as their non immutable counterparts)
-                    if ('_immutable' === substr($fieldMetadata['dataType'], -10)) {
-                        $fieldTemplateName = 'field_'.substr($fieldMetadata['dataType'], 0, -10);
+                    if ('_immutable' === mb_substr($fieldMetadata['dataType'], -10)) {
+                        $fieldTemplateName = 'field_'.mb_substr($fieldMetadata['dataType'], 0, -10);
                     } else {
                         $fieldTemplateName = 'field_'.$fieldMetadata['dataType'];
                     }
@@ -54,8 +54,8 @@ class TemplateConfigPass implements ConfigPassInterface
                     if ($entityConfig['primary_key_field_name'] === $fieldName) {
                         $template = $entityConfig['templates']['field_id'];
                     // easyadminplus overrides
-                    } elseif (file_exists('../vendor/wandi/easyadmin-plus-bundle/src/Resources/views/templates/field_' . $fieldMetadata['dataType'] . '.html.twig')) {
-                        $template = '@WandiEasyAdminPlus/templates/field_' . $fieldMetadata['dataType'] . '.html.twig';
+                    } elseif (file_exists('../vendor/wandi/easyadmin-plus-bundle/src/Resources/views/templates/field_' . $fieldMetadata['type'] . '.html.twig')) {
+                        $template = '@WandiEasyAdminPlus/templates/field_' . $fieldMetadata['type'] . '.html.twig';
                     } elseif (array_key_exists($fieldTemplateName, $entityConfig['templates'])) {
                         $template = $entityConfig['templates'][$fieldTemplateName];
                     } else {

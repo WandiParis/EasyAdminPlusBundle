@@ -40,7 +40,7 @@ easy_admin:
                 # action is enabled for Product Entity!
 ```
 
-A new button is visible on top of `List` action, beside `New` action.
+A new button is visible on top of `List` action, beside `Search` action.
 
 <p align="center">
     <img src="images/export-button.png" align="center" alt="Export Button" />
@@ -67,9 +67,16 @@ To see the complete list, check all the files named `field_{*}.html.twig` in `Ea
 
 `WandiEasyAdminPlus` simply overrides the following fields to strip some extra infos and html tags for proper text plain formatting:
 * field_association.html.twig (strip `html` and put `comas` between related entities if iterable)
+* field_boolean.html.twig (strip `html` and just display 0 or 1)
+* field_date.html.twig (strip `html`)
+* field_datetime.html.twig (strip `html`)
+* field_datetimetz.html.twig (strip `html`)
+* field_email.html.twig (strip `html`)
 * field_file.html.twig (strip `html` and put `absolute url` to file)
 * field_image.html.twig (strip `html` and put `absolute url` to image)
 * field_tel.html.twig (strip `html` and `tel:` prefix)
+* field_time.html.twig (strip `html`)
+* field_toggle.html.twig (strip `html` and just display 0 or 1)
 * field_url.html.twig (strip `html`)
 * label_null.html.twig (strip `label`, simple empty string)
 
@@ -151,9 +158,9 @@ In this example, we:
 
 ### ACL
 
-Thanks to [ACL](chapter-4.md) feature, you can restrict `Export` action to a specific `role`.
+You can restrict `Export` action to a specific `item_permission`.
 
-Simply add the minimum role required to get the feature enabled:
+Simply add the minimum permission required to get the feature enabled:
 
 ```yaml
 # config/packages/easy_admin.yaml
@@ -174,7 +181,7 @@ easy_admin:
             delete:
                 # ...
             export:
-                role: ROLE_EASY_ADMIN_SUPER
+                item_permission: ROLE_EASY_ADMIN_SUPER
                 fields:
                     # ...
 ```
@@ -182,23 +189,22 @@ easy_admin:
 ```twig
 {# vendor/wandi/easyadmin-plus-bundle/resources/views/default/list.html.twig #}
 
-{# ... #} 
+{% extends '@BaseEasyAdmin/default/list.html.twig' %}
 
-{% block new_action %}
-    {# Do not display EXPORT button if not defined or not granted #}
+{% block global_actions %}
+
+    {# Do not display EXPORT button if not defined and not granted #}    
     {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export') %}
-      {% set referer = app.request.server.get('http-referer')|default('/') %}
-      <div class="button-action">
-        <a class="btn btn-primary" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
-          <i class="fa fa-download"></i>
-            {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
-        </a>
-      </div>
-  {% endif %}
-  {# Do not display NEW button if not granted #}
-  {% if is_easyadmin_granted(_entity_config, 'new') %}
+        {% set _action = easyadmin_get_action_for_list_view('new', _entity_config.name) %}
+        <div class="button-action">
+            <a class="btn btn-primary" href="{{ path('easyadmin', app.request.query|merge({ action: "export" })) }}">
+                <i class="fa fa-download"></i>
+                {{ 'exporter.export'|trans({}, 'EasyAdminPlusBundle') }}
+            </a>
+        </div>
+    {% endif %}
+
     {{ parent() }}
-  {% endif %}
 {% endblock %}
 ```
 
