@@ -55,7 +55,7 @@ class TemplateConfigPass implements ConfigPassInterface
                         $template = $entityConfig['templates']['field_id'];
                     // easyadminplus overrides
                     } elseif (file_exists('../vendor/wandi/easyadmin-plus-bundle/src/Resources/views/templates/field_' . $fieldMetadata['type'] . '.html.twig')) {
-                        $template = '@WandiEasyAdminPlus/templates/field_' . $fieldMetadata['dataType'] . '.html.twig';
+                        $template = '@WandiEasyAdminPlus/templates/field_' . $fieldMetadata['type'] . '.html.twig';
                     } elseif (array_key_exists($fieldTemplateName, $entityConfig['templates'])) {
                         $template = $entityConfig['templates'][$fieldTemplateName];
                     } else {
