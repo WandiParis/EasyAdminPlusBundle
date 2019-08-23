@@ -164,4 +164,28 @@ Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or
 - { property: ownerType, label: 'Owner Type', type: 'Greg0ire\Enum\Bridge\Symfony\Form\Type\EnumType', type_options: { class: 'App\Enum\CompanyOwnerType', prefix_label_with_class: true, translation_domain: 'enum' } }
 ```
 
+-------
+
+## [WandiColorPicker](https://github.com/WandiParis/ColorPickerBundle)
+
+If you use our ColorPicker bundle and you want to visually display the color, just call our template `@WandiEasyAdminPlus/templates/wandi_color_picker.html.twig`.
+
+```yaml
+- { property: color, label: 'Color', template: '@WandiEasyAdminPlus/templates/wandi_color_picker.html.twig' }
+```
+
+<p align="center">
+    <img src="doc/images/wandi-color-picker-list" align="middle" alt="WandiColorPicker - List" />
+</p>
+
+Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or `Form` actions, you can directly use his `FormType` with his FQN.
+
+```yaml
+- { property: color, label: 'Color', type: 'Wandi\ColorPickerBundle\Form\Type\ColorPickerType' }
+```
+
+<p align="center">
+    <img src="doc/images/wandi-color-picker-form" align="middle" alt="WandiColorPicker - List" />
+</p>
+
 [Back to main readme](../README.md)
