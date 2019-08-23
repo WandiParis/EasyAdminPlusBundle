@@ -1,0 +1,7 @@
+{% if value is not null %}
+    <div class="text-center py-2 rounded {{ (value|wandi_color_picker_get_brightness == constant("Wandi\\ColorPickerBundle\\Twig\\Extension\\ColorExtension::BRIGHTNESS_DARK") ? 'text-white' : 'text-dark') }}" style="background-color: {{ value }} !important;">
+        {{ value }}
+    </div>
+{% else %}
+    <span class="label">{{ 'label.null'|trans(domain = 'EasyAdminBundle') }}</span>
+{% endif %}
