@@ -175,7 +175,7 @@ If you use our ColorPicker bundle and you want to visually display the color, ju
 ```
 
 <p align="center">
-    <img src="doc/images/wandi-color-picker-list.png" align="middle" alt="WandiColorPicker - List" />
+    <img src="images/wandi-color-picker-list.png" align="middle" alt="WandiColorPicker - List" />
 </p>
 
 Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or `Form` actions, you can directly use his `FormType` with his FQN.
@@ -185,7 +185,7 @@ Note: this is only required on the `List` or `Show` action, for `New`, `Edit` or
 ```
 
 <p align="center">
-    <img src="doc/images/wandi-color-picker-form.png" align="middle" alt="WandiColorPicker - List" />
+    <img src="images/wandi-color-picker-form.png" align="middle" alt="WandiColorPicker - List" />
 </p>
 
 [Back to main readme](../README.md)
