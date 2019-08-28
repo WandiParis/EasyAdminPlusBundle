@@ -1,1 +1,5 @@
-{{ value|date(field_options.format) }}
+{% if value is not null %}
+    {{ value|date(field_options.format) }}
+{% else %}
+    {{ 'label.null'|trans(domain = 'EasyAdminBundle') }}
+{% endif %}
