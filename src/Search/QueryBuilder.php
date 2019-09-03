@@ -89,6 +89,10 @@ class QueryBuilder
 
         if (null !== $sortField) {
             $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias().'.', $sortField), $sortDirection);
+            if(isset($entityConfig['list']) && isset($entityConfig['list']['sort']) && isset($entityConfig['list']['sort']['field'])) {
+                $queryBuilder->addOrderBy(sprintf('%s%s',
+                    $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias().'.', $entityConfig['list']['sort']['field']), 'ASC');
+            }
         }
 
         return $queryBuilder;
