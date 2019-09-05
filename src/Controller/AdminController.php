@@ -696,7 +696,12 @@ class AdminController extends BaseAdminController
             }
             $ret = $service->execute($this->request, $this->entity, $ids, $data);
             $nb = \count($ids);
-            $this->addFlash('success nt', $this->get('translator')->transChoice('flash.batch_success', $nb, ['%action%' => $this->get('translator')->trans($batchs[$name]['label'] ?? $batchs[$name]['name']), '%nb%' => $nb], 'EasyAdminPlusBundle'));
+            if(method_exists($service, 'countSuccess') && $service->countSuccess() !== null){
+                $countOk = $service->countSuccess();
+            }else{
+                $countOk = $nb;
+            }
+            $this->addFlash('success nt', $this->get('translator')->transChoice('flash.batch_success', $countOk, ['%action%' => $this->get('translator')->trans($batchs[$name]['label'] ?? $batchs[$name]['name']), '%nb%' => $nb], 'EasyAdminPlusBundle'));
 
         }
         if($ret) {

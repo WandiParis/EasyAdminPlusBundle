@@ -30,6 +30,30 @@ On the list, checkbox inputs are added toselect items and buttons are visible on
     <img src="images/batch-list.png" align="center" alt="Batch list" />
 </p>
 
+
+Exemple BatchAction
+
+```php
+<?php
+class DeleteBatch implements BatchInterface
+{
+    private $count = 0;
+
+    public function execute($request, array $entityConfig, $ids, array $data) 
+    {
+        foreach ($ids as $itemId) {
+            $count++;
+        }
+    }
+    
+    public function countSuccess(){
+        return $this->count;
+    }
+
+
+}
+```
+
 -------
 
 ### Default behavior
