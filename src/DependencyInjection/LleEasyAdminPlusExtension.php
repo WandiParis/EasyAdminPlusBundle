@@ -58,9 +58,11 @@ class LleEasyAdminPlusExtension extends Extension
             ];
         }
         if (empty($config['translator']['locales'])) {
-            $config['translator']['locales'] = [
-                $container->getParameter('locale') ?? $container->getParameter('kernel.default_locale'),
-            ];
+            if($container->hasParameter('locale') && $container->getParameter('locale')){
+                $config['translator']['locales'] = [$container->getParameter('locale')];
+            }else{
+                $config['translator']['locales'] = [$container->getParameter('kernel.default_locale')];
+            }
         }
 
         return $config;
