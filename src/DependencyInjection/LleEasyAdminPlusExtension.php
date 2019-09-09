@@ -62,6 +62,7 @@ class LleEasyAdminPlusExtension extends Extension
                 $config['translator']['locales'] = [$container->getParameter('locale')];
             }else{
                 $config['translator']['locales'] = [$container->getParameter('kernel.default_locale')];
+                $container->setParameter('locale', $container->getParameter('kernel.default_locale'));
             }
         }
 
