@@ -18,8 +18,11 @@
         : attribute(easyadmin.item, easyadmin.entity.primary_key_field_name) %}
 
     {% set _request_parameters = { entity: easyadmin.entity.name, referer: app.request.query.get('referer') } %}
+    {% set _data = (easyadmin.view == 'new')
+        ? null
+        : data  %}
     {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
-        actions: _entity_actions|prune_item_actions(easyadmin.entity, [], data ?? null),
+        actions: _entity_actions|prune_item_actions(easyadmin.entity, [], _data ?? null),
         request_parameters: _request_parameters,
         translation_domain: _translation_domain,
         trans_parameters: _trans_parameters,
