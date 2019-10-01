@@ -5,6 +5,8 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 use DateTime;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * DateFilterType
@@ -15,7 +17,14 @@ class PeriodeFilterType extends AbstractFilterType
     private $choices;
     private $requestChoice;
     private $format;
-    
+
+    protected $flashBag;
+
+    public function __construct(SessionInterface $session)
+    {
+        $this->flashBag = $session->getFlashBag();
+    }
+
     public function configure(array $config = [])
     {
         parent::configure($config);
@@ -34,12 +43,21 @@ class PeriodeFilterType extends AbstractFilterType
             $from = $to = null;
             $c = $this->alias . $this->columnName;
             if(isset($this->data['value']['from']) && $this->data['value']['from']) {
-                $from = DateTime::createFromFormat($this->format, $this->data['value']['from'])->format('Y-m-d');
+                $from = DateTime::createFromFormat($this->format, $this->data['value']['from']);
+                if (!$from) {
+                    $this->flashBag->add("error",'filter.periodeFilter.from.wrong_format');
+                    return false;
+                }
+                $format = $format->format('Y-m-d');
                 $qb->andWhere($c. ' >= :var_from_' . $this->uniqueId);
                 $queryBuilder->setParameter('var_from_' . $this->uniqueId, $from);
             }
             if(isset($this->data['value']['to']) && $this->data['value']['to']) {
                 $to = DateTime::createFromFormat($this->format, $this->data['value']['to']);
+                if (!$to) {
+                    $this->flashBag->add("error", 'filter.periodeFilter.to.wrong_format');
+                    return false;
+                }
                 $to->modify('+1 day');
                 $to = $to->format('Y-m-d');
                 $qb->andWhere($c.' < :var_to_'.$this->uniqueId);

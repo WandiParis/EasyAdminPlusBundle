@@ -124,3 +124,9 @@ Réinitialiser: Reset
 Actions massives: Batch actions
 Filtrer les résultats: Filter results
 form.url_auto_complet.placeholder: Choose a value
+filter:
+    dateFilter:
+        wrong_format: Wrong date format for the date filter
+    periodeFilter:
+        from.wrong_format: Wront date format for the periode filter "From"
+        to.wrong_format: Wront date format for the periode filter "To"
