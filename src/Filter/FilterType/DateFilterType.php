@@ -19,9 +19,12 @@ class DateFilterType extends AbstractFilterType
 
     protected $flashBag;
 
-    public function __construct(SessionInterface $session)
+    protected $translator;
+
+    public function __construct(SessionInterface $session, TranslatorInterface $translator)
     {
         $this->flashBag = $session->getFlashBag();
+        $this->translator = $translator;
     }
 
     public function configure(array $config = [])
@@ -52,7 +55,7 @@ class DateFilterType extends AbstractFilterType
 
             $date = DateTime::createFromFormat('d/m/Y', $this->data['value']);
             if (!$date) {
-                $this->flashBag->add("error", 'filter.dateFilter.wrong_format');
+                $this->flashBag->add("error nt", $this->translator->trans('filter.dateFilter.wrong_format', [], 'EasyAdminPlusBundle'));
                 return false;
             }
 
