@@ -4,7 +4,10 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 
 use DateTime;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * DateFilterType
@@ -13,6 +16,16 @@ class DateFilterType extends AbstractFilterType
 {
 
     protected $yearRange;
+
+    protected $flashBag;
+
+    protected $translator;
+
+    public function __construct(SessionInterface $session, TranslatorInterface $translator)
+    {
+        $this->flashBag = $session->getFlashBag();
+        $this->translator = $translator;
+    }
 
     public function configure(array $config = [])
     {
@@ -39,7 +52,13 @@ class DateFilterType extends AbstractFilterType
     public function apply($queryBuilder)
     {
         if (isset($this->data['value']) && $this->data['value'] && isset($this->data['comparator'])) {
+
             $date = DateTime::createFromFormat('d/m/Y', $this->data['value']);
+            if (!$date) {
+                $this->flashBag->add("error nt", $this->translator->trans('filter.dateFilter.wrong_format', [], 'EasyAdminPlusBundle'));
+                return false;
+            }
+
             switch ($this->data['comparator']) {
                 case 'equal':
                     $queryBuilder->andWhere($queryBuilder->expr()->like($this->alias.$this->columnName, ':var_' . $this->uniqueId));
@@ -51,7 +70,8 @@ class DateFilterType extends AbstractFilterType
                     $queryBuilder->andWhere($queryBuilder->expr()->gt($this->alias.$this->columnName, ':var_' . $this->uniqueId));
                     break;
             }
-            $queryBuilder->setParameter('var_' . $this->uniqueId, $date->format('Y-m-d').'%');
+                $queryBuilder->setParameter('var_' . $this->uniqueId, $date->format('Y-m-d').'%');
+
         }
     }
 
