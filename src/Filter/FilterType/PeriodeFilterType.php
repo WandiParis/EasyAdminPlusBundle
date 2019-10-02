@@ -5,8 +5,6 @@ namespace Lle\EasyAdminPlusBundle\Filter\FilterType;
 use DateTime;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * DateFilterType
