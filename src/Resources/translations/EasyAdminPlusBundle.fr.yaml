@@ -133,6 +133,3 @@ Réinitialiser: Réinitialiser
 Actions massives: Actions massives
 Filtrer les résultats: Filtrer les résultats
 form.url_auto_complet.placeholder: Choisir une valeur
-filter:
-    dateFilter:
-        wrong_format: Mauvais format de date pour le filtre date
