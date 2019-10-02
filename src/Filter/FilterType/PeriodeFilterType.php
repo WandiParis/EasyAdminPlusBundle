@@ -18,15 +18,6 @@ class PeriodeFilterType extends AbstractFilterType
     private $requestChoice;
     private $format;
 
-    protected $flashBag;
-
-    protected $translator;
-
-    public function __construct(SessionInterface $session, TranslatorInterface $translator)
-    {
-        $this->flashBag = $session->getFlashBag();
-        $this->translator = $translator;
-    }
 
     public function configure(array $config = [])
     {
@@ -45,12 +36,9 @@ class PeriodeFilterType extends AbstractFilterType
             $qb = $queryBuilder;
             $from = $to = null;
             $c = $this->alias . $this->columnName;
-            $error = false;
             if(isset($this->data['value']['from']) && $this->data['value']['from']) {
                 $from = DateTime::createFromFormat($this->format, $this->data['value']['from']);
-                if (!$from) {
-                    $error = true;
-                } else {
+                if ($from) {
                     $from = $from->format('Y-m-d');
                     $qb->andWhere($c. ' >= :var_from_' . $this->uniqueId);
                     $queryBuilder->setParameter('var_from_' . $this->uniqueId, $from);
@@ -58,17 +46,12 @@ class PeriodeFilterType extends AbstractFilterType
             }
             if(isset($this->data['value']['to']) && $this->data['value']['to']) {
                 $to = DateTime::createFromFormat($this->format, $this->data['value']['to']);
-                if (!$to) {
-                    $error = true;
-                } else {
+                if ($to) {
                     $to->modify('+1 day');
                     $to = $to->format('Y-m-d');
                     $qb->andWhere($c.' < :var_to_'.$this->uniqueId);
                     $queryBuilder->setParameter('var_to_' . $this->uniqueId, $to);
                 }
-            }
-            if ($error) {
-                $this->flashBag->add("error nt", $this->translator->trans('filter.dateFilter.wrong_format', [], 'EasyAdminPlusBundle'));
             }
         }
     }
