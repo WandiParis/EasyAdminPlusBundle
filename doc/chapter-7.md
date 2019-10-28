@@ -18,7 +18,10 @@ Configure the the property you want to autocomplete in easyadmin YAML:
 In type options, you have:
 - url: Required. An url where you get JSON data for the autocomplete.
 - value_filter: Optional. A Twig filter to apply to the **current** value of the entity, in case of edition. This is useful if the value is some ID to make it readeable.
-
+- params: Optional params passed in the route (EX: params: {'namequeryparams': '#nameform_namefield'} }) and in controller: $myparams = $request->query->get('params',[])['namequeryparams'] ?? null;
+- path: generate an url with path.route and path.params
+- placeholder
+- class: generate the url for a class
 -------
 ### What url to use ?
 

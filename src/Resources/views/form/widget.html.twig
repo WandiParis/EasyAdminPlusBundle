@@ -3,7 +3,7 @@
     <div id="{{ id }}_json"></div>
     <script>
         var {{ id }}schema = {{  schema|raw }}
-        window.editor{{ id }}startval = null
+            window.editor{{ id }}startval = null
         function {{ id }}_load(value, schema){
             var schema = (schema)? schema:{{  schema|raw }};
             JSONEditor.defaults.options.theme = '{{ theme }}';
@@ -105,58 +105,65 @@
 {%  endblock %}
 
 {% block url_autocomplete_widget %}
-<div class="autocomplet-url"
-{% for key, value in attr %}
-	{{ key }} = "{{ value }}"
-{%  endfor %}
->
-<select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name|lower}}-autocomplete-url-lle='{{ url }}'>
-    <option value="{{value}}" selected="selected">{{ value_filter ? include(template_from_string( "{{ value |" ~ value_filter ~ "}}")) : value_label }}</option>
-</select>
+    <div class="autocomplet-url"
+    {% for key, value in attr %}
+    {{ key }} = "{{ value }}"
+    {%  endfor %}
+    >
+    <select id="{{name}}" name="{{full_name}}" class="form-control" data-{{name|lower}}-autocomplete-url-lle='{{ url }}'>
+        <option value="{{value}}" selected="selected">{{ value_filter ? include(template_from_string( "{{ value |" ~ value_filter ~ "}}")) : value_label }}</option>
+    </select>
 
-<script>
-    $(document).ready(function() {
-        var lleAutocompleteFields = $('[data-{{name|lower}}-autocomplete-url-lle]');
+    <script>
+        $(document).ready(function() {
+            var lleAutocompleteFields = $('[data-{{name|lower}}-autocomplete-url-lle]');
 
-        lleAutocompleteFields.each(function() {
-            var $this = $(this);
-            var url = $this.data('{{name|lower}}-autocomplete-url-lle');
+            lleAutocompleteFields.each(function() {
+                var $this = $(this);
+                var url = $this.data('{{name|lower}}-autocomplete-url-lle');
+                var formData = {}
+                {%  for index,value in params  %}
+                $('{{ value }}').change(function(evt){
+                    formData['{{ index }}'] = $(this).val()
+                    $this.val(null).change();
+                })
+                $('{{ value }}').change();
+                {%  endfor %}
+                // select2 config for easyadmin
+                $this.select2({
+                    theme: 'bootstrap',
+                    ajax: {
+                        url: url,
+                        dataType: 'json',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        delay: 250,
 
-            // select2 config for easyadmin
-            $this.select2({
-                theme: 'bootstrap',
-                ajax: {
-                    url: url,
-                    dataType: 'json',
-                    xhrFields: {
-                        withCredentials: true
+                        // paramètres GET
+                        data: function (params) {
+                            // the _ is here to force easyadmin return results even if query is empty
+                            return { 'query': $.trim(params.term) || "_", 'page': params.page, 'params': formData };
+                        },
+
+                        // analyse json reçu
+                        processResults: function (data, params) {
+                            return {
+                                results: data.results,
+                                pagination: {
+                                    more: data.has_next_page
+                                }
+                            };
+                        }
                     },
-                    delay: 250,
-
-                    // paramètres GET
-                    data: function (params) {
-                        // the _ is here to force easyadmin return results even if query is empty
-                        return { 'query': $.trim(params.term) || "_", 'page': params.page };
-                    },
-
-                    // analyse json reçu
-                    processResults: function (data, params) {
-                        return {
-                            results: data.results,
-                            pagination: {
-                                more: data.has_next_page
-                            }
-                        };
-                    }
-                },
-                placeholder: '{{placeholder|trans}}',
-                width: 'resolve',
-                allowClear: true
+                    placeholder: '{{placeholder|trans}}',
+                    width: 'resolve',
+                    allowClear: true
+                });
             });
-        });
-    })
-</script>
-</div>
+        })
+    </script>
+    </div>
 {% endblock %}
 
 

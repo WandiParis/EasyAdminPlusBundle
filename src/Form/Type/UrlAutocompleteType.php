@@ -46,12 +46,14 @@ class UrlAutocompleteType extends AbstractType
             "path" => null,
             "class" => null,
             "value_filter" => null,
-            "placeholder" => 'form.url_auto_complet.placeholder' 
+            "params" => [],
+            "placeholder" => 'form.url_auto_complet.placeholder'
         ]);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options){
         $view->vars['url'] = $options['url'];
+        $view->vars['params'] = $options['params'] ?? [];
         $view->vars['value_label'] = $view->vars['value'];
         if ($options['placeholder']) {
             $view->vars['placeholder'] = $options['placeholder'];
