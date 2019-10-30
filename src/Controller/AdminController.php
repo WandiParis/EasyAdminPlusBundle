@@ -545,6 +545,13 @@ class AdminController extends BaseAdminController
 
             $this->dispatch(EasyAdminEvents::POST_UPDATE, array('entity' => $entity));
 
+            if (isset($this->entity['edit']['redirectToAction']) && $this->isActionAllowed($this->entity['edit']['redirectToAction']) && $this->entity['edit']['redirectToAction'] != 'delete') {
+
+                return $this->redirectToRoute('easyadmin',
+                    [ 'action' => $this->entity['edit']['redirectToAction'], 'entity'=> $this->entity['name'], 'id' => $id ]
+                );
+            }
+
             return $this->redirectToReferrer();
         }
 
@@ -701,7 +708,7 @@ class AdminController extends BaseAdminController
             }else{
                 $countOk = $nb;
             }
-            $this->addFlash('success nt', $this->get('translator')->transChoice('flash.batch_success', $countOk, ['%action%' => $this->get('translator')->trans($batchs[$name]['label'] ?? $batchs[$name]['name']), '%nb%' => $nb], 'EasyAdminPlusBundle'));
+            $this->addFlash('success nt', $this->get('translator')->transChoice('flash.batch_success', $countOk, ['%action%' => $this->get('translator')->trans($batchs[$name]['label'] ?? $batchs[$name]['name']), '%nb%' => $countOk], 'EasyAdminPlusBundle'));
 
         }
         if($ret) {
