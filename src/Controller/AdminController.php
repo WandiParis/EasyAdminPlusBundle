@@ -480,6 +480,12 @@ class AdminController extends BaseAdminController
 
             $this->dispatch(EasyAdminEvents::POST_PERSIST, array('entity' => $entity));
 
+            if (isset($this->entity['new']['redirectToAction']) && $this->isActionAllowed($this->entity['new']['redirectToAction']) && $this->entity['new']['redirectToAction'] != 'delete') {
+                return $this->redirectToRoute('easyadmin',
+                    [ 'action' => $this->entity['new']['redirectToAction'], 'entity'=> $this->entity['name'], 'id' => $entity->getId() ]
+                );
+            }
+
             return $this->redirectToReferrer();
         }
 
