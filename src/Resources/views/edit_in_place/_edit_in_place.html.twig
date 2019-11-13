@@ -11,7 +11,7 @@
           {% if eipType.hasCallback %}data-callback="{{ loaderCallback }}"{% endif %}
           data-item-id="{{ item.id }}">
         {% if valueRaw is not null and valueRaw != "" %}
-            {{ value|raw }} <em style="pointer:cursor; display:none;" id="icon-{{ id }}" class="fa fa-edit"></em>
+            {{ value|raw }}<em style="pointer:cursor; display:none;" id="icon-{{ id }}" class="fa fa-edit"></em>
         {% else %}
             <em style="pointer:cursor;" class="fa fa-edit"></em>
         {% endif %}
