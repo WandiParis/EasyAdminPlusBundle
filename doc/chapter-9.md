@@ -37,9 +37,21 @@ Configure the show entity like this
             - { type: 'sublist', id: 'echeances', label: 'tab.echeances', entity: 'Controle', property: 'Controles'}
             - { type: 'sublist', id: 'options', label: 'tab.options', entity: 'Ressource', property: 'Options'}
             - { type: 'sublist', id: 'paniers', label: 'tab.panier', property: 'paniers', entity: 'Panier',template_form: 'easy_admin/Helper/_sub_form.html.twig', add_form: 'App\Form\PanierType',add_route: 'app_admin_eleve_addpanier', with_add: true , 'with_delete': true, add_form_options: {'parent':'{parent}'}}
+            - { type: 'sublist', id: 'eleves', 'repository_method': 'findByClassCurrentYears', label: 'tab.eleves', entity: 'Eleve' , ignore_fields: ['classe']}
             - { type: 'tab', id: 'historique', label: 'Historique', action: 'historyAction' }
 ```
 
+if repository_method in place of property ou can custom the list (the parent is first args you can change it with repository_method_args):
+```php
+public function findByClassCurrentYear(Classe $classe){
+        return $this->createQueryBuilder('e')->where('e.classe = :classe')
+            ->andWhere('e.annee = :annee')
+            ->setParameters([
+                'annee' => $this->currentYear,
+                'classe' => $classe
+            ]);
+    }
+```
 every group open and close a box (bootstrap). If their is a label it show it in the header box.
 
 The tabs must alway be in the last positions.

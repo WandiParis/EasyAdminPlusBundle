@@ -151,20 +151,13 @@
               <!-- /.tab-pane -->
             {% elseif metadata.type == 'sublist' %}
               <div class="tab-pane" id="{{metadata.id}}">
-                {% set action = "Lle\\EasyAdminPlusBundle\\Controller\\AdminController:embeddedListAction" %}
+                  {% set action = "Lle\\EasyAdminPlusBundle\\Controller\\AdminController:embeddedListAction" %}
+                  {% set items = null %}
+                  {% set entity_name = metadata.entity %}
                   {% if metadata.property is defined %}
                       {% set items = attribute(entity, metadata.property) %}
-                      {% set entity_name = metadata.entity %}
-                  {% elseif metadata.qb is defined and metadata.repository_entity is defined and metadata.entity is defined %}
-                      {% set items = null %}
-                      {% set entity_name = metadata.entity %}
-                  {% else %}
-                      {% set items = attribute(entity, metadata.property) %}
-                      {% set entity_name = metadata.entity %}
                   {% endif %}
-
-
-                {{ render(controller(action ,{'request':app.request, 'entity':entity_name, 'items':items, 'metadata': metadata })) }}
+                {{ render(controller(action ,{'request':app.request, 'entity':entity_name, 'items':items, 'metadata': metadata, 'parent':entity })) }}
               </div>
               <!-- /.tab-pane -->
             {% endif %}

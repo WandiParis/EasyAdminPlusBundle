@@ -285,7 +285,7 @@ class AdminController extends BaseAdminController
         return $this->get('lle.easy_admin_plus.query_builder')->createListQueryBuilder($this->entity, $sortField, $sortDirection, $dqlFilter, $this->request);
     }
 
-    public function embeddedListAction($request, $entity, $items, $metadata)
+    public function embeddedListAction($request, $entity, $items, $metadata, $parent = null)
     {
         $this->initialize($request);
         $this->master_entity = $this->entity;
@@ -294,12 +294,11 @@ class AdminController extends BaseAdminController
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
         // retrieve data with given query builder for given repository
-        if (!$items && isset($metadata['qb']) && isset($metadata['repository_entity']) && $entity != '') {
-            $repository = $this->em->getRepository($metadata['repository_entity']);
-
-            //pass arguments array to method if it exist
-            $itemsQb = call_user_func_array([$repository, $metadata['qb']], isset($metadata['qb_parameters']) ? $metadata['qb_parameters'] : []);
-            $items = $itemsQb->getQuery()->execute();
+        $class = $this->config['entities'][$metadata['entity']]['class'] ?? $metadata['targetEntity'] ?? null;
+        if (!$items && $parent && $class && isset($metadata['repository_method']) && $metadata['repository_method']) {
+            $repository = $this->em->getRepository($class);
+            $qb = call_user_func_array([$repository, $metadata['repository_method']], isset($metadata['repository_method_args']) ? $metadata['repository_method_args'] : [$parent]);
+            $items = $qb->getQuery()->execute();
         }
 
         $fields = $this->entity['list']['fields'];
