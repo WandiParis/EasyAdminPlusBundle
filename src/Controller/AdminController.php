@@ -291,8 +291,16 @@ class AdminController extends BaseAdminController
         $this->master_entity = $this->entity;
         $vars = explode('\\',$this->master_entity['class']);
         $master_entity_class =  ucfirst(strtolower(end($vars)));
-
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
+
+        // retrieve data with given query builder for given repository
+        if (!$items && isset($metadata['qb']) && isset($metadata['repository_entity']) && $entity != '') {
+            $repository = $this->em->getRepository($metadata['repository_entity']);
+
+            //pass arguments array to method if it exist
+            $itemsQb = call_user_func_array([$repository, $metadata['qb']], isset($metadata['qb_parameters']) ? $metadata['qb_parameters'] : []);
+            $items = $itemsQb->getQuery()->execute();
+        }
 
         $fields = $this->entity['list']['fields'];
         foreach($metadata['ignore_fields']??[] as $field_to_del) {
