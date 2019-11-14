@@ -23,6 +23,9 @@ services:
   Lle\EasyAdminPlusBundle\EditInPlaceType\StringEipType:
     tags: [lle.easy_admin_plus.edit_in_place]
 
+  Lle\EasyAdminPlusBundle\EditInPlaceType\FloatEipType:
+    tags: [lle.easy_admin_plus.edit_in_place]
+
   Lle\EasyAdminPlusBundle\EditInPlaceType\EntityEipType:
     tags: [lle.easy_admin_plus.edit_in_place]
     arguments: ["@doctrine.orm.entity_manager"]

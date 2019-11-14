@@ -742,6 +742,7 @@ class AdminController extends BaseAdminController
     }
 
     protected function eipAction(){
+        $validator = $this->get('validator');
         /* @var \Lle\EasyAdminPlusBundle\Service\EditInPlaceFactory $eipFactory */
         $eipFactory = $this->get('lle.easy_admin_plus_edit_in_place.factory');
         $entity = $this->em->getRepository($this->entity['class'])->findOneById($this->request->request->get('id'));
@@ -751,14 +752,31 @@ class AdminController extends BaseAdminController
             $method = 'set' . $field;
             $eipType = $eipFactory->getEditInPlaceType($this->request->request->get('type'));
             $value = $eipType->getValueFromRequest($this->request);
-            $entity->$method($value);
-            $this->dispatch(EasyAdminEvents::PRE_UPDATE, array('entity' => $entity));
-            $this->em->persist($entity);
-            $this->em->flush();
-            $this->dispatch(EasyAdminEvents::POST_UPDATE, array('entity' => $entity));
-            $template = $this->get('twig')->createTemplate('{{ easyadmin_render_field_for_list_view(name,item,metadata) }}');
-            $html = $template->render(['item' => $entity, 'metadata' => $this->entity[$view]['fields'][$field], 'name' => $this->entity['name']]);
-            return new JsonResponse(['code' => 'OK', 'html' => (string)html_entity_decode($html), 'val' => $eipType->formatValue($value)]);
+            $violations = $validator->validatePropertyValue($entity, $field, $value);
+            if(count($violations) === 0) {
+                $entity->$method($value);
+                $this->dispatch(EasyAdminEvents::PRE_UPDATE, array('entity' => $entity));
+                $this->em->persist($entity);
+                $this->em->flush();
+                $this->dispatch(EasyAdminEvents::POST_UPDATE, array('entity' => $entity));
+                $template = $this->get('twig')->createTemplate('{{ easyadmin_render_field_for_list_view(name,item,metadata) }}');
+                $html = $template->render([
+                    'item' => $entity,
+                    'metadata' => $this->entity[$view]['fields'][$field],
+                    'name' => $this->entity['name']
+                ]);
+
+                return new JsonResponse([
+                    'code' => 'OK',
+                    'html' => (string)html_entity_decode($html),
+                    'val' => $eipType->formatValue($value)
+                ]);
+            }else{
+                return new JsonResponse([
+                    'code' => 'NOK',
+                    'err' => $violations[0] ? $violations[0]->getMessage() : 'invalid data'
+                ]);
+            }
         }
         return new JsonResponse(['code'=>'NOK', 'err'=> 'access denied']);
     }
