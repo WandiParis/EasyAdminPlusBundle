@@ -161,6 +161,7 @@ $(function() {
     });
 
     $('body').on('click','.eap-edit-in-place-ok',function(){
+        console.log('ok')
         var elm = $(this);
         elm.html('<i class="fa fa-spinner"></i>');
         var id = $(this).attr('data-item-id');
