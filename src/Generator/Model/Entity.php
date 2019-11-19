@@ -4,7 +4,7 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
 use Wandi\EasyAdminPlusBundle\Generator\Property\PropertyConfig;
 
@@ -17,13 +17,6 @@ class Entity
     private $properties;
     private $metaData;
 
-    /**
-     * Entity constructor.
-     *
-     * @param ClassMetadata $metaData
-     *
-     * @throws EAException
-     */
     public function __construct(ClassMetadata $metaData)
     {
         $this->methods = new ArrayCollection();
@@ -34,19 +27,11 @@ class Entity
         $this->initProperties();
     }
 
-    /**
-     * @return mixed
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     *
-     * @return object Entity
-     */
     public function setName(string $name): Entity
     {
         $this->name = $name;
@@ -54,14 +39,6 @@ class Entity
         return $this;
     }
 
-    /**
-     * @param ClassMetadata $metaData
-     * @param array         $bundles
-     *
-     * @return array
-     *
-     * @throws EAException
-     */
     public static function buildNameData(ClassMetadata $metaData, array $bundles): array
     {
         $entityShortName = (new \ReflectionClass($metaData->getName()))->getShortName();
@@ -74,7 +51,7 @@ class Entity
         }
 
         if (0 === preg_match('#((.*?)(?:Bundle))#', $metaData->getName(), $match)) {
-            throw new EAException('Unable to parse the bundle name for the '.$entityShortName.' entity');
+            throw new RuntimeCommandException('Unable to parse the bundle name for the '.$entityShortName.' entity');
         }
 
         unset($match[0]);
@@ -93,7 +70,7 @@ class Entity
             }
         }
 
-        throw new EAException('<comment>the entity bundle could not be found for the '.$entityShortName.'</comment>');
+        throw new RuntimeCommandException('<comment>the entity bundle could not be found for the '.$entityShortName.'</comment>');
     }
 
     public static function buildName(array $nameData): string
@@ -101,19 +78,11 @@ class Entity
         return strtolower($nameData['bundle'].'_'.$nameData['entity']);
     }
 
-    /**
-     * @return mixed
-     */
     public function getClass(): string
     {
         return $this->class;
     }
 
-    /**
-     * @param mixed $class
-     *
-     * @return $this
-     */
     public function setClass($class): Entity
     {
         $this->class = $class;
@@ -121,19 +90,11 @@ class Entity
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getDisabledAction(): array
     {
         return $this->disabledAction;
     }
 
-    /**
-     * @param mixed $disabledAction
-     *
-     * @return $this
-     */
     public function setDisabledAction($disabledAction): Entity
     {
         $this->disabledAction = $disabledAction;
@@ -141,19 +102,11 @@ class Entity
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMethods(): ArrayCollection
     {
         return $this->methods;
     }
 
-    /**
-     * @param ArrayCollection $methods
-     *
-     * @return $this
-     */
     public function setMethods(ArrayCollection $methods): Entity
     {
         $this->methods = $methods;
@@ -161,9 +114,6 @@ class Entity
         return $this;
     }
 
-    /**
-     * @param $eaToolParams
-     */
     public function buildMethods(array $eaToolParams): void
     {
         foreach ($eaToolParams['methods'] as $name => $method) {
@@ -194,19 +144,11 @@ class Entity
         }
     }
 
-    /**
-     * @param Method $method
-     */
     public function addMethod(Method $method): void
     {
         $this->methods[] = $method;
     }
 
-    /**
-     * @param $eaToolParams
-     *
-     * @return array
-     */
     public function getStructure(array $eaToolParams): array
     {
         $methodsStructure = [];
@@ -229,19 +171,11 @@ class Entity
         return $structure;
     }
 
-    /**
-     * @return array
-     */
     public function getProperties(): array
     {
         return $this->properties;
     }
 
-    /**
-     * @param array $properties
-     *
-     * @return $this
-     */
     public function setProperties(array $properties): Entity
     {
         $this->properties = $properties;
@@ -249,9 +183,6 @@ class Entity
         return $this;
     }
 
-    /**
-     * @throws EAException
-     */
     private function initProperties(): void
     {
         $reflectionProperties = (new \ReflectionClass($this->metaData->getName()))->getProperties();
@@ -263,19 +194,11 @@ class Entity
         $this->properties = PropertyTypeHelper::setVichPropertiesConfig($this->properties);
     }
 
-    /**
-     * @return ClassMetadata
-     */
     public function getMetaData(): ClassMetadata
     {
         return $this->metaData;
     }
 
-    /**
-     * @param array $metaData
-     *
-     * @return $this
-     */
     public function setMetaData(array $metaData): Entity
     {
         $this->metaData = $metaData;

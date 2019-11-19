@@ -5,7 +5,8 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 
 class GeneratorCleanCommand extends ContainerAwareCommand
 {
@@ -17,27 +18,16 @@ class GeneratorCleanCommand extends ContainerAwareCommand
         ;
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $container = $this->getContainer();
         $dirProject = $container->getParameter('kernel.project_dir');
 
         if (!is_dir($dirProject.'/config/packages/easy_admin')) {
-            $output->writeln('<info>Unable</info> to clean easy admin configuration, no configuration file found.');
-            $output->writeln('The cleaning process is stopped.');
-
-            return;
+            throw new \RuntimeException('Unable to clean easy admin configuration, no configuration file found.');
         }
 
-        try {
-            $eaTool = $container->get('wandi.easy_admin_plus.generator.clean');
-            $eaTool->run();
-        } catch (EAException $e) {
-            $output->writeln('<error>'.$e->getMessage().'</error>');
-        }
+        $eaTool = $container->get('wandi.easy_admin_plus.generator.clean');
+        $eaTool->run();
     }
 }

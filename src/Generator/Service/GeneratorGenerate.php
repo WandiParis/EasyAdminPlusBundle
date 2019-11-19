@@ -12,9 +12,6 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
     private $vichMappings;
     private $consoleOutput;
 
-    /**
-     * @required
-     */
     public function buildServiceConfig()
     {
         $this->vichMappings = $this->container->hasParameter('vich_uploader.mappings') ?
@@ -24,8 +21,6 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
 
     /**
      * Generates entity files, the menu file, and the base file.
-     *
-     * @throws \Wandi\EasyAdminPlusBundle\Generator\Exception\EAException
      */
     public function run(): void
     {

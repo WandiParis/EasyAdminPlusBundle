@@ -263,11 +263,6 @@ class TypeGuesser
 
     /**
      * Return the guessed type of the property of the class.
-     *
-     * @param string $property
-     * @param string $class
-     *
-     * @return string
      */
     public static function getGuessType(string $property, string $class): string
     {

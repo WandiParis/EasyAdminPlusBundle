@@ -11,11 +11,6 @@ abstract class GeneratorBase
     protected $projectDir;
     protected $container;
 
-    /**
-     * GeneratorBase constructor.
-     *
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -24,9 +19,6 @@ abstract class GeneratorBase
         $this->projectDir = $container->getParameter('kernel.project_dir');
     }
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;

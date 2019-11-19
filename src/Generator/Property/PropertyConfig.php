@@ -9,20 +9,13 @@ use Wandi\EasyAdminPlusBundle\Generator\Type\TypeGuesser;
 
 class PropertyConfig
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private static $defaultPropertyConfig = [
         'name' => '',
         'annotationClasses' => [],
         'typeConfig' => null,
     ];
 
-    /**
-     * @param \ReflectionProperty $reflectProperty
-     *
-     * @return array
-     */
     public static function setPropertyConfig(\ReflectionProperty $reflectProperty): array
     {
         $annotationReader = new AnnotationReader();

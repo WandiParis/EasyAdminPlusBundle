@@ -7,7 +7,7 @@ use Symfony\Component\Translation\Translator;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 use Doctrine\ORM\Mapping\Column;
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Field;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Method;
 use Wandi\EasyAdminPlusBundle\Generator\Type\EasyAdminType;
@@ -53,45 +53,33 @@ class PropertyTypeHelper extends AbstractPropertyHelper
         return self::$typeHelpers;
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Field  $field
-     * @param Method $method
-     *
-     * @throws EAException
-     */
     public static function handleImage(array $propertyConfig, Field $field, Method $method): void
     {
         /** @var UploadableField $uploadableField */
         $uploadableField = PropertyHelper::getClassFromArray($propertyConfig['annotationClasses'], UploadableField::class);
 
         if (!isset(GeneratorTool::getParameterBag()['vich_uploader.mappings'])) {
-            throw new EaException('No vich mappings detected');
+            throw new RuntimeCommandException('No vich mappings detected');
         }
 
         if (!isset((GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()])) {
-            throw new EaException('No vich mappings detected for ' . $uploadableField->getMapping());
+            throw new RuntimeCommandException('No vich mappings detected for ' . $uploadableField->getMapping());
         }
 
         $mapping = (GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()];
 
         if (!isset($mapping['uri_prefix'])) {
-            throw new EaException('The uri_prefix index doest not exist ');
+            throw new RuntimeCommandException('The uri_prefix index doest not exist ');
         }
         $param = array_search($mapping['uri_prefix'], GeneratorTool::getParameterBag(), true);
 
         if (!$param) {
-            throw new EaException(sprintf('Can not find the parameter relative to the specified value (%s)', $mapping['uri_prefix']));
+            throw new RuntimeCommandException(sprintf('Can not find the parameter relative to the specified value (%s)', $mapping['uri_prefix']));
         }
 
         $field->setBasePath('%'.$param.'%');
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Field  $field
-     * @param Method $method
-     */
     public static function handleDecimal(array $propertyConfig, Field $field, Method $method): void
     {
         /** @var Column $column */
@@ -116,11 +104,6 @@ class PropertyTypeHelper extends AbstractPropertyHelper
         }
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Field  $field
-     * @param Method $method
-     */
     public static function handleAutoComplete(array $propertyConfig, Field $field, Method $method): void
     {
         if ('list' == $method->getName() && PropertyHelper::getClassFromArray($propertyConfig['annotationClasses'], OneToMany::class)) {
@@ -137,11 +120,6 @@ class PropertyTypeHelper extends AbstractPropertyHelper
         }
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Field  $field
-     * @param Method $method
-     */
     public static function handleDatetimetz(array $propertyConfig, Field $field, Method $method): void
     {
         if (in_array($method->getName(), ['list', 'show'])) {
@@ -149,13 +127,6 @@ class PropertyTypeHelper extends AbstractPropertyHelper
         }
     }
 
-    /**
-     * @param array $properties
-     *
-     * @return array
-     *
-     * @throws EAException
-     */
     public static function setVichPropertiesConfig(array $properties): array
     {
         $vichProperties = array_filter($properties, function ($property) {
@@ -177,7 +148,7 @@ class PropertyTypeHelper extends AbstractPropertyHelper
             $propertyTargeted = $propertyTargeted[0] ?? null;
 
             if (!$propertyTargeted) {
-                throw new EAException('Bad fileNameProperty (Vich property)');
+                throw new RuntimeCommandException('Bad fileNameProperty (Vich property)');
             }
             $config = array_values(array_filter(TypeGuesser::$generatorTypesConfiguration, function ($type) {
                 return EasyAdminType::IMAGE == $type['easyAdminType'];

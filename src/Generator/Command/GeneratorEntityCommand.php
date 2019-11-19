@@ -2,7 +2,7 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Command;
 
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,7 +70,7 @@ the generation process is stopped</info></comment>');
         try {
             $eaTool = $this->getContainer()->get('wandi.easy_admin_plus.generator.entity');
             $eaTool->run($entitiesMetaData, $this);
-        } catch (EAException $e) {
+        } catch (RuntimeCommandException $e) {
             $output->writeln('<error>'.$e->getMessage().'</error>');
         }
     }

@@ -39,7 +39,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Date;
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Field;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Method;
 
@@ -157,9 +157,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         ],
     ];
 
-    /**
-     * @return mixed
-     */
     public static function getClassHelpers(): array
     {
         return self::$classHelpers;
@@ -170,12 +167,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         self::$classHelpers = $helpers;
     }
 
-    /**
-     * @param SortablePosition $class
-     * @param Field            $field
-     * @param Entity           $entity
-     * @param Method           $method
-     */
     public static function handlePosition(SortablePosition $class, Field $field, Entity $entity, Method $method): void
     {
         $typeOptions = $field->getTypeOptions();
@@ -185,12 +176,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         }
     }
 
-    /**
-     * @param Image  $image
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleImage(Image $image, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -327,10 +312,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * Returns the list of mimes in a string.
-     *
-     * @param array $mimes
-     *
-     * @return string
      */
     private static function getMimesToString(array $mimes): string
     {
@@ -346,11 +327,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         return $mimesString;
     }
 
-    /**
-     * @param array $messages
-     *
-     * @return string
-     */
     private static function buildHelpMessage(array $messages): string
     {
         $helpMessage = '';
@@ -361,14 +337,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         return $helpMessage;
     }
 
-    /**
-     * @param Choice $choice
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     *
-     * @throws EAException
-     */
     public static function handleChoice(Choice $choice, Field $field, Entity $entity, Method $method): void
     {
         if (!is_array($choice->choices) && !$choice->callback) {
@@ -376,7 +344,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
         }
 
         if (!is_array($choice->choices) && !$choice->callback) {
-            throw new EAException('Either "choices" or "callback" must be specified on constraint Choice');
+            throw new RuntimeCommandException('Either "choices" or "callback" must be specified on constraint Choice');
         }
 
         if ($choice->callback) {
@@ -384,7 +352,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
             if (!is_callable($choices = array(new $object(), $choice->callback))
                 && !is_callable($choice->callback)
             ) {
-                throw new EAException('The Choice constraint expects a valid callback');
+                throw new RuntimeCommandException('The Choice constraint expects a valid callback');
             }
             $choices = call_user_func($choices);
         } else {
@@ -402,14 +370,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * If the linked field has the nullable option set to false,
-     * set the allow_delete option to felse for the field currant.
-     *
-     * @param UploadableField $uploadableField
-     * @param Field           $field
-     * @param Entity          $entity
-     * @param Method          $method
-     *
-     * @throws EAException
+     * set the allow_delete option to felse for the current field
      */
     public static function handleUploadableField(UploadableField $uploadableField, Field $field, Entity $entity, Method $method): void
     {
@@ -419,7 +380,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
         }));
 
         if (!isset($propertyLinked[0])) {
-            throw new EAException('The UploadableField does not have a valid file name property');
+            throw new RuntimeCommandException('The UploadableField does not have a valid file name property');
         }
         $column = PropertyHelper::getClassFromArray($propertyLinked[0]['annotationClasses'], Column::class);
         if (!$column->nullable) {
@@ -431,22 +392,12 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * Check if it is an associative array.
-     *
-     * @param array $array
-     *
-     * @return bool
      */
     public static function isAssoc(array $array): bool
     {
         return $array !== array_values($array);
     }
 
-    /**
-     * @param Range  $range
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleRange(Range $range, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -474,12 +425,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param Count  $count
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleCount(Count $count, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -505,13 +450,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
         $field->setHelp($helpMessage);
     }
-    
-    /**
-     * @param Bic    $bic
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
+
     public static function handleBic(Bic $bic, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -524,12 +463,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setTypeOptions($typeOptions);
     }
 
-    /**
-     * @param Iban   $iban
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleIban(Iban $iban, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -538,12 +471,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param Isbn   $isbn
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleIsbn(Isbn $isbn, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -560,12 +487,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param Email  $email
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleEmail(Email $email, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -574,21 +495,13 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param Url    $url
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     *
-     * @throws EAException
-     */
     public static function handleUrl(Url $url, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
 
         if (empty($url->protocols)) {
-            throw new EAException('No authorized protocols (property -> '.$field->getName().')');
+            throw new RuntimeCommandException('No authorized protocols (property -> '.$field->getName().')');
         }
         $protocols = implode(', ', $url->protocols);
         $helpMessage[] = $translator->trans('generator.url.protocols', ['%protocols' => $protocols]);
@@ -596,12 +509,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp(self::buildHelpMessage($helpMessage));
     }
 
-    /**
-     * @param Regex  $regex
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleRegex(Regex $regex, Field $field, Entity $entity, Method $method): void
     {
         if ($regex->match) {
@@ -611,12 +518,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         }
     }
 
-    /**
-     * @param Length $length
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleLength(Length $length, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -642,12 +543,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param Luhn   $luhn
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleLuhn(Luhn $luhn, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -662,11 +557,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * ISO 4217.
-     *
-     * @param Currency $currency
-     * @param Field    $field
-     * @param Entity   $entity
-     * @param Method   $method
      */
     public static function handleCurrency(Currency $currency, Field $field, Entity $entity, Method $method): void
     {
@@ -677,11 +567,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * ISO 3166-1.
-     *
-     * @param Country $country
-     * @param Field   $field
-     * @param Entity  $entity
-     * @param Method  $method
      */
     public static function handleCountry(Country $country, Field $field, Entity $entity, Method $method): void
     {
@@ -690,12 +575,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setTypeOptions($typeOptions);
     }
 
-    /**
-     * @param Ip     $ip
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleIp(Ip $ip, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -722,11 +601,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * RFC 3066.
-     *
-     * @param Language $language
-     * @param Field    $field
-     * @param Entity   $entity
-     * @param Method   $method
      */
     public static function handleLanguage(Language $language, Field $field, Entity $entity, Method $method): void
     {
@@ -737,11 +611,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * ISO 639-1.
-     *
-     * @param Locale $locale
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
      */
     public static function handleLocale(Locale $locale, Field $field, Entity $entity, Method $method): void
     {
@@ -750,12 +619,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setTypeOptions($typeOptions);
     }
 
-    /**
-     * @param CardScheme $cardScheme
-     * @param Field      $field
-     * @param Entity     $entity
-     * @param Method     $method
-     */
     public static function handleCardScheme(CardScheme $cardScheme, Field $field, Entity $entity, Method $method): void
     {
         $typeOptions = $field->getTypeOptions();
@@ -763,12 +626,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setTypeOptions($typeOptions);
     }
 
-    /**
-     * @param Issn   $issn
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleIssn(Issn $issn, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -777,12 +634,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param EqualTo $equalTo
-     * @param Field   $field
-     * @param Entity  $entity
-     * @param Method  $method
-     */
     public static function handleEqualTo(EqualTo $equalTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -791,12 +642,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param NotEqualTo $notEqualTo
-     * @param Field      $field
-     * @param Entity     $entity
-     * @param Method     $method
-     */
     public static function handleNotEqualTo(NotEqualTo $notEqualTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -805,12 +650,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param IdenticalTo $identicalTo
-     * @param Field       $field
-     * @param Entity      $entity
-     * @param Method      $method
-     */
     public static function handleIdenticalTo(IdenticalTo $identicalTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -819,12 +658,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param NotIdenticalTo $notIdenticalTo
-     * @param Field          $field
-     * @param Entity         $entity
-     * @param Method         $method
-     */
     public static function handleNotIdenticalTo(NotIdenticalTo $notIdenticalTo, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -833,12 +666,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param LessThan $lessThan
-     * @param Field    $field
-     * @param Entity   $entity
-     * @param Method   $method
-     */
     public static function handleLessThan(LessThan $lessThan, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -847,12 +674,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param LessThanOrEqual $lessThanOrEqual
-     * @param Field           $field
-     * @param Entity          $entity
-     * @param Method          $method
-     */
     public static function handleLessThanOrEqual(LessThanOrEqual $lessThanOrEqual, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -861,12 +682,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param GreaterThan $greaterThan
-     * @param Field       $field
-     * @param Entity      $entity
-     * @param Method      $method
-     */
     public static function handleGreaterThan(GreaterThan $greaterThan, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -875,12 +690,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param GreaterThanOrEqual $greaterThanOrEqual
-     * @param Field              $field
-     * @param Entity             $entity
-     * @param Method             $method
-     */
     public static function handleGreaterThanOrEqual(GreaterThanOrEqual $greaterThanOrEqual, Field $field, Entity $entity, Method $method): void
     {
         /** @var Translator $translator */
@@ -889,34 +698,16 @@ class PropertyClassHelper extends AbstractPropertyHelper
         $field->setHelp($helpMessage);
     }
 
-    /**
-     * @param DateTime $dateTime
-     * @param Field    $field
-     * @param Entity   $entity
-     * @param Method   $method
-     */
     public static function handleDateTime(DateTime $dateTime, Field $field, Entity $entity, Method $method): void
     {
         //dump($dateTime);die();
     }
 
-    /**
-     * @param Date   $date
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleDate(Date $date, Field $field, Entity $entity, Method $method): void
     {
         //dump($date);die();
     }
 
-    /**
-     * @param Time   $time
-     * @param Field  $field
-     * @param Entity $entity
-     * @param Method $method
-     */
     public static function handleTime(Time $time, Field $field, Entity $entity, Method $method): void
     {
         //dump($time);die();

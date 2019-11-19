@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Command\Command;
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -23,11 +23,6 @@ class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
 
     /**
      * TODO: Factoriser les fonctions generateFileEntity avec Eatool class.
-     *
-     * @param array   $entitiesMetaData
-     * @param Command $command
-     *
-     * @throws EAException
      */
     public function run(array $entitiesMetaData, Command $command): void
     {
@@ -53,17 +48,12 @@ class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
         $this->updateImportsFile($generatorTool->getEntities());
     }
 
-    /**
-     * @param ArrayCollection $entities
-     *
-     * @throws EAException
-     */
     private function updateMenuFile(ArrayCollection $entities): void
     {
         $fileMenuContent = Yaml::parse(file_get_contents(sprintf('%s/config/packages/easy_admin/menu.yaml', $this->projectDir)));
 
         if (!isset($fileMenuContent['easy_admin']['design']['menu'])) {
-            throw new EAException('no easy admin menu detected');
+            throw new RuntimeCommandException('no easy admin menu detected');
         }
 
         foreach ($entities as $entity) {
@@ -76,17 +66,12 @@ class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
         file_put_contents($this->projectDir.'/config/packages/easy_admin/menu.yaml', $ymlContent);
     }
 
-    /**
-     * @param ArrayCollection $entities
-     *
-     * @throws EAException
-     */
     private function updateImportsFile(ArrayCollection $entities): void
     {
         $fileMenuContent = Yaml::parse(file_get_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir)));
 
         if (!isset($fileMenuContent['imports'])) {
-            throw new EAException('There is no imports option in the configuration file.');
+            throw new RuntimeCommandException('There is no imports option in the configuration file.');
         }
 
         foreach ($entities as $entity) {
@@ -101,7 +86,7 @@ class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
 
         $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
         if (!file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir), $ymlContent)) {
-            throw new EAException(sprintf('Can not update imported files in %s/config/packages/easy_admin.yaml', $this->projectDir));
+            throw new RuntimeCommandException(sprintf('Can not update imported files in %s/config/packages/easy_admin.yaml', $this->projectDir));
         }
     }
 

@@ -4,7 +4,7 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Yaml\Yaml;
 
@@ -13,47 +13,34 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
     private $consoleOutput;
     private $bundles;
 
-    /**
-     * @required
-     */
     public function buildServiceConfig()
     {
         $this->consoleOutput = new ConsoleOutput();
         $this->bundles = $this->container->getParameter('kernel.bundles');
     }
 
-    /**
-     * @throws EAException
-     */
     public function run(): void
     {
         $fileContent = Yaml::parse(file_get_contents($this->projectDir.'/config/packages/easy_admin.yaml'));
 
-        //RETIRER cette horreur
         if (!isset($fileContent['imports'])) {
-            throw new EAException('There are no imported files.');
+            throw new RuntimeCommandException('There are no imported files.');
         }
+
         $entitiesToDelete = $this->getEntitiesToDelete($fileContent);
 
-        if (empty($entitiesToDelete)) {
-            $this->consoleOutput->writeln('There are no files to clean, cleaning process <info>completed</info>.');
-
-            return;
+        if (!empty($entitiesToDelete)) {
+            $this->consoleOutput->writeln('<info>Start </info>of cleaning easyadmin configuration files.');
+            $this->purgeImportedFiles($entitiesToDelete);
+            $this->purgeEasyAdminMenu($entitiesToDelete);
+            $this->purgeEntityFiles($entitiesToDelete);
         }
 
-        $this->consoleOutput->writeln('<info>Start </info>of cleaning easyadmin configuration files.');
-        $this->purgeImportedFiles($entitiesToDelete);
-        $this->purgeEasyAdminMenu($entitiesToDelete);
-        $this->purgeEntityFiles($entitiesToDelete);
         $this->consoleOutput->writeln('Cleaning process <info>completed</info>');
     }
 
     /**
      * Returns the list of entities to delete.
-     *
-     * @param $fileContent
-     *
-     * @return array
      */
     private function getEntitiesToDelete($fileContent): array
     {
@@ -69,11 +56,6 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
         return $entitiesToDelete;
     }
 
-    /**
-     * @param array $files
-     *
-     * @return array
-     */
     private function getEasyAdminEntityNames(array $files): array
     {
         $entitiesName = [];
@@ -96,11 +78,6 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
 
     /**
      * Returns an array containing the names of the entities.
-     *
-     * @param array $metaDataList
-     * @param array $bundles
-     *
-     * @return array
      */
     private function getEntitiesNameFromMetaDataList(array $metaDataList, array $bundles): array
     {
@@ -111,17 +88,12 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
         return $entitiesName;
     }
 
-    /**
-     * @param $entities
-     *
-     * @throws EAException
-     */
     private function purgeImportedFiles(array $entities): void
     {
         $fileBaseContent = Yaml::parse(file_get_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir)));
 
         if (!isset($fileBaseContent['imports'])) {
-            throw new EAException('No imported files2');
+            throw new RuntimeCommandException('No imported files2');
         }
 
         foreach ($fileBaseContent['imports'] as $key => $import) {
@@ -135,17 +107,12 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
         file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir), $ymlContent);
     }
 
-    /**
-     * @param $entities
-     *
-     * @throws EAException
-     */
     private function purgeEasyAdminMenu(array $entities): void
     {
         $fileContent = Yaml::parse(file_get_contents(sprintf('%s/config/packages/easy_admin/menu.yaml', $this->projectDir)));
 
         if (!isset($fileContent['easy_admin']['design']['menu'])) {
-            throw new EAException('no easy admin menu detected');
+            throw new RuntimeCommandException('no easy admin menu detected');
         }
 
         foreach ($fileContent['easy_admin']['design']['menu'] as $key => $entry) {
@@ -159,11 +126,6 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
         file_put_contents($this->projectDir.'/config/packages/easy_admin/menu.yaml', $ymlContent);
     }
 
-    /**
-     * @param array $entities
-     *
-     * @throws EAException
-     */
     private function purgeEntityFiles(array $entities): void
     {
         foreach ($entities['name'] as $entityName) {
@@ -172,7 +134,7 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
             if (unlink($this->projectDir.$path)) {
                 $this->consoleOutput->writeln(sprintf('   >File <comment>%s</comment> has been <info>deleted</info>.', $path));
             } else {
-                throw new EAException(sprintf('Unable to delete configuration file for %s entity', $entityName));
+                throw new RuntimeCommandException(sprintf('Unable to delete configuration file for %s entity', $entityName));
             }
         }
     }

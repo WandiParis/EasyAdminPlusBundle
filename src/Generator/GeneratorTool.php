@@ -2,7 +2,7 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator;
 
-use Wandi\EasyAdminPlusBundle\Generator\Exception\EAException;
+use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Yaml\Dumper;
@@ -20,9 +20,6 @@ class GeneratorTool
     private static $translation = null;
     private static $parameterBag = null;
 
-    /**
-     * EATool constructor.
-     */
     public function __construct($parameters)
     {
         $this->entities = new ArrayCollection();
@@ -30,76 +27,46 @@ class GeneratorTool
         $this->initHelpers();
     }
 
-    /**
-     * @return null|Translator
-     */
     public static function getTranslation(): ?Translator
     {
         return self::$translation;
     }
 
-    /**
-     * @return array|null
-     */
     public static function getParameterBag(): ?array
     {
         return self::$parameterBag;
     }
 
-    /**
-     * @param array $parameterBag
-     */
     public static function setParameterBag(array $parameterBag): void
     {
         self::$parameterBag = $parameterBag;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getEntities(): ArrayCollection
     {
         return $this->entities;
     }
 
-    /**
-     * @param ArrayCollection $entities
-     *
-     * @return GeneratorTool
-     */
-    public function setEntities(ArrayCollection $entities): GeneratorTool
+    public function setEntities(ArrayCollection $entities): self
     {
         $this->entities = $entities;
 
         return $this;
     }
 
-    /**
-     * @param Entity $entity
-     *
-     * @return $this
-     */
-    public function addEntity(Entity $entity): GeneratorTool
+    public function addEntity(Entity $entity): self
     {
         $this->entities[] = $entity;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return $this
-     */
-    public function setParameters(array $parameters): GeneratorTool
+    public function setParameters(array $parameters): self
     {
         $this->parameters = $parameters;
 
@@ -125,10 +92,6 @@ class GeneratorTool
         return $structure;
     }
 
-    /**
-     * @param $fileName
-     * @param $projectDir
-     */
     public function initTranslation(string $fileName, string $projectDir, string $userLocale): void
     {
         if (null === self::$translation) {
@@ -153,12 +116,6 @@ class GeneratorTool
         PropertyTypeHelper::setTypeHelpers($typeHelpers);
     }
 
-    /**
-     * @param $projectDir
-     * @param ConsoleOutput $consoleOutput
-     *
-     * @throws EAException
-     */
     public function generateMenuFile(string $projectDir, ConsoleOutput $consoleOutput): void
     {
         $ymlContent = self::buildDumpPhpToYml($this->getMenuStructure(), $this->parameters);
@@ -166,23 +123,20 @@ class GeneratorTool
         if (false !== file_put_contents($projectDir.$path, $ymlContent)) {
             $consoleOutput->writeln('The menu file <comment>'.$path.' </comment>has been <info>generated</info>.');
         } else {
-            throw new EAException('Unable to generate the menu file, the generation process is <info>stopped</info>');
+            throw new RuntimeCommandException('Unable to generate the menu file, the generation process is <info>stopped</info>');
         }
     }
 
-    /**
-     * @param $projectDir
-     * @param ConsoleOutput $consoleOutput
-     *
-     * @throws EAException
-     */
     public function generateEntityFiles(string $projectDir, ConsoleOutput $consoleOutput): void
     {
         if (!is_dir($projectDir.'/config/packages/easy_admin/entities/')) {
             if (mkdir($projectDir.'/config/packages/easy_admin/entities/')) {
                 $consoleOutput->writeln('<info>entities folder created successfully.</info>');
             } else {
-                throw new EAException('the entity folder could not be created');
+                throw new RuntimeCommandException(sprintf(
+                    'the entity folder could not be created : %s',
+                    $projectDir.'/config/packages/easy_admin/entities/'
+                ));
             }
         }
 
@@ -195,14 +149,14 @@ class GeneratorTool
             if (file_put_contents($projectDir.$path, $ymlContent)) {
                 $consoleOutput->writeln('  > generating <comment>'.$path.'</comment>');
             } else {
-                throw new EAException('Unable to generate the configuration file for the '.$entity->getName().' entity, the generation process is stopped');
+                throw new RuntimeCommandException(sprintf(
+                    'Unable to generate the configuration file for the %s entity, the generation process is stopped',
+                    $entity->getName()
+                ));
             }
         }
     }
 
-    /**
-     * @return array
-     */
     private function getBaseFileStructure(): array
     {
         $importFiles = [];
@@ -219,9 +173,6 @@ class GeneratorTool
         ];
     }
 
-    /**
-     * @return array
-     */
     private function getDesignFileStructure(): array
     {
         $structure = [
@@ -252,16 +203,10 @@ class GeneratorTool
         if (file_put_contents($projectDir.$path, $ymlContent)) {
             $consoleOutput->writeln('The <info>design</info>  file <comment>'.$path.'</comment> has been <info>generated</info>.');
         } else {
-            throw new EAException('Unable to generate the design file , the generation process is <info>stopped</info>');
+            throw new RuntimeCommandException('Unable to generate the design file , the generation process is <info>stopped</info>');
         }
     }
 
-    /**
-     * @param $projectDir
-     * @param ConsoleOutput $consoleOutput
-     *
-     * @throws EAException
-     */
     public function generateBaseFile(string $projectDir, ConsoleOutput $consoleOutput): void
     {
         $ymlContent = self::buildDumpPhpToYml($this->getBaseFileStructure(), $this->parameters);
@@ -272,17 +217,12 @@ class GeneratorTool
         if (file_put_contents($projectDir.$path, $ymlContent)) {
             $consoleOutput->writeln('The <info>main</info> configuration file <comment>'.$path.'</comment> has been <info>generated</info>.');
         } else {
-            throw new EAException('Unable to generate the main configuration file , the generation process is <info>stopped</info>');
+            throw new RuntimeCommandException('Unable to generate the main configuration file , the generation process is <info>stopped</info>');
         }
     }
 
     /**
      * Dumps a PHP value to YML.
-     *
-     * @param array $phpContent
-     * @param array $parameters
-     *
-     * @return string
      */
     public static function buildDumpPhpToYml(array $phpContent, array $parameters): string
     {
