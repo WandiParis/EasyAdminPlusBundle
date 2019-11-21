@@ -18,7 +18,7 @@ class StringEipType extends AbstractEipType{
         return '@EasyAdmin/edit_in_place/_string.html.twig';
     }
 
-    public function getType(): string{
+    public function getType(): string{ //necessar for yaml config else use StringEipType::class in config
         return 'string'; 
     }
 }
