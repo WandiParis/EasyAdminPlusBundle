@@ -275,8 +275,6 @@ class TypeGuesser
         $propertyAnnotations = $annotationReader->getPropertyAnnotations(new \ReflectionProperty($class, $property));
         self::getTypesOrderedByPriorities();
 
-//        dd($propertyAnnotations);
-
         foreach (self::$generatorTypesConfiguration as $type => &$configuration) {
             $configuration = array_replace(self::$defaultConfigType, $configuration);
             $check = true;

@@ -18,8 +18,6 @@ class PropertyConfig
 
     public static function setPropertyConfig(\ReflectionProperty $reflectProperty): array
     {
-//        if ($reflectProperty->getName() !== 'createdAt') return [];
-
         $typeGuessed = TypeGuesser::getGuessType($reflectProperty->name, $reflectProperty->class);
         $propertyConfig = [
             'name' => $reflectProperty->getName(),
@@ -30,8 +28,6 @@ class PropertyConfig
         if (PropertyHelper::hasClass($propertyConfig['annotationClasses'], Id::class)) {
             $propertyConfig['typeConfig']['methodsNoAllowed'] = array_merge($propertyConfig['typeConfig']['methodsNoAllowed'], ['new', 'edit']);
         }
-
-        dump(sprintf('propriété: %s - type: %s', $propertyConfig['name'], $typeGuessed));
 
         return $propertyConfig;
     }
@@ -64,9 +60,7 @@ class PropertyConfig
             if (null === $propertyTargeted = $propertyTargeted[0] ?? null) {
                 continue;
             }
-
-//            dd($imageConfig);
-
+            
             foreach ($properties as &$property) {
                 if ($property === $propertyTargeted) {
                     $property['typeConfig'] = array_merge($imageConfig, ['propertyFile' => $vichProperty['name']]);
@@ -103,6 +97,9 @@ class PropertyConfig
         $properties = array_replace($properties, $timestampableProperties);
     }
 
+    /**
+     * Remove virtual property local
+     */
     public static function setTranslatableEntityPropertiesConfig(array &$properties): void
     {
         $properties = array_filter($properties, function ($property) {

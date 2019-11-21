@@ -120,6 +120,7 @@ class GeneratorTool
     {
         $ymlContent = self::buildDumpPhpToYml($this->getMenuStructure(), $this->parameters);
         $path = '/config/packages/easy_admin/menu.yaml';
+
         if (false !== file_put_contents($projectDir.$path, $ymlContent)) {
             $consoleOutput->writeln('The menu file <comment>'.$path.' </comment>has been <info>generated</info>.');
         } else {

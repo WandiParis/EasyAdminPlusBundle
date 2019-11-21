@@ -374,7 +374,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * If the linked field has the nullable option set to false,
-     * set the allow_delete option to felse for the current field.
+     * set the allow_delete option to false for the current field.
      */
     public static function handleUploadableField(UploadableField $uploadableField, Field $field, Entity $entity, Method $method): void
     {
