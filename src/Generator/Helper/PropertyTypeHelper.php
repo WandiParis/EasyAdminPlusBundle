@@ -4,10 +4,8 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Helper;
 
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Translation\Translator;
-use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 use Doctrine\ORM\Mapping\Column;
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Field;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Method;
 use Wandi\EasyAdminPlusBundle\Generator\Type\EasyAdminType;
@@ -49,29 +47,10 @@ class PropertyTypeHelper extends AbstractPropertyHelper
 
     public static function handleImage(array $propertyConfig, Field $field, Method $method): void
     {
-        /** @var UploadableField $uploadableField */
-        $uploadableField = PropertyHelper::getClassFromArray($propertyConfig['annotationClasses'], UploadableField::class);
-
-        if (!isset(GeneratorTool::getParameterBag()['vich_uploader.mappings'])) {
-            throw new RuntimeCommandException('No vich mappings detected');
-        }
-
-        if (!isset((GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()])) {
-            throw new RuntimeCommandException('No vich mappings detected for '.$uploadableField->getMapping());
-        }
-
-        $mapping = (GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()];
-
-        if (!isset($mapping['uri_prefix'])) {
-            throw new RuntimeCommandException('The uri_prefix index doest not exist ');
-        }
-        $param = array_search($mapping['uri_prefix'], GeneratorTool::getParameterBag(), true);
-
-        if (!$param) {
-            throw new RuntimeCommandException(sprintf('Can not find the parameter relative to the specified value (%s)', $mapping['uri_prefix']));
-        }
-
-        $field->setBasePath('%'.$param.'%');
+        $field
+            ->setTemplate('@WandiEasyAdminPlus/templates/vich_uploader_image.html.twig')
+            ->setPropertyFile($propertyConfig['typeConfig']['propertyFile'])
+        ;
     }
 
     public static function handleDecimal(array $propertyConfig, Field $field, Method $method): void

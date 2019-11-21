@@ -81,7 +81,8 @@ class TypeGuesser
             'embedded' => VichFile::class,
             'priority' => 4,
             'easyAdminType' => EasyAdminType::IMAGE,
-            'typeForced' => true,
+            'typeForced' => false,
+            'propertyFile' => null,
             'methodsNoAllowed' => [
                 'new',
                 'edit',

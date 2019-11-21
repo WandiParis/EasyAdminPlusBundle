@@ -208,11 +208,13 @@ class Entity
             PropertyConfig::setTranslatableEntityPropertiesConfig($this->properties);
         }
 
-//        dump('------------');
+        dump('------------');
 
-//        foreach ($this->properties as $property) {
-//            dump(sprintf('propriété: %s - type: %s', $property['name'], $property['typeConfig']['easyAdminType']));
-//        }
+        foreach ($this->properties as $property) {
+            dump(sprintf('propriété: %s - type: %s', $property['name'], $property['typeConfig']['easyAdminType']));
+        }
+
+//        die;
     }
 
     public function getMetaData(): ClassMetadata

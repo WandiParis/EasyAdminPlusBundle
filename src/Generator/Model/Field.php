@@ -13,16 +13,18 @@ class Field
     private $typeOptions;
     private $label;
     private $help;
-    private $basePath;
     private $format;
+    private $template;
+    private $propertyFile;
 
     public function __construct()
     {
         $this->typeOptions = ['attr' => []];
         $this->help = '';
-        $this->basePath = '';
         $this->forcedType = '';
         $this->format = '';
+        $this->template = null;
+        $this->propertyFile = '';
     }
 
     public function getName(): ?string
@@ -70,7 +72,8 @@ class Field
             'type_options' => $this->typeOptions,
             'help' => $this->help,
             'format' => $this->format,
-            'base_path' => $this->basePath,
+            'template' => $this->template,
+            'propertyFile' => $this->propertyFile,
         ];
 
         return self::removeEmptyValuesAndSubArrays($structure);
@@ -116,18 +119,6 @@ class Field
     public function setHelp(string $help): Field
     {
         $this->help = $help;
-
-        return $this;
-    }
-
-    public function getBasePath(): string
-    {
-        return $this->basePath;
-    }
-
-    public function setBasePath(string $basePath): Field
-    {
-        $this->basePath = $basePath;
 
         return $this;
     }
@@ -195,6 +186,30 @@ class Field
     public function setFormat($format): Field
     {
         $this->format = $format;
+
+        return $this;
+    }
+
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?string $template): Field
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    public function getPropertyFile(): string
+    {
+        return $this->propertyFile;
+    }
+
+    public function setPropertyFile(?string $propertyFile): Field
+    {
+        $this->propertyFile = $propertyFile;
 
         return $this;
     }

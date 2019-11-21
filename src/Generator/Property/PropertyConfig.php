@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping\Id;
 use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyHelper;
 use Wandi\EasyAdminPlusBundle\Generator\Type\EasyAdminType;
 use Wandi\EasyAdminPlusBundle\Generator\Type\TypeGuesser;
+use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
 
 class PropertyConfig
 {
@@ -30,7 +31,7 @@ class PropertyConfig
             $propertyConfig['typeConfig']['methodsNoAllowed'] = array_merge($propertyConfig['typeConfig']['methodsNoAllowed'], ['new', 'edit']);
         }
 
-//        dump(sprintf('propriété: %s - type: %s', $propertyConfig['name'], $typeGuessed));
+        dump(sprintf('propriété: %s - type: %s', $propertyConfig['name'], $typeGuessed));
 
         return $propertyConfig;
     }
@@ -64,9 +65,11 @@ class PropertyConfig
                 continue;
             }
 
+//            dd($imageConfig);
+
             foreach ($properties as &$property) {
                 if ($property === $propertyTargeted) {
-                    $property['typeConfig'] = $imageConfig;
+                    $property['typeConfig'] = array_merge($imageConfig, ['propertyFile' => $vichProperty['name']]);
                     $property['annotationClasses'][] = $uploadableField;
                 }
             }
@@ -75,7 +78,7 @@ class PropertyConfig
 
     /**
      * Set DateTime type
-     * Disable methods 'new', 'edit' method for createdAt/updatedAt field.
+     * Disable methods 'new', 'edit' method for createdAt/updatedAt fields.
      */
     public static function setTimestampablePropertiesConfig(array &$properties): void
     {
