@@ -33,7 +33,7 @@ class TemplateConfigPass implements ConfigPassInterface
     {
         foreach ($backendConfig['entities'] as $entityName => $entityConfig) {
             foreach (array('export') as $view) {
-                if (!array_key_exists($view, $backendConfig['entities'][$entityName])){
+                if (!array_key_exists($view, $backendConfig['entities'][$entityName])) {
                     continue;
                 }
                 foreach ($entityConfig[$view]['fields'] as $fieldName => $fieldMetadata) {
@@ -54,8 +54,8 @@ class TemplateConfigPass implements ConfigPassInterface
                     if ($entityConfig['primary_key_field_name'] === $fieldName) {
                         $template = $entityConfig['templates']['field_id'];
                     // easyadminplus overrides
-                    } elseif (file_exists('../vendor/wandi/easyadmin-plus-bundle/src/Resources/views/templates/export/field_' . $fieldMetadata['type'] . '.html.twig')) {
-                        $template = '@WandiEasyAdminPlus/templates/export/field_' . $fieldMetadata['type'] . '.html.twig';
+                    } elseif (file_exists('../vendor/wandi/easyadmin-plus-bundle/src/Resources/views/templates/export/field_'.$fieldMetadata['type'].'.html.twig')) {
+                        $template = '@WandiEasyAdminPlus/templates/export/field_'.$fieldMetadata['type'].'.html.twig';
                     } elseif (array_key_exists($fieldTemplateName, $entityConfig['templates'])) {
                         $template = $entityConfig['templates'][$fieldTemplateName];
                     } else {

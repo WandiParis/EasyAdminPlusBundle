@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Ip;
 use Symfony\Component\Validator\Constraints\Url;
 use Vich\UploaderBundle\Mapping\Annotation\UploadableField;
+use Vich\UploaderBundle\Entity\File as VichFile;
 use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyHelper;
 
 class TypeGuesser
@@ -31,6 +32,8 @@ class TypeGuesser
         'methodsTypeForced' => [],
         'methodsNoAllowed' => [],
         'doctrineColumnType' => null,
+        'embedded' => null,
+        'autoGuesser' => true,
     ];
 
     /**
@@ -74,7 +77,8 @@ class TypeGuesser
             ],
         ],
         EasyAdminType::IMAGE => [
-            'doctrineColumnType' => DoctrineType::STRING,
+            'autoGuesser' => false,
+            'embedded' => VichFile::class,
             'priority' => 4,
             'easyAdminType' => EasyAdminType::IMAGE,
             'typeForced' => true,
@@ -270,9 +274,16 @@ class TypeGuesser
         $propertyAnnotations = $annotationReader->getPropertyAnnotations(new \ReflectionProperty($class, $property));
         self::getTypesOrderedByPriorities();
 
+//        dd($propertyAnnotations);
+
         foreach (self::$generatorTypesConfiguration as $type => &$configuration) {
             $configuration = array_replace(self::$defaultConfigType, $configuration);
             $check = true;
+
+            if (false === $configuration['autoGuesser']) {
+                continue;
+            }
+
             foreach ($configuration['mandatoryClasses'] as $class) {
                 if (!PropertyHelper::hasClass($propertyAnnotations, $class)) {
                     $check = false;

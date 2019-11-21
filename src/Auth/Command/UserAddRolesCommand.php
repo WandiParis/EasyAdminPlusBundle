@@ -37,6 +37,7 @@ class UserAddRolesCommand extends ContainerAwareCommand
         /** @var User $user */
         if (null === ($user = $em->getRepository(User::class)->findOneByUsername($username))) {
             $output->writeln(sprintf('<error>User %s was not found</error>', $username));
+
             return;
         }
 
@@ -44,6 +45,7 @@ class UserAddRolesCommand extends ContainerAwareCommand
 
         if (empty($roles)) {
             $output->writeln(sprintf('<error>No role added to the user %s</error>', $username));
+
             return;
         }
 

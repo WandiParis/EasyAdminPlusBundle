@@ -24,7 +24,7 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
         $fileContent = Yaml::parse(file_get_contents($this->projectDir.'/config/packages/easy_admin.yaml'));
 
         if (!isset($fileContent['imports'])) {
-            throw new RuntimeCommandException('There are no imported files.');
+            return;
         }
 
         $entitiesToDelete = $this->getEntitiesToDelete($fileContent);

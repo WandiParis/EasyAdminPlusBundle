@@ -370,7 +370,7 @@ class PropertyClassHelper extends AbstractPropertyHelper
 
     /**
      * If the linked field has the nullable option set to false,
-     * set the allow_delete option to felse for the current field
+     * set the allow_delete option to felse for the current field.
      */
     public static function handleUploadableField(UploadableField $uploadableField, Field $field, Entity $entity, Method $method): void
     {
@@ -380,7 +380,8 @@ class PropertyClassHelper extends AbstractPropertyHelper
         }));
 
         if (!isset($propertyLinked[0])) {
-            throw new RuntimeCommandException('The UploadableField does not have a valid file name property');
+            return;
+//            throw new RuntimeCommandException('The UploadableField does not have a valid file name property');
         }
         $column = PropertyHelper::getClassFromArray($propertyLinked[0]['annotationClasses'], Column::class);
         if (!$column->nullable) {
@@ -402,7 +403,6 @@ class PropertyClassHelper extends AbstractPropertyHelper
     {
         /** @var Translator $translator */
         $translator = GeneratorTool::getTranslation();
-
 
         if (null !== $range->min && null !== $range->max) {
             if ($range->min == $range->max) {

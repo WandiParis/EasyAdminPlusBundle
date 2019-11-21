@@ -16,9 +16,6 @@ class Field
     private $basePath;
     private $format;
 
-    /**
-     * Field constructor.
-     */
     public function __construct()
     {
         $this->typeOptions = ['attr' => []];
@@ -28,19 +25,11 @@ class Field
         $this->format = '';
     }
 
-    /**
-     * @return mixed
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     *
-     * @return $this
-     */
     public function setName($name): Field
     {
         $this->name = $name;
@@ -48,19 +37,11 @@ class Field
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param mixed $type
-     *
-     * @return $this
-     */
     public function setType(string $type): Field
     {
         $this->type = $type;
@@ -68,19 +49,11 @@ class Field
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getLabel(): string
     {
         return $this->label;
     }
 
-    /**
-     * @param mixed $label
-     *
-     * @return $this
-     */
     public function setLabel($label): Field
     {
         $this->label = $label;
@@ -123,19 +96,11 @@ class Field
         return $array;
     }
 
-    /**
-     * @return array
-     */
     public function getTypeOptions(): ?array
     {
         return $this->typeOptions;
     }
 
-    /**
-     * @param array $typeOptions
-     *
-     * @return $this
-     */
     public function setTypeOptions(array $typeOptions): Field
     {
         $this->typeOptions = $typeOptions;
@@ -143,19 +108,11 @@ class Field
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getHelp(): string
     {
         return $this->help;
     }
 
-    /**
-     * @param mixed $help
-     *
-     * @return $this
-     */
     public function setHelp(string $help): Field
     {
         $this->help = $help;
@@ -163,19 +120,11 @@ class Field
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getBasePath(): string
     {
         return $this->basePath;
     }
 
-    /**
-     * @param mixed $basePath
-     *
-     * @return $this
-     */
     public function setBasePath(string $basePath): Field
     {
         $this->basePath = $basePath;
@@ -183,19 +132,11 @@ class Field
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getForcedType(): string
     {
         return $this->forcedType;
     }
 
-    /**
-     * @param mixed $forcedType
-     *
-     * @return $this
-     */
     public function setForcedType(string $forcedType): Field
     {
         $this->forcedType = $forcedType;
@@ -203,10 +144,6 @@ class Field
         return $this;
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Method $method
-     */
     public function buildFieldConfig(array $propertyConfig, Method $method): void
     {
         $this->name = $propertyConfig['name'];
@@ -219,10 +156,6 @@ class Field
         }
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Method $method
-     */
     private function buildFieldTypeHelpers(array $propertyConfig, Method $method): void
     {
         $helpers = PropertyTypeHelper::getTypeHelpers();
@@ -236,11 +169,6 @@ class Field
         }
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Entity $entity
-     * @param method $method
-     */
     private function buildFieldClassHelpers(array $propertyConfig, Entity $entity, method $method): void
     {
         $helpers = PropertyClassHelper::getClassHelpers();
@@ -253,30 +181,17 @@ class Field
         }
     }
 
-    /**
-     * @param array  $propertyConfig
-     * @param Entity $entity
-     * @param Method $method
-     */
     public function buildFieldHelpers(array $propertyConfig, Entity $entity, Method $method): void
     {
         $this->buildFieldClassHelpers($propertyConfig, $entity, $method);
         $this->buildFieldTypeHelpers($propertyConfig, $method);
     }
 
-    /**
-     * @return mixed
-     */
     public function getFormat(): string
     {
         return $this->format;
     }
 
-    /**
-     * @param mixed $format
-     *
-     * @return $this
-     */
     public function setFormat($format): Field
     {
         $this->format = $format;

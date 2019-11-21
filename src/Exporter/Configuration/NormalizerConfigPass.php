@@ -3,7 +3,6 @@
 namespace Wandi\EasyAdminPlusBundle\Exporter\Configuration;
 
 use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigPassInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Normalizes the different configuration formats available for entities, views,
@@ -49,7 +48,7 @@ class NormalizerConfigPass implements ConfigPassInterface
         foreach ($backendConfig['entities'] as $entityName => $entityConfig) {
             $designElementIndex = 0;
             foreach (array('export') as $view) {
-                if (!array_key_exists($view, $backendConfig['entities'][$entityName])){
+                if (!array_key_exists($view, $backendConfig['entities'][$entityName])) {
                     continue;
                 }
                 $fields = [];

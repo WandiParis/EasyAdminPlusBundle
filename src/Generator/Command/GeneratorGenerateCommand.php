@@ -14,7 +14,7 @@ use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 
 class GeneratorGenerateCommand extends ContainerAwareCommand
 {
-    /** @var SymfonyStyle $io*/
+    /** @var SymfonyStyle $io */
     private $io;
 
     protected function configure(): void
@@ -57,7 +57,6 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
             }
 
             $this->io->success('easy_admin folder created successfully.');
-
         } else {
             $cleanCommand->run(new ArrayInput([]), $output);
         }

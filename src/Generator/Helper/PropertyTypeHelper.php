@@ -11,16 +11,10 @@ use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Field;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Method;
 use Wandi\EasyAdminPlusBundle\Generator\Type\EasyAdminType;
-use Wandi\EasyAdminPlusBundle\Generator\Type\TypeGuesser;
 
 class PropertyTypeHelper extends AbstractPropertyHelper
 {
     const FORMAT_DATETIMETZ = 'd/m/Y à H\hi e';
-
-    private static $vichTypes = [
-        EasyAdminType::VICH_FILE,
-        EasyAdminType::VICH_IMAGE,
-    ];
 
     private static $typeHelpers = [
         EasyAdminType::IMAGE => [
@@ -63,7 +57,7 @@ class PropertyTypeHelper extends AbstractPropertyHelper
         }
 
         if (!isset((GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()])) {
-            throw new RuntimeCommandException('No vich mappings detected for ' . $uploadableField->getMapping());
+            throw new RuntimeCommandException('No vich mappings detected for '.$uploadableField->getMapping());
         }
 
         $mapping = (GeneratorTool::getParameterBag()['vich_uploader.mappings'])[$uploadableField->getMapping()];
@@ -125,43 +119,5 @@ class PropertyTypeHelper extends AbstractPropertyHelper
         if (in_array($method->getName(), ['list', 'show'])) {
             $field->setFormat(self::FORMAT_DATETIMETZ);
         }
-    }
-
-    public static function setVichPropertiesConfig(array $properties): array
-    {
-        $vichProperties = array_filter($properties, function ($property) {
-            return in_array($property['typeConfig']['easyAdminType'], self::$vichTypes);
-        });
-
-        foreach ($vichProperties as $vichProperty) {
-            $uploadableField = PropertyHelper::getClassFromArray($vichProperty['annotationClasses'], UploadableField::class);
-
-            /** @var UploadableField $uploadableField */
-            if (!$uploadableField) {
-                continue;
-            }
-
-            $propertyTargeted = array_values(array_filter($properties, function ($property) use ($uploadableField) {
-                return $property['name'] == $uploadableField->getFileNameProperty();
-            }));
-
-            $propertyTargeted = $propertyTargeted[0] ?? null;
-
-            if (!$propertyTargeted) {
-                throw new RuntimeCommandException('Bad fileNameProperty (Vich property)');
-            }
-            $config = array_values(array_filter(TypeGuesser::$generatorTypesConfiguration, function ($type) {
-                return EasyAdminType::IMAGE == $type['easyAdminType'];
-            }))[0];
-
-            foreach ($properties as &$property) {
-                if ($property === $propertyTargeted) {
-                    $property['typeConfig'] = array_replace(TypeGuesser::$defaultConfigType, $config);
-                    $property['annotationClasses'][] = $uploadableField;
-                }
-            }
-        }
-
-        return $properties;
     }
 }

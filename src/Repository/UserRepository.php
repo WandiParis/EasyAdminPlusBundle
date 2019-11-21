@@ -14,7 +14,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository implements UserLoade
      *
      * @param string $username
      *
-     * @return null|object
+     * @return object|null
      */
     public function loadUserByUsername($username)
     {

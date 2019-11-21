@@ -26,7 +26,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     {
         // return the subscribed events, their methods and priorities
         return array(
-            /**
+            /*
              * Removed in WandiEasyAdminPlus 1.0, roles are now part of EasyAdmin!
              *
              * See:

@@ -5,8 +5,8 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
 use Wandi\EasyAdminPlusBundle\Generator\Property\PropertyConfig;
+use Wandi\I18nBundle\Traits\TranslatableEntity;
 
 class Entity
 {
@@ -185,13 +185,34 @@ class Entity
 
     private function initProperties(): void
     {
-        $reflectionProperties = (new \ReflectionClass($this->metaData->getName()))->getProperties();
+        $reflectionClass = new \ReflectionClass($this->metaData->getName());
+        $classTraits = array_keys($reflectionClass->getTraits());
 
-        foreach ($reflectionProperties as $reflectionProperty) {
+        $timestampableClassName = 'Gedmo\Timestampable\Traits\Timestampable';
+        $translatableEntityClassName = 'Wandi\I18nBundle\Traits\TranslatableEntity';
+
+        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             $this->properties[] = PropertyConfig::setPropertyConfig($reflectionProperty);
         }
 
-        $this->properties = PropertyTypeHelper::setVichPropertiesConfig($this->properties);
+        //Vich (Image/File)
+        PropertyConfig::setVichPropertiesConfig($this->properties);
+
+        //Timestampable
+        if (trait_exists($timestampableClassName) && in_array($timestampableClassName, $classTraits)) {
+            PropertyConfig::setTimestampablePropertiesConfig($this->properties);
+        }
+
+        //TranslatableEntity
+        if (trait_exists($translatableEntityClassName) && in_array($translatableEntityClassName, $classTraits)) {
+            PropertyConfig::setTranslatableEntityPropertiesConfig($this->properties);
+        }
+
+//        dump('------------');
+
+//        foreach ($this->properties as $property) {
+//            dump(sprintf('propriété: %s - type: %s', $property['name'], $property['typeConfig']['easyAdminType']));
+//        }
     }
 
     public function getMetaData(): ClassMetadata

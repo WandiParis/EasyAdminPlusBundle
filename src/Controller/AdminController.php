@@ -159,10 +159,11 @@ class AdminController extends BaseAdminController
     }
 
     /**
-     * Format CSV file
+     * Format CSV file.
      *
      * @param Paginator $paginator recordsets to export
-     * @param array $fields fields to display
+     * @param array     $fields    fields to display
+     *
      * @return Response
      */
     public function getExportFile($paginator, $fields)
@@ -171,7 +172,7 @@ class AdminController extends BaseAdminController
 
         // first legend line
         $keys = array_keys($fields);
-        for($i=0, $count=count($keys) ; $i<$count ; $i++){
+        for ($i = 0, $count = count($keys); $i < $count; ++$i) {
             $keys[$i] = $fields[$keys[$i]]['label'] ?? $keys[$i];
         }
         fputcsv($handle, $keys, ';', '"');
@@ -194,7 +195,7 @@ class AdminController extends BaseAdminController
 
         return new Response("\xEF\xBB\xBF".$content, 200, array(
             'Content-Type' => 'application/force-download',
-            'Content-Disposition' => 'attachment; filename="' . sprintf('export-%s-%s.csv', strtolower($this->entity['name']), date('Ymd_His')) . '"'
+            'Content-Disposition' => 'attachment; filename="'.sprintf('export-%s-%s.csv', strtolower($this->entity['name']), date('Ymd_His')).'"',
         ));
     }
 
@@ -250,12 +251,12 @@ class AdminController extends BaseAdminController
             // dispatch event
             $fileNames = [];
             $locales = $translator->getLocales();
-            foreach(array_keys($request->request->get('dictionaries')[$domain]) as $fileName){
-                if (!preg_match('/^(.*)\/([^\.]+)\.([^\.]+)$/', $fileName, $match)){
+            foreach (array_keys($request->request->get('dictionaries')[$domain]) as $fileName) {
+                if (!preg_match('/^(.*)\/([^\.]+)\.([^\.]+)$/', $fileName, $match)) {
                     continue;
                 }
-                foreach($locales as $locale){
-                    $fileNames[] = $match[1] . '/' . $match[2] . '.' . $locale . '.' . $match[3];
+                foreach ($locales as $locale) {
+                    $fileNames[] = $match[1].'/'.$match[2].'.'.$locale.'.'.$match[3];
                 }
             }
             $this->get('event_dispatcher')->dispatch(EasyAdminPlusTranslatorEvents::POST_TRANSLATE,

@@ -2,7 +2,6 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Event;
 
-
 use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;

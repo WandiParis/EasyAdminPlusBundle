@@ -53,6 +53,8 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
             $generatorTool->addEntity($entity);
         }
 
+//        dd($generatorTool);
+
         $generatorTool->generateMenuFile($this->projectDir, $this->consoleOutput);
         $generatorTool->generateEntityFiles($this->projectDir, $this->consoleOutput);
         $generatorTool->generateDesignFile($this->projectDir, $this->consoleOutput);
