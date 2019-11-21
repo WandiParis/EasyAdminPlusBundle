@@ -29,7 +29,7 @@ class Method
         return $this->title;
     }
 
-    public function setTitle($title): Method
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -61,14 +61,14 @@ class Method
         return $this->actions;
     }
 
-    public function setActions(ArrayCollection $actions): Method
+    public function setActions(ArrayCollection $actions): self
     {
         $this->actions = $actions;
 
         return $this;
     }
 
-    public function addAction(Action $action): Method
+    public function addAction(Action $action): self
     {
         $this->actions[] = $action;
 
@@ -80,14 +80,14 @@ class Method
         return $this->fields;
     }
 
-    public function setFields(ArrayCollection $fields): Method
+    public function setFields(ArrayCollection $fields): self
     {
         $this->fields = $fields;
 
         return $this;
     }
 
-    public function addField(Field $field): Method
+    public function addField(Field $field): self
     {
         $this->fields[] = $field;
 
@@ -99,7 +99,7 @@ class Method
         return $this->sort;
     }
 
-    public function setSort(array $sort): Method
+    public function setSort(array $sort): self
     {
         $this->sort = $sort;
 
@@ -111,7 +111,7 @@ class Method
         return $this->name;
     }
 
-    public function setName(string $name): Method
+    public function setName(string $name): self
     {
         $this->name = $name;
 

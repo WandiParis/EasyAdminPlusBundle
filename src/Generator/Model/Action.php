@@ -18,7 +18,7 @@ class Action
         return $this->name;
     }
 
-    public function setName(string $name): Action
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -30,7 +30,7 @@ class Action
         return $this->icon;
     }
 
-    public function setIcon(string $icon): Action
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
 
@@ -42,7 +42,7 @@ class Action
         return $this->label;
     }
 
-    public function setLabel(string $label): Action
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 

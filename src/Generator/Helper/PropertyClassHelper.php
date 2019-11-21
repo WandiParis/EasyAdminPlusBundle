@@ -37,6 +37,7 @@ use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Time;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Date;
+use Wandi\ColorPickerBundle\Validator\Constraints\HexColor;
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
@@ -155,6 +156,9 @@ class PropertyClassHelper extends AbstractPropertyHelper
         Date::class => [
             'function' => 'handleDate',
         ],
+        HexColor::class => [
+            'function' => 'handleHexColor',
+        ]
     ];
 
     public static function getClassHelpers(): array
@@ -711,5 +715,34 @@ class PropertyClassHelper extends AbstractPropertyHelper
     public static function handleTime(Time $time, Field $field, Entity $entity, Method $method): void
     {
         //dump($time);die();
+    }
+
+    public static function handleEnum($enum, Field $field, Entity $entity, Method $method): void
+    {
+        if (in_array($method->getName(), ['list', 'show'])) {
+            $field
+                ->setTemplate('enum.html.twig')
+                ->setClass(get_class($enum))
+            ;
+        } else if (in_array($method->getName(), ['new', 'edit'])) {
+            $field->setForcedType('Greg0ire\Enum\Bridge\Symfony\Form\Type\EnumType');
+
+            $typeOptions = $field->getTypeOptions();
+            $typeOptions['class'] = get_class($enum);
+            $typeOptions['prefix_label_with_class'] = true;
+            $field->setTypeOptions($typeOptions);
+        }
+    }
+
+    /**
+     * https://packagist.org/packages/wandi/color-picker-bundle
+     */
+    public static function handleHexColor(HexColor $hexColor, Field $field, Entity $entity, Method $method): void
+    {
+        if (in_array($method->getName(), ['list', 'show'])) {
+            $field->setTemplate('@WandiEasyAdminPlus/templates/wandi_color_picker.html.twig');
+        } else if (in_array($method->getName(), ['new', 'edit'])) {
+            $field->setForcedType('Wandi\ColorPickerBundle\Form\Type\ColorPickerType');
+        }
     }
 }

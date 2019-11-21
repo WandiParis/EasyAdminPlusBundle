@@ -32,7 +32,7 @@ class Entity
         return $this->name;
     }
 
-    public function setName(string $name): Entity
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -83,7 +83,7 @@ class Entity
         return $this->class;
     }
 
-    public function setClass($class): Entity
+    public function setClass($class): self
     {
         $this->class = $class;
 
@@ -95,7 +95,7 @@ class Entity
         return $this->disabledAction;
     }
 
-    public function setDisabledAction($disabledAction): Entity
+    public function setDisabledAction($disabledAction): self
     {
         $this->disabledAction = $disabledAction;
 
@@ -107,7 +107,7 @@ class Entity
         return $this->methods;
     }
 
-    public function setMethods(ArrayCollection $methods): Entity
+    public function setMethods(ArrayCollection $methods): self
     {
         $this->methods = $methods;
 
@@ -176,7 +176,7 @@ class Entity
         return $this->properties;
     }
 
-    public function setProperties(array $properties): Entity
+    public function setProperties(array $properties): self
     {
         $this->properties = $properties;
 
@@ -220,12 +220,5 @@ class Entity
     public function getMetaData(): ClassMetadata
     {
         return $this->metaData;
-    }
-
-    public function setMetaData(array $metaData): Entity
-    {
-        $this->metaData = $metaData;
-
-        return $this;
     }
 }

@@ -16,6 +16,7 @@ class Field
     private $format;
     private $template;
     private $propertyFile;
+    private $class;
 
     public function __construct()
     {
@@ -24,7 +25,8 @@ class Field
         $this->forcedType = '';
         $this->format = '';
         $this->template = null;
-        $this->propertyFile = '';
+        $this->propertyFile = null;
+        $this->class = null;
     }
 
     public function getName(): ?string
@@ -32,7 +34,7 @@ class Field
         return $this->name;
     }
 
-    public function setName($name): Field
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -44,7 +46,7 @@ class Field
         return $this->type;
     }
 
-    public function setType(string $type): Field
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -56,7 +58,7 @@ class Field
         return $this->label;
     }
 
-    public function setLabel($label): Field
+    public function setLabel($label): self
     {
         $this->label = $label;
 
@@ -67,13 +69,14 @@ class Field
     {
         $structure = [
             'property' => $this->name,
-            'label' => $this->name,
+            'label' => $this->label ?? $this->name,
             'type' => $this->forcedType,
             'type_options' => $this->typeOptions,
             'help' => $this->help,
             'format' => $this->format,
             'template' => $this->template,
             'propertyFile' => $this->propertyFile,
+            'class' => $this->getClass(),
         ];
 
         return self::removeEmptyValuesAndSubArrays($structure);
@@ -104,7 +107,7 @@ class Field
         return $this->typeOptions;
     }
 
-    public function setTypeOptions(array $typeOptions): Field
+    public function setTypeOptions(array $typeOptions): self
     {
         $this->typeOptions = $typeOptions;
 
@@ -116,7 +119,7 @@ class Field
         return $this->help;
     }
 
-    public function setHelp(string $help): Field
+    public function setHelp(string $help): self
     {
         $this->help = $help;
 
@@ -128,7 +131,7 @@ class Field
         return $this->forcedType;
     }
 
-    public function setForcedType(string $forcedType): Field
+    public function setForcedType(string $forcedType): self
     {
         $this->forcedType = $forcedType;
 
@@ -169,6 +172,11 @@ class Field
                     || in_array($method->getName(), $classHelper['methods']))) {
                 PropertyClassHelper::{$classHelper['function']}($annotation, $this, $entity, $method);
             }
+
+            //Enum
+            if ('Greg0ire\Enum\Bridge\Symfony\Validator\Constraint\Enum' === get_parent_class(get_class($annotation))) {
+                PropertyClassHelper::HandleEnum($annotation, $this, $entity, $method);
+            }
         }
     }
 
@@ -183,7 +191,7 @@ class Field
         return $this->format;
     }
 
-    public function setFormat($format): Field
+    public function setFormat($format): self
     {
         $this->format = $format;
 
@@ -195,7 +203,7 @@ class Field
         return $this->template;
     }
 
-    public function setTemplate(?string $template): Field
+    public function setTemplate(?string $template): self
     {
         $this->template = $template;
 
@@ -207,9 +215,21 @@ class Field
         return $this->propertyFile;
     }
 
-    public function setPropertyFile(?string $propertyFile): Field
+    public function setPropertyFile(?string $propertyFile): self
     {
         $this->propertyFile = $propertyFile;
+
+        return $this;
+    }
+
+    public function getClass(): string
+    {
+        return $this->class;
+    }
+
+    public function setClass(?string $class): self
+    {
+        $this->class = $class;
 
         return $this;
     }
