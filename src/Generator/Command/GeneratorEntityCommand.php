@@ -2,17 +2,34 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputDefinition;
+use Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorEntity;
+use Symfony\Component\Console\Command\Command;
 
-class GeneratorEntityCommand extends ContainerAwareCommand
+class GeneratorEntityCommand extends Command
 {
+    /** @var GeneratorEntity $generatorEntity */
+    private $generatorEntity;
+    /** @var EntityManagerInterface $em */
+    private $em;
+    private $projectDir;
+
+    public function __construct(GeneratorEntity $generatorEntity, EntityManagerInterface $em,string $projectDir)
+    {
+        $this->generatorEntity = $generatorEntity;
+        $this->projectDir = $projectDir;
+        $this->em = $em;
+
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this
@@ -29,13 +46,11 @@ class GeneratorEntityCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $dirProject = $this->getContainer()->getParameter('kernel.project_dir');
-        $entiyManager = $this->getContainer()->get('doctrine.orm.entity_manager');
         $helper = $this->getHelper('question');
         $entitiesRawName = $input->getArgument('entity');
         $entitiesMetaData = [];
 
-        if (!is_dir($dirProject.'/config/packages/easy_admin/')) {
+        if (!is_dir($this->projectDir.'/config/packages/easy_admin/')) {
             $output->writeln('You need to launch <info>wandi:easy-admin-plus:generator:generate</info> command before launching this command.');
 
             return;
@@ -58,7 +73,7 @@ the generation process is stopped</info></comment>');
 
         if (!$input->getOption('force')) {
             foreach ($entitiesMetaData as $entity) {
-                if (file_exists($dirProject.'/config/packages/easy_admin/entities/'.$entity.'.yaml')) {
+                if (file_exists($this->projectDir.'/config/packages/easy_admin/entities/'.$entity.'.yaml')) {
                     $question = new ConfirmationQuestion(sprintf('A easy admin config file for %s, already exist, do you want to override it [<info>y</info>/n]?', $entity), true);
                     if (!$helper->ask($input, $output, $question)) {
                         return;
@@ -67,11 +82,7 @@ the generation process is stopped</info></comment>');
             }
         }
 
-        try {
-            $eaTool = $this->getContainer()->get('wandi.easy_admin_plus.generator.entity');
-            $eaTool->run($entitiesMetaData, $this);
-        } catch (RuntimeCommandException $e) {
-            $output->writeln('<error>'.$e->getMessage().'</error>');
-        }
+        $this->generatorEntity->run($entitiesMetaData, $this);
+
     }
 }

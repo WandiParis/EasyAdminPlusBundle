@@ -2,25 +2,23 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 abstract class GeneratorBase
 {
-    protected $parameters;
+    /** @var ParameterBagInterface $parameterBag */
+    protected $parameterBag;
+    /** @var EntityManagerInterface $em */
     protected $em;
     protected $projectDir;
-    protected $container;
+    protected $generatorParameters;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag)
     {
-        $this->container = $container;
-        $this->em = $container->get('doctrine.orm.entity_manager');
-        $this->parameters = $container->getParameter('easy_admin_plus')['generator'];
-        $this->projectDir = $container->getParameter('kernel.project_dir');
-    }
-
-    public function setContainer(ContainerInterface $container)
-    {
-        $this->container = $container;
+        $this->em = $em;
+        $this->parameterBag = $parameterBag;
+        $this->generatorParameters = $parameterBag->get('easy_admin_plus')['generator'];
+        $this->projectDir = $parameterBag->get('kernel.project_dir');
     }
 }

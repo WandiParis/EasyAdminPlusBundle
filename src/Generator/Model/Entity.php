@@ -4,9 +4,6 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
-use Wandi\EasyAdminPlusBundle\Generator\Property\PropertyConfig;
-use Wandi\I18nBundle\Traits\TranslatableEntity;
 
 class Entity
 {
@@ -23,8 +20,6 @@ class Entity
         $this->disabledAction = [];
         $this->metaData = $metaData;
         $this->properties = [];
-
-        $this->initProperties();
     }
 
     public function getName(): string
@@ -37,40 +32,6 @@ class Entity
         $this->name = $name;
 
         return $this;
-    }
-
-    public static function buildNameData(ClassMetadata $metaData, array $bundles): array
-    {
-        $entityShortName = (new \ReflectionClass($metaData->getName()))->getShortName();
-
-        if ("App\Entity" == $metaData->namespace) {
-            return[
-                'bundle' => 'App',
-                'entity' => $entityShortName,
-            ];
-        }
-
-        if (0 === preg_match('#((.*?)(?:Bundle))#', $metaData->getName(), $match)) {
-            throw new RuntimeCommandException('Unable to parse the bundle name for the '.$entityShortName.' entity');
-        }
-
-        unset($match[0]);
-        $match = array_values($match);
-
-        $match = array_map(function ($a) {
-            return str_replace('\\', '', $a);
-        }, $match);
-
-        foreach ($bundles as $name => $bundle) {
-            if ($match[0] === $name) {
-                return [
-                    'bundle' => str_replace('\\', '', $match[1]),
-                    'entity' => $entityShortName,
-                ];
-            }
-        }
-
-        throw new RuntimeCommandException('<comment>the entity bundle could not be found for the '.$entityShortName.'</comment>');
     }
 
     public static function buildName(array $nameData): string
@@ -154,6 +115,7 @@ class Entity
         $methodsStructure = [];
 
         foreach ($this->methods as $method) {
+            /** @var Method $method */
             $methodsStructure = array_merge($methodsStructure, $method->getStructure($eaToolParams));
         }
 
@@ -181,40 +143,6 @@ class Entity
         $this->properties = $properties;
 
         return $this;
-    }
-
-    private function initProperties(): void
-    {
-        $reflectionClass = new \ReflectionClass($this->metaData->getName());
-        $classTraits = array_keys($reflectionClass->getTraits());
-
-        $timestampableClassName = 'Gedmo\Timestampable\Traits\Timestampable';
-        $translatableEntityClassName = 'Wandi\I18nBundle\Traits\TranslatableEntity';
-
-        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-            $this->properties[] = PropertyConfig::setPropertyConfig($reflectionProperty);
-        }
-
-        //Vich (Image/File)
-        PropertyConfig::setVichPropertiesConfig($this->properties);
-
-        //Timestampable
-        if (trait_exists($timestampableClassName) && in_array($timestampableClassName, $classTraits)) {
-            PropertyConfig::setTimestampablePropertiesConfig($this->properties);
-        }
-
-        //TranslatableEntity
-        if (trait_exists($translatableEntityClassName) && in_array($translatableEntityClassName, $classTraits)) {
-            PropertyConfig::setTranslatableEntityPropertiesConfig($this->properties);
-        }
-
-        dump('------------');
-
-        foreach ($this->properties as $property) {
-            dump(sprintf('propriété: %s - type: %s', $property['name'], $property['typeConfig']['easyAdminType']));
-        }
-
-//        die;
     }
 
     public function getMetaData(): ClassMetadata

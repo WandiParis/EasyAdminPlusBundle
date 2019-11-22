@@ -5,9 +5,23 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Command\Command;
+use Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorClean;
 
-class GeneratorCleanCommand extends ContainerAwareCommand
+class GeneratorCleanCommand extends Command
 {
+    /** @var GeneratorClean $generatorClean */
+    private $generatorClean;
+    private $projectDir;
+
+    public function __construct(GeneratorClean $geenratorClean, string $projectDir)
+    {
+        $this->generatorClean = $geenratorClean;
+        $this->projectDir = $projectDir;
+
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this
@@ -18,14 +32,10 @@ class GeneratorCleanCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $container = $this->getContainer();
-        $dirProject = $container->getParameter('kernel.project_dir');
-
-        if (!is_dir($dirProject.'/config/packages/easy_admin')) {
+        if (!is_dir($this->projectDir.'/config/packages/easy_admin')) {
             throw new \RuntimeException('Unable to clean easy admin configuration, no configuration file found.');
         }
 
-        $eaTool = $container->get('wandi.easy_admin_plus.generator.clean');
-        $eaTool->run();
+        $this->generatorClean->run();
     }
 }

@@ -2,21 +2,29 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
+use Wandi\EasyAdminPlusBundle\Generator\Property\Initialization;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterface
+class GeneratorGenerate extends GeneratorBase
 {
-    private $vichMappings;
     private $consoleOutput;
+    private $propertyInitialization;
+    private $entityCreation;
 
-    public function buildServiceConfig()
-    {
-        $this->vichMappings = $this->container->hasParameter('vich_uploader.mappings') ?
-            $this->container->getParameter('vich_uploader.mappings') : null;
+    public function __construct(
+        EntityCreation $entityCreation,
+        EntityManagerInterface $em,
+        ParameterBagInterface $parameterBag
+    ){
         $this->consoleOutput = new ConsoleOutput();
+        $this->entityCreation = $entityCreation;
+
+        parent::__construct($em, $parameterBag);
     }
 
     /**
@@ -25,12 +33,12 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
     public function run(): void
     {
         $listMetaData = $this->em->getMetadataFactory()->getAllMetadata();
-        $locale = $this->container->getParameter('locale') ?? $this->container->getParameter('kernel.default_locale');
+        $locale = $this->parameterBag->get('locale') ?? $this->parameterBag->get('kernel.default_locale');
 
-        $generatorTool = new GeneratorTool($this->parameters);
-        $generatorTool->setParameterBag($this->container->getParameterBag()->all());
-        $generatorTool->initTranslation($this->parameters['translation_domain'], $this->projectDir, $locale);
-        $bundles = $this->container->getParameter('kernel.bundles');
+        $generatorTool = new GeneratorTool($this->generatorParameters);
+        $generatorTool->setParameterBag($this->parameterBag->all());
+        $generatorTool->initTranslation($this->generatorParameters['translation_domain'], $this->projectDir, $locale);
+        $bundles = $this->parameterBag->get('kernel.bundles');
 
         if (empty($listMetaData)) {
             $this->consoleOutput->writeln('<comment>There are no entities to configure, the generation process is stopped.</comment>');
@@ -39,18 +47,9 @@ class GeneratorGenerate extends GeneratorBase implements GeneratorConfigInterfac
         }
 
         foreach ($listMetaData as $metaData) {
-            $nameData = Entity::buildNameData($metaData, $bundles);
-            if (in_array($nameData['bundle'].'Bundle', $this->parameters['bundles_filter'])) {
-                continue;
+            if (null !== $entity = $this->entityCreation->run($metaData)) {
+                $generatorTool->addEntity($entity);
             }
-
-            /** @var ClassMetadata $metaData */
-            $entity = new Entity($metaData);
-            $entity->setName(Entity::buildName($nameData));
-            $entity->setClass($metaData->getName());
-            $entity->buildMethods($generatorTool->getParameters());
-
-            $generatorTool->addEntity($entity);
         }
 
         $generatorTool->generateMenuFile($this->projectDir, $this->consoleOutput);

@@ -2,9 +2,6 @@
 
 namespace Wandi\EasyAdminPlusBundle\Generator\Model;
 
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyClassHelper;
-use Wandi\EasyAdminPlusBundle\Generator\Helper\PropertyTypeHelper;
-
 class Field
 {
     private $name;
@@ -138,54 +135,6 @@ class Field
         return $this;
     }
 
-    public function buildFieldConfig(array $propertyConfig, Method $method): void
-    {
-        $this->name = $propertyConfig['name'];
-        $this->type = $propertyConfig['typeConfig']['easyAdminType'];
-        $this->label = $propertyConfig['name'];
-
-        if ($propertyConfig['typeConfig']['typeForced'] && (empty($propertyConfig['typeConfig']['methodsTypeForced'])
-            || !in_array($method->getName(), $propertyConfig['typeConfig']['methodsTypeForced']))) {
-            $this->forcedType = $this->type;
-        }
-    }
-
-    private function buildFieldTypeHelpers(array $propertyConfig, Method $method): void
-    {
-        $helpers = PropertyTypeHelper::getTypeHelpers();
-
-        foreach ($helpers as $type => $helper) {
-            $helper = array_replace(PropertyTypeHelper::getMaskHelper(), $helper);
-
-            if ($propertyConfig['typeConfig']['easyAdminType'] == $type && !in_array($method->getName(), $helper['methods'])) {
-                PropertyTypeHelper::{$helper['function']}($propertyConfig, $this, $method);
-            }
-        }
-    }
-
-    private function buildFieldClassHelpers(array $propertyConfig, Entity $entity, method $method): void
-    {
-        $helpers = PropertyClassHelper::getClassHelpers();
-
-        foreach ($propertyConfig['annotationClasses'] as $annotation) {
-            if (($classHelper = $helpers[get_class($annotation)] ?? null) && (!in_array($method->getName(), ['list', 'show'])
-                    || in_array($method->getName(), $classHelper['methods']))) {
-                PropertyClassHelper::{$classHelper['function']}($annotation, $this, $entity, $method);
-            }
-
-            //Enum
-            if ('Greg0ire\Enum\Bridge\Symfony\Validator\Constraint\Enum' === get_parent_class(get_class($annotation))) {
-                PropertyClassHelper::HandleEnum($annotation, $this, $entity, $method);
-            }
-        }
-    }
-
-    public function buildFieldHelpers(array $propertyConfig, Entity $entity, Method $method): void
-    {
-        $this->buildFieldClassHelpers($propertyConfig, $entity, $method);
-        $this->buildFieldTypeHelpers($propertyConfig, $method);
-    }
-
     public function getFormat(): string
     {
         return $this->format;
@@ -222,7 +171,7 @@ class Field
         return $this;
     }
 
-    public function getClass(): string
+    public function getClass(): ?string
     {
         return $this->class;
     }
