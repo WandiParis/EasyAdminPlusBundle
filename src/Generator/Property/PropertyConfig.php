@@ -106,4 +106,17 @@ class PropertyConfig
             return 'locale' !== $property['name'];
         });
     }
+
+    /**
+     * Remove deletedAt property
+     */
+    public static function setSoftDeleteableEntityPropertiesConfig(array &$properties): void
+    {
+        $properties = array_filter($properties, function ($property) {
+            return 'deletedAt' !== $property['name'];
+        });
+    }
+
+
+
 }

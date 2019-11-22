@@ -190,6 +190,7 @@ class Entity
 
         $timestampableClassName = 'Gedmo\Timestampable\Traits\Timestampable';
         $translatableEntityClassName = 'Wandi\I18nBundle\Traits\TranslatableEntity';
+        $softDeleteableEntityClassName = 'Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity';
 
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             $this->properties[] = PropertyConfig::setPropertyConfig($reflectionProperty);
@@ -206,6 +207,11 @@ class Entity
         //TranslatableEntity
         if (trait_exists($translatableEntityClassName) && in_array($translatableEntityClassName, $classTraits)) {
             PropertyConfig::setTranslatableEntityPropertiesConfig($this->properties);
+        }
+
+        //SoftDeleteableEntity
+        if (trait_exists($softDeleteableEntityClassName) && in_array($softDeleteableEntityClassName, $classTraits)) {
+            PropertyConfig::setSoftDeleteableEntityPropertiesConfig($this->properties);
         }
 
         dump('------------');

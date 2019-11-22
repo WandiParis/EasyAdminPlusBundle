@@ -7,16 +7,22 @@ use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Yaml\Yaml;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
+class GeneratorClean extends GeneratorBase
 {
     private $consoleOutput;
     private $bundles;
 
-    public function buildServiceConfig()
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        ParameterBagInterface $parameterBag
+    ){
+        $this->bundles = $parameterBag->get('kernel.bundles');
         $this->consoleOutput = new ConsoleOutput();
-        $this->bundles = $this->container->getParameter('kernel.bundles');
+
+        parent::__construct($em, $parameterBag);
     }
 
     public function run(): void

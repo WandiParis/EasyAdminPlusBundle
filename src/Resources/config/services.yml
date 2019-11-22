@@ -56,44 +56,51 @@ services:
             - '@wandi.easy_admin_plus.acl.security.admin_authorization_checker'
         tags:
             - { name: twig.extension }
-
     wandi.easy_admin_plus.exporter.configuration.normalizer_config_pass:
         class: Wandi\EasyAdminPlusBundle\Exporter\Configuration\NormalizerConfigPass
-        public: true
     wandi.easy_admin_plus.exporter.configuration.property_config_pass:
         class: Wandi\EasyAdminPlusBundle\Exporter\Configuration\PropertyConfigPass
-        public: true
     wandi.easy_admin_plus.exporter.configuration.template_config_pass:
         class: Wandi\EasyAdminPlusBundle\Exporter\Configuration\TemplateConfigPass
-        public: true
-
     wandi.easy_admin_plus.generator.base:
         abstract: true
         autowire: true
-        calls:
-            - method: buildServiceConfig
-    wandi.easy_admin_plus.generator.generate:
-        class: Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorGenerate
-        public: true
-        parent: wandi.easy_admin_plus.generator.base
+    wandi.easy_admin_plus.generator.property.initialization:
+        class: Wandi\EasyAdminPlusBundle\Generator\Property\Initialization
+        autowire: true
     wandi.easy_admin_plus.generator.clean:
         class: Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorClean
-        public: true
         parent: wandi.easy_admin_plus.generator.base
     wandi.easy_admin_plus.generator.entity:
         class: Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorEntity
-        public: true
         parent: wandi.easy_admin_plus.generator.base
-
-    wandi.easy_admin_plus.command.generator.generate:
-        class: Wandi\EasyAdminPlusBundle\Generator\Command\GeneratorGenerateCommand
-        tags:
-            -  { name: console.command, command: wandi:easy-admin-plus:generator:generate }
+    wandi.easy_admin_plus.generator.generate:
+        class: Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorGenerate
+        autowire: true
+        arguments:
+            - '@wandi.easy_admin_plus.generator.property.initialization'
+        parent: wandi.easy_admin_plus.generator.base
     wandi.easy_admin_plus.command.generator.clean:
         class: Wandi\EasyAdminPlusBundle\Generator\Command\GeneratorCleanCommand
+        arguments:
+            - '@wandi.easy_admin_plus.generator.clean'
+            - '%kernel.project_dir%'
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:generator:cleanup }
     wandi.easy_admin_plus.command.generator.entity:
         class: Wandi\EasyAdminPlusBundle\Generator\Command\GeneratorEntityCommand
+        arguments:
+            - '@wandi.easy_admin_plus.generator.entity'
+            - '@doctrine.orm.entity_manager'
+            - '%kernel.project_dir%'
         tags:
             -  { name: console.command, command: wandi:easy-admin-plus:generator:entity }
+    wandi.easy_admin_plus.command.generator.generate:
+        class: Wandi\EasyAdminPlusBundle\Generator\Command\GeneratorGenerateCommand
+        autowire: true
+        arguments:
+            - '@wandi.easy_admin_plus.generator.generate'
+            - '%kernel.project_dir%'
+        tags:
+            - { name: console.command, command: wandi:easy-admin-plus:generator:generate }
+

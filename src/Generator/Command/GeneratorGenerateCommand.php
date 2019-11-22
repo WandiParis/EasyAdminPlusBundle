@@ -11,11 +11,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
+use Symfony\Component\Console\Command\Command;
+use Wandi\EasyAdminPlusBundle\Generator\Service\GeneratorGenerate;
 
-class GeneratorGenerateCommand extends ContainerAwareCommand
+class GeneratorGenerateCommand extends Command
 {
     /** @var SymfonyStyle $io */
     private $io;
+    /** @var GeneratorGenerate $generator */
+    private $generator;
+    private $projectDir;
+
+    public function __construct(GeneratorGenerate $generator, string $projectDir)
+    {
+        $this->generator = $generator;
+        $this->projectDir = $projectDir;
+
+        parent::__construct();
+    }
 
     protected function configure(): void
     {
@@ -37,22 +50,20 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $container = $this->getContainer();
-        $dirProject = $container->getParameter('kernel.project_dir');
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('A easy admin config file, <info>already exist</info>, do you want to <info>override</info> it [<info>y</info>/n]?', true);
         $cleanCommand = $this->getApplication()->find('wandi:easy-admin-plus:generator:cleanup');
 
         if (!$input->getOption('force')) {
-            if (is_dir($dirProject.'/config/packages/easy_admin/')) {
+            if (is_dir($this->projectDir.'/config/packages/easy_admin/')) {
                 if (!$helper->ask($input, $output, $question)) {
                     return;
                 }
             }
         }
 
-        if (!is_dir($dirProject.'/config/packages/easy_admin/')) {
-            if (!mkdir($dirProject.'/config/packages/easy_admin/')) {
+        if (!is_dir($this->projectDir.'/config/packages/easy_admin/')) {
+            if (!mkdir($this->projectDir.'/config/packages/easy_admin/')) {
                 throw new RuntimeCommandException('Unable to create easy_admin folder, the build process is stopped');
             }
 
@@ -61,7 +72,7 @@ class GeneratorGenerateCommand extends ContainerAwareCommand
             $cleanCommand->run(new ArrayInput([]), $output);
         }
 
-        $eaTool = $container->get('wandi.easy_admin_plus.generator.generate');
-        $eaTool->run();
+        $this->generator->run();
+
     }
 }

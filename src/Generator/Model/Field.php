@@ -222,7 +222,7 @@ class Field
         return $this;
     }
 
-    public function getClass(): string
+    public function getClass(): ?string
     {
         return $this->class;
     }
