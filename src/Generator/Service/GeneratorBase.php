@@ -14,6 +14,7 @@ abstract class GeneratorBase
     protected $projectDir;
     protected $generatorParameters;
 
+
     public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag)
     {
         $this->em = $em;
