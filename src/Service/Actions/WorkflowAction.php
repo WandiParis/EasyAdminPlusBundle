@@ -7,6 +7,7 @@ use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Exception\LogicException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class WorkflowAction
 {
@@ -24,7 +25,9 @@ final class WorkflowAction
         $entity = $request->query->get('class');
         $transition = $request->query->get('transition');
         $object = $this->em->getRepository($entity)->find($id);
-
+        if(!$object){
+            throw new NotFoundHttpException('not found');
+        }
         $workflow = $this->workflows->get($object);
 
         try {
