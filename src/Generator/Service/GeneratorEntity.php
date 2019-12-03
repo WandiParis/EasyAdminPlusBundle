@@ -3,7 +3,9 @@
 namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
@@ -12,13 +14,15 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Yaml\Yaml;
 
-class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
+class GeneratorEntity extends GeneratorBase
 {
     private $consoleOutput;
 
-    public function buildServiceConfig()
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag)
     {
         $this->consoleOutput = new ConsoleOutput();
+
+        parent::__construct($em, $parameterBag);
     }
 
     /**
@@ -26,20 +30,20 @@ class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
      */
     public function run(array $entitiesMetaData, Command $command): void
     {
-        $bundles = $this->container->getParameter('kernel.bundles');
-        $locale = $this->container->getParameter('locale') ?? $this->container->getParameter('kernel.default_locale');
+        $bundles = $this->parameterBag->get('kernel.bundles');
+        $locale = $this->parameterBag->get('locale') ?? $this->parameterBag->get('kernel.default_locale');
         $relatedEntities = $this->getRelatedEntitiesMetaData($entitiesMetaData, $command, $bundles);
         $relatedEntities = array_merge($relatedEntities, $entitiesMetaData);
 
-        $generatorTool = new GeneratorTool($this->parameters);
-        $generatorTool->setParameterBag($this->container->getParameterBag()->all());
-        $generatorTool->initTranslation($this->parameters['translation_domain'], $this->projectDir, $locale);
+        $generatorTool = new GeneratorTool($this->generatorParameters);
+        $generatorTool->setParameterBag($this->parameterBag->all());
+        $generatorTool->initTranslation($this->generatorParameters['translation_domain'], $this->projectDir, $locale);
 
         foreach ($relatedEntities as $entityMetaData) {
             $entity = new Entity($entityMetaData);
             $entity->setName(Entity::buildName(Entity::buildNameData($entityMetaData, $bundles)));
             $entity->setClass($entityMetaData->getName());
-            $entity->buildMethods($this->parameters);
+            $entity->buildMethods($this->getRelatedEntitiesMetaData());
             $generatorTool->addEntity($entity);
         }
 
@@ -62,7 +66,7 @@ class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
             }
         }
 
-        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->generatorParameters);
         file_put_contents($this->projectDir.'/config/packages/easy_admin/menu.yaml', $ymlContent);
     }
 
@@ -84,7 +88,7 @@ class GeneratorEntity extends GeneratorBase implements GeneratorConfigInterface
             }
         }
 
-        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileMenuContent, $this->generatorParameters);
         if (!file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir), $ymlContent)) {
             throw new RuntimeCommandException(sprintf('Can not update imported files in %s/config/packages/easy_admin.yaml', $this->projectDir));
         }

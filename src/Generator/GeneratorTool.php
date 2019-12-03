@@ -142,6 +142,7 @@ class GeneratorTool
         }
 
         foreach ($this->getEntities()->getIterator()  as $entity) {
+            /** @var Entity $entity */
             $ymlContent = self::buildDumpPhpToYml($entity->getStructure($this->parameters), $this->parameters);
             $path = '/config/packages/easy_admin/entities/'.$entity->getName().'.yaml';
             $consoleOutput->writeln('Generating entity "<info>'.$entity->getName().'</info>"');

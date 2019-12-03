@@ -25,6 +25,7 @@ class EntityPropertiesCreation
     public function __construct(ParameterBagInterface $parameterBag)
     {
         $this->bundles = $parameterBag->get('kernel.bundles');
+
     }
 
     public function run(ClassMetadata $metaData): array

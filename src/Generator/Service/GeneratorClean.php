@@ -4,19 +4,26 @@ namespace Wandi\EasyAdminPlusBundle\Generator\Service;
 
 use Wandi\EasyAdminPlusBundle\Generator\GeneratorTool;
 use Wandi\EasyAdminPlusBundle\Generator\Model\Entity;
+use Wandi\EasyAdminPlusBundle\Generator\Service\EntityCreation;
 use Wandi\EasyAdminPlusBundle\Generator\Exception\RuntimeCommandException;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Yaml\Yaml;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
+class GeneratorClean extends GeneratorBase
 {
     private $consoleOutput;
     private $bundles;
 
-    public function buildServiceConfig()
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        ParameterBagInterface $parameterBag
+    ){
+        $this->bundles = $parameterBag->get('kernel.bundles');
         $this->consoleOutput = new ConsoleOutput();
-        $this->bundles = $this->container->getParameter('kernel.bundles');
+
+        parent::__construct($em, $parameterBag);
     }
 
     public function run(): void
@@ -82,7 +89,7 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
     private function getEntitiesNameFromMetaDataList(array $metaDataList, array $bundles): array
     {
         $entitiesName = array_map(function ($metaData) use ($bundles) {
-            return Entity::buildName(Entity::buildNameData($metaData, $bundles));
+            return Entity::buildName(EntityCreation::buildNameData($metaData, $bundles));
         }, $metaDataList);
 
         return $entitiesName;
@@ -103,7 +110,7 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
         }
 
         $fileBaseContent['imports'] = array_values($fileBaseContent['imports']);
-        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileBaseContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileBaseContent, $this->generatorParameters);
         file_put_contents(sprintf('%s/config/packages/easy_admin.yaml', $this->projectDir), $ymlContent);
     }
 
@@ -122,7 +129,7 @@ class GeneratorClean extends GeneratorBase implements GeneratorConfigInterface
         }
 
         $fileContent['easy_admin']['design']['menu'] = array_values($fileContent['easy_admin']['design']['menu']);
-        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileContent, $this->parameters);
+        $ymlContent = GeneratorTool::buildDumpPhpToYml($fileContent, $this->generatorParameters);
         file_put_contents($this->projectDir.'/config/packages/easy_admin/menu.yaml', $ymlContent);
     }
 
