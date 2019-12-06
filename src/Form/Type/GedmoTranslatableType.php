@@ -44,10 +44,13 @@ class GedmoTranslatableType extends AbstractType
         $fieldName = $builder->getName();
         $locales = $this->locales;
         $defaultLocale = $this->defaultLocale;
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($fieldName, $locales, $options) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($fieldName, $locales, $options, $defaultLocale) {
             $form = $event->getForm();
             foreach ($locales as $locale) {
-                $form->add($locale, $options['fields_class'], ['label' => false]);
+                $form->add($locale, $options['fields_class'], [
+                    'label' => false,
+                    'required' => ($defaultLocale == $locale && $options['required'])
+                ]);
             }
         });
         // submit

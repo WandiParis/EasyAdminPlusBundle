@@ -24,7 +24,10 @@ class DateTimeEipType extends AbstractEipType{
     }
 
     public function formatValue($value):string{
-        return $value->format('d/m/Y H:i');
+        if($value && $value instanceof \DateTime) {
+            return $value->format('d/m/Y H:i');
+        }
+        return (string)$value;
     }
 
     public function getValueFromRequest(Request $request)
@@ -35,7 +38,7 @@ class DateTimeEipType extends AbstractEipType{
         } else {
             $value = null;
         }
-        return $value;
+        return ($value)? $value:null;
     }
 
     public function getType(): string{
