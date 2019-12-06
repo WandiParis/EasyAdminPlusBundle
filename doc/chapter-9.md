@@ -20,7 +20,7 @@ Configure the show entity like this
             - { name: edit, icon: edit }
             - { name: delete, icon: trash }
         fields:
-            - { type: 'group', css_class: 'col-sm-6', label: 'Echeance' }
+            - { type: 'group', css_class: 'col-sm-6', label: 'Echeance', roles: ['ROLE_ADMIN'], close: true }
             - { property: libelle, label: label.libelle }
             - { property: commentaire, label: label.commentaire, type: raw }
             - { property: ressource, label: label.ressource }
@@ -40,6 +40,17 @@ Configure the show entity like this
             - { type: 'sublist', id: 'eleves', 'repository_method': 'findByClassCurrentYears', label: 'tab.eleves', entity: 'Eleve' , ignore_fields: ['classe']}
             - { type: 'tab', id: 'historique', label: 'Historique', action: 'historyAction' }
 ```
+
+For the group:
+
+You can add role with options roles and minifie with options close .
+
+For the sublist:
+
+You have another options :
+
+- hidden_if_empty (bool) : hide onglet if sublist is empty
+- show_count (bool); show count in onglet
 
 if repository_method in place of property ou can custom the list (the parent is first args you can change it with repository_method_args):
 ```php

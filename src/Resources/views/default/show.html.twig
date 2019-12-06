@@ -66,10 +66,17 @@
     {% set hasTab = false %}
     {% for field, metadata in fields    %}
       {% if metadata.type == 'tab' or metadata.type == 'sublist' %}
-        <li class="">
-          <a href="#{{metadata.id}}" id="tab-{{metadata.id}}" data-toggle="tab" aria-expanded="false">{{metadata.label|trans()}}
-          </a>
-        </li>
+          {%  set count = 0 %}
+          {% if metadata.property is defined and (metadata.show_count is defined and metadata.show_count) or (metadata.hidden_if_empty is defined and metadata.hidden_if_empty) %}
+              {%  set count = attribute(entity, metadata.property)|length %}
+          {%  endif %}
+
+          <li class="" {% if metadata.hidden_if_empty is defined and metadata.hidden_if_empty and count < 1 %}style="display:none;"{%  endif %}>
+                <a href="#{{metadata.id}}" id="tab-{{metadata.id}}" data-toggle="tab" aria-expanded="false">
+                    {{metadata.label|trans()}}
+                   {% if metadata.show_count is defined and metadata.show_count and metadata.property is defined %}({{ count }}){%  endif %}
+                </a>
+          </li>
       {% endif %}
     {% endfor %}
   </ul>
@@ -83,23 +90,32 @@
               {% if div_ouvert %}
                   </div></div></div>
               {% endif %}
-              {% set div_ouvert = true %}
-              {% set label_css_class = metadata.label_css_class ?? 'col-sm-2' %}
-              {% set value_css_class = metadata.value_css_class ?? 'col-sm-10' %}
-              <div class="field-group col-xs-12 {{ metadata.css_class|default('') }}">
-                <div class="{% if metadata.label|default(false) or metadata.icon|default(false) %} box box-default {%  endif %}">
+              {%  if (metadata.roles is defined and is_granted(metadata.roles)) or metadata.roles is not defined %}
+                  {% set div_ouvert = true %}
+                  {% set label_css_class = metadata.label_css_class ?? 'col-sm-2' %}
+                  {% set value_css_class = metadata.value_css_class ?? 'col-sm-10' %}
+                  <div class="field-group col-xs-12 {{ metadata.css_class|default('') }} " >
+                    <div class="{% if metadata.label|default(false) or metadata.icon|default(false) %} box box-default {%  endif %} {%  if metadata.close is defined and metadata.close %}collapsed-box{%  endif %}">
 
-                  {% if metadata.label|default(false) or metadata.icon|default(false) %}
-                      <div class="box-header with-border">
-                          <h3 class="box-title">
-                              {% if metadata.icon|default(false) %}
-                                  <i class="fa fa-{{ metadata.icon }}"></i>
-                              {% endif %}
-                              {{ metadata.label|trans|raw }}
-                          </h3>
-                      </div>
-                  {% endif %}
-                  <div class="box-body">
+                      {% if metadata.label|default(false) or metadata.icon|default(false) %}
+                          <div class="box-header with-border">
+                              <h3 class="box-title">
+                                  {% if metadata.icon|default(false) %}
+                                      <i class="fa fa-{{ metadata.icon }}"></i>
+                                  {% endif %}
+                                  {{ metadata.label|trans|raw }}
+                              </h3>
+                              <div class="box-tools pull-right">
+                                  {%  if metadata.close is defined and metadata.close %}
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                                    {%  else %}
+                                           <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                    {%  endif %}
+                              </div>
+                          </div>
+                      {% endif %}
+                      <div class="box-body" {%  if metadata.close is defined and metadata.close %}style="display:none;"{%  endif %}>
+              {%  endif %}
           {% else %}
               {% block show_field %}
                   {% if easyadmin_render_field_for_show_view(_entity_config.name, entity, metadata) != '' %}

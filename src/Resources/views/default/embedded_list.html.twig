@@ -28,7 +28,6 @@
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
 
     {% set _columns_count = fields|length + (_list_item_actions|length > 0 ? 1 : 0) %}
-
     <div class="table-responsive">
         <table class="table">
             <thead>
