@@ -33,7 +33,7 @@ class StringFilterType extends AbstractFilterType
         parent::configure($config);
         $this->defaults = [
             'value' => $config['defaultValue'] ?? "",
-            'comparator' => $config['defaultComparator'] ?? "startswith"
+            'comparator' => $config['defaultComparator'] ?? "contains"
         ];
         $this->additionalProperties = $config['additionalProperties'] ?? [];
         
