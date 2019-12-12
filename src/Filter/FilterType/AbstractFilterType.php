@@ -99,8 +99,6 @@ abstract class AbstractFilterType implements FilterTypeInterface
                 $val_post = $request->request->get($var, null);
                 if (! is_null($val_post)) {
                     $this->data[$k] = $val_post;
-                } else {
-                    $this->data = [];
                 }
             }
         }
