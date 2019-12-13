@@ -88,7 +88,14 @@ class QueryBuilder
         }
 
         if (null !== $sortField) {
-            $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias().'.', $sortField), $sortDirection);
+            $overwriteOrderBy = $entityConfig["overwrite_orderby"] ?? true;
+
+            if ($overwriteOrderBy) {
+                $queryBuilder->addOrderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias() . '.', $sortField), $sortDirection);
+            } else {
+                $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias() . '.', $sortField), $sortDirection);
+            }
+
             if(isset($entityConfig['list']) && isset($entityConfig['list']['sort']) && isset($entityConfig['list']['sort']['field'])) {
                 $queryBuilder->addOrderBy(sprintf('%s%s',
                     $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias().'.', $entityConfig['list']['sort']['field']), 'ASC');
@@ -138,9 +145,9 @@ class QueryBuilder
         foreach($queryBuilder->getParameters() as $parameter) {
             $queryParameters[$parameter->getName()] = $parameter->getValue();
         }
-        
+
         $entitiesAlreadyJoined = array();
-        
+
         $orModule = $queryBuilder->expr()->orX();
         foreach ($entityConfig['search']['fields'] as $fieldName => $metadata) {
             if (false !== strpos($fieldName, '.')) {
@@ -194,7 +201,7 @@ class QueryBuilder
         }
 
         $queryBuilder->andWhere($orModule);
-        
+
         if (0 !== count($queryParameters)) {
             $queryBuilder->setParameters($queryParameters);
         }
