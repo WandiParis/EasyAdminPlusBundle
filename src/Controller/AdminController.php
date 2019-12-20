@@ -426,12 +426,12 @@ class AdminController extends BaseAdminController
                         if ($entry) {
                             $type = $metaData->isSingleValuedAssociation($k)? 'single_assoc':'multi_assoc';
                             $assoc = $metaData->getAssociationMapping($k);
-                            $obj = $this->em->getRepository($assoc['targetEntity'])->find($entry);
-                            if($obj) {
+                            $obj = $this->em->getRepository($assoc['targetEntity'])->findOneBy($entry);
+                            if ($obj) {
                                 $id = $this->em->getClassMetadata($assoc['targetEntity'])->getIdentifierValues($obj);
                                 $retour = (string) $obj; //(method_exists($obj, '__toString')) ? implode(',', $id) . ' ' . $obj->__toString() : $id;
                             } else {
-                                $retour = "";
+                                $retour = "??";
                             }
                         }
                     } else if($type === 'boolean'){
