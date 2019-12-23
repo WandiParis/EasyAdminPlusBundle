@@ -422,7 +422,7 @@ class AdminController extends BaseAdminController
                 foreach($log->getData() as $k => $entry){
                     $type = $metaData->getTypeOfField($k);
                     $retour = $entry;
-                    if($metaData->hasAssociation($k)){
+                    if($metaData->hasAssociation($k) && is_array($entry)){
                         if ($entry) {
                             $type = $metaData->isSingleValuedAssociation($k)? 'single_assoc':'multi_assoc';
                             $assoc = $metaData->getAssociationMapping($k);
