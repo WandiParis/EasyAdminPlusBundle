@@ -91,9 +91,9 @@ class QueryBuilder
             $overwriteOrderBy = $entityConfig["overwrite_orderby"] ?? true;
 
             if ($overwriteOrderBy) {
-                $queryBuilder->addOrderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias() . '.', $sortField), $sortDirection);
-            } else {
                 $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias() . '.', $sortField), $sortDirection);
+            } else {
+                $queryBuilder->addOrderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $queryBuilder->getRootAlias() . '.', $sortField), $sortDirection);
             }
 
             if(isset($entityConfig['list']) && isset($entityConfig['list']['sort']) && isset($entityConfig['list']['sort']['field'])) {
