@@ -15,27 +15,6 @@
     {% block filters %}
         {{ include('@LleEasyAdminPlus/default/includes/_filters.html.twig') }}
     {% endblock %}
-    {% block confirmModal %}
-        <div class="modal fade" id="easyadminplus-confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="easyadminplus-confirmModal-title"> Confirm </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="easyadminplus-confirmModal-body">
-                        {{ 'easyadminplus_confirm_export_moreLinesThan_max' | trans({'%max%': paginator.nbResults}) }}
-                    </div>
-                    <div class="modal-footer">
-                        <a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
-                        <a type="button" class="btn btn-primary" onclick="$('#easyadminplus-confirmModal').modal('hide')" id="easyadminplus-btn-confirm">Confirm</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endblock %}
 {% endblock %}
 
 
@@ -96,17 +75,17 @@
             {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export', null) %}
                 {% set referer = app.request.server.get('http-referer')|default('/') %}
                 {%  for format in _entity_config.export.formats %}
-                    {% if _entity_config.export.max is defined and paginator.nbResults > _entity_config.export.max %}
-                        <a class="btn btn-primary" onclick="confirmModal('{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}', 'test')" style="margin-right:5px;" >
+                        <a class="btn btn-primary"
+                                {% if _entity_config.export.max is defined and paginator.nbResults > _entity_config.export.max %}
+                                onclick="confirmExport('{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}',
+                                        '{{ 'easyadminplus_confirm_export_moreLinesThan_max' | trans({'%max%': paginator.nbResults}) }}')"
+                                {% else %}
+                                    href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}"
+                                 {% endif %}
+                           style="margin-right:5px;" >
                             <i class="fa fa-download"></i>
                             {{ 'exporter.export'|trans({'%format%':format}, 'EasyAdminPlusBundle') }}
                         </a>
-                    {% else %}
-                        <a class="btn btn-primary" style="margin-right:5px;" href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}">
-                            <i class="fa fa-download"></i>
-                            {{ 'exporter.export'|trans({'%format%':format}, 'EasyAdminPlusBundle') }}
-                        </a>
-                    {% endif %}
                 {%  endfor %}
             {% endif %}
 
@@ -229,9 +208,11 @@
             }
         }
 
-        function confirmModal(url) {
-            $('#easyadminplus-confirmModal').modal('show')
-            $('#easyadminplus-btn-confirm').attr("href", url)
+        function confirmExport(url, message) {
+            let res = window.confirm(message)
+            if (res) {
+                document.location.href = url
+            }
         }
 
     </script>
