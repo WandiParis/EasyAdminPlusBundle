@@ -77,8 +77,8 @@
                 {%  for format in _entity_config.export.formats %}
                         <a class="btn btn-primary"
                                 {% if _entity_config.export.max is defined and paginator.nbResults > _entity_config.export.max %}
-                                onclick="confirmExport('{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}',
-                                        '{{ 'easyadminplus_confirm_export_moreLinesThan_max' | trans({'%max%': paginator.nbResults}) }}')"
+                                    {% set message =  'action.export.confirm.maxLines' | trans({'%max%': paginator.nbResults}, 'EasyAdminPlusBundle') %}
+                                    onclick="confirmExport('{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}','{{ message }}')"
                                 {% else %}
                                     href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}"
                                  {% endif %}

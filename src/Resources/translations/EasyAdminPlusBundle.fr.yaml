@@ -108,6 +108,7 @@ batch:
 label.batchthispage: "Uniquement sur la page courante"
 label.batchallpage: "Sur toutes les pages"
 action.batchselectall: "Tout sélectionner"
+action.export.confirm.maxLines: "Il y a plus de %max% lignes qui vont êtres exportées, voulez vous continuer ?"
 label.batchallselectactive: "Appliqué à tout"
 action.batchselectpage: "Sélectionner la page affichée"
 label.batchselectall: "Sélectionner tout"

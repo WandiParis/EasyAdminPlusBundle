@@ -107,6 +107,7 @@ batch:
     execute: Execute
 label.batchthispage: "This page"
 action.batchselectall: "Select all"
+action.export.confirm.maxLines: "There are more than %max% lines that will be exported, do you want to continue ?"
 label.batchallselectactive: "All items are selected"
 action.batchselectpage: "Select current page"
 label.batchselectall: "Select all"
