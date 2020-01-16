@@ -78,10 +78,9 @@
                         <a class="btn btn-primary"
                                 {% if _entity_config.export.max is defined and paginator.nbResults > _entity_config.export.max %}
                                     {% set message =  'action.export.confirm.maxLines' | trans({'%max%': paginator.nbResults}, 'EasyAdminPlusBundle') %}
-                                    onclick="confirmExport('{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}','{{ message }}')"
-                                {% else %}
-                                    href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}"
+                                    onclick="return confirmExport('{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}','{{ message }}')"
                                  {% endif %}
+                           href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}"
                            style="margin-right:5px;" >
                             <i class="fa fa-download"></i>
                             {{ 'exporter.export'|trans({'%format%':format}, 'EasyAdminPlusBundle') }}
@@ -209,10 +208,7 @@
         }
 
         function confirmExport(url, message) {
-            let res = window.confirm(message)
-            if (res) {
-                document.location.href = url
-            }
+            return window.confirm(message)
         }
 
     </script>
