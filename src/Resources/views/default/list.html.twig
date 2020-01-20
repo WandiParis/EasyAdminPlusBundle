@@ -15,7 +15,6 @@
     {% block filters %}
         {{ include('@LleEasyAdminPlus/default/includes/_filters.html.twig') }}
     {% endblock %}
-
 {% endblock %}
 
 
@@ -27,7 +26,7 @@
             {% set _list_item_actions = _list_item_actions|prune_item_actions(_entity_config, [], null) %}
             {% for action in _list_item_actions if (action.global is defined and action.global) %}
                     {%  if action.confirm is defined %}
-                        {%  if action.route is defined %}
+                        {% if action.route is defined %}
                             {% set action_href = path(action.route, action.parameters) %}
                         {% else %}
                             {% set action_href = path(action.name, action.parameters) %}
@@ -71,14 +70,21 @@
                     {% endif %}
             {% endfor %}
 
+
             {# EXPORT #}
             {% if _entity_config.export is defined and is_easyadmin_granted(_entity_config, 'export', null) %}
                 {% set referer = app.request.server.get('http-referer')|default('/') %}
                 {%  for format in _entity_config.export.formats %}
-                    <a class="btn btn-primary" style="margin-right:5px;" href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}">
-                        <i class="fa fa-download"></i>
-                        {{ 'exporter.export'|trans({'%format%':format}, 'EasyAdminPlusBundle') }}
-                    </a>
+                        <a class="btn btn-primary"
+                                {% if _entity_config.export.max is defined and paginator.nbResults > _entity_config.export.max %}
+                                    {% set message =  'action.export.confirm.maxLines' | trans({'%max%': paginator.nbResults}, 'EasyAdminPlusBundle') %}
+                                    onclick="return confirmExport('{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}','{{ message }}')"
+                                 {% endif %}
+                           href="{{ path('easyadmin', app.request.query|merge({ action: "export", format: format })) }}"
+                           style="margin-right:5px;" >
+                            <i class="fa fa-download"></i>
+                            {{ 'exporter.export'|trans({'%format%':format}, 'EasyAdminPlusBundle') }}
+                        </a>
                 {%  endfor %}
             {% endif %}
 
@@ -199,6 +205,10 @@
                 if (val) $(id_button + ' .'+val).show();
                 return false;
             }
+        }
+
+        function confirmExport(url, message) {
+            return window.confirm(message)
         }
 
     </script>
