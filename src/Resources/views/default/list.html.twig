@@ -262,7 +262,7 @@
                     {% endfor %}
 
                     {% if _list_item_actions|length > 0 %}
-                        <th  {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}>
+                        <th  {{ easyadmin_config('design.rtl') ? 'dir="rtl"' }}  class="no-print">
                             <span>{{ 'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') }}</span>
                         </th>
                     {% endif %}
@@ -346,7 +346,7 @@
                         {# ACTIONS #}
                         {% if _list_item_actions|length > 0 %}
                             {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
-                            <td data-label="{{ _column_label }}" class="actions">
+                            <td data-label="{{ _column_label }}" class="actions no-print">
                                 {% block item_actions %}
                                     {% set _list_item_actions_current = _list_item_actions|prune_item_actions(_entity_config, [], item) %}
                                     {{ include('@EasyAdmin/default/includes/_actions.html.twig', {

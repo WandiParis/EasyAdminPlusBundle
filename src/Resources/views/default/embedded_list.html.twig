@@ -52,7 +52,7 @@
                     {% endfor %}
 
                     {% if _list_item_actions|length > 0 %}
-                        <th>
+                        <th class="no-print">
                             <span>{{ 'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') }}</span>
                         </th>
                     {% endif %}
@@ -92,7 +92,7 @@
                                 {% set _list_item_actions_current = _list_item_actions_current|merge([{name:delete_route ,type:'route', label:'action.delete',target:'','icon':'trash',route_params: {'main_id':main_id}}]) %}
                             {% endif %}
                             {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
-                            <td data-label="{{ _column_label }}" class="actions">
+                            <td data-label="{{ _column_label }}" class="actions no-print">
                             {% block item_actions %}
                                 {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
                                     actions: _list_item_actions_current,
