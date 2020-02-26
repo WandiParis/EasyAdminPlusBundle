@@ -56,3 +56,4 @@ easy_admin_bundle:
 10. [Query Builder Method](doc/chapter-11.md)
 11. [Workflow handling](doc/chapter-workflow.md)
 12. [EditInPlace](doc/eip.md)
+13. [Redirect To Action (edit and new)](doc/redirectToAction.md)
