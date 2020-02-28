@@ -367,6 +367,7 @@ class AdminController extends BaseAdminController
             'parent' => $this->em->getRepository($this->master_entity['class'])->find($request->query->get('id')),
             'main_id'=>$request->query->get('id'),
             'entity'=>$entity,
+            'label'=> $metadata['label'] ?? null,
             'add_form'=>$add_form,
             'referer'=>$referer,
             'add_delete' => $metadata['with_delete'] ?? false,

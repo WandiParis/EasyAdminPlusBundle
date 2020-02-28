@@ -1403,4 +1403,60 @@ body.error .error-message {
         padding-top: 0;
     }
 }
+
+
+{# Print  ------------------------------------------------------------------------- #}
+.only-print {
+    display: none;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+    .only-print {
+        display: block;
+    }
+
+    a::after {
+        display: none;
+    }
+
+    .tab-content .tab-pane {
+        display: block !important;
+    }
+
+    .tab-content .tab-pane .label-unselect {
+        display: none;
+    }
+
+    .tab-content .tab-pane .add-form {
+        display: none;
+    }
+
+    .embedded-list {
+        width: 100%;
+        margin-bottom: 20px;
+    {% if 'dark' == color_scheme %}
+        border: 1px solid #DDD;
+    {% elseif 'light' == color_scheme %}
+        border: 1px solid #EEE;
+    {% endif %}
+        border-radius: 3px
+    }
+    .embedded-list .embedded-list__title {
+        padding: 11px 10px 9px;
+    {% if 'dark' == color_scheme %}
+        border-bottom: 1px solid #DDD;
+    {% elseif 'light' == color_scheme %}
+        border-bottom: 1px solid #EEE;
+    {% endif %}
+    }
+    .embedded-list .embedded-list__title h3 {
+        display: inline-block;
+        font-size: 18px;
+        margin: 0;
+        line-height: 1;
+    }
+}
 {% endautoescape %}
