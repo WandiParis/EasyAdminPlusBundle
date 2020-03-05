@@ -2,7 +2,6 @@
 
 namespace Wandi\EasyAdminPlusBundle\Controller;
 
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use EasyCorp\Bundle\EasyAdminBundle\Search\Paginator;
 use EasyCorp\Bundle\EasyAdminBundle\Twig\EasyAdminTwigExtension;
