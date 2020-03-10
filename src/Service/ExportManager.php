@@ -40,15 +40,19 @@ class ExportManager
     }
 
     private function getExportableValue($entity, array $field): ?string{
-        $value = $this->propertyAccessor->getValue($entity, $field['property']);
-        if($value instanceOf \DateTime){
-            return $value->format($field['format']);
-        }elseif(is_array($value)){
-            return implode(',', $value);
-        }elseif(is_object($value)){
-            return (string)$value;
+        try {
+            $value = $this->propertyAccessor->getValue($entity, $field['property']);
+            if ($value instanceOf \DateTime){
+                return $value->format($field['format']);
+            } elseif (is_array($value)){
+                return implode(',', $value);
+            } elseif (is_object($value)){
+                return (string)$value;
+            }
+            return $value;
+        } catch(\Exception $e) {
+            return "";
         }
-        return $value;
     }
 
     private function generateData(iterable $paginator, array $fields): array{
