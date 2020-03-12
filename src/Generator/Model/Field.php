@@ -31,7 +31,7 @@ class Field
     /**
      * @return mixed
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -126,7 +126,7 @@ class Field
     /**
      * @return array
      */
-    public function getTypeOptions(): ?array
+    public function getTypeOptions(): array
     {
         return $this->typeOptions;
     }

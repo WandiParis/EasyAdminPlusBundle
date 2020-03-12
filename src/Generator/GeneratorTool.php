@@ -33,7 +33,7 @@ class GeneratorTool
     /**
      * @return null|Translator
      */
-    public static function getTranslation(): ?Translator
+    public static function getTranslation(): Translator
     {
         return self::$translation;
     }
@@ -41,7 +41,7 @@ class GeneratorTool
     /**
      * @return array|null
      */
-    public static function getParameterBag(): ?array
+    public static function getParameterBag(): array
     {
         return self::$parameterBag;
     }
