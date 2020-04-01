@@ -122,9 +122,13 @@ class QueryBuilder
         /* @var EntityManager */
         $em = $this->doctrine->getManagerForClass($entityConfig['class']);
         /* @var DoctrineQueryBuilder */
-
+        
         $qb_method = ($entityConfig['qb_method'] ?? null);
-        if ($qb_method) {
+        $qb_method_search = ($entityConfig['search']['qb_method'] ?? null);
+        if ($qb_method_search) {
+            $queryBuilder = $em->getRepository($entityConfig['class'])->$qb_method_search();
+            $entityName = $queryBuilder->getRootAlias();
+        } else if ($qb_method) {
             $queryBuilder = $em->getRepository($entityConfig['class'])->$qb_method();
             $entityName = $queryBuilder->getRootAlias();
         } else {
