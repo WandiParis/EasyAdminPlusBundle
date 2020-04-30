@@ -33,7 +33,7 @@ class TemplateConfigPass implements ConfigPassInterface
     {
         foreach ($backendConfig['entities'] as $entityName => $entityConfig) {
             foreach (array('export') as $view) {
-                if (!array_key_exists($view, $backendConfig['entities'][$entityName])){
+                if (!array_key_exists($view, $backendConfig['entities'][$entityName])) {
                     continue;
                 }
                 foreach ($entityConfig[$view]['fields'] as $fieldName => $fieldMetadata) {
@@ -56,13 +56,13 @@ class TemplateConfigPass implements ConfigPassInterface
                     // such as formatting its values as numbers (e.g. `1,234` instead of `1234`)
                     if ($entityConfig['primary_key_field_name'] === $fieldName) {
                         $template = $entityConfig['templates']['field_id'];
-                        // easyadminplus overrides
-                    } elseif (file_exists('../vendor/wandi/easyadmin-plus-bundle/src/Resources/views/templates/field_' . $fieldMetadata['type'] . '.html.twig')) {
-                        $template = '@WandiEasyAdminPlus/templates/field_' . $fieldMetadata['type'] . '.html.twig';
+                    // easyadminplus overrides
+                    } elseif (file_exists('../vendor/wandi/easyadmin-plus-bundle/src/Resources/views/templates/export/field_'.$fieldMetadata['type'].'.html.twig')) {
+                        $template = '@WandiEasyAdminPlus/templates/export/field_'.$fieldMetadata['type'].'.html.twig';
                     } elseif (array_key_exists($fieldTemplateName, $entityConfig['templates'])) {
                         $template = $entityConfig['templates'][$fieldTemplateName];
                     } else {
-                        $template = '@WandiEasyAdminPlus/templates/label_null.html.twig';
+                        $template = '@WandiEasyAdminPlus/templates/export/label_null.html.twig';
                     }
 
                     $entityConfig[$view]['fields'][$fieldName]['template'] = $template;
