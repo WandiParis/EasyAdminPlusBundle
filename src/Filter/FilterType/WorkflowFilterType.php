@@ -61,7 +61,11 @@ class WorkflowFilterType extends ChoiceFilterType
 
     public function isSelected($data,$value){
         if(is_null($data['value'])){
-            return !in_array($value, $this->excludes);
+            if(count($this->excludes)){
+                return !in_array($value, $this->excludes);
+            } else {
+                return false;
+            }
         }
         if(is_array($data['value'])){
             return in_array($value,$data['value']);
