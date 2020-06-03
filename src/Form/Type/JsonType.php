@@ -30,6 +30,8 @@ class JsonType extends AbstractType {
             "display_required_only" => false,
             "required_by_default" => true,
             "theme" => "bootstrap2",
+            'allow_extra_fields' => true,
+            'allow_add' => true
         ]);
     }
 
