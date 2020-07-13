@@ -27,13 +27,13 @@ class NumberFilterType extends AbstractFilterType
                     $queryBuilder->setParameter('var_' . $this->uniqueId, $this->data['value']);
                     break;
                 case 'neq':
-                    $queryBuilder->andWhere($queryBuilder->expr()->neq($alias . $this->columnName, ':var_' . $this->uniqueId));
+                    $queryBuilder->andWhere($queryBuilder->expr()->neq($this->alias . $this->columnName, ':var_' . $this->uniqueId));
                     break;
                 case 'lt':
-                    $queryBuilder->andWhere($queryBuilder->expr()->lt($alias . $this->columnName, ':var_' . $this->uniqueId));
+                    $queryBuilder->andWhere($queryBuilder->expr()->lt($this->alias . $this->columnName, ':var_' . $this->uniqueId));
                     break;
                 case 'lte':
-                    $queryBuilder->andWhere($queryBuilder->expr()->lte($alias . $this->columnName, ':var_' . $this->uniqueId));
+                    $queryBuilder->andWhere($queryBuilder->expr()->lte($this->alias . $this->columnName, ':var_' . $this->uniqueId));
                     break;
                 case 'gt':
                     $queryBuilder->andWhere($this->alias . $this->columnName .' > :var_' . $this->uniqueId);
@@ -45,13 +45,13 @@ class NumberFilterType extends AbstractFilterType
                     break;
  
                 case 'isnull':
-                    $queryBuilder->andWhere($queryBuilder->expr()->isNull($alias . $this->columnName));
+                    $queryBuilder->andWhere($queryBuilder->expr()->isNull($this->alias . $this->columnName));
                     return;
                 case 'isnotnull':
-                    $queryBuilder->andWhere($queryBuilder->expr()->isNotNull($alias . $this->columnName));
+                    $queryBuilder->andWhere($queryBuilder->expr()->isNotNull($this->alias . $this->columnName));
                     return;
                 default:
-                    $queryBuilder->andWhere($queryBuilder->expr()->eq($alias . $this->columnName, ':var_' . $this->uniqueId));
+                    $queryBuilder->andWhere($queryBuilder->expr()->eq($this->alias . $this->columnName, ':var_' . $this->uniqueId));
                     break;
             }
             $queryBuilder->setParameter('var_' . $this->uniqueId, $this->data['value']);
