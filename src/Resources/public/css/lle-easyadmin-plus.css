@@ -34,13 +34,17 @@ form .row .w-100{
 }
 .field-text {
     position: relative;
+    /*
     top: 50%;
     transform: translateY(-50%)
+    */
 }
 .field-textarea {
     position: relative;
+    /*
     top: 50%;
     transform: translateY(-50%)
+    */
 }
 .field-textarea textarea {
     resize: vertical;
