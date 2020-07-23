@@ -223,7 +223,7 @@ class QueryBuilder
             }
         }
 
-        if (null !== $sortField) {
+        if ($qb_method_search and null !== $sortField) {
             $queryBuilder->orderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : $entityName.'.', $sortField), $sortDirection ?: 'DESC');
         }
 
