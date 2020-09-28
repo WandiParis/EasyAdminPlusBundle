@@ -1,7 +1,9 @@
 {% if data['value'] is iterable %}
     <span class="filter-state">
         <small>{{ filtertype.filterLabel |trans }}</small>
-        <span class="badge">{% for v in data['value'] %}{{ v }}{% endfor %}</span>
+        {% for v in data['value'] %}
+        <span class="badge">{{ v }}</span>
+        {% endfor %}
     </span>
 {% else %}
     <span class="filter-state">
