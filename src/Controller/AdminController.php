@@ -295,6 +295,12 @@ class AdminController extends BaseAdminController
         // retrieve data with given query builder for given repository
         $class = $this->config['entities'][$metadata['entity']]['class'] ?? $metadata['targetEntity'] ?? null;
         if (!$items && $parent && $class && isset($metadata['repository_method']) && $metadata['repository_method']) {
+            $disabled_filters = $this->entity['disabled_filters'] ?? [];
+            foreach($disabled_filters as $filter) {
+                if($this->em->getFilters()->isEnabled($filter)){
+                    $this->em->getFilters()->disable($filter);
+                }
+            }
             $repository = $this->em->getRepository($class);
             $qb = call_user_func_array([$repository, $metadata['repository_method']], isset($metadata['repository_method_args']) ? $metadata['repository_method_args'] : [$parent]);
             $items = $qb->getQuery()->execute();
