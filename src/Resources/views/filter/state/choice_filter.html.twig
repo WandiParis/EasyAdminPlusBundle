@@ -2,12 +2,14 @@
     <span class="filter-state">
         <small>{{ filtertype.filterLabel |trans }}</small>
         {% for v in data['value'] %}
-        <span class="badge">{{ v }}</span>
+            <span class="badge">{{ v }}</span>
         {% endfor %}
     </span>
 {% else %}
-    <span class="filter-state">
+    {% if data['value'] %}
+        <span class="filter-state">
         <small>{{ filtertype.filterLabel |trans }}</small>
         <span class="badge">{{ data['value'] }}</span>
     </span>
+    {% endif %}
 {% endif %}
