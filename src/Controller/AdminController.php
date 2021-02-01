@@ -292,6 +292,8 @@ class AdminController extends BaseAdminController
         $master_entity_class =  $this->master_entity['name'];
         $this->entity = $this->get('easyadmin.config.manager')->getEntityConfiguration($entity);
 
+        $this->dispatch(EasyAdminEvents::PRE_LIST);
+        
         // retrieve data with given query builder for given repository
         $class = $this->config['entities'][$metadata['entity']]['class'] ?? $metadata['targetEntity'] ?? null;
         if (!$items && $parent && $class && isset($metadata['repository_method']) && $metadata['repository_method']) {
