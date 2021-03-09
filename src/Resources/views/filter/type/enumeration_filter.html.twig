@@ -1,6 +1,6 @@
 <select name="{{nameprefix}}comparator{{namesuffix}}">
-    <option value="in" {% if data.comparator is defined and data.comparator == "in" %} selected="selected" {% endif %} >contains</option>
-    <option value="notin" {% if data.comparator is defined and data.comparator == "notin" %} selected="selected" {% endif %} >doesn't contain</option>
+    <option value="in" {% if data.comparator is defined and data.comparator == "in" %} selected="selected" {% endif %} >{{ 'filter.enumeration.contains' | trans({}, 'EasyAdminPlusBundle') }}</option>
+    <option value="notin" {% if data.comparator is defined and data.comparator == "notin" %} selected="selected" {% endif %} >{{ 'filter.enumeration.does_not_contain' | trans({}, 'EasyAdminPlusBundle') }}</option>
 </select>
 
 <select name="{{nameprefix}}value{{namesuffix}}[]" size="4" multiple>

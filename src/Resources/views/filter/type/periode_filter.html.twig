@@ -19,7 +19,7 @@
     name="{{nameprefix}}value{{namesuffix}}[from]" 
     class="form-control form_datepicker"
     id="_{{nameprefix}}value_from{{namesuffix}}"  
-     placeholder="{{'du'|trans}}"
+     placeholder="{{ 'filter.periode.from' | trans({}, 'EasyAdminPlusBundle') }}"
     {% if data.value is defined and data.value.from is defined %}value="{{data.value.from}}"{% endif %} />
   </div>
   <div class="col-md-6">
@@ -27,7 +27,7 @@
     name="{{nameprefix}}value{{namesuffix}}[to]" 
     class="form-control form_datepicker"
     id="_{{nameprefix}}value_to{{namesuffix}}"  
-     placeholder="{{'au'|trans}}"
+     placeholder="{{ 'filter.periode.to' | trans({}, 'EasyAdminPlusBundle') }}"
     {% if data.value is defined and data.value.to is defined %}value="{{data.value.to}}"{% endif %} />
   </div>
 </div>

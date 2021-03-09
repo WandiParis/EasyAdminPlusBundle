@@ -12,15 +12,15 @@
         <ul class="dropdown-menu" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
                                        onclick="return lle.filter_set_button('#{{ nameprefix }}comparator{{ namesuffix }}','.{{ nameprefix }}button{{ namesuffix }}','equal');">
-                    <i class="fa fa-calendar-o"></i>Le</a>
+                    <i class="fa fa-calendar-o"></i>{{ 'filter.date_time.on' | trans({}, 'EasyAdminPlusBundle') }}</a>
             </li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
                                        onclick="return lle.filter_set_button('#{{ nameprefix }}comparator{{ namesuffix }}','.{{ nameprefix }}button{{ namesuffix }}','before');">
-                    <i class="fa fa-angle-left"></i>Avant le</a>
+                    <i class="fa fa-angle-left"></i>{{ 'filter.date_time.before' | trans({}, 'EasyAdminPlusBundle') }}</a>
             </li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
                                        onclick="return lle.filter_set_button('#{{ nameprefix }}comparator{{ namesuffix }}','.{{ nameprefix }}button{{ namesuffix }}','after');">
-                    <i class="fa fa fa-angle-right"></i>Aprés le</a>
+                    <i class="fa fa fa-angle-right"></i>{{ 'filter.date.after' | trans({}, 'EasyAdminPlusBundle') }}</a>
             </li>
 
         </ul>

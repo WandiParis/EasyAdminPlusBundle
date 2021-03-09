@@ -45,7 +45,7 @@
           {% for filter in filters %}
             {% if loop.index == nbMainFilters %}
             <div class="col-xs-12">
-               <a class="toggle-secondary-filters" href="#secondary-filters" aria-expanded="false" aria-controls="secondary-filters" data-toggle="collapse"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span>{{'Plus de filtres'|trans({}, 'EasyAdminPlusBundle') }}</span></a>
+               <a class="toggle-secondary-filters" href="#secondary-filters" aria-expanded="false" aria-controls="secondary-filters" data-toggle="collapse"><i class="fa fa-plus-circle" aria-hidden="true"></i> <span>{{ 'filter.show_more' | trans({}, 'EasyAdminPlusBundle') }}</span></a>
             </div>
 
             <div id="secondary-filters" class="collapse" style="width: 100%">
@@ -71,11 +71,11 @@
 
              $('#secondary-filters').on('shown.bs.collapse', function () {
               $('.toggle-secondary-filters').find('i').toggleClass('fa-plus-circle fa-minus-circle');
-              $('.toggle-secondary-filters').find('span').text('Moins de filtres');
+              $('.toggle-secondary-filters').find('span').text('{{ 'filter.show_less' | trans({}, 'EasyAdminPlusBundle') }}');
            });
            $('#secondary-filters').on('hidden.bs.collapse', function () {
              $('.toggle-secondary-filters').find('i').toggleClass('fa-plus-circle fa-minus-circle');
-             $('.toggle-secondary-filters').find('span').text('Plus de filtres');
+             $('.toggle-secondary-filters').find('span').text('{{ 'filter.show_more' | trans({}, 'EasyAdminPlusBundle') }}');
            })
           </script>
           </div><!-- row -->

@@ -21,19 +21,19 @@
          </button>
          <ul class="dropdown-menu pull-right" role="menu">
            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','contains');">
-             <i class="fa fa-text-width"></i>Contient</a>
+             <i class="fa fa-text-width"></i>{{ 'filter.string.contains' | trans({}, 'EasyAdminPlusBundle') }}</a>
            </li>
            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','startswith');">
-             <i class="fa fa-caret-square-o-right"></i>Commence par</a>
+             <i class="fa fa-caret-square-o-right"></i>{{ 'filter.string.starts_with' | trans({}, 'EasyAdminPlusBundle') }}</a>
            </li>
            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','endswith');">
-             <i class="fa fa-caret-square-o-left"></i>Termine par</a>
+             <i class="fa fa-caret-square-o-left"></i>{{ 'filter.string.ends_with' | trans({}, 'EasyAdminPlusBundle') }}</a>
            </li>
            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','isnull');">
-             <i class="fa fa-square-o "></i>Est vide</a>
+             <i class="fa fa-square-o "></i>{{ 'filter.string.is_empty' | trans({}, 'EasyAdminPlusBundle') }}</a>
            </li>
            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','isnotnull');">
-             <i class="fa fa-square-o "></i>Est non vide</a>
+             <i class="fa fa-square-o "></i>{{ 'filter.string.is_not_empty' | trans({}, 'EasyAdminPlusBundle') }}</a>
            </li>
          </ul>
 
