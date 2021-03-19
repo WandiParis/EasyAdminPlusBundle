@@ -13,15 +13,15 @@
         <div class="input-group-btn">
          <button type="button" class="btn btn-default dropdown-toggle {{nameprefix}}button{{namesuffix}}" data-toggle="dropdown" aria-expanded="false">
 
-           <i title="Egal" class="fa equals">=</i>
-           <i title="Est vide" class="fa fa-square-o isnull"></i>
+           <i title="{{ 'filter.exact_string.equals' | trans({}, 'EasyAdminPlusBundle') }}" class="fa equals">=</i>
+           <i title="{{ 'filter.exact_string.is_null' | trans({}, 'EasyAdminPlusBundle') }}" class="fa fa-square-o isnull"></i>
          </button>
          <ul class="dropdown-menu pull-right" role="menu">
            <li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','equals');">
              <i class="fa"></i>=</a>
            </li>
            <li role="presentation"><a role="menuitem" tabindex="-1" href="#"  onclick="return lle.filter_set_button('#{{nameprefix}}comparator{{namesuffix}}','.{{nameprefix}}button{{namesuffix}}','isnull');">
-             <i class="fa fa-square-o "></i>Est vide</a>
+             <i class="fa fa-square-o "></i>{{ 'filter.exact_string.is_null' | trans({}, 'EasyAdminPlusBundle') }}</a>
            </li>
          </ul>
 

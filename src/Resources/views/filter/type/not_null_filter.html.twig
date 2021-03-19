@@ -1,5 +1,5 @@
 <select class="form-control" name="{{nameprefix}}value{{namesuffix}}">
-    <option value="">Tous</option>
-    <option value="null" {% if data.value is defined and data.value == "null" %} selected="selected" {% endif %}>Non renseigné</option>
-    <option value="notnull" {% if data.value is defined and data.value == "notnull" %} selected="selected" {% endif %}>Renseigné</option>
+    <option value="">{{ 'filter.not_null.all' | trans({}, 'EasyAdminPlusBundle') }}</option>
+    <option value="null" {% if data.value is defined and data.value == "null" %} selected="selected" {% endif %}>{{ 'filter.not_null.not_filled' | trans({}, 'EasyAdminPlusBundle') }}</option>
+    <option value="notnull" {% if data.value is defined and data.value == "notnull" %} selected="selected" {% endif %}>{{ 'filter.not_null.filled' | trans({}, 'EasyAdminPlusBundle') }}</option>
 </select>

@@ -1,5 +1,5 @@
 <select class="form-control" name="{{nameprefix}}value{{namesuffix}}">
-    <option value="all">Tous</option>
-    <option value="true" {% if  filtertype.isSelected(data,"true") %} selected="selected" {% endif %}>Oui</option>
-    <option value="false" {% if filtertype.isSelected(data,"false") %} selected="selected" {% endif %}>Non</option>
+    <option value="all">{{ 'filter.boolean.all' | trans({}, 'EasyAdminPlusBundle') }}</option>
+    <option value="true" {% if  filtertype.isSelected(data,"true") %} selected="selected" {% endif %}>{{ 'filter.boolean.yes' | trans({}, 'EasyAdminPlusBundle') }}</option>
+    <option value="false" {% if filtertype.isSelected(data,"false") %} selected="selected" {% endif %}>{{ 'filter.boolean.no' | trans({}, 'EasyAdminPlusBundle') }}</option>
 </select>

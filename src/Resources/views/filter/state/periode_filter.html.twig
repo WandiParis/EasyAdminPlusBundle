@@ -3,10 +3,10 @@
     <small>{{ filtertype.filterLabel |trans }}</small>
     <span class="badge">
         {% if data['value']['from'] %}
-            du {{ data['value']['from'] }}
+            {{ 'filter.periode.from' | trans({}, 'EasyAdminPlusBundle') }} {{ data['value']['from'] }}
         {% endif %}
         {% if data['value']['to'] %}
-            au {{ data['value']['to'] }}
+            {{ 'filter.periode.to' | trans({}, 'EasyAdminPlusBundle') }} {{ data['value']['to'] }}
         {% endif %}
     </span>
 </span>

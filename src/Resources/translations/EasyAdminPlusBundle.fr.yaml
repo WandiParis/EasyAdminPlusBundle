@@ -20,7 +20,7 @@ generator:
     image:
         mime: "Les formats autorisés pour l'image sont %mimes%."
         ratio:
-            equal: "Le ratio de l'image doit être égale à %equal%."
+            equal: "Le ratio de l'image doit être égal à %equal%."
             min: "Le ratio de l'image doit être supérieur à %min%."
             max: "Le ratio de l'image doit être inférieur à %max%."
             interval: "Le ratio de l'image doit être compris entre %min% et %max%."
@@ -31,11 +31,11 @@ generator:
         max: "La valeur doit être inférieure à %max%."
     count:
         interval: "Le nombre d'éléments doit être compris entre %min% et %max%."
-        equal: "Le nombre d'éléments doit être égale à %value%."
+        equal: "Le nombre d'éléments doit être égal à %value%."
         min: "Le nombre d'élément doit être supérieur ou égale à %min%."
         max: "Le nombre d'éléments doit être inférieur ou égale à %max%."
     bic:
-        help: "La valeur doit être un  code universel d'identification des banques (BIC) valide."
+        help: "La valeur doit être un code universel d'identification des banques (BIC) valide."
     iban:
         help: "La valeur doit être un code IBAN (International Bank Account Number) valide."
     isbn:
@@ -43,15 +43,15 @@ generator:
         13: "La valeur doit être un code ISBN-13 (International Standard Book Number) valide."
         both: "La valeur doit être un code ISBN-10 ou ISBN-13 (International Standard Book Number) valide."
     email:
-        help: "L'adresse e-mail doit comporter un @ suivis d'un nom de domaine (ex: john@free.fr)."
+        help: "L'adresse e-mail doit comporter un @ suivi d'un nom de domaine (ex: john@free.fr)."
     url:
-        help: "La valeur doit être une url valide, avec le bon protocol"
+        help: "La valeur doit être une url valide, avec le bon protocole"
         protocols: "Les protocoles autorisés pour l'url sont %protocols."
     length:
         min: "Le nombre de caractères doit être supérieur à %min%."
-        max: "Le nombre de caractère ne doit pas dépasser %max%."
+        max: "Le nombre de caractères ne doit pas dépasser %max%."
         interval: "Le nombre de caractères doit être compris entre %min% et %max%."
-        equal: "Le nombre de caractères doit être égale à %equal%."
+        equal: "Le nombre de caractères doit être égal à %equal%."
     luhn:
         help: "Vous devez entrer un numéro de carte de crédit valide."
     ip:
@@ -85,7 +85,7 @@ generator:
           list: "Liste %entity%"
           show: "Fiche %entity%"
           new: "Ajouter %entity%"
-          edit: "Editer %entity%"
+          edit: "Éditer %entity%"
 blame:
     created_at: Créé le
     updated_at: Maj le
@@ -108,7 +108,7 @@ batch:
 label.batchthispage: "Uniquement sur la page courante"
 label.batchallpage: "Sur toutes les pages"
 action.batchselectall: "Tout sélectionner"
-action.export.confirm.maxLines: "Il y a plus de %max% lignes qui vont êtres exportées, voulez vous continuer ?"
+action.export.confirm.maxLines: "Il y a plus de %max% lignes qui vont être exportées, voulez vous continuer ?"
 label.batchallselectactive: "Appliqué à tout"
 action.batchselectpage: "Sélectionner la page affichée"
 label.batchselectall: "Sélectionner tout"
@@ -124,8 +124,8 @@ wf_modal:
     title: "Voulez vous effectuer ce changement d'état ?"
     action: "Valider"
     content: ""
-message.confirm-success: Votre action à été réalisé avec succès
-message.confirm: Voulez vous vraiment executé cette action ?
+message.confirm-success: Votre action a été réalisée avec succès
+message.confirm: Voulez vous vraiment exécuter cette action ?
 flash.batch_success: '{1} Action "%action%" réussie sur %nb% élément|{0} Action "%action%" réussie sur aucun élément|]-Inf,Inf[ Action "%action%" réussie sur les %nb% éléments'
 action.close: Fermer
 action.validate: Valider
@@ -134,3 +134,44 @@ Réinitialiser: Réinitialiser
 Actions massives: Actions massives
 Filtrer les résultats: Filtrer les résultats
 form.url_auto_complet.placeholder: Choisir une valeur
+filter:
+    show_less: "Moins de filtres"
+    show_more: "Plus de filtres"
+    auto_complete:
+        placeholder: "Sélectionnez une valeur"
+    boolean:
+        yes: "Oui"
+        no: "Non"
+        all: "Tous"
+    date:
+        on: "Le"
+        before: "Avant le"
+        after: "Après le"
+    date_time:
+        on: "Le"
+        before: "Avant le"
+        after: "Après le"
+    enumeration:
+        contains: "contient"
+        does_not_contain: "ne contient pas"
+    exact_string:
+        is_null: "Est vide"
+        equals: "Égal"
+    not_null:
+        all: "Tous"
+        filled: "Renseigné"
+        not_filled: "Non renseigné"
+    number:
+        is_equal: "Est égal à"
+        is_not_equal: "N'est pas égal à"
+        lesser_than: "Plus petit que"
+        greater_than: "Plus grand que"
+    string:
+        contains: "Contient"
+        starts_with: "Commence par"
+        ends_with: "Termine par"
+        is_empty: "Est vide"
+        is_not_empty: "Est non vide"
+    periode:
+        from: "du"
+        to: "au"
