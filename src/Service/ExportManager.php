@@ -42,7 +42,9 @@ class ExportManager
     private function getExportableValue($entity, array $field): ?string{
         try {
             $value = $this->propertyAccessor->getValue($entity, $field['property']);
-            if ($value instanceOf \DateTime){
+            if($field['type'] == 'workflow') {
+                return $this->translator->trans("wf.etat." . $value);
+            } elseif ($value instanceOf \DateTime){
                 return $value->format($field['format']);
             } elseif (is_array($value)){
                 return implode(',', $value);
