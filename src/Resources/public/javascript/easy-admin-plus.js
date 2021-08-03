@@ -1,8 +1,9 @@
 $(function(){
     var date=new Date();
-    $('.datepicker').datepicker({ changeMonth: true, changeYear: true });
-    $('.datepicker-future').datepicker({minDate: 'now', changeMonth: true, changeYear: true});
-    $('.datepicker-past').datepicker({maxDate: 'now', changeMonth: true, changeYear: true});
+    var format='dd/mm/yy';
+    $('.datepicker').datepicker({dateFormat: format, changeMonth: true, changeYear: true });
+    $('.datepicker-future').datepicker({dateFormat: format,minDate: 'now', changeMonth: true, changeYear: true});
+    $('.datepicker-past').datepicker({dateFormat: format,maxDate: 'now', changeMonth: true, changeYear: true});
     $('.datetimepicker').datetimepicker();
 });
 
